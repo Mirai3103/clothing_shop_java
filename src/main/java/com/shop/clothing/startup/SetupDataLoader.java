@@ -1,17 +1,14 @@
 package com.shop.clothing.startup;
 
-import com.shop.clothing.entity.Permission;
-import com.shop.clothing.entity.Role;
-import com.shop.clothing.entity.User;
-import com.shop.clothing.repository.PermissionRepository;
-import com.shop.clothing.repository.RoleRepository;
-import com.shop.clothing.repository.UserRepository;
-import com.shop.clothing.request.permission.CreatePermissionRequest;
-import com.shop.clothing.request.role.CreateRoleRequest;
-import com.shop.clothing.service.PermissionService;
-import com.shop.clothing.service.RoleService;
+import com.shop.clothing.auth.entity.Permission;
+import com.shop.clothing.auth.entity.Role;
+import com.shop.clothing.auth.entity.User;
+import com.shop.clothing.auth.repository.PermissionRepository;
+import com.shop.clothing.auth.repository.RoleRepository;
+import com.shop.clothing.auth.repository.UserRepository;
+import com.shop.clothing.auth.commands.permission.createPermission.CreatePermissionCommand;
+import com.shop.clothing.common.Cqrs.ISender;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,20 +25,26 @@ public class SetupDataLoader implements
 
     private final UserRepository userRepository;
 
-    private final RoleService roleService;
 
-    private final PermissionService permissionService;
+    private final ISender sender;
+
 
     private final PasswordEncoder passwordEncoder;
     private final SeedCategory seedCategory;
+    private final UserRepository userRepo;
+    private final PermissionRepository permissionRepository;
+    private final RoleRepository roleRepository;
 
-    public SetupDataLoader(UserRepository userRepository, RoleService roleService, PermissionService permissionService, PasswordEncoder passwordEncoder, SeedCategory seedCategory) {
+    public SetupDataLoader(UserRepository userRepository, ISender roleService, PasswordEncoder passwordEncoder, SeedCategory seedCategory, UserRepository userRepo, PermissionRepository permissionRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
-        this.roleService = roleService;
-        this.permissionService = permissionService;
+        this.sender = roleService;
         this.passwordEncoder = passwordEncoder;
         this.seedCategory = seedCategory;
+        this.userRepo = userRepo;
+        this.permissionRepository = permissionRepository;
+        this.roleRepository = roleRepository;
     }
+
 
     @Override
     @Transactional
@@ -61,7 +64,7 @@ public class SetupDataLoader implements
 
         createRoleIfNotFound("ROLE_EMPLOYEE", "Nhân viên", "Nhân viên", new ArrayList<>());
 
-        Role adminRole = roleService.getRoleByName("ROLE_ADMIN").orElseThrow();
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
         User user = new User();
         user.setFirstName("Admin");
         user.setLastName("Admin");
@@ -78,10 +81,10 @@ public class SetupDataLoader implements
     @Transactional
     public Permission createPermissionIfNotFound(String name, String displayName, String description) {
 
-        Permission permission = permissionService.getPermissionByName(name).orElse(null);
+        Permission permission = permissionRepository.findByName(name).orElse(null);
         if (permission == null) {
-            var result = permissionService.addPermission(CreatePermissionRequest.builder().normalizedName(name).displayName(displayName).description(description).build());
-            permission = result.getData();
+            var result = sender.send(CreatePermissionCommand.builder().normalizedName(name).displayName(displayName).description(description).build());
+            permission = permissionRepository.findById(result.get()).orElse(null);
         }
 
         return permission;
@@ -91,9 +94,9 @@ public class SetupDataLoader implements
     public Role createRoleIfNotFound(
             String name, String displayName, String description, List<Permission> permissions) {
 
-        var role = roleService.getRoleByName(name).orElse(null);
+        var role = roleRepository.findByName(name).orElse(null);
         if (role == null) {
-            roleService.addRole(CreateRoleRequest.builder().normalizedName(name).displayName(displayName).description(description).build());
+            roleRepository.save(Role.builder().normalizedName(name).displayName(displayName).description(description).build());
         }
         return role;
     }
@@ -144,6 +147,7 @@ public class SetupDataLoader implements
         createPermissionIfNotFound("MANAGE_ACCOUNTING", "Quản lý kế toán", "Quyền quản lý công việc kế toán.");
         createPermissionIfNotFound("MANAGE_CUSTOMERS", "Quản lý khách hàng", "Quyền quản lý thông tin khách hàng.");
         createPermissionIfNotFound("MANAGE_BRANDS", "Quản lý thương hiệu", "Quyền quản lý thông tin thương hiệu.");
+        createPermissionIfNotFound("MANAGE_CATEGORIES", "Quản lý danh mục", "Quyền quản lý thông tin danh mục.");
         createPermissionIfNotFound("ADMIN_DASHBOARD", "Truy cập bảng điều khiển", "Quyền truy cập bảng điều khiển.");
     }
 }

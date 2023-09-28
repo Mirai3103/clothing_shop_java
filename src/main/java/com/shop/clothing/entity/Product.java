@@ -1,5 +1,6 @@
 package com.shop.clothing.entity;
 
+import com.shop.clothing.category.Category;
 import com.shop.clothing.common.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -69,5 +70,10 @@ public class Product extends AuditableEntity{
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "product")
     private java.util.List<ProductOption> productOptions;
+
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private java.util.List<ProductImage>images;
 
 }

@@ -1,5 +1,6 @@
 package com.shop.clothing.entity;
 
+import com.shop.clothing.auth.entity.User;
 import com.shop.clothing.common.AuditableEntity;
 import com.shop.clothing.entity.enums.OrderStatus;
 import jakarta.persistence.*;

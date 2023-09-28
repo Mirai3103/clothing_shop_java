@@ -21,7 +21,7 @@ public class ProductOption extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, name = "product_option_id")
-    private int productPropertyId;
+    private int productOptionId;
 
 
     @Column(nullable = false, name = "color", length = 50)
@@ -35,9 +35,6 @@ public class ProductOption extends AuditableEntity {
     private int stock = 0;
 
 
-    private String displayImage;
-
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate = null;
@@ -46,8 +43,5 @@ public class ProductOption extends AuditableEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "productOption")
-    private java.util.List<ProductOptionImage> productPropertyImages;
 
 }
