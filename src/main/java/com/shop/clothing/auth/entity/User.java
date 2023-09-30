@@ -1,6 +1,6 @@
 package com.shop.clothing.auth.entity;
 
-import com.shop.clothing.entity.Order;
+import com.shop.clothing.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

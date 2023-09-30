@@ -1,4 +1,4 @@
-package com.shop.clothing.entity.enums;
+package com.shop.clothing.payment.entity.enums;
 
 public enum PromotionType {
     PERCENTAGE,

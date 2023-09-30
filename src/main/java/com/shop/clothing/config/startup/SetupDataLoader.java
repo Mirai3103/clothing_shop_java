@@ -1,4 +1,4 @@
-package com.shop.clothing.startup;
+package com.shop.clothing.config.startup;
 
 import com.shop.clothing.auth.entity.Permission;
 import com.shop.clothing.auth.entity.Role;

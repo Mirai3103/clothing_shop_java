@@ -1,6 +1,7 @@
-package com.shop.clothing.entity;
+package com.shop.clothing.brand;
 
 import com.shop.clothing.common.AuditableEntity;
+import com.shop.clothing.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;

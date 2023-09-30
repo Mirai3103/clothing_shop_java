@@ -164,18 +164,6 @@
         })
 
     })
-    setTimeout(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const title = urlParams.get('ntitle');
-        const content = urlParams.get('ncontent');
-        const type = urlParams.get('ntype');
-        console.log(title, content, type)
-        if (title  && type) {
-            Alpine.store('toast').add(type, title, content)
-            console.log('add')
-        }
-        window.history.replaceState({}, document.title,window.location.pathname);
-    }, 1000)
 
 </script>
 

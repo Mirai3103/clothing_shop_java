@@ -1,5 +1,6 @@
-package com.shop.clothing.entity;
+package com.shop.clothing.order.entity;
 
+import com.shop.clothing.product.entity.ProductOption;
 import jakarta.persistence.*;
 import lombok.*;
 

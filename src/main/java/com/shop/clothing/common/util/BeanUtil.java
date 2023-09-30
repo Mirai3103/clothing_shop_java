@@ -1,4 +1,4 @@
-package com.shop.clothing.util;
+package com.shop.clothing.common.util;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

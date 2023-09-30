@@ -1,4 +1,4 @@
-package com.shop.clothing.entity;
+package com.shop.clothing.product.entity;
 
 import com.shop.clothing.common.AuditableEntity;
 import jakarta.persistence.*;

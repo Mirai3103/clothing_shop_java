@@ -1,5 +1,6 @@
 package com.shop.clothing.config;
 
+import com.shop.clothing.common.BusinessLogicException;
 import com.shop.clothing.common.dto.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,13 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BusinessLogicException.class)
+
+    public ResponseEntity<?> businessLogicExceptionHandler(BusinessLogicException ex) {
+
+        ErrorResponse error = ErrorResponse.builder().error(ex.getMessage()).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     @ExceptionHandler(Exception.class)
 
     public ResponseEntity<?> globalExceptionHandler(Exception ex) {

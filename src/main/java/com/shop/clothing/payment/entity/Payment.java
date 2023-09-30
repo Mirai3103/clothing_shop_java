@@ -1,12 +1,11 @@
-package com.shop.clothing.entity;
+package com.shop.clothing.payment.entity;
 
 import com.shop.clothing.common.AuditableEntity;
-import com.shop.clothing.entity.enums.PaymentMethod;
-import com.shop.clothing.entity.enums.PaymentStatus;
+import com.shop.clothing.payment.entity.enums.PaymentMethod;
+import com.shop.clothing.payment.entity.enums.PaymentStatus;
+import com.shop.clothing.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Builder

@@ -1,4 +1,4 @@
-package com.shop.clothing.util;
+package com.shop.clothing.common.util;
 
 import java.text.Normalizer;
 import java.util.regex.Pattern;

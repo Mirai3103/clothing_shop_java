@@ -1,10 +1,9 @@
 package com.shop.clothing.category.commands.updateCategory;
 
 import com.shop.clothing.category.CategoryRepository;
-import com.shop.clothing.category.commands.updateCategory.UpdateCategoryCommand;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
-import com.shop.clothing.util.SlugUtil;
+import com.shop.clothing.common.util.SlugUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

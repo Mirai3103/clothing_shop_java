@@ -27,7 +27,6 @@ import java.util.ArrayList;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-@EnableWebMvc
 
 public class SecurityConfig {
     @Bean

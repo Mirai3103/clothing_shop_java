@@ -1,4 +1,4 @@
-package com.shop.clothing.entity.enums;
+package com.shop.clothing.order.entity.enums;
 
 public enum OrderStatus {
     PENDING,

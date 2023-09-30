@@ -1,5 +1,6 @@
 package com.shop.clothing.common.Cqrs;
 
+import com.shop.clothing.common.BusinessLogicException;
 import lombok.*;
 
 @AllArgsConstructor
@@ -29,5 +30,12 @@ public class HandleResponse<T>{
     }
     public static <T>HandleResponse<T> error(String error){
         return HandleResponse.<T>builder().error(error).build();
+    }
+
+    public T orThrow(){
+        if (error != null && !error.isEmpty()){
+            throw new BusinessLogicException(error);
+        }
+        return data;
     }
 }

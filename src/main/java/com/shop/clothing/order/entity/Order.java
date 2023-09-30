@@ -1,8 +1,10 @@
-package com.shop.clothing.entity;
+package com.shop.clothing.order.entity;
 
 import com.shop.clothing.auth.entity.User;
 import com.shop.clothing.common.AuditableEntity;
-import com.shop.clothing.entity.enums.OrderStatus;
+import com.shop.clothing.promotion.Promotion;
+import com.shop.clothing.order.entity.enums.OrderStatus;
+import com.shop.clothing.payment.entity.Payment;
 import jakarta.persistence.*;
 import lombok.*;
 

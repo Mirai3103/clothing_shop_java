@@ -1,7 +1,8 @@
-package com.shop.clothing.entity;
+package com.shop.clothing.promotion;
 
 import com.shop.clothing.common.AuditableEntity;
-import com.shop.clothing.entity.enums.PromotionType;
+import com.shop.clothing.payment.entity.enums.PromotionType;
+import com.shop.clothing.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
