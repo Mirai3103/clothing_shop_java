@@ -1,6 +1,9 @@
 package com.shop.clothing.config;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,9 +22,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 
 @Configuration
@@ -43,6 +50,7 @@ public class SecurityConfig {
         }).rememberMe(rememberMe -> {
             rememberMe.key("remember-me");
             rememberMe.tokenValiditySeconds(7 * 24 * 60 * 60); // 7 days
+            rememberMe.tokenRepository(persistentTokenRepository());
         }).formLogin(login -> {
             login.loginPage("/auth/login");
             login.failureUrl("/auth/login?error=true");
@@ -66,6 +74,13 @@ public class SecurityConfig {
         provider.setUserDetailsService(this.userDetailsService);
         return provider;
     }
-
+    private DataSource dataSource;
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        var tokenRepository = new JdbcTokenRepositoryImpl();
+//        tokenRepository.setCreateTableOnStartup(false);
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
+    }
 
 }

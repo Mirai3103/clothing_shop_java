@@ -11,6 +11,7 @@ import com.shop.clothing.common.Cqrs.ISender;
 import jakarta.transaction.Transactional;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,7 @@ public class SetupDataLoader implements
     private final PermissionRepository permissionRepository;
     private final RoleRepository roleRepository;
 
+
     public SetupDataLoader(UserRepository userRepository, ISender roleService, PasswordEncoder passwordEncoder, SeedCategory seedCategory, UserRepository userRepo, PermissionRepository permissionRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.sender = roleService;
@@ -43,6 +45,7 @@ public class SetupDataLoader implements
         this.userRepo = userRepo;
         this.permissionRepository = permissionRepository;
         this.roleRepository = roleRepository;
+
     }
 
 
@@ -113,6 +116,9 @@ public class SetupDataLoader implements
     }
     @Transactional
     public  void seedPermission() {
+
+
+
         createPermissionIfNotFound("CREATE_PRODUCT", "Tạo sản phẩm", "Quyền tạo sản phẩm mới.");
         createPermissionIfNotFound("UPDATE_PRODUCT", "Cập nhật sản phẩm", "Quyền cập nhật thông tin sản phẩm.");
         createPermissionIfNotFound("DELETE_PRODUCT", "Xóa sản phẩm", "Quyền xóa sản phẩm.");

@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UpdateCategoryCommandHandler implements IRequestHandler<UpdateCategoryCommand, Void> {
     private final CategoryRepository categoryRepository;
-    private final SlugUtil slugUtil;
 
     @Override
     @Transactional
@@ -27,6 +26,7 @@ public class UpdateCategoryCommandHandler implements IRequestHandler<UpdateCateg
         if (isUpdateName && isUpdateSlug && isUpdateParent) {
             return HandleResponse.error("Không có gì thay đổi");
         }
+
         if (!isUpdateName) {
             var existWithName = categoryRepository.findByName(updateCategoryCommand.getName());
             if (existWithName.isPresent()) {
@@ -37,7 +37,7 @@ public class UpdateCategoryCommandHandler implements IRequestHandler<UpdateCateg
         if (!isUpdateSlug) {
             var existWithSlug = categoryRepository.findBySlug(updateCategoryCommand.getSlug());
             if (existWithSlug.isPresent()) {
-                return HandleResponse.error("Slug danh mục đã tồn tại");
+                return HandleResponse.error("Url danh mục đã tồn tại");
             }
             exist.get().setSlug(updateCategoryCommand.getSlug());
         }
