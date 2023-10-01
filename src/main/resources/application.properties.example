@@ -1,7 +1,7 @@
 
-spring.datasource.url=jdbc:mysql://103.200.23.188:3306/huuhoang_clothing_shop?useSSL=false
-spring.datasource.username=huuhoang_group_5
-spring.datasource.password=0iGpEoaO4Lpc
+spring.datasource.url=jdbc:mysql://localhost:3306/huuhoang_clothing_shop?useSSL=false
+spring.datasource.username=ab
+spring.datasource.password=abc
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 spring.jpa.hibernate.ddl-auto=update
 spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
@@ -11,6 +11,6 @@ spring.jpa.properties.hibernate.format_sql=true
 spring.thymeleaf.prefix=classpath:/templates/
 spring.thymeleaf.suffix=.html
 
-cloudinary.cloud-name=dkvga054t
-cloudinary.api-key=177378989858313
-cloudinary.api-secret=_YRUPuteY7KGo0DYOKN159GdvPs
+cloudinary.cloud-name=aaa
+cloudinary.api-key=aaaaa
+cloudinary.api-secret=aaaaaa
