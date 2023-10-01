@@ -89,6 +89,10 @@ public class SeedCategory {
                 .name("Quần lót")
                 .parentId(quan.get())
                 .build());
+        var quanNam = sender.send(CreateCategoryCommand.builder()
+                .name("Quần nam")
+                .parentId(quan.get())
+                .build());
         var vay = sender.send(CreateCategoryCommand.builder()
                 .name("Chân váy")
                 .build());

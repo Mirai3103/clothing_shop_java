@@ -10,33 +10,34 @@ var mock = {
     discount: "-8%",
     name: "\n                Jeans Copper Denim Slim Fit\n            ",
 };
-let driver;
 var nodeMarkdown = new NodeHtmlMarkdown();
 function getSlug(href) {
-    // without query string
-    var pattern = /https:\/\/www.coolmate.me\/product\/(.*)\?/g;
-    var match = pattern.exec(href);
-    return match[1];
+    const url = new URL(href);
+    const pathname = url.pathname;
+    const slug = pathname.split("/").pop();
+    return slug;
 }
 async function getDescripton(item = mock) {
-    // https://www.coolmate.me/product/body-html/coolmate-x-copper-denim-quan-jeans-dang-slim-fit?preview=
     const slug = getSlug(item.detailHref);
     const { data } = await axios.get("https://www.coolmate.me/product/body-html/" + slug + "?preview=");
     const $ = load(data.html);
     return nodeMarkdown.translate($.html());
 }
+const nameSet = new Set();
 async function getDetail(item = mock) {
+    const slug = getSlug(item.detailHref);
+    if (nameSet.has(slug)) return {};
+    nameSet.add(slug);
     const { data } = await axios.get(item.detailHref);
     const $ = load(data);
-    const description = $(".product-description__wrapper").html();
     const discount = $(".product-single__percent-price").text().trim();
     const rawPrice = $(".product-single__compare-price").text().trim();
     const afterDiscountPrice = $(".product-single__regular-price").text().trim();
     const displayImage = $(".image > img").first().attr("src");
     const title = $(".product-single__title").text().trim();
     const category = $(".breadcrumb__item").last().text().trim();
-    const colorsList = $(".option-select--color input[name='color']");
-    const sizeList = $(".option-select--shorts_size input[name='shorts_size']");
+    const colorsList = $(".option-select[class*='color'] input[name*='color']");
+    const sizeList = $(".option-select[class*='size'] input[name*='size']");
     const features = $("#features-listing").html();
     const productOptions = [];
 
@@ -58,6 +59,26 @@ async function getDetail(item = mock) {
                 .get(),
         });
     });
+    if (productOptions.length == 0) {
+        let gallery = $(".image > img")
+            .map((index, element) => {
+                return $(element).attr("src").trim();
+            })
+            .get();
+        gallery = gallery.filter((item) => {
+            return !item.includes("width=80,height=80");
+        });
+        productOptions.push({
+            color: "",
+            gallery: gallery,
+            size: sizeList
+                .map((index, element) => {
+                    return $(element).attr("data-title").trim();
+                })
+                .get(),
+        });
+    }
+    console.log("done: ", item.name);
     return {
         description: await getDescripton(item),
         discount,
@@ -72,7 +93,11 @@ async function getDetail(item = mock) {
 }
 import fs from "fs";
 async function main() {
-    const result = await getDetail();
+    const items = JSON.parse(fs.readFileSync("result.json"));
+    const promises = items.map((item) => {
+        return getDetail(item);
+    });
+    const result = await Promise.all(promises);
     fs.writeFileSync("detail.json", JSON.stringify(result));
 }
 

@@ -18,7 +18,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table
-@SQLDelete(sql = "UPDATE promotion SET deleted_date = NOW() WHERE brand_id=?")
+@SQLDelete(sql = "UPDATE promotion SET deleted_date = NOW() WHERE promotion_id=?")
 @Where(clause = "deleted_date is null")
 public class Promotion extends AuditableEntity {
 
