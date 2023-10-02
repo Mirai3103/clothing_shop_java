@@ -81,7 +81,7 @@ const prisma = new PrismaClient();
 //     },
 
 async function insert(item) {
-    let existCategory = await prisma.category.findUnique({
+    let existCategory = await prisma.category.findFirst({
         where: {
             name: item.category.trim(),
         },
@@ -95,38 +95,71 @@ async function insert(item) {
                 created_date: new Date(),
             },
         });
+        console.log("inserted category: ", existCategory.category_id);
     }
 
     const product = await prisma.product.create({
         data: {
             description: item.features + "\n\n" + item.description,
             discount: Number(item.discount.replace(/[^0-9]/g, "")) || 0,
-            price: Number(item.rawPrice.replace(/[^0-9]/g, "")),
+            price: Number(item.rawPrice.replace(/[^0-9]/g, "")) || (Math.floor(Math.random() * 500) + 50) * 1000,
             display_image: item.displayImage,
             for_gender: 0,
             name: item.title,
             slug: toSlug(item.title.trim()),
-            category_category_id: existCategory.id,
+            category_category_id: existCategory.category_id,
             created_by: "system",
             created_date: new Date(),
         },
     });
+    console.log("inserted product: ", product.product_id);
     const productOptions = item.productOptions;
     const idColorMap = {};
     for await (const productOption of productOptions) {
+        let existColor = await prisma.color.findFirst({
+            where: {
+                name: productOption.color.trim(),
+            },
+        });
+        if (!existColor) {
+            existColor = await prisma.color.create({
+                data: {
+                    name: productOption.color.trim(),
+                    created_by: "system",
+                    created_date: new Date(),
+                },
+            });
+            console.log("inserted color: ", existColor.color_id);
+        }
+        idColorMap[productOption.color.trim()] = existColor.color_id;
+
         for await (const size of productOption.size) {
             const newProductOption = await prisma.product_option.create({
                 data: {
-                    color: productOption.color,
+                    color_color_id: existColor.color_id,
                     size: size.trim(),
                     stock: Math.floor(Math.random() * 1000) + 50,
-                    product_product_id: product.id,
+                    product_product_id: product.product_id,
                     created_by: "system",
                     created_date: new Date(),
-                    display_image: productOption.gallery[0],
                 },
             });
-            idColorMap[productOption.color] = newProductOption.id;
+        }
+    }
+    for await (const productOption of productOptions) {
+        const id = idColorMap[productOption.color.trim()];
+        for await (const image of productOption.gallery) {
+            try {
+                await prisma.product_image.create({
+                    data: {
+                        url: image,
+                        for_color_color_id: id,
+                        created_by: "system",
+                        created_date: new Date(),
+                        product_product_id: product.id,
+                    },
+                });
+            } catch (e) {}
         }
     }
 }
@@ -134,7 +167,14 @@ async function insert(item) {
 async function main() {
     const dataSTR = fs.readFileSync("detail.json");
     const data = JSON.parse(dataSTR);
+    for await (const item of data) {
+        await insert(item);
+    }
 }
+
+main().then(() => {
+    console.log("done");
+});
 
 function toSlug(str) {
     // Chuyển hết sang chữ thường

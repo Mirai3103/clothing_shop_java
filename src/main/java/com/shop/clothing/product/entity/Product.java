@@ -41,7 +41,7 @@ public class Product extends AuditableEntity{
     private String slug;
 
 
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String description;
 
 

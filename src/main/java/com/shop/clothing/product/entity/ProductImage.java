@@ -18,8 +18,8 @@ public class ProductImage extends AuditableEntity{
     @Column(updatable = false, nullable = false,name = "url",length = 500)
     private String url;
 
-    @Column(nullable = true, name = "for_color", length = 50)
-    private String forColor;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Color forColor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;

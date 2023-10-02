@@ -23,12 +23,7 @@ public class ProductOption extends AuditableEntity {
     @Column(updatable = false, nullable = false, name = "product_option_id")
     private int productOptionId;
 
-
-    @Column(nullable = false, name = "color", length = 50)
-    private String color;
-
-
-    @Column(nullable = false, name = "size", length = 50)
+  @Column(nullable = false, name = "size", length = 50)
     private String size;
 
 
@@ -43,5 +38,7 @@ public class ProductOption extends AuditableEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Color color;
 
 }
