@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "0rder")
+@Table(name = "_order")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

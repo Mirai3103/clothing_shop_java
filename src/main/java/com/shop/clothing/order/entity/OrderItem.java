@@ -22,9 +22,10 @@ public class OrderItem {
     private int quantity;
     private double price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_option_id", insertable = false, updatable = false)
     private ProductOption productOption;
+
 }
 @AllArgsConstructor
 @NoArgsConstructor
