@@ -1,4 +1,3 @@
-Đây là nội dung đề xuất cho file README.md của repository website bán quần áo sử dụng Spring MVC, MySQL và Node.js:
 
 # Website bán quần áo
 
