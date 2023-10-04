@@ -42,9 +42,9 @@ public class SecurityConfig {
         http.getSharedObject(AuthenticationManagerBuilder.class).authenticationProvider(daoAuthenticationProvider());
 
         http.authorizeHttpRequests(authConfig -> {
-            authConfig.requestMatchers(HttpMethod.GET, "/admin/brand/**").hasAuthority("MANAGE_BRANDS");
-            authConfig.requestMatchers(HttpMethod.GET, "/admin/category/**").hasAuthority("MANAGE_CATEGORIES");
-            authConfig.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("ADMIN_DASHBOARD");
+//            authConfig.requestMatchers(HttpMethod.GET, "/admin/brand/**").hasAuthority("MANAGE_BRANDS");
+//            authConfig.requestMatchers(HttpMethod.GET, "/admin/category/**").hasAuthority("MANAGE_CATEGORIES");
+//            authConfig.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("ADMIN_DASHBOARD");
             authConfig.anyRequest().permitAll();
 
         }).rememberMe(rememberMe -> {

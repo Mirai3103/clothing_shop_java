@@ -10,6 +10,7 @@ import com.shop.clothing.common.dto.Paginated;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -24,7 +25,7 @@ public class CategoryApiController {
     private final ISender sender;
 
     @GetMapping()
-    public Paginated<CategoryDto> getCategories(@Valid GetAllCategoriesQueries paginationRequest) {
+    public Paginated<CategoryDto> getCategories(@Valid @ParameterObject GetAllCategoriesQueries paginationRequest) {
         return sender.send(paginationRequest).get();
     }
 

@@ -2,6 +2,9 @@ package com.shop.clothing.config;
 
 import com.shop.clothing.common.BusinessLogicException;
 import com.shop.clothing.common.dto.ErrorResponse;
+import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,7 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@AllArgsConstructor
 public class RestExceptionHandler {
+    private final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -45,10 +51,11 @@ public class RestExceptionHandler {
         ErrorResponse error = ErrorResponse.builder().error(ex.getMessage()).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler(Exception.class)
 
     public ResponseEntity<?> globalExceptionHandler(Exception ex) {
-
+        logger.error(ex.getMessage());
         ErrorResponse error = ErrorResponse.builder().error(ex.getMessage()).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 
