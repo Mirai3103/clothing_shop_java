@@ -1,6 +1,8 @@
 package com.shop.clothing.auth.entity;
 
+import com.shop.clothing.cart.CartItem;
 import com.shop.clothing.order.entity.Order;
+import com.shop.clothing.order.entity.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -58,6 +60,10 @@ public class User implements UserDetails {
     private boolean isCustomer = true;
 
     private Date createdAt = new Date();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private java.util.List<CartItem> cartItems;
 
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = { CascadeType.MERGE, CascadeType.PERSIST })
