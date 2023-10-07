@@ -2,6 +2,7 @@ package com.shop.clothing.file.endpoint;
 
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.file.command.uploadFile.UploadFileCommand;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class FileController {
     private final ISender sender;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestBody MultipartFile file) {
         var command = new UploadFileCommand(file);
         var result = sender.send(command);
         return ResponseEntity.ok(result.orThrow());

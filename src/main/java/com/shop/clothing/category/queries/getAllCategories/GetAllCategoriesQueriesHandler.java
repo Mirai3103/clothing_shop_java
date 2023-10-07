@@ -1,6 +1,6 @@
-package com.shop.clothing.category.queries.getAllCategoriesQueries;
+package com.shop.clothing.category.queries.getAllCategories;
 
-import com.shop.clothing.category.CategoryDto;
+import com.shop.clothing.category.CategoryBriefDto;
 import com.shop.clothing.category.CategoryRepository;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
@@ -12,16 +12,16 @@ import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class GetAllCategoriesQueriesHandler implements IRequestHandler<GetAllCategoriesQueries, Paginated<CategoryDto>> {
+public class GetAllCategoriesQueriesHandler implements IRequestHandler<GetAllCategoriesQueries, Paginated<CategoryBriefDto>> {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
     @Override
     @Transactional
-    public HandleResponse<Paginated<CategoryDto>> handle(GetAllCategoriesQueries getAllCategoriesQueries) {
+    public HandleResponse<Paginated<CategoryBriefDto>> handle(GetAllCategoriesQueries getAllCategoriesQueries) {
         var categories = categoryRepository.findAll(
                 getAllCategoriesQueries.getPageable("categoryId"));
-        return HandleResponse.ok(Paginated.of(categories.map(category -> modelMapper.map(category, CategoryDto.class))));
+        return HandleResponse.ok(Paginated.of(categories.map(category -> modelMapper.map(category, CategoryBriefDto.class))));
     }
 
 }

@@ -2,7 +2,7 @@ package com.shop.clothing.config.startup;
 
 import com.shop.clothing.auth.entity.Permission;
 import com.shop.clothing.auth.entity.Role;
-import com.shop.clothing.auth.entity.User;
+import com.shop.clothing.user.entity.User;
 import com.shop.clothing.auth.repository.PermissionRepository;
 import com.shop.clothing.auth.repository.RoleRepository;
 import com.shop.clothing.auth.repository.UserRepository;
@@ -11,7 +11,6 @@ import com.shop.clothing.common.Cqrs.ISender;
 import jakarta.transaction.Transactional;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

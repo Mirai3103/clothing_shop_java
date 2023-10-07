@@ -8,9 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CategoryDto extends AuditableDto{
+public class CategoryBriefDto extends AuditableDto{
     private int categoryId;
     private String name;
     private String slug;
-    private CategoryDto parent;
+    private CategoryBriefDto parent;
 }

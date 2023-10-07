@@ -11,8 +11,16 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-@IdClass(OrderItemKey.class)
+@IdClass(OrderItem.OrderItemKey.class)
 public class OrderItem {
+    @AllArgsConstructor
+    @NoArgsConstructor
+  public   static
+    class OrderItemKey implements java.io.Serializable{
+        private String orderId;
+        private int productOptionId;
+    }
+
     @Id
     @Column(updatable = false, nullable = false,name = "order_id")
     private String orderId;
@@ -25,12 +33,5 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_option_id", insertable = false, updatable = false)
     private ProductOption productOption;
-
-}
-@AllArgsConstructor
-@NoArgsConstructor
-class OrderItemKey implements java.io.Serializable{
-    private String orderId;
-    private int productOptionId;
 
 }

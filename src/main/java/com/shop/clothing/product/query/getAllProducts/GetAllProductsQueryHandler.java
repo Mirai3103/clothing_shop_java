@@ -1,6 +1,5 @@
 package com.shop.clothing.product.query.getAllProducts;
 
-import com.shop.clothing.category.CategoryDto;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.common.dto.Paginated;

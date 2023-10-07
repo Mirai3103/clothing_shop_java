@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class GetProductBySlugQueryHandler implements IRequestHandler<GetProductByIdQuery, ProductDetailDto> {
+public class GetProductByIdQueryHandler implements IRequestHandler<GetProductByIdQuery, ProductDetailDto> {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public HandleResponse<ProductDetailDto> handle(GetProductByIdQuery getProductBySlugQuery) {
-        var product = productRepository.findBySlug(getProductBySlugQuery.id());
+        var product = productRepository.findById(getProductBySlugQuery.id());
         if (product.isEmpty()) {
             return HandleResponse.ok(null);
         }

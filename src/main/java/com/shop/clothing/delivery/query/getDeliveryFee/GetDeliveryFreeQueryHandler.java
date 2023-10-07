@@ -10,15 +10,13 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class GetDeliveryFreeQueryHandler implements IRequestHandler<GetDeliveryFeeQuery, Integer> {
-        private final ProductRepository productRepository;
-        private final GiaoHangNhanhService giaoHangNhanhService;
+    private final GiaoHangNhanhService giaoHangNhanhService;
+
     @Override
     public HandleResponse<Integer> handle(GetDeliveryFeeQuery getDeliveryFeeQuery) {
-        var listProduct = productRepository.findByProductIdIn(getDeliveryFeeQuery.getProductIds());
-        var totalPrice = listProduct.stream().mapToInt(product -> (int) (product.getPrice()*product.getDiscount()/100)).sum();
+
         try {
-            System.out.println(totalPrice);
-            return HandleResponse.ok(giaoHangNhanhService.getDeliveryFee(getDeliveryFeeQuery.getToProvince(), getDeliveryFeeQuery.getToDistrict(), getDeliveryFeeQuery.getToWard(), totalPrice,600));
+            return HandleResponse.ok(giaoHangNhanhService.getDeliveryFee(getDeliveryFeeQuery.getToProvince(), getDeliveryFeeQuery.getToDistrict(), getDeliveryFeeQuery.getToWard(), getDeliveryFeeQuery.getTotalPrice(), 600));
         } catch (Exception e) {
             return HandleResponse.error("Lỗi khi lấy phí vận chuyển");
         }

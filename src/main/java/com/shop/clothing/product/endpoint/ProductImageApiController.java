@@ -1,6 +1,7 @@
 package com.shop.clothing.product.endpoint;
 
 import com.shop.clothing.common.Cqrs.ISender;
+import com.shop.clothing.product.command.createProductImage.CreateProductImageCommand;
 import com.shop.clothing.product.command.createProductOption.CreateProductOptionCommand;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,8 @@ public class ProductImageApiController {
     private final ISender sender;
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createProduct(@RequestBody @ParameterObject @Valid CreateProductOptionCommand createProductOptionCommand) {
-        var result = sender.send(createProductOptionCommand);
+    public ResponseEntity<Void> createProduct(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid CreateProductImageCommand createProductImageCommand) {
+        var result = sender.send(createProductImageCommand);
         return ResponseEntity.ok().build();
     }
 }

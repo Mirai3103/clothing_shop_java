@@ -23,7 +23,7 @@ public class Permission {
     @Column(name = "description", length = 100)
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
             name = "role_permissions",
             joinColumns = @JoinColumn(name = "permission_id"),

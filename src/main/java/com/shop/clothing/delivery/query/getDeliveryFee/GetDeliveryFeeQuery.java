@@ -29,6 +29,6 @@ public class GetDeliveryFeeQuery implements IRequest<Integer> {
     @Size(min = 2, max = 30, message = "Tên phường/xã phải có độ dài từ 2 đến 30 ký tự")
 
     private String toWard;
-    private List<Integer> productIds;
+    private  int totalPrice;
 
 }

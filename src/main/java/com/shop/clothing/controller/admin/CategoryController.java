@@ -1,7 +1,7 @@
 package com.shop.clothing.controller.admin;
 
 import com.shop.clothing.category.commands.updateCategory.UpdateCategoryCommand;
-import com.shop.clothing.category.queries.getAllCategoriesQueries.GetAllCategoriesQueries;
+import com.shop.clothing.category.queries.getAllCategories.GetAllCategoriesQueries;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.category.commands.createCategory.CreateCategoryCommand;
 import lombok.AllArgsConstructor;

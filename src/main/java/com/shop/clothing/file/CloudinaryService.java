@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @Service
-public class CloudinaryService {
+public class CloudinaryService implements IFileService {
 
     private final Cloudinary cloudinary;
 
@@ -35,6 +35,6 @@ public class CloudinaryService {
             throw new RuntimeException(e);
         }
 
-     }
+    }
 
 }

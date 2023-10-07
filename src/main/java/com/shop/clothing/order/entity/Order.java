@@ -1,6 +1,6 @@
 package com.shop.clothing.order.entity;
 
-import com.shop.clothing.auth.entity.User;
+import com.shop.clothing.user.entity.User;
 import com.shop.clothing.common.AuditableEntity;
 import com.shop.clothing.promotion.Promotion;
 import com.shop.clothing.order.entity.enums.OrderStatus;
@@ -19,9 +19,6 @@ public class Order extends AuditableEntity {
     @Id
     @Column(updatable = false, nullable = false, name = "order_id", length = 36)
     private String orderId;
-
-    @Column(name = "user_id", length = 36)
-    private String userId;
 
     @Column(name = "customer_name", length = 100)
     private String customerName;
@@ -47,7 +44,8 @@ public class Order extends AuditableEntity {
 
 
     @Column()
-    private OrderStatus status;
+    @Builder.Default
+    private OrderStatus status = OrderStatus.PENDING;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private java.util.List<Payment> payments;

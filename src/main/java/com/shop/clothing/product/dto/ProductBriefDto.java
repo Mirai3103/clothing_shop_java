@@ -1,7 +1,8 @@
 package com.shop.clothing.product.dto;
 
 
-import com.shop.clothing.category.CategoryDto;
+import com.shop.clothing.category.CategoryBriefDto;
+import com.shop.clothing.common.dto.AuditableDto;
 import com.shop.clothing.product.entity.Product;
 
 import lombok.Getter;
@@ -11,7 +12,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductBriefDto {
+public class ProductBriefDto  extends AuditableDto {
+    private int productId;
     private String name;
 
     private Product.ProductGender forGender = Product.ProductGender.FOR_BOTH;
@@ -21,6 +23,6 @@ public class ProductBriefDto {
     private double discount;
 
     private String displayImage;
-    private CategoryDto category;
+    private CategoryBriefDto category;
 
 }

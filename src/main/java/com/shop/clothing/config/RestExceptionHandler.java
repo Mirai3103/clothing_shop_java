@@ -56,6 +56,7 @@ public class RestExceptionHandler {
 
     public ResponseEntity<?> globalExceptionHandler(Exception ex) {
         logger.error(ex.getMessage());
+        ex.printStackTrace();
         ErrorResponse error = ErrorResponse.builder().error(ex.getMessage()).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 

@@ -34,4 +34,9 @@ public class MomoTest {
             System.out.println(url);
         });
     }
+    @Test void getPaymentStatus() {
+        assertDoesNotThrow(() -> {
+//            var url = momoService.checkPaymentStatus()
+        });
+    }
 }

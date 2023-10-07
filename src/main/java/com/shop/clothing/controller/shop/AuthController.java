@@ -22,7 +22,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("registerRequest", RegisterCommand.builder().build());
+        model.addAttribute("registerCommand", RegisterCommand.builder().build());
         return "register";
     }
 

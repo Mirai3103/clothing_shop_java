@@ -21,9 +21,8 @@ public class Payment extends AuditableEntity{
     @Column(nullable = false)
     private PaymentMethod paymentMethod;
     @Column(nullable = false)
+    @Builder.Default
     private PaymentStatus status = PaymentStatus.PENDING;
-    @Column(nullable = false)
-    private String transactionId;
     @Column(nullable = false)
     private String paymentDetails;
     @Column()

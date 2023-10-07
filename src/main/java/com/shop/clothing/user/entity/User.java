@@ -1,5 +1,7 @@
-package com.shop.clothing.auth.entity;
+package com.shop.clothing.user.entity;
 
+import com.shop.clothing.auth.entity.Permission;
+import com.shop.clothing.auth.entity.Role;
 import com.shop.clothing.cart.CartItem;
 import com.shop.clothing.order.entity.Order;
 import com.shop.clothing.order.entity.OrderItem;
@@ -58,7 +60,7 @@ public class User implements UserDetails {
 
 
     private boolean isCustomer = true;
-
+@Builder.Default
     private Date createdAt = new Date();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -78,11 +80,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private java.util.List<Order> orders;
 
-    private List<String> getPermissions(Collection<Role> roles) {
+    public List<String> getPermissions() {
 
         List<String> permissions = new ArrayList<>();
         List<Permission> collection = new ArrayList<>();
-        for (Role role : roles) {
+        for (Role role : this.getRoles()) {
             permissions.add(role.getNormalizedName());
             collection.addAll(role.getPermissions());
         }
@@ -104,7 +106,7 @@ public class User implements UserDetails {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getGrantedAuthorities(getPermissions(this.getRoles()));
+        return getGrantedAuthorities(getPermissions());
     }
 
     @Override

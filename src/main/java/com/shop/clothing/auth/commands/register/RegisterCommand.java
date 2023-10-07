@@ -1,6 +1,6 @@
 package com.shop.clothing.auth.commands.register;
 
-import com.shop.clothing.auth.entity.User;
+import com.shop.clothing.user.entity.User;
 import com.shop.clothing.common.Cqrs.IRequest;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.shop.clothing.auth;
 
-import com.shop.clothing.auth.entity.User;
+import com.shop.clothing.user.entity.User;
 import com.shop.clothing.auth.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,7 @@
 package com.shop.clothing.auth.entity;
 
 import com.shop.clothing.common.AuditableEntity;
+import com.shop.clothing.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

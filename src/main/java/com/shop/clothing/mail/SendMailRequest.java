@@ -1,2 +1,4 @@
-package com.shop.clothing.mail;public class SendMailRequest {
+package com.shop.clothing.mail;
+
+public class SendMailRequest {
 }

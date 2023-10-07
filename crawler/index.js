@@ -38,7 +38,7 @@ async function getList(page) {
 
 async function main() {
     var result = [];
-    for (var i = 1; i <= 15; i++) {
+    for (var i = 1; i <= 60; i++) {
         var list = await getList(i);
         result = [...result, ...list];
     }

@@ -2,6 +2,7 @@ package com.shop.clothing.common.Cqrs;
 
 import com.shop.clothing.common.BusinessLogicException;
 import lombok.*;
+import org.springframework.http.HttpStatusCode;
 
 @AllArgsConstructor
 @Builder
