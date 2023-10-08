@@ -35,7 +35,6 @@ public class MomoATMPaymentStrategy implements PaymentStrategy {
 
         if (lastPayment == null || lastPayment.getStatus() != PaymentStatus.PENDING) {
             var payment = Payment.builder().paymentId(paymentId)
-                    .paymentMethod(PaymentMethod.MOMO_ATM)
                     .amount(order.getTotalAmount())
                     .paymentDetails("Thanh toán bằng ATM")
                     .order(order)

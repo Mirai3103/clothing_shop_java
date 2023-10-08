@@ -75,6 +75,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
                 .payments(null)
                 .deliveryFee(fee)
                 .totalAmount((int) totalPrice + fee)
+                .paymentMethod(createOrderCommand.getPaymentMethod())
                 .build();
         orderRepository.save(newOrder);
         cartItems.forEach(cartItem -> {

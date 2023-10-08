@@ -1,5 +1,6 @@
 package com.shop.clothing.order.entity;
 
+import com.shop.clothing.payment.entity.enums.PaymentMethod;
 import com.shop.clothing.user.entity.User;
 import com.shop.clothing.common.AuditableEntity;
 import com.shop.clothing.promotion.Promotion;
@@ -25,6 +26,8 @@ public class Order extends AuditableEntity {
 
     @Column(length = 500)
     private String address;
+    @Column(nullable = false)
+    private PaymentMethod paymentMethod;
 
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;

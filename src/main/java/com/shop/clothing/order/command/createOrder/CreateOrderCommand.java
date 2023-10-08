@@ -2,7 +2,9 @@ package com.shop.clothing.order.command.createOrder;
 
 import com.shop.clothing.common.Cqrs.IRequest;
 import com.shop.clothing.common.validation.NullOrNotBlank;
+import com.shop.clothing.payment.entity.enums.PaymentMethod;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,4 +30,6 @@ public class CreateOrderCommand implements IRequest<String> {
     private String note;
     @NullOrNotBlank(message = "Cần nhập mã giảm giá")
     private String promotionCode;
+    @NotNull(message = "Phương thức thanh toán không được để trống")
+    private PaymentMethod paymentMethod = PaymentMethod.COD;
 }
