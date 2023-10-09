@@ -23,7 +23,7 @@ public class TestMailService {
     @Test
     public void testSendEmail() {
         assertDoesNotThrow(() -> {
-            mailService.sendEmail("huuhoag1412@outlook.com", "huuhoag1412@gmail.com", "Test", "Test");
+            mailService.sendEmail("huuhoag1412@gmail.com", "Test", "Test");
         });
     }
 }

@@ -17,5 +17,5 @@ import lombok.Setter;
 @Getter
 public class ProductImageDto {
     private String url;
-    private Color forColor;
+    private ColorDto forColor;
 }

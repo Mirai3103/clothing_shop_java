@@ -23,5 +23,6 @@ public class ProductDetailDto extends ProductBriefDto {
 
     private java.util.List<ProductOptionDto> productOptions;
     private java.util.List<ProductImageDto>images;
+    private String description;
 
 }

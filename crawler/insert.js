@@ -35,6 +35,7 @@ async function insert(item) {
         },
     });
     console.log("inserted product: ", product.product_id);
+    const productId = product.product_id;
     const productOptions = item.productOptions;
     const idColorMap = {};
     for await (const productOption of productOptions) {
@@ -72,13 +73,14 @@ async function insert(item) {
         const id = idColorMap[productOption.color.trim()];
         for await (const image of productOption.gallery) {
             try {
+                console.log("insert for product: ", productId, " color: ", id);
                 await prisma.product_image.create({
                     data: {
                         url: image,
                         for_color_color_id: id,
                         created_by: "system",
                         created_date: new Date(),
-                        product_product_id: product.id,
+                        product_product_id: productId,
                     },
                 });
             } catch (e) {}

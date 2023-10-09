@@ -10,9 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/auth")
@@ -40,7 +38,23 @@ public class AuthController {
         }
         return "login";
     }
-
+    @GetMapping("/forgot-password")
+    public String forgotPassword(Model model) {
+        return "forgot-password";
+    }
+    @PostMapping("/forgot-password")
+    public String createForgotPassword(Model model) {
+        return "forgot-password";
+    }
+    @GetMapping("/reset-password")
+    public String resetPassword( @RequestParam String token) {
+        //todo: check token
+        return "reset-password";
+    }
+    @PostMapping("/reset-password")
+    public String changePassword(@RequestParam String token) {
+            return "reset-password";
+    }
     @PostMapping("/register")
     public String register(@Valid RegisterCommand registerCommand, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
