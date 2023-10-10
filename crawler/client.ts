@@ -8,8 +8,8 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-import axios, { AxiosError } from "axios";
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from "axios";
+import axios, { AxiosError } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
 
 export class Client {
     private instance: AxiosInstance;
@@ -17,9 +17,11 @@ export class Client {
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, instance?: AxiosInstance) {
+
         this.instance = instance ? instance : axios.create();
 
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
+
     }
 
     /**
@@ -37,23 +39,20 @@ export class Client {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processCreateCategory(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateCategory(_response);
+        });
     }
 
     protected processCreateCategory(response: AxiosResponse): Promise<boolean> {
@@ -69,10 +68,11 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
             return Promise.resolve<boolean>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -96,21 +96,18 @@ export class Client {
             headers: {
                 "Content-Type": "application/json",
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processUpdateCartItemQuantity(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateCartItemQuantity(_response);
+        });
     }
 
     protected processUpdateCartItemQuantity(response: AxiosResponse): Promise<void> {
@@ -126,6 +123,7 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -140,28 +138,27 @@ export class Client {
         let url_ = this.baseUrl + "/momo/ipn?";
         if (param === undefined || param === null)
             throw new Error("The parameter 'param' must be defined and cannot be null.");
-        else url_ += "param=" + encodeURIComponent("" + param) + "&";
+        else
+            url_ += "param=" + encodeURIComponent("" + param) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
             method: "POST",
             url: url_,
-            headers: {},
-            cancelToken,
+            headers: {
+            },
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processIpn(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processIpn(_response);
+        });
     }
 
     protected processIpn(response: AxiosResponse): Promise<void> {
@@ -177,6 +174,109 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getMyProfile( cancelToken?: CancelToken | undefined): Promise<UserDto> {
+        let url_ = this.baseUrl + "/api/user/my-profile";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetMyProfile(_response);
+        });
+    }
+
+    protected processGetMyProfile(response: AxiosResponse): Promise<UserDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = UserDto.fromJS(resultData200);
+            return Promise.resolve<UserDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<UserDto>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    updateMyProfile(body: UpdateProfileCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/user/my-profile";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateMyProfile(_response);
+        });
+    }
+
+    protected processUpdateMyProfile(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -199,23 +299,20 @@ export class Client {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processCreateProduct(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateProduct(_response);
+        });
     }
 
     protected processCreateProduct(response: AxiosResponse): Promise<number> {
@@ -231,10 +328,11 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
             return Promise.resolve<number>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -257,23 +355,20 @@ export class Client {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processCreatePayment(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreatePayment(_response);
+        });
     }
 
     protected processCreatePayment(response: AxiosResponse): Promise<CreatePaymentResponse> {
@@ -289,9 +384,10 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = CreatePaymentResponse.fromJS(resultData200);
             return Promise.resolve<CreatePaymentResponse>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -314,23 +410,20 @@ export class Client {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processCreateOrder(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateOrder(_response);
+        });
     }
 
     protected processCreateOrder(response: AxiosResponse): Promise<string> {
@@ -346,10 +439,11 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
             return Promise.resolve<string>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -373,23 +467,20 @@ export class Client {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processUploadFile(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUploadFile(_response);
+        });
     }
 
     protected processUploadFile(response: AxiosResponse): Promise<string> {
@@ -405,10 +496,11 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
             return Promise.resolve<string>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -431,23 +523,20 @@ export class Client {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processCreateColor(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateColor(_response);
+        });
     }
 
     protected processCreateColor(response: AxiosResponse): Promise<number> {
@@ -463,10 +552,11 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
             return Promise.resolve<number>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -490,21 +580,18 @@ export class Client {
             headers: {
                 "Content-Type": "application/json",
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processAddToCart(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAddToCart(_response);
+        });
     }
 
     protected processAddToCart(response: AxiosResponse): Promise<void> {
@@ -520,6 +607,7 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -534,30 +622,28 @@ export class Client {
         let url_ = this.baseUrl + "/momo/callback?";
         if (param === undefined || param === null)
             throw new Error("The parameter 'param' must be defined and cannot be null.");
-        else url_ += "param=" + encodeURIComponent("" + param) + "&";
+        else
+            url_ += "param=" + encodeURIComponent("" + param) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
             method: "GET",
             url: url_,
             headers: {
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processCallback(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCallback(_response);
+        });
     }
 
     protected processCallback(response: AxiosResponse): Promise<string> {
@@ -573,68 +659,16 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
             return Promise.resolve<string>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<string>(null as any);
-    }
-
-    /**
-     * @return OK
-     */
-    getMyProfile(cancelToken?: CancelToken | undefined): Promise<UserDto> {
-        let url_ = this.baseUrl + "/api/user/my-profile";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                Accept: "*/*",
-            },
-            cancelToken,
-        };
-
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processGetMyProfile(_response);
-            });
-    }
-
-    protected processGetMyProfile(response: AxiosResponse): Promise<UserDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UserDto.fromJS(resultData200);
-            return Promise.resolve<UserDto>(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UserDto>(null as any);
     }
 
     /**
@@ -651,23 +685,20 @@ export class Client {
             method: "GET",
             url: url_,
             headers: {
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processGetProductById(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetProductById(_response);
+        });
     }
 
     protected processGetProductById(response: AxiosResponse): Promise<ProductDetailDto> {
@@ -683,9 +714,10 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = ProductDetailDto.fromJS(resultData200);
             return Promise.resolve<ProductDetailDto>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -705,60 +737,64 @@ export class Client {
      * @param keyword (optional)
      * @return OK
      */
-    getProducts(
-        categoryId: number | undefined,
-        forGender: ForGender | undefined,
-        minPrice: number | undefined,
-        maxPrice: number | undefined,
-        page: number | undefined,
-        size: number | undefined,
-        sortField: string | undefined,
-        sortDir: string | undefined,
-        keyword: string | undefined,
-        cancelToken?: CancelToken | undefined
-    ): Promise<PaginatedProductBriefDto> {
+    getProducts(categoryId: number | undefined, forGender: ForGender | undefined, minPrice: number | undefined, maxPrice: number | undefined, page: number | undefined, size: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedProductBriefDto> {
         let url_ = this.baseUrl + "/api/product/?";
-        if (categoryId === null) throw new Error("The parameter 'categoryId' cannot be null.");
-        else if (categoryId !== undefined) url_ += "categoryId=" + encodeURIComponent("" + categoryId) + "&";
-        if (forGender === null) throw new Error("The parameter 'forGender' cannot be null.");
-        else if (forGender !== undefined) url_ += "forGender=" + encodeURIComponent("" + forGender) + "&";
-        if (minPrice === null) throw new Error("The parameter 'minPrice' cannot be null.");
-        else if (minPrice !== undefined) url_ += "minPrice=" + encodeURIComponent("" + minPrice) + "&";
-        if (maxPrice === null) throw new Error("The parameter 'maxPrice' cannot be null.");
-        else if (maxPrice !== undefined) url_ += "maxPrice=" + encodeURIComponent("" + maxPrice) + "&";
-        if (page === null) throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined) url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (size === null) throw new Error("The parameter 'size' cannot be null.");
-        else if (size !== undefined) url_ += "size=" + encodeURIComponent("" + size) + "&";
-        if (sortField === null) throw new Error("The parameter 'sortField' cannot be null.");
-        else if (sortField !== undefined) url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
-        if (sortDir === null) throw new Error("The parameter 'sortDir' cannot be null.");
-        else if (sortDir !== undefined) url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
-        if (keyword === null) throw new Error("The parameter 'keyword' cannot be null.");
-        else if (keyword !== undefined) url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        if (categoryId === null)
+            throw new Error("The parameter 'categoryId' cannot be null.");
+        else if (categoryId !== undefined)
+            url_ += "categoryId=" + encodeURIComponent("" + categoryId) + "&";
+        if (forGender === null)
+            throw new Error("The parameter 'forGender' cannot be null.");
+        else if (forGender !== undefined)
+            url_ += "forGender=" + encodeURIComponent("" + forGender) + "&";
+        if (minPrice === null)
+            throw new Error("The parameter 'minPrice' cannot be null.");
+        else if (minPrice !== undefined)
+            url_ += "minPrice=" + encodeURIComponent("" + minPrice) + "&";
+        if (maxPrice === null)
+            throw new Error("The parameter 'maxPrice' cannot be null.");
+        else if (maxPrice !== undefined)
+            url_ += "maxPrice=" + encodeURIComponent("" + maxPrice) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (size === null)
+            throw new Error("The parameter 'size' cannot be null.");
+        else if (size !== undefined)
+            url_ += "size=" + encodeURIComponent("" + size) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
             method: "GET",
             url: url_,
             headers: {
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processGetProducts(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetProducts(_response);
+        });
     }
 
     protected processGetProducts(response: AxiosResponse): Promise<PaginatedProductBriefDto> {
@@ -774,9 +810,10 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = PaginatedProductBriefDto.fromJS(resultData200);
             return Promise.resolve<PaginatedProductBriefDto>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -788,48 +825,44 @@ export class Client {
      * @param totalPrice (optional)
      * @return OK
      */
-    getDeliveryFee(
-        toProvince: string,
-        toDistrict: string,
-        toWard: string,
-        totalPrice: number | undefined,
-        cancelToken?: CancelToken | undefined
-    ): Promise<number> {
+    getDeliveryFee(toProvince: string, toDistrict: string, toWard: string, totalPrice: number | undefined, cancelToken?: CancelToken | undefined): Promise<number> {
         let url_ = this.baseUrl + "/api/delivery/fee?";
         if (toProvince === undefined || toProvince === null)
             throw new Error("The parameter 'toProvince' must be defined and cannot be null.");
-        else url_ += "toProvince=" + encodeURIComponent("" + toProvince) + "&";
+        else
+            url_ += "toProvince=" + encodeURIComponent("" + toProvince) + "&";
         if (toDistrict === undefined || toDistrict === null)
             throw new Error("The parameter 'toDistrict' must be defined and cannot be null.");
-        else url_ += "toDistrict=" + encodeURIComponent("" + toDistrict) + "&";
+        else
+            url_ += "toDistrict=" + encodeURIComponent("" + toDistrict) + "&";
         if (toWard === undefined || toWard === null)
             throw new Error("The parameter 'toWard' must be defined and cannot be null.");
-        else url_ += "toWard=" + encodeURIComponent("" + toWard) + "&";
-        if (totalPrice === null) throw new Error("The parameter 'totalPrice' cannot be null.");
-        else if (totalPrice !== undefined) url_ += "totalPrice=" + encodeURIComponent("" + totalPrice) + "&";
+        else
+            url_ += "toWard=" + encodeURIComponent("" + toWard) + "&";
+        if (totalPrice === null)
+            throw new Error("The parameter 'totalPrice' cannot be null.");
+        else if (totalPrice !== undefined)
+            url_ += "totalPrice=" + encodeURIComponent("" + totalPrice) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
             method: "GET",
             url: url_,
             headers: {
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processGetDeliveryFee(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetDeliveryFee(_response);
+        });
     }
 
     protected processGetDeliveryFee(response: AxiosResponse): Promise<number> {
@@ -845,10 +878,11 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
             return Promise.resolve<number>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -865,51 +899,52 @@ export class Client {
      * @param keyword (optional)
      * @return OK
      */
-    getCategories(
-        eyword: string | undefined,
-        page: number | undefined,
-        size: number | undefined,
-        sortField: string | undefined,
-        sortDir: string | undefined,
-        keyword: string | undefined,
-        cancelToken?: CancelToken | undefined
-    ): Promise<PaginatedCategoryBriefDto> {
+    getCategories(eyword: string | undefined, page: number | undefined, size: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedCategoryBriefDto> {
         let url_ = this.baseUrl + "/api/category?";
-        if (eyword === null) throw new Error("The parameter 'eyword' cannot be null.");
-        else if (eyword !== undefined) url_ += "eyword=" + encodeURIComponent("" + eyword) + "&";
-        if (page === null) throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined) url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (size === null) throw new Error("The parameter 'size' cannot be null.");
-        else if (size !== undefined) url_ += "size=" + encodeURIComponent("" + size) + "&";
-        if (sortField === null) throw new Error("The parameter 'sortField' cannot be null.");
-        else if (sortField !== undefined) url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
-        if (sortDir === null) throw new Error("The parameter 'sortDir' cannot be null.");
-        else if (sortDir !== undefined) url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
-        if (keyword === null) throw new Error("The parameter 'keyword' cannot be null.");
-        else if (keyword !== undefined) url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        if (eyword === null)
+            throw new Error("The parameter 'eyword' cannot be null.");
+        else if (eyword !== undefined)
+            url_ += "eyword=" + encodeURIComponent("" + eyword) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (size === null)
+            throw new Error("The parameter 'size' cannot be null.");
+        else if (size !== undefined)
+            url_ += "size=" + encodeURIComponent("" + size) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
             method: "GET",
             url: url_,
             headers: {
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processGetCategories(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetCategories(_response);
+        });
     }
 
     protected processGetCategories(response: AxiosResponse): Promise<PaginatedCategoryBriefDto> {
@@ -925,9 +960,10 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = PaginatedCategoryBriefDto.fromJS(resultData200);
             return Promise.resolve<PaginatedCategoryBriefDto>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -938,7 +974,7 @@ export class Client {
     /**
      * @return OK
      */
-    getMyCart(cancelToken?: CancelToken | undefined): Promise<CartItemDto[]> {
+    getMyCart( cancelToken?: CancelToken | undefined): Promise<CartItemDto[]> {
         let url_ = this.baseUrl + "/api/cart/my-cart";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -946,23 +982,20 @@ export class Client {
             method: "GET",
             url: url_,
             headers: {
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processGetMyCart(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetMyCart(_response);
+        });
     }
 
     protected processGetMyCart(response: AxiosResponse): Promise<CartItemDto[]> {
@@ -978,14 +1011,17 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
-                for (let item of resultData200) result200!.push(CartItemDto.fromJS(item));
-            } else {
+                for (let item of resultData200)
+                    result200!.push(CartItemDto.fromJS(item));
+            }
+            else {
                 result200 = <any>null;
             }
             return Promise.resolve<CartItemDto[]>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -998,29 +1034,28 @@ export class Client {
      */
     deleteCategory(id: string, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/category/delete/{id}";
-        if (id === undefined || id === null) throw new Error("The parameter 'id' must be defined.");
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
             method: "DELETE",
             url: url_,
-            headers: {},
-            cancelToken,
+            headers: {
+            },
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processDeleteCategory(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDeleteCategory(_response);
+        });
     }
 
     protected processDeleteCategory(response: AxiosResponse): Promise<void> {
@@ -1036,6 +1071,7 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1056,22 +1092,20 @@ export class Client {
         let options_: AxiosRequestConfig = {
             method: "DELETE",
             url: url_,
-            headers: {},
-            cancelToken,
+            headers: {
+            },
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.processClearCart(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processClearCart(_response);
+        });
     }
 
     protected processClearCart(response: AxiosResponse): Promise<void> {
@@ -1087,6 +1121,7 @@ export class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1101,9 +1136,11 @@ export class CreateProductClient {
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, instance?: AxiosInstance) {
+
         this.instance = instance ? instance : axios.create();
 
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
+
     }
 
     /**
@@ -1122,21 +1159,18 @@ export class CreateProductClient {
             headers: {
                 "Content-Type": "application/json",
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.process1(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.process1(_response);
+        });
     }
 
     protected process1(response: AxiosResponse): Promise<void> {
@@ -1152,6 +1186,7 @@ export class CreateProductClient {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1175,21 +1210,18 @@ export class CreateProductClient {
             headers: {
                 "Content-Type": "application/json",
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.process2(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.process2(_response);
+        });
     }
 
     protected process2(response: AxiosResponse): Promise<void> {
@@ -1205,6 +1237,7 @@ export class CreateProductClient {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1219,9 +1252,11 @@ export class CreateCategoryClient {
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, instance?: AxiosInstance) {
+
         this.instance = instance ? instance : axios.create();
 
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
+
     }
 
     /**
@@ -1239,23 +1274,20 @@ export class CreateCategoryClient {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
-                Accept: "*/*",
+                "Accept": "*/*"
             },
-            cancelToken,
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.process1(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.process1(_response);
+        });
     }
 
     protected process1(response: AxiosResponse): Promise<number> {
@@ -1271,10 +1303,11 @@ export class CreateCategoryClient {
         if (status === 200) {
             const _responseText = response.data;
             let result200: any = null;
-            let resultData200 = _responseText;
+            let resultData200  = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
             return Promise.resolve<number>(result200);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1289,37 +1322,37 @@ export class ClearCartClient {
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, instance?: AxiosInstance) {
+
         this.instance = instance ? instance : axios.create();
 
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
+
     }
 
     /**
      * @return OK
      */
-    1(cancelToken?: CancelToken | undefined): Promise<void> {
+    1( cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/cart/clear-cart";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
             method: "DELETE",
             url: url_,
-            headers: {},
-            cancelToken,
+            headers: {
+            },
+            cancelToken
         };
 
-        return this.instance
-            .request(options_)
-            .catch((_error: any) => {
-                if (isAxiosError(_error) && _error.response) {
-                    return _error.response;
-                } else {
-                    throw _error;
-                }
-            })
-            .then((_response: AxiosResponse) => {
-                return this.process1(_response);
-            });
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.process1(_response);
+        });
     }
 
     protected process1(response: AxiosResponse): Promise<void> {
@@ -1335,6 +1368,7 @@ export class ClearCartClient {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
+
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1354,7 +1388,8 @@ export class UpdateCategoryCommand implements IUpdateCategoryCommand {
     constructor(data?: IUpdateCategoryCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1362,7 +1397,8 @@ export class UpdateCategoryCommand implements IUpdateCategoryCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.id = _data["id"];
             this.name = _data["name"];
@@ -1372,16 +1408,17 @@ export class UpdateCategoryCommand implements IUpdateCategoryCommand {
     }
 
     static fromJS(data: any): UpdateCategoryCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new UpdateCategoryCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["id"] = this.id;
         data["name"] = this.name;
@@ -1409,7 +1446,8 @@ export class UpdateCartItemQuantityCommand implements IUpdateCartItemQuantityCom
     constructor(data?: IUpdateCartItemQuantityCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1417,7 +1455,8 @@ export class UpdateCartItemQuantityCommand implements IUpdateCartItemQuantityCom
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.productOptionId = _data["productOptionId"];
             this.newQuantity = _data["newQuantity"];
@@ -1425,16 +1464,17 @@ export class UpdateCartItemQuantityCommand implements IUpdateCartItemQuantityCom
     }
 
     static fromJS(data: any): UpdateCartItemQuantityCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new UpdateCartItemQuantityCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["productOptionId"] = this.productOptionId;
         data["newQuantity"] = this.newQuantity;
@@ -1469,7 +1509,8 @@ export class MomoCallbackParam implements IMomoCallbackParam {
     constructor(data?: IMomoCallbackParam) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1477,7 +1518,8 @@ export class MomoCallbackParam implements IMomoCallbackParam {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.partnerCode = _data["partnerCode"];
             this.orderId = _data["orderId"];
@@ -1496,16 +1538,17 @@ export class MomoCallbackParam implements IMomoCallbackParam {
     }
 
     static fromJS(data: any): MomoCallbackParam {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new MomoCallbackParam();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["partnerCode"] = this.partnerCode;
         data["orderId"] = this.orderId;
@@ -1542,6 +1585,70 @@ export interface IMomoCallbackParam {
     [key: string]: any;
 }
 
+export class UpdateProfileCommand implements IUpdateProfileCommand {
+    firstName!: string;
+    lastName!: string;
+    email?: string;
+    address?: string;
+    phoneNumber?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IUpdateProfileCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.address = _data["address"];
+            this.phoneNumber = _data["phoneNumber"];
+        }
+    }
+
+    static fromJS(data: any): UpdateProfileCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateProfileCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["address"] = this.address;
+        data["phoneNumber"] = this.phoneNumber;
+        return data;
+    }
+}
+
+export interface IUpdateProfileCommand {
+    firstName: string;
+    lastName: string;
+    email?: string;
+    address?: string;
+    phoneNumber?: string;
+
+    [key: string]: any;
+}
+
 export class CreateProductCommand implements ICreateProductCommand {
     name!: string;
     forGender?: CreateProductCommandForGender;
@@ -1557,7 +1664,8 @@ export class CreateProductCommand implements ICreateProductCommand {
     constructor(data?: ICreateProductCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1565,7 +1673,8 @@ export class CreateProductCommand implements ICreateProductCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.name = _data["name"];
             this.forGender = _data["forGender"];
@@ -1579,16 +1688,17 @@ export class CreateProductCommand implements ICreateProductCommand {
     }
 
     static fromJS(data: any): CreateProductCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CreateProductCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["name"] = this.name;
         data["forGender"] = this.forGender;
@@ -1626,7 +1736,8 @@ export class CreateProductOptionCommand implements ICreateProductOptionCommand {
     constructor(data?: ICreateProductOptionCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1634,7 +1745,8 @@ export class CreateProductOptionCommand implements ICreateProductOptionCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.colorId = _data["colorId"];
             this.size = _data["size"];
@@ -1644,16 +1756,17 @@ export class CreateProductOptionCommand implements ICreateProductOptionCommand {
     }
 
     static fromJS(data: any): CreateProductOptionCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CreateProductOptionCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["colorId"] = this.colorId;
         data["size"] = this.size;
@@ -1682,7 +1795,8 @@ export class CreateProductImageCommand implements ICreateProductImageCommand {
     constructor(data?: ICreateProductImageCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1690,7 +1804,8 @@ export class CreateProductImageCommand implements ICreateProductImageCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.productId = _data["productId"];
             this.colorId = _data["colorId"];
@@ -1699,16 +1814,17 @@ export class CreateProductImageCommand implements ICreateProductImageCommand {
     }
 
     static fromJS(data: any): CreateProductImageCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CreateProductImageCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["productId"] = this.productId;
         data["colorId"] = this.colorId;
@@ -1733,7 +1849,8 @@ export class CreatePaymentCommand implements ICreatePaymentCommand {
     constructor(data?: ICreatePaymentCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1741,23 +1858,25 @@ export class CreatePaymentCommand implements ICreatePaymentCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.orderId = _data["orderId"];
         }
     }
 
     static fromJS(data: any): CreatePaymentCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CreatePaymentCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["orderId"] = this.orderId;
         return data;
@@ -1783,7 +1902,8 @@ export class CreatePaymentResponse implements ICreatePaymentResponse {
     constructor(data?: ICreatePaymentResponse) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1791,7 +1911,8 @@ export class CreatePaymentResponse implements ICreatePaymentResponse {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.paymentId = _data["paymentId"];
             this.paymentMethod = _data["paymentMethod"];
@@ -1803,16 +1924,17 @@ export class CreatePaymentResponse implements ICreatePaymentResponse {
     }
 
     static fromJS(data: any): CreatePaymentResponse {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CreatePaymentResponse();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["paymentId"] = this.paymentId;
         data["paymentMethod"] = this.paymentMethod;
@@ -1849,7 +1971,8 @@ export class CreateOrderCommand implements ICreateOrderCommand {
     constructor(data?: ICreateOrderCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
         if (!data) {
@@ -1860,11 +1983,13 @@ export class CreateOrderCommand implements ICreateOrderCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             if (Array.isArray(_data["productOptionIds"])) {
                 this.productOptionIds = [] as any;
-                for (let item of _data["productOptionIds"]) this.productOptionIds!.push(item);
+                for (let item of _data["productOptionIds"])
+                    this.productOptionIds!.push(item);
             }
             this.customerName = _data["customerName"];
             this.address = _data["address"];
@@ -1876,20 +2001,22 @@ export class CreateOrderCommand implements ICreateOrderCommand {
     }
 
     static fromJS(data: any): CreateOrderCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CreateOrderCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         if (Array.isArray(this.productOptionIds)) {
             data["productOptionIds"] = [];
-            for (let item of this.productOptionIds) data["productOptionIds"].push(item);
+            for (let item of this.productOptionIds)
+                data["productOptionIds"].push(item);
         }
         data["customerName"] = this.customerName;
         data["address"] = this.address;
@@ -1922,7 +2049,8 @@ export class CreateColorCommand implements ICreateColorCommand {
     constructor(data?: ICreateColorCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1930,7 +2058,8 @@ export class CreateColorCommand implements ICreateColorCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.name = _data["name"];
             this.image = _data["image"];
@@ -1938,16 +2067,17 @@ export class CreateColorCommand implements ICreateColorCommand {
     }
 
     static fromJS(data: any): CreateColorCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CreateColorCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["name"] = this.name;
         data["image"] = this.image;
@@ -1971,7 +2101,8 @@ export class CreateCategoryCommand implements ICreateCategoryCommand {
     constructor(data?: ICreateCategoryCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -1979,7 +2110,8 @@ export class CreateCategoryCommand implements ICreateCategoryCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.name = _data["name"];
             this.parentId = _data["parentId"];
@@ -1987,16 +2119,17 @@ export class CreateCategoryCommand implements ICreateCategoryCommand {
     }
 
     static fromJS(data: any): CreateCategoryCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CreateCategoryCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["name"] = this.name;
         data["parentId"] = this.parentId;
@@ -2020,7 +2153,8 @@ export class AddToCartCommand implements IAddToCartCommand {
     constructor(data?: IAddToCartCommand) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -2028,7 +2162,8 @@ export class AddToCartCommand implements IAddToCartCommand {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.productOptionId = _data["productOptionId"];
             this.quantity = _data["quantity"];
@@ -2036,16 +2171,17 @@ export class AddToCartCommand implements IAddToCartCommand {
     }
 
     static fromJS(data: any): AddToCartCommand {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new AddToCartCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["productOptionId"] = this.productOptionId;
         data["quantity"] = this.quantity;
@@ -2071,15 +2207,16 @@ export class UserDto implements IUserDto {
     createdAt?: Date;
     permissions?: string[];
     emailVerified?: boolean;
-    accountEnabled?: boolean;
     customer?: boolean;
+    accountEnabled?: boolean;
 
     [key: string]: any;
 
     constructor(data?: IUserDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -2087,7 +2224,8 @@ export class UserDto implements IUserDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.userId = _data["userId"];
             this.firstName = _data["firstName"];
@@ -2099,25 +2237,27 @@ export class UserDto implements IUserDto {
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             if (Array.isArray(_data["permissions"])) {
                 this.permissions = [] as any;
-                for (let item of _data["permissions"]) this.permissions!.push(item);
+                for (let item of _data["permissions"])
+                    this.permissions!.push(item);
             }
             this.emailVerified = _data["emailVerified"];
-            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
+            this.accountEnabled = _data["accountEnabled"];
         }
     }
 
     static fromJS(data: any): UserDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new UserDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["userId"] = this.userId;
         data["firstName"] = this.firstName;
@@ -2129,11 +2269,12 @@ export class UserDto implements IUserDto {
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         if (Array.isArray(this.permissions)) {
             data["permissions"] = [];
-            for (let item of this.permissions) data["permissions"].push(item);
+            for (let item of this.permissions)
+                data["permissions"].push(item);
         }
         data["emailVerified"] = this.emailVerified;
-        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        data["accountEnabled"] = this.accountEnabled;
         return data;
     }
 }
@@ -2149,192 +2290,8 @@ export interface IUserDto {
     createdAt?: Date;
     permissions?: string[];
     emailVerified?: boolean;
-    accountEnabled?: boolean;
     customer?: boolean;
-
-    [key: string]: any;
-}
-
-export class Brand implements IBrand {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    brandId?: number;
-    name?: string;
-    slug?: string;
-    deletedDate?: Date;
-    products?: Product[];
-
-    [key: string]: any;
-
-    constructor(data?: IBrand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
-            }
-            this.createdBy = _data["createdBy"];
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
-            this.brandId = _data["brandId"];
-            this.name = _data["name"];
-            this.slug = _data["slug"];
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            if (Array.isArray(_data["products"])) {
-                this.products = [] as any;
-                for (let item of _data["products"]) this.products!.push(Product.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Brand {
-        data = typeof data === "object" ? data : {};
-        let result = new Brand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
-        }
-        data["createdBy"] = this.createdBy;
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
-        data["brandId"] = this.brandId;
-        data["name"] = this.name;
-        data["slug"] = this.slug;
-        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        if (Array.isArray(this.products)) {
-            data["products"] = [];
-            for (let item of this.products) data["products"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IBrand {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    brandId?: number;
-    name?: string;
-    slug?: string;
-    deletedDate?: Date;
-    products?: Product[];
-
-    [key: string]: any;
-}
-
-export class Category implements ICategory {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    categoryId?: number;
-    name?: string;
-    slug?: string;
-    deletedDate?: Date;
-    products?: Product[];
-    parent?: Category;
-    children?: Category[];
-
-    [key: string]: any;
-
-    constructor(data?: ICategory) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
-            }
-            this.createdBy = _data["createdBy"];
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
-            this.categoryId = _data["categoryId"];
-            this.name = _data["name"];
-            this.slug = _data["slug"];
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            if (Array.isArray(_data["products"])) {
-                this.products = [] as any;
-                for (let item of _data["products"]) this.products!.push(Product.fromJS(item));
-            }
-            this.parent = _data["parent"] ? Category.fromJS(_data["parent"]) : <any>undefined;
-            if (Array.isArray(_data["children"])) {
-                this.children = [] as any;
-                for (let item of _data["children"]) this.children!.push(Category.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Category {
-        data = typeof data === "object" ? data : {};
-        let result = new Category();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
-        }
-        data["createdBy"] = this.createdBy;
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
-        data["categoryId"] = this.categoryId;
-        data["name"] = this.name;
-        data["slug"] = this.slug;
-        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        if (Array.isArray(this.products)) {
-            data["products"] = [];
-            for (let item of this.products) data["products"].push(item.toJSON());
-        }
-        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
-        if (Array.isArray(this.children)) {
-            data["children"] = [];
-            for (let item of this.children) data["children"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface ICategory {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    categoryId?: number;
-    name?: string;
-    slug?: string;
-    deletedDate?: Date;
-    products?: Product[];
-    parent?: Category;
-    children?: Category[];
+    accountEnabled?: boolean;
 
     [key: string]: any;
 }
@@ -2354,7 +2311,8 @@ export class CategoryBriefDto implements ICategoryBriefDto {
     constructor(data?: ICategoryBriefDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -2362,14 +2320,13 @@ export class CategoryBriefDto implements ICategoryBriefDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
             this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
+            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.categoryId = _data["categoryId"];
             this.name = _data["name"];
             this.slug = _data["slug"];
@@ -2378,16 +2335,17 @@ export class CategoryBriefDto implements ICategoryBriefDto {
     }
 
     static fromJS(data: any): CategoryBriefDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CategoryBriefDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
@@ -2414,97 +2372,6 @@ export interface ICategoryBriefDto {
     [key: string]: any;
 }
 
-export class Color implements IColor {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    colorId?: number;
-    name?: string;
-    image?: string;
-    productOptions?: ProductOption[];
-    productImages?: ProductImage[];
-
-    [key: string]: any;
-
-    constructor(data?: IColor) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
-            }
-            this.createdBy = _data["createdBy"];
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
-            this.colorId = _data["colorId"];
-            this.name = _data["name"];
-            this.image = _data["image"];
-            if (Array.isArray(_data["productOptions"])) {
-                this.productOptions = [] as any;
-                for (let item of _data["productOptions"]) this.productOptions!.push(ProductOption.fromJS(item));
-            }
-            if (Array.isArray(_data["productImages"])) {
-                this.productImages = [] as any;
-                for (let item of _data["productImages"]) this.productImages!.push(ProductImage.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Color {
-        data = typeof data === "object" ? data : {};
-        let result = new Color();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
-        }
-        data["createdBy"] = this.createdBy;
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
-        data["colorId"] = this.colorId;
-        data["name"] = this.name;
-        data["image"] = this.image;
-        if (Array.isArray(this.productOptions)) {
-            data["productOptions"] = [];
-            for (let item of this.productOptions) data["productOptions"].push(item.toJSON());
-        }
-        if (Array.isArray(this.productImages)) {
-            data["productImages"] = [];
-            for (let item of this.productImages) data["productImages"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IColor {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    colorId?: number;
-    name?: string;
-    image?: string;
-    productOptions?: ProductOption[];
-    productImages?: ProductImage[];
-
-    [key: string]: any;
-}
-
 export class ColorDto implements IColorDto {
     colorId?: number;
     name?: string;
@@ -2515,7 +2382,8 @@ export class ColorDto implements IColorDto {
     constructor(data?: IColorDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -2523,7 +2391,8 @@ export class ColorDto implements IColorDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.colorId = _data["colorId"];
             this.name = _data["name"];
@@ -2532,16 +2401,17 @@ export class ColorDto implements IColorDto {
     }
 
     static fromJS(data: any): ColorDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new ColorDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["colorId"] = this.colorId;
         data["name"] = this.name;
@@ -2554,129 +2424,6 @@ export interface IColorDto {
     colorId?: number;
     name?: string;
     image?: string;
-
-    [key: string]: any;
-}
-
-export class Product implements IProduct {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    productId?: number;
-    name?: string;
-    forGender?: ProductForGender;
-    slug?: string;
-    description?: string;
-    price?: number;
-    discount?: number;
-    displayImage?: string;
-    deletedDate?: Date;
-    brand?: Brand;
-    category?: Category;
-    productOptions?: ProductOption[];
-    images?: ProductImage[];
-
-    [key: string]: any;
-
-    constructor(data?: IProduct) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
-            }
-            this.createdBy = _data["createdBy"];
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
-            this.productId = _data["productId"];
-            this.name = _data["name"];
-            this.forGender = _data["forGender"];
-            this.slug = _data["slug"];
-            this.description = _data["description"];
-            this.price = _data["price"];
-            this.discount = _data["discount"];
-            this.displayImage = _data["displayImage"];
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            this.brand = _data["brand"] ? Brand.fromJS(_data["brand"]) : <any>undefined;
-            this.category = _data["category"] ? Category.fromJS(_data["category"]) : <any>undefined;
-            if (Array.isArray(_data["productOptions"])) {
-                this.productOptions = [] as any;
-                for (let item of _data["productOptions"]) this.productOptions!.push(ProductOption.fromJS(item));
-            }
-            if (Array.isArray(_data["images"])) {
-                this.images = [] as any;
-                for (let item of _data["images"]) this.images!.push(ProductImage.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Product {
-        data = typeof data === "object" ? data : {};
-        let result = new Product();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
-        }
-        data["createdBy"] = this.createdBy;
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
-        data["productId"] = this.productId;
-        data["name"] = this.name;
-        data["forGender"] = this.forGender;
-        data["slug"] = this.slug;
-        data["description"] = this.description;
-        data["price"] = this.price;
-        data["discount"] = this.discount;
-        data["displayImage"] = this.displayImage;
-        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        data["brand"] = this.brand ? this.brand.toJSON() : <any>undefined;
-        data["category"] = this.category ? this.category.toJSON() : <any>undefined;
-        if (Array.isArray(this.productOptions)) {
-            data["productOptions"] = [];
-            for (let item of this.productOptions) data["productOptions"].push(item.toJSON());
-        }
-        if (Array.isArray(this.images)) {
-            data["images"] = [];
-            for (let item of this.images) data["images"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IProduct {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    productId?: number;
-    name?: string;
-    forGender?: ProductForGender;
-    slug?: string;
-    description?: string;
-    price?: number;
-    discount?: number;
-    displayImage?: string;
-    deletedDate?: Date;
-    brand?: Brand;
-    category?: Category;
-    productOptions?: ProductOption[];
-    images?: ProductImage[];
 
     [key: string]: any;
 }
@@ -2696,13 +2443,15 @@ export class ProductDetailDto implements IProductDetailDto {
     category?: CategoryBriefDto;
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
+    description?: string;
 
     [key: string]: any;
 
     constructor(data?: IProductDetailDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -2710,14 +2459,13 @@ export class ProductDetailDto implements IProductDetailDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
             this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
+            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.productId = _data["productId"];
             this.name = _data["name"];
             this.forGender = _data["forGender"];
@@ -2728,26 +2476,30 @@ export class ProductDetailDto implements IProductDetailDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             if (Array.isArray(_data["productOptions"])) {
                 this.productOptions = [] as any;
-                for (let item of _data["productOptions"]) this.productOptions!.push(ProductOptionDto.fromJS(item));
+                for (let item of _data["productOptions"])
+                    this.productOptions!.push(ProductOptionDto.fromJS(item));
             }
             if (Array.isArray(_data["images"])) {
                 this.images = [] as any;
-                for (let item of _data["images"]) this.images!.push(ProductImageDto.fromJS(item));
+                for (let item of _data["images"])
+                    this.images!.push(ProductImageDto.fromJS(item));
             }
+            this.description = _data["description"];
         }
     }
 
     static fromJS(data: any): ProductDetailDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new ProductDetailDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
@@ -2763,12 +2515,15 @@ export class ProductDetailDto implements IProductDetailDto {
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         if (Array.isArray(this.productOptions)) {
             data["productOptions"] = [];
-            for (let item of this.productOptions) data["productOptions"].push(item.toJSON());
+            for (let item of this.productOptions)
+                data["productOptions"].push(item.toJSON());
         }
         if (Array.isArray(this.images)) {
             data["images"] = [];
-            for (let item of this.images) data["images"].push(item.toJSON());
+            for (let item of this.images)
+                data["images"].push(item.toJSON());
         }
+        data["description"] = this.description;
         return data;
     }
 }
@@ -2788,91 +2543,22 @@ export interface IProductDetailDto {
     category?: CategoryBriefDto;
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
-
-    [key: string]: any;
-}
-
-export class ProductImage implements IProductImage {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    url?: string;
-    forColor?: Color;
-    product?: Product;
-
-    [key: string]: any;
-
-    constructor(data?: IProductImage) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
-            }
-            this.createdBy = _data["createdBy"];
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
-            this.url = _data["url"];
-            this.forColor = _data["forColor"] ? Color.fromJS(_data["forColor"]) : <any>undefined;
-            this.product = _data["product"] ? Product.fromJS(_data["product"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): ProductImage {
-        data = typeof data === "object" ? data : {};
-        let result = new ProductImage();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
-        }
-        data["createdBy"] = this.createdBy;
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
-        data["url"] = this.url;
-        data["forColor"] = this.forColor ? this.forColor.toJSON() : <any>undefined;
-        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IProductImage {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    url?: string;
-    forColor?: Color;
-    product?: Product;
+    description?: string;
 
     [key: string]: any;
 }
 
 export class ProductImageDto implements IProductImageDto {
     url?: string;
-    forColor?: Color;
+    forColor?: ColorDto;
 
     [key: string]: any;
 
     constructor(data?: IProductImageDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -2880,24 +2566,26 @@ export class ProductImageDto implements IProductImageDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.url = _data["url"];
-            this.forColor = _data["forColor"] ? Color.fromJS(_data["forColor"]) : <any>undefined;
+            this.forColor = _data["forColor"] ? ColorDto.fromJS(_data["forColor"]) : <any>undefined;
         }
     }
 
     static fromJS(data: any): ProductImageDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new ProductImageDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["url"] = this.url;
         data["forColor"] = this.forColor ? this.forColor.toJSON() : <any>undefined;
@@ -2907,90 +2595,7 @@ export class ProductImageDto implements IProductImageDto {
 
 export interface IProductImageDto {
     url?: string;
-    forColor?: Color;
-
-    [key: string]: any;
-}
-
-export class ProductOption implements IProductOption {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    productOptionId?: number;
-    size?: string;
-    stock?: number;
-    deletedDate?: Date;
-    product?: Product;
-    color?: Color;
-
-    [key: string]: any;
-
-    constructor(data?: IProductOption) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
-            }
-            this.createdBy = _data["createdBy"];
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
-            this.productOptionId = _data["productOptionId"];
-            this.size = _data["size"];
-            this.stock = _data["stock"];
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            this.product = _data["product"] ? Product.fromJS(_data["product"]) : <any>undefined;
-            this.color = _data["color"] ? Color.fromJS(_data["color"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): ProductOption {
-        data = typeof data === "object" ? data : {};
-        let result = new ProductOption();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
-        }
-        data["createdBy"] = this.createdBy;
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
-        data["productOptionId"] = this.productOptionId;
-        data["size"] = this.size;
-        data["stock"] = this.stock;
-        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
-        data["color"] = this.color ? this.color.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IProductOption {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    productOptionId?: number;
-    size?: string;
-    stock?: number;
-    deletedDate?: Date;
-    product?: Product;
-    color?: Color;
+    forColor?: ColorDto;
 
     [key: string]: any;
 }
@@ -3011,7 +2616,8 @@ export class ProductOptionDto implements IProductOptionDto {
     constructor(data?: IProductOptionDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -3019,14 +2625,13 @@ export class ProductOptionDto implements IProductOptionDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
             this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
+            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.productOptionId = _data["productOptionId"];
             this.size = _data["size"];
             this.stock = _data["stock"];
@@ -3036,16 +2641,17 @@ export class ProductOptionDto implements IProductOptionDto {
     }
 
     static fromJS(data: any): ProductOptionDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new ProductOptionDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
@@ -3088,7 +2694,8 @@ export class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
     constructor(data?: IPaginatedProductBriefDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -3096,11 +2703,13 @@ export class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
-                for (let item of _data["data"]) this.data!.push(ProductBriefDto.fromJS(item));
+                for (let item of _data["data"])
+                    this.data!.push(ProductBriefDto.fromJS(item));
             }
             this.page = _data["page"];
             this.size = _data["size"];
@@ -3112,20 +2721,22 @@ export class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
     }
 
     static fromJS(data: any): PaginatedProductBriefDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new PaginatedProductBriefDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         if (Array.isArray(this.data)) {
             data["data"] = [];
-            for (let item of this.data) data["data"].push(item.toJSON());
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
         }
         data["page"] = this.page;
         data["size"] = this.size;
@@ -3168,7 +2779,8 @@ export class ProductBriefDto implements IProductBriefDto {
     constructor(data?: IProductBriefDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -3176,14 +2788,13 @@ export class ProductBriefDto implements IProductBriefDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
             this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
+            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.productId = _data["productId"];
             this.name = _data["name"];
             this.forGender = _data["forGender"];
@@ -3196,16 +2807,17 @@ export class ProductBriefDto implements IProductBriefDto {
     }
 
     static fromJS(data: any): ProductBriefDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new ProductBriefDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
@@ -3254,7 +2866,8 @@ export class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
     constructor(data?: IPaginatedCategoryBriefDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -3262,11 +2875,13 @@ export class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             if (Array.isArray(_data["data"])) {
                 this.data = [] as any;
-                for (let item of _data["data"]) this.data!.push(CategoryBriefDto.fromJS(item));
+                for (let item of _data["data"])
+                    this.data!.push(CategoryBriefDto.fromJS(item));
             }
             this.page = _data["page"];
             this.size = _data["size"];
@@ -3278,20 +2893,22 @@ export class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
     }
 
     static fromJS(data: any): PaginatedCategoryBriefDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new PaginatedCategoryBriefDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         if (Array.isArray(this.data)) {
             data["data"] = [];
-            for (let item of this.data) data["data"].push(item.toJSON());
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
         }
         data["page"] = this.page;
         data["size"] = this.size;
@@ -3326,7 +2943,8 @@ export class CartItemDto implements ICartItemDto {
     constructor(data?: ICartItemDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -3334,28 +2952,28 @@ export class CartItemDto implements ICartItemDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.userId = _data["userId"];
             this.productOptionId = _data["productOptionId"];
             this.quantity = _data["quantity"];
-            this.productOption = _data["productOption"]
-                ? ProductOptionDetailDto.fromJS(_data["productOption"])
-                : <any>undefined;
+            this.productOption = _data["productOption"] ? ProductOptionDetailDto.fromJS(_data["productOption"]) : <any>undefined;
         }
     }
 
     static fromJS(data: any): CartItemDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new CartItemDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["userId"] = this.userId;
         data["productOptionId"] = this.productOptionId;
@@ -3391,7 +3009,8 @@ export class ProductOptionDetailDto implements IProductOptionDetailDto {
     constructor(data?: IProductOptionDetailDto) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -3399,14 +3018,13 @@ export class ProductOptionDetailDto implements IProductOptionDetailDto {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
             this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"]
-                ? new Date(_data["lastModifiedDate"].toString())
-                : <any>undefined;
+            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.productOptionId = _data["productOptionId"];
             this.size = _data["size"];
             this.stock = _data["stock"];
@@ -3417,16 +3035,17 @@ export class ProductOptionDetailDto implements IProductOptionDetailDto {
     }
 
     static fromJS(data: any): ProductOptionDetailDto {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new ProductOptionDetailDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
@@ -3465,7 +3084,8 @@ export class Body implements IBody {
     constructor(data?: IBody) {
         if (data) {
             for (var property in data) {
-                if (data.hasOwnProperty(property)) (<any>this)[property] = (<any>data)[property];
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
             }
         }
     }
@@ -3473,23 +3093,25 @@ export class Body implements IBody {
     init(_data?: any) {
         if (_data) {
             for (var property in _data) {
-                if (_data.hasOwnProperty(property)) this[property] = _data[property];
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
             }
             this.file = _data["file"];
         }
     }
 
     static fromJS(data: any): Body {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         let result = new Body();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
-        data = typeof data === "object" ? data : {};
+        data = typeof data === 'object' ? data : {};
         for (var property in this) {
-            if (this.hasOwnProperty(property)) data[property] = this[property];
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
         }
         data["file"] = this.file;
         return data;
@@ -3526,12 +3148,6 @@ export enum CreateOrderCommandPaymentMethod {
     MOMO_ATM = "MOMO_ATM",
 }
 
-export enum ProductForGender {
-    FOR_MALE = "FOR_MALE",
-    FOR_FEMALE = "FOR_FEMALE",
-    FOR_BOTH = "FOR_BOTH",
-}
-
 export enum ProductDetailDtoForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
@@ -3553,10 +3169,10 @@ export class ApiException extends Error {
     override message: string;
     status: number;
     response: string;
-    headers: { [key: string]: any };
+    headers: { [key: string]: any; };
     result: any;
 
-    constructor(message: string, status: number, response: string, headers: { [key: string]: any }, result: any) {
+    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
         super();
 
         this.message = message;
@@ -3573,15 +3189,11 @@ export class ApiException extends Error {
     }
 }
 
-function throwException(
-    message: string,
-    status: number,
-    response: string,
-    headers: { [key: string]: any },
-    result?: any
-): any {
-    if (result !== null && result !== undefined) throw result;
-    else throw new ApiException(message, status, response, headers, null);
+function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
+    if (result !== null && result !== undefined)
+        throw result;
+    else
+        throw new ApiException(message, status, response, headers, null);
 }
 
 function isAxiosError(obj: any | undefined): obj is AxiosError {

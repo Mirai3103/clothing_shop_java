@@ -5,7 +5,6 @@ import com.shop.clothing.product.command.createColor.CreateColorCommand;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

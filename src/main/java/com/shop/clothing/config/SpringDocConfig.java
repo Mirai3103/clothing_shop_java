@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
                 version = "1.0",
                 description = "APIs for user management"
         )
+
 )
 public class SpringDocConfig {
 

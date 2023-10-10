@@ -1,4 +1,4 @@
-import type { AxiosInstance, AxiosResponse, CancelToken } from "axios";
+import type { AxiosInstance, AxiosResponse, CancelToken } from 'axios';
 export declare class Client {
     private instance;
     private baseUrl;
@@ -19,6 +19,16 @@ export declare class Client {
      */
     ipn(param: MomoCallbackParam, cancelToken?: CancelToken | undefined): Promise<void>;
     protected processIpn(response: AxiosResponse): Promise<void>;
+    /**
+     * @return OK
+     */
+    getMyProfile(cancelToken?: CancelToken | undefined): Promise<UserDto>;
+    protected processGetMyProfile(response: AxiosResponse): Promise<UserDto>;
+    /**
+     * @return OK
+     */
+    updateMyProfile(body: UpdateProfileCommand, cancelToken?: CancelToken | undefined): Promise<void>;
+    protected processUpdateMyProfile(response: AxiosResponse): Promise<void>;
     /**
      * @return OK
      */
@@ -55,11 +65,6 @@ export declare class Client {
      */
     callback(param: MomoCallbackParam, cancelToken?: CancelToken | undefined): Promise<string>;
     protected processCallback(response: AxiosResponse): Promise<string>;
-    /**
-     * @return OK
-     */
-    getMyProfile(cancelToken?: CancelToken | undefined): Promise<UserDto>;
-    protected processGetMyProfile(response: AxiosResponse): Promise<UserDto>;
     /**
      * @return OK
      */
@@ -216,6 +221,26 @@ export interface IMomoCallbackParam {
     responseTime?: number;
     extraData?: string;
     signature?: string;
+    [key: string]: any;
+}
+export declare class UpdateProfileCommand implements IUpdateProfileCommand {
+    firstName: string;
+    lastName: string;
+    email?: string;
+    address?: string;
+    phoneNumber?: string;
+    [key: string]: any;
+    constructor(data?: IUpdateProfileCommand);
+    init(_data?: any): void;
+    static fromJS(data: any): UpdateProfileCommand;
+    toJSON(data?: any): any;
+}
+export interface IUpdateProfileCommand {
+    firstName: string;
+    lastName: string;
+    email?: string;
+    address?: string;
+    phoneNumber?: string;
     [key: string]: any;
 }
 export declare class CreateProductCommand implements ICreateProductCommand {
@@ -389,8 +414,8 @@ export declare class UserDto implements IUserDto {
     createdAt?: Date;
     permissions?: string[];
     emailVerified?: boolean;
-    accountEnabled?: boolean;
     customer?: boolean;
+    accountEnabled?: boolean;
     [key: string]: any;
     constructor(data?: IUserDto);
     init(_data?: any): void;
@@ -408,68 +433,8 @@ export interface IUserDto {
     createdAt?: Date;
     permissions?: string[];
     emailVerified?: boolean;
-    accountEnabled?: boolean;
     customer?: boolean;
-    [key: string]: any;
-}
-export declare class Brand implements IBrand {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    brandId?: number;
-    name?: string;
-    slug?: string;
-    deletedDate?: Date;
-    products?: Product[];
-    [key: string]: any;
-    constructor(data?: IBrand);
-    init(_data?: any): void;
-    static fromJS(data: any): Brand;
-    toJSON(data?: any): any;
-}
-export interface IBrand {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    brandId?: number;
-    name?: string;
-    slug?: string;
-    deletedDate?: Date;
-    products?: Product[];
-    [key: string]: any;
-}
-export declare class Category implements ICategory {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    categoryId?: number;
-    name?: string;
-    slug?: string;
-    deletedDate?: Date;
-    products?: Product[];
-    parent?: Category;
-    children?: Category[];
-    [key: string]: any;
-    constructor(data?: ICategory);
-    init(_data?: any): void;
-    static fromJS(data: any): Category;
-    toJSON(data?: any): any;
-}
-export interface ICategory {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    categoryId?: number;
-    name?: string;
-    slug?: string;
-    deletedDate?: Date;
-    products?: Product[];
-    parent?: Category;
-    children?: Category[];
+    accountEnabled?: boolean;
     [key: string]: any;
 }
 export declare class CategoryBriefDto implements ICategoryBriefDto {
@@ -498,34 +463,6 @@ export interface ICategoryBriefDto {
     parent?: CategoryBriefDto;
     [key: string]: any;
 }
-export declare class Color implements IColor {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    colorId?: number;
-    name?: string;
-    image?: string;
-    productOptions?: ProductOption[];
-    productImages?: ProductImage[];
-    [key: string]: any;
-    constructor(data?: IColor);
-    init(_data?: any): void;
-    static fromJS(data: any): Color;
-    toJSON(data?: any): any;
-}
-export interface IColor {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    colorId?: number;
-    name?: string;
-    image?: string;
-    productOptions?: ProductOption[];
-    productImages?: ProductImage[];
-    [key: string]: any;
-}
 export declare class ColorDto implements IColorDto {
     colorId?: number;
     name?: string;
@@ -540,50 +477,6 @@ export interface IColorDto {
     colorId?: number;
     name?: string;
     image?: string;
-    [key: string]: any;
-}
-export declare class Product implements IProduct {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    productId?: number;
-    name?: string;
-    forGender?: ProductForGender;
-    slug?: string;
-    description?: string;
-    price?: number;
-    discount?: number;
-    displayImage?: string;
-    deletedDate?: Date;
-    brand?: Brand;
-    category?: Category;
-    productOptions?: ProductOption[];
-    images?: ProductImage[];
-    [key: string]: any;
-    constructor(data?: IProduct);
-    init(_data?: any): void;
-    static fromJS(data: any): Product;
-    toJSON(data?: any): any;
-}
-export interface IProduct {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    productId?: number;
-    name?: string;
-    forGender?: ProductForGender;
-    slug?: string;
-    description?: string;
-    price?: number;
-    discount?: number;
-    displayImage?: string;
-    deletedDate?: Date;
-    brand?: Brand;
-    category?: Category;
-    productOptions?: ProductOption[];
-    images?: ProductImage[];
     [key: string]: any;
 }
 export declare class ProductDetailDto implements IProductDetailDto {
@@ -601,6 +494,7 @@ export declare class ProductDetailDto implements IProductDetailDto {
     category?: CategoryBriefDto;
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
+    description?: string;
     [key: string]: any;
     constructor(data?: IProductDetailDto);
     init(_data?: any): void;
@@ -622,35 +516,12 @@ export interface IProductDetailDto {
     category?: CategoryBriefDto;
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
-    [key: string]: any;
-}
-export declare class ProductImage implements IProductImage {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    url?: string;
-    forColor?: Color;
-    product?: Product;
-    [key: string]: any;
-    constructor(data?: IProductImage);
-    init(_data?: any): void;
-    static fromJS(data: any): ProductImage;
-    toJSON(data?: any): any;
-}
-export interface IProductImage {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    url?: string;
-    forColor?: Color;
-    product?: Product;
+    description?: string;
     [key: string]: any;
 }
 export declare class ProductImageDto implements IProductImageDto {
     url?: string;
-    forColor?: Color;
+    forColor?: ColorDto;
     [key: string]: any;
     constructor(data?: IProductImageDto);
     init(_data?: any): void;
@@ -659,37 +530,7 @@ export declare class ProductImageDto implements IProductImageDto {
 }
 export interface IProductImageDto {
     url?: string;
-    forColor?: Color;
-    [key: string]: any;
-}
-export declare class ProductOption implements IProductOption {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    productOptionId?: number;
-    size?: string;
-    stock?: number;
-    deletedDate?: Date;
-    product?: Product;
-    color?: Color;
-    [key: string]: any;
-    constructor(data?: IProductOption);
-    init(_data?: any): void;
-    static fromJS(data: any): ProductOption;
-    toJSON(data?: any): any;
-}
-export interface IProductOption {
-    createdBy?: string;
-    createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
-    productOptionId?: number;
-    size?: string;
-    stock?: number;
-    deletedDate?: Date;
-    product?: Product;
-    color?: Color;
+    forColor?: ColorDto;
     [key: string]: any;
 }
 export declare class ProductOptionDto implements IProductOptionDto {
@@ -882,11 +723,6 @@ export declare enum CreateOrderCommandPaymentMethod {
     MOMO_QR = "MOMO_QR",
     MOMO_ATM = "MOMO_ATM"
 }
-export declare enum ProductForGender {
-    FOR_MALE = "FOR_MALE",
-    FOR_FEMALE = "FOR_FEMALE",
-    FOR_BOTH = "FOR_BOTH"
-}
 export declare enum ProductDetailDtoForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
@@ -915,3 +751,4 @@ export declare class ApiException extends Error {
     protected isApiException: boolean;
     static isApiException(obj: any): obj is ApiException;
 }
+//# sourceMappingURL=client.d.ts.map

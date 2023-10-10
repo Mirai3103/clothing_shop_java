@@ -42,6 +42,10 @@ public class GetAllProductsQueryHandler implements IRequestHandler<GetAllProduct
         if (!getAllProductsQuery.getKeyword().isBlank()) {
             predicates = cb.and(predicates, cb.like(root.get("name"), "%" + getAllProductsQuery.getKeyword() + "%"));
         }
+
+        if (!getAllProductsQuery.isIncludeDeleted()) {
+            predicates = cb.and(predicates, cb.isNull(root.get("deletedDate")));
+        }
         String sortField = getAllProductsQuery.getSortField();
         if (sortField.isBlank()) {
             sortField = "createdDate";

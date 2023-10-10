@@ -14,6 +14,10 @@ public class BeanUtil {
         return new BCryptPasswordEncoder(10);
     }
     @Bean
+    public ClientUtil clientUtil() {
+        return new ClientUtil();
+    }
+    @Bean
     public SlugUtil slugUtil() {
         return new SlugUtil();
     }

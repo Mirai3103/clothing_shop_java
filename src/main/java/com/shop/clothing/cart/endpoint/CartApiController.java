@@ -9,7 +9,6 @@ import com.shop.clothing.cart.query.getMyCart.GetMyCartQuery;
 import com.shop.clothing.common.Cqrs.ISender;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;

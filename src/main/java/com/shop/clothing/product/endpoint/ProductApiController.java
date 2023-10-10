@@ -22,6 +22,7 @@ public class ProductApiController {
 
     @GetMapping("/")
     public ResponseEntity<Paginated<ProductBriefDto>> getProducts(@Valid @ParameterObject GetAllProductsQuery getAllProductsQuery) {
+     
         var result = sender.send(getAllProductsQuery);
         return ResponseEntity.ok(result.orThrow());
     }

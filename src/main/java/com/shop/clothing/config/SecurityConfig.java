@@ -43,7 +43,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authConfig -> {
 //            authConfig.requestMatchers(HttpMethod.GET, "/admin/brand/**").hasAuthority("MANAGE_BRANDS");
-//            authConfig.requestMatchers(HttpMethod.GET, "/admin/category/**").hasAuthority("MANAGE_CATEGORIES");
+//            authConfig.requestMatchers(HttpMethod.GET, "/admin/category/**").hasxx("MANAGE_CATEGORIES");
 //            authConfig.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("ADMIN_DASHBOARD");
             authConfig.anyRequest().permitAll();
 
@@ -60,7 +60,9 @@ public class SecurityConfig {
             logout.logoutSuccessUrl("/");
             logout.deleteCookies("JSESSIONID");
             logout.invalidateHttpSession(true);
-        }).csrf(AbstractHttpConfigurer::disable);
+        })
+
+                .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 

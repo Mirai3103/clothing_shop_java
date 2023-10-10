@@ -6,7 +6,6 @@ import com.shop.clothing.product.command.createProductOption.CreateProductOption
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

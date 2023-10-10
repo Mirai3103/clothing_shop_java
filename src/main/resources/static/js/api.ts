@@ -11,7 +11,7 @@
 import axios, { AxiosError } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
 
-export class Client {
+class Client {
     private instance: AxiosInstance;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -1243,7 +1243,7 @@ export class Client {
     }
 }
 
-export class CreateProductClient {
+class CreateProductClient {
     private instance: AxiosInstance;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -1359,7 +1359,7 @@ export class CreateProductClient {
     }
 }
 
-export class CreateCategoryClient {
+class CreateCategoryClient {
     private instance: AxiosInstance;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -1429,7 +1429,7 @@ export class CreateCategoryClient {
     }
 }
 
-export class ClearCartClient {
+class ClearCartClient {
     private instance: AxiosInstance;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -1490,7 +1490,7 @@ export class ClearCartClient {
     }
 }
 
-export class UpdateCategoryCommand implements IUpdateCategoryCommand {
+class UpdateCategoryCommand implements IUpdateCategoryCommand {
     id!: number;
     name!: string;
     slug!: string;
@@ -1541,7 +1541,7 @@ export class UpdateCategoryCommand implements IUpdateCategoryCommand {
     }
 }
 
-export interface IUpdateCategoryCommand {
+interface IUpdateCategoryCommand {
     id: number;
     name: string;
     slug: string;
@@ -1550,7 +1550,7 @@ export interface IUpdateCategoryCommand {
     [key: string]: any;
 }
 
-export class UpdateCartItemQuantityCommand implements IUpdateCartItemQuantityCommand {
+class UpdateCartItemQuantityCommand implements IUpdateCartItemQuantityCommand {
     productOptionId?: number;
     newQuantity?: number;
 
@@ -1595,14 +1595,14 @@ export class UpdateCartItemQuantityCommand implements IUpdateCartItemQuantityCom
     }
 }
 
-export interface IUpdateCartItemQuantityCommand {
+interface IUpdateCartItemQuantityCommand {
     productOptionId?: number;
     newQuantity?: number;
 
     [key: string]: any;
 }
 
-export class MomoCallbackParam implements IMomoCallbackParam {
+class MomoCallbackParam implements IMomoCallbackParam {
     partnerCode?: string;
     orderId?: string;
     requestId?: string;
@@ -1680,7 +1680,7 @@ export class MomoCallbackParam implements IMomoCallbackParam {
     }
 }
 
-export interface IMomoCallbackParam {
+interface IMomoCallbackParam {
     partnerCode?: string;
     orderId?: string;
     requestId?: string;
@@ -1698,7 +1698,7 @@ export interface IMomoCallbackParam {
     [key: string]: any;
 }
 
-export class UpdatePasswordCommand implements IUpdatePasswordCommand {
+class UpdatePasswordCommand implements IUpdatePasswordCommand {
     oldPassword!: string;
     newPassword?: string;
 
@@ -1743,14 +1743,14 @@ export class UpdatePasswordCommand implements IUpdatePasswordCommand {
     }
 }
 
-export interface IUpdatePasswordCommand {
+interface IUpdatePasswordCommand {
     oldPassword: string;
     newPassword?: string;
 
     [key: string]: any;
 }
 
-export class UpdateProfileCommand implements IUpdateProfileCommand {
+class UpdateProfileCommand implements IUpdateProfileCommand {
     firstName!: string;
     lastName!: string;
     email?: string;
@@ -1804,7 +1804,7 @@ export class UpdateProfileCommand implements IUpdateProfileCommand {
     }
 }
 
-export interface IUpdateProfileCommand {
+interface IUpdateProfileCommand {
     firstName: string;
     lastName: string;
     email?: string;
@@ -1814,7 +1814,7 @@ export interface IUpdateProfileCommand {
     [key: string]: any;
 }
 
-export class CreateProductCommand implements ICreateProductCommand {
+class CreateProductCommand implements ICreateProductCommand {
     name!: string;
     forGender?: CreateProductCommandForGender;
     description!: string;
@@ -1877,7 +1877,7 @@ export class CreateProductCommand implements ICreateProductCommand {
     }
 }
 
-export interface ICreateProductCommand {
+interface ICreateProductCommand {
     name: string;
     forGender?: CreateProductCommandForGender;
     description: string;
@@ -1890,7 +1890,7 @@ export interface ICreateProductCommand {
     [key: string]: any;
 }
 
-export class CreateProductOptionCommand implements ICreateProductOptionCommand {
+class CreateProductOptionCommand implements ICreateProductOptionCommand {
     colorId!: number;
     size!: string;
     stock?: number;
@@ -1941,7 +1941,7 @@ export class CreateProductOptionCommand implements ICreateProductOptionCommand {
     }
 }
 
-export interface ICreateProductOptionCommand {
+interface ICreateProductOptionCommand {
     colorId: number;
     size: string;
     stock?: number;
@@ -1950,7 +1950,7 @@ export interface ICreateProductOptionCommand {
     [key: string]: any;
 }
 
-export class CreateProductImageCommand implements ICreateProductImageCommand {
+class CreateProductImageCommand implements ICreateProductImageCommand {
     productId?: number;
     colorId?: number;
     url?: string;
@@ -1998,7 +1998,7 @@ export class CreateProductImageCommand implements ICreateProductImageCommand {
     }
 }
 
-export interface ICreateProductImageCommand {
+interface ICreateProductImageCommand {
     productId?: number;
     colorId?: number;
     url?: string;
@@ -2006,7 +2006,7 @@ export interface ICreateProductImageCommand {
     [key: string]: any;
 }
 
-export class CreatePaymentCommand implements ICreatePaymentCommand {
+class CreatePaymentCommand implements ICreatePaymentCommand {
     orderId?: string;
 
     [key: string]: any;
@@ -2048,13 +2048,13 @@ export class CreatePaymentCommand implements ICreatePaymentCommand {
     }
 }
 
-export interface ICreatePaymentCommand {
+interface ICreatePaymentCommand {
     orderId?: string;
 
     [key: string]: any;
 }
 
-export class CreatePaymentResponse implements ICreatePaymentResponse {
+class CreatePaymentResponse implements ICreatePaymentResponse {
     paymentId?: string;
     paymentMethod?: CreatePaymentResponsePaymentMethod;
     orderId?: string;
@@ -2111,7 +2111,7 @@ export class CreatePaymentResponse implements ICreatePaymentResponse {
     }
 }
 
-export interface ICreatePaymentResponse {
+interface ICreatePaymentResponse {
     paymentId?: string;
     paymentMethod?: CreatePaymentResponsePaymentMethod;
     orderId?: string;
@@ -2122,7 +2122,7 @@ export interface ICreatePaymentResponse {
     [key: string]: any;
 }
 
-export class CreateOrderCommand implements ICreateOrderCommand {
+class CreateOrderCommand implements ICreateOrderCommand {
     productOptionIds!: number[];
     customerName!: string;
     address!: string;
@@ -2193,7 +2193,7 @@ export class CreateOrderCommand implements ICreateOrderCommand {
     }
 }
 
-export interface ICreateOrderCommand {
+interface ICreateOrderCommand {
     productOptionIds: number[];
     customerName: string;
     address: string;
@@ -2205,7 +2205,7 @@ export interface ICreateOrderCommand {
     [key: string]: any;
 }
 
-export class CreateColorCommand implements ICreateColorCommand {
+class CreateColorCommand implements ICreateColorCommand {
     name!: string;
     image?: string;
 
@@ -2250,14 +2250,14 @@ export class CreateColorCommand implements ICreateColorCommand {
     }
 }
 
-export interface ICreateColorCommand {
+interface ICreateColorCommand {
     name: string;
     image?: string;
 
     [key: string]: any;
 }
 
-export class CreateCategoryCommand implements ICreateCategoryCommand {
+class CreateCategoryCommand implements ICreateCategoryCommand {
     name!: string;
     parentId?: number;
 
@@ -2302,14 +2302,14 @@ export class CreateCategoryCommand implements ICreateCategoryCommand {
     }
 }
 
-export interface ICreateCategoryCommand {
+interface ICreateCategoryCommand {
     name: string;
     parentId?: number;
 
     [key: string]: any;
 }
 
-export class AddToCartCommand implements IAddToCartCommand {
+class AddToCartCommand implements IAddToCartCommand {
     productOptionId?: number;
     quantity?: number;
 
@@ -2354,14 +2354,14 @@ export class AddToCartCommand implements IAddToCartCommand {
     }
 }
 
-export interface IAddToCartCommand {
+interface IAddToCartCommand {
     productOptionId?: number;
     quantity?: number;
 
     [key: string]: any;
 }
 
-export class UserDto implements IUserDto {
+class UserDto implements IUserDto {
     userId?: string;
     firstName?: string;
     lastName?: string;
@@ -2371,9 +2371,9 @@ export class UserDto implements IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
+    customer?: boolean;
     emailVerified?: boolean;
     accountEnabled?: boolean;
-    customer?: boolean;
 
     [key: string]: any;
 
@@ -2405,9 +2405,9 @@ export class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
+            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
-            this.customer = _data["customer"];
         }
     }
 
@@ -2437,14 +2437,14 @@ export class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
+        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
-        data["customer"] = this.customer;
         return data;
     }
 }
 
-export interface IUserDto {
+interface IUserDto {
     userId?: string;
     firstName?: string;
     lastName?: string;
@@ -2454,14 +2454,14 @@ export interface IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
+    customer?: boolean;
     emailVerified?: boolean;
     accountEnabled?: boolean;
-    customer?: boolean;
 
     [key: string]: any;
 }
 
-export class CategoryBriefDto implements ICategoryBriefDto {
+class CategoryBriefDto implements ICategoryBriefDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -2524,7 +2524,7 @@ export class CategoryBriefDto implements ICategoryBriefDto {
     }
 }
 
-export interface ICategoryBriefDto {
+interface ICategoryBriefDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -2537,7 +2537,7 @@ export interface ICategoryBriefDto {
     [key: string]: any;
 }
 
-export class ColorDto implements IColorDto {
+class ColorDto implements IColorDto {
     colorId?: number;
     name?: string;
     image?: string;
@@ -2585,7 +2585,7 @@ export class ColorDto implements IColorDto {
     }
 }
 
-export interface IColorDto {
+interface IColorDto {
     colorId?: number;
     name?: string;
     image?: string;
@@ -2593,7 +2593,7 @@ export interface IColorDto {
     [key: string]: any;
 }
 
-export class ProductDetailDto implements IProductDetailDto {
+class ProductDetailDto implements IProductDetailDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -2696,7 +2696,7 @@ export class ProductDetailDto implements IProductDetailDto {
     }
 }
 
-export interface IProductDetailDto {
+interface IProductDetailDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -2717,7 +2717,7 @@ export interface IProductDetailDto {
     [key: string]: any;
 }
 
-export class ProductImageDto implements IProductImageDto {
+class ProductImageDto implements IProductImageDto {
     url?: string;
     forColor?: ColorDto;
 
@@ -2762,14 +2762,14 @@ export class ProductImageDto implements IProductImageDto {
     }
 }
 
-export interface IProductImageDto {
+interface IProductImageDto {
     url?: string;
     forColor?: ColorDto;
 
     [key: string]: any;
 }
 
-export class ProductOptionDto implements IProductOptionDto {
+class ProductOptionDto implements IProductOptionDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -2835,7 +2835,7 @@ export class ProductOptionDto implements IProductOptionDto {
     }
 }
 
-export interface IProductOptionDto {
+interface IProductOptionDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -2849,7 +2849,7 @@ export interface IProductOptionDto {
     [key: string]: any;
 }
 
-export class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
+class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
     data?: ProductBriefDto[];
     page?: number;
     size?: number;
@@ -2917,7 +2917,7 @@ export class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
     }
 }
 
-export interface IPaginatedProductBriefDto {
+interface IPaginatedProductBriefDto {
     data?: ProductBriefDto[];
     page?: number;
     size?: number;
@@ -2929,7 +2929,7 @@ export interface IPaginatedProductBriefDto {
     [key: string]: any;
 }
 
-export class ProductBriefDto implements IProductBriefDto {
+class ProductBriefDto implements IProductBriefDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -3007,7 +3007,7 @@ export class ProductBriefDto implements IProductBriefDto {
     }
 }
 
-export interface IProductBriefDto {
+interface IProductBriefDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -3025,7 +3025,7 @@ export interface IProductBriefDto {
     [key: string]: any;
 }
 
-export class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
+class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
     data?: CategoryBriefDto[];
     page?: number;
     size?: number;
@@ -3093,7 +3093,7 @@ export class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
     }
 }
 
-export interface IPaginatedCategoryBriefDto {
+interface IPaginatedCategoryBriefDto {
     data?: CategoryBriefDto[];
     page?: number;
     size?: number;
@@ -3105,7 +3105,7 @@ export interface IPaginatedCategoryBriefDto {
     [key: string]: any;
 }
 
-export class CartItemDto implements ICartItemDto {
+class CartItemDto implements ICartItemDto {
     userId?: string;
     productOptionId?: number;
     quantity?: number;
@@ -3156,7 +3156,7 @@ export class CartItemDto implements ICartItemDto {
     }
 }
 
-export interface ICartItemDto {
+interface ICartItemDto {
     userId?: string;
     productOptionId?: number;
     quantity?: number;
@@ -3165,7 +3165,7 @@ export interface ICartItemDto {
     [key: string]: any;
 }
 
-export class ProductOptionDetailDto implements IProductOptionDetailDto {
+class ProductOptionDetailDto implements IProductOptionDetailDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -3234,7 +3234,7 @@ export class ProductOptionDetailDto implements IProductOptionDetailDto {
     }
 }
 
-export interface IProductOptionDetailDto {
+interface IProductOptionDetailDto {
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -3249,7 +3249,7 @@ export interface IProductOptionDetailDto {
     [key: string]: any;
 }
 
-export class Body implements IBody {
+class Body implements IBody {
     file!: string;
 
     [key: string]: any;
@@ -3291,13 +3291,13 @@ export class Body implements IBody {
     }
 }
 
-export interface IBody {
+interface IBody {
     file: string;
 
     [key: string]: any;
 }
 
-export class Body2 implements IBody2 {
+class Body2 implements IBody2 {
     file?: string;
 
     [key: string]: any;
@@ -3339,54 +3339,54 @@ export class Body2 implements IBody2 {
     }
 }
 
-export interface IBody2 {
+interface IBody2 {
     file?: string;
 
     [key: string]: any;
 }
 
-export enum ForGender {
+enum ForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
     FOR_BOTH = "FOR_BOTH",
 }
 
-export enum CreateProductCommandForGender {
+enum CreateProductCommandForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
     FOR_BOTH = "FOR_BOTH",
 }
 
-export enum CreatePaymentResponsePaymentMethod {
+enum CreatePaymentResponsePaymentMethod {
     COD = "COD",
     MOMO_QR = "MOMO_QR",
     MOMO_ATM = "MOMO_ATM",
 }
 
-export enum CreateOrderCommandPaymentMethod {
+enum CreateOrderCommandPaymentMethod {
     COD = "COD",
     MOMO_QR = "MOMO_QR",
     MOMO_ATM = "MOMO_ATM",
 }
 
-export enum ProductDetailDtoForGender {
+enum ProductDetailDtoForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
     FOR_BOTH = "FOR_BOTH",
 }
 
-export enum ProductBriefDtoForGender {
+enum ProductBriefDtoForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
     FOR_BOTH = "FOR_BOTH",
 }
 
-export interface FileParameter {
+interface FileParameter {
     data: any;
     fileName: string;
 }
 
-export class ApiException extends Error {
+class ApiException extends Error {
     override message: string;
     status: number;
     response: string;

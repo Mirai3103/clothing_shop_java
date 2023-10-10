@@ -34,4 +34,19 @@ public class UserDto {
     private boolean isCustomer = true;
     private Date createdAt = new Date();
     private Collection<String> permissions;
+
+    public String toJsonObject() {
+        return "{" +
+                "\"userId\":\"" + userId + '\"' +
+                ", \"firstName\":\"" + firstName + '\"' +
+                ", \"lastName\":\"" + lastName + '\"' +
+                ", \"email\":\"" + email + '\"' +
+                ", \"phoneNumber\":\"" + phoneNumber + '\"' +
+                ", \"address\":\"" + address + '\"' +
+                ", \"avatarUrl\":\"" + avatarUrl + '\"' +
+                ", \"isEmailVerified\":" + isEmailVerified +
+                ", \"isAccountEnabled\":" + isAccountEnabled +
+                ", \"isCustomer\":" + isCustomer +
+                '}';
+    }
 }

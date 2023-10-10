@@ -7,7 +7,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-export class Client {
+class Client {
     constructor(baseUrl, instance) {
         this.jsonParseReviver = undefined;
         this.instance = instance ? instance : axios.create();
@@ -1147,7 +1147,7 @@ export class Client {
         return Promise.resolve(null);
     }
 }
-export class CreateProductClient {
+class CreateProductClient {
     constructor(baseUrl, instance) {
         this.jsonParseReviver = undefined;
         this.instance = instance ? instance : axios.create();
@@ -1248,7 +1248,7 @@ export class CreateProductClient {
         return Promise.resolve(null);
     }
 }
-export class CreateCategoryClient {
+class CreateCategoryClient {
     constructor(baseUrl, instance) {
         this.jsonParseReviver = undefined;
         this.instance = instance ? instance : axios.create();
@@ -1306,7 +1306,7 @@ export class CreateCategoryClient {
         return Promise.resolve(null);
     }
 }
-export class ClearCartClient {
+class ClearCartClient {
     constructor(baseUrl, instance) {
         this.jsonParseReviver = undefined;
         this.instance = instance ? instance : axios.create();
@@ -1356,7 +1356,7 @@ export class ClearCartClient {
         return Promise.resolve(null);
     }
 }
-export class UpdateCategoryCommand {
+class UpdateCategoryCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1396,7 +1396,7 @@ export class UpdateCategoryCommand {
         return data;
     }
 }
-export class UpdateCartItemQuantityCommand {
+class UpdateCartItemQuantityCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1432,7 +1432,7 @@ export class UpdateCartItemQuantityCommand {
         return data;
     }
 }
-export class MomoCallbackParam {
+class MomoCallbackParam {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1490,7 +1490,7 @@ export class MomoCallbackParam {
         return data;
     }
 }
-export class UpdatePasswordCommand {
+class UpdatePasswordCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1526,7 +1526,7 @@ export class UpdatePasswordCommand {
         return data;
     }
 }
-export class UpdateProfileCommand {
+class UpdateProfileCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1568,7 +1568,7 @@ export class UpdateProfileCommand {
         return data;
     }
 }
-export class CreateProductCommand {
+class CreateProductCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1616,7 +1616,7 @@ export class CreateProductCommand {
         return data;
     }
 }
-export class CreateProductOptionCommand {
+class CreateProductOptionCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1656,7 +1656,7 @@ export class CreateProductOptionCommand {
         return data;
     }
 }
-export class CreateProductImageCommand {
+class CreateProductImageCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1694,7 +1694,7 @@ export class CreateProductImageCommand {
         return data;
     }
 }
-export class CreatePaymentCommand {
+class CreatePaymentCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1728,7 +1728,7 @@ export class CreatePaymentCommand {
         return data;
     }
 }
-export class CreatePaymentResponse {
+class CreatePaymentResponse {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1772,7 +1772,7 @@ export class CreatePaymentResponse {
         return data;
     }
 }
-export class CreateOrderCommand {
+class CreateOrderCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1829,7 +1829,7 @@ export class CreateOrderCommand {
         return data;
     }
 }
-export class CreateColorCommand {
+class CreateColorCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1865,7 +1865,7 @@ export class CreateColorCommand {
         return data;
     }
 }
-export class CreateCategoryCommand {
+class CreateCategoryCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1901,7 +1901,7 @@ export class CreateCategoryCommand {
         return data;
     }
 }
-export class AddToCartCommand {
+class AddToCartCommand {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1937,7 +1937,7 @@ export class AddToCartCommand {
         return data;
     }
 }
-export class UserDto {
+class UserDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -1965,9 +1965,9 @@ export class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
+            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
-            this.customer = _data["customer"];
         }
     }
     static fromJS(data) {
@@ -1995,13 +1995,13 @@ export class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
+        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
-        data["customer"] = this.customer;
         return data;
     }
 }
-export class CategoryBriefDto {
+class CategoryBriefDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2049,7 +2049,7 @@ export class CategoryBriefDto {
         return data;
     }
 }
-export class ColorDto {
+class ColorDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2087,7 +2087,7 @@ export class ColorDto {
         return data;
     }
 }
-export class ProductDetailDto {
+class ProductDetailDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2167,7 +2167,7 @@ export class ProductDetailDto {
         return data;
     }
 }
-export class ProductImageDto {
+class ProductImageDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2203,7 +2203,7 @@ export class ProductImageDto {
         return data;
     }
 }
-export class ProductOptionDto {
+class ProductOptionDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2253,7 +2253,7 @@ export class ProductOptionDto {
         return data;
     }
 }
-export class PaginatedProductBriefDto {
+class PaginatedProductBriefDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2307,7 +2307,7 @@ export class PaginatedProductBriefDto {
         return data;
     }
 }
-export class ProductBriefDto {
+class ProductBriefDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2365,7 +2365,7 @@ export class ProductBriefDto {
         return data;
     }
 }
-export class PaginatedCategoryBriefDto {
+class PaginatedCategoryBriefDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2419,7 +2419,7 @@ export class PaginatedCategoryBriefDto {
         return data;
     }
 }
-export class CartItemDto {
+class CartItemDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2459,7 +2459,7 @@ export class CartItemDto {
         return data;
     }
 }
-export class ProductOptionDetailDto {
+class ProductOptionDetailDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2511,7 +2511,7 @@ export class ProductOptionDetailDto {
         return data;
     }
 }
-export class Body {
+class Body {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2545,7 +2545,7 @@ export class Body {
         return data;
     }
 }
-export class Body2 {
+class Body2 {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -2579,43 +2579,43 @@ export class Body2 {
         return data;
     }
 }
-export var ForGender;
+var ForGender;
 (function (ForGender) {
     ForGender["FOR_MALE"] = "FOR_MALE";
     ForGender["FOR_FEMALE"] = "FOR_FEMALE";
     ForGender["FOR_BOTH"] = "FOR_BOTH";
 })(ForGender || (ForGender = {}));
-export var CreateProductCommandForGender;
+var CreateProductCommandForGender;
 (function (CreateProductCommandForGender) {
     CreateProductCommandForGender["FOR_MALE"] = "FOR_MALE";
     CreateProductCommandForGender["FOR_FEMALE"] = "FOR_FEMALE";
     CreateProductCommandForGender["FOR_BOTH"] = "FOR_BOTH";
 })(CreateProductCommandForGender || (CreateProductCommandForGender = {}));
-export var CreatePaymentResponsePaymentMethod;
+var CreatePaymentResponsePaymentMethod;
 (function (CreatePaymentResponsePaymentMethod) {
     CreatePaymentResponsePaymentMethod["COD"] = "COD";
     CreatePaymentResponsePaymentMethod["MOMO_QR"] = "MOMO_QR";
     CreatePaymentResponsePaymentMethod["MOMO_ATM"] = "MOMO_ATM";
 })(CreatePaymentResponsePaymentMethod || (CreatePaymentResponsePaymentMethod = {}));
-export var CreateOrderCommandPaymentMethod;
+var CreateOrderCommandPaymentMethod;
 (function (CreateOrderCommandPaymentMethod) {
     CreateOrderCommandPaymentMethod["COD"] = "COD";
     CreateOrderCommandPaymentMethod["MOMO_QR"] = "MOMO_QR";
     CreateOrderCommandPaymentMethod["MOMO_ATM"] = "MOMO_ATM";
 })(CreateOrderCommandPaymentMethod || (CreateOrderCommandPaymentMethod = {}));
-export var ProductDetailDtoForGender;
+var ProductDetailDtoForGender;
 (function (ProductDetailDtoForGender) {
     ProductDetailDtoForGender["FOR_MALE"] = "FOR_MALE";
     ProductDetailDtoForGender["FOR_FEMALE"] = "FOR_FEMALE";
     ProductDetailDtoForGender["FOR_BOTH"] = "FOR_BOTH";
 })(ProductDetailDtoForGender || (ProductDetailDtoForGender = {}));
-export var ProductBriefDtoForGender;
+var ProductBriefDtoForGender;
 (function (ProductBriefDtoForGender) {
     ProductBriefDtoForGender["FOR_MALE"] = "FOR_MALE";
     ProductBriefDtoForGender["FOR_FEMALE"] = "FOR_FEMALE";
     ProductBriefDtoForGender["FOR_BOTH"] = "FOR_BOTH";
 })(ProductBriefDtoForGender || (ProductBriefDtoForGender = {}));
-export class ApiException extends Error {
+class ApiException extends Error {
     constructor(message, status, response, headers, result) {
         super();
         this.isApiException = true;

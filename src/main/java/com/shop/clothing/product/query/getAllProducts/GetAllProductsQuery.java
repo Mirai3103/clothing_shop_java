@@ -15,4 +15,5 @@ public class GetAllProductsQuery extends PaginationRequest implements IRequest<P
     private Product.ProductGender forGender;
     private int minPrice = 0;
     private int maxPrice = Integer.MAX_VALUE;
+    private boolean includeDeleted = false;
 }

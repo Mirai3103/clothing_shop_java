@@ -8,6 +8,8 @@ import com.shop.clothing.product.entity.Product;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Getter
@@ -24,5 +26,6 @@ public class ProductBriefDto  extends AuditableDto {
 
     private String displayImage;
     private CategoryBriefDto category;
+    private LocalDateTime deletedDate;
 
 }

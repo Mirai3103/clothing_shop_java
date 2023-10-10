@@ -28,7 +28,7 @@ public class RestExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             WebRequest request) {
-        var errorBuilder = ErrorResponse.builder().error("Validation error").httpStatus(HttpStatus.BAD_REQUEST);
+        var errorBuilder = ErrorResponse.builder().error("Lỗi đầu vào").httpStatus(HttpStatus.BAD_REQUEST);
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().stream().
                 forEach(fieldError -> {
