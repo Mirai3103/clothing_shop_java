@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
+    <script src="/js/api.js">
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <link rel="stylesheet" href="/css/style.css"/>
+    <script >
+        const client = new Client();
+        window.apiClient = client;
+        console.log(client);
+    </script>
 </head>
 <body class="relative" x-data="{}">
+
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
     <nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
         <div class="flex flex-wrap justify-between items-center">

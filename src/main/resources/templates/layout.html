@@ -14,6 +14,7 @@
                 display: none;
             }
         </style>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
         <link rel="stylesheet" href="/css/style.css" />
@@ -23,8 +24,13 @@
                 currency: "VND",
             });
         </script>
+        <script type="module">
+            import { Client } from "/js/api.js";
+            const client = new Client();
+            window.apiClient = client;
+        </script>
     </head>
-    <body class="relative">
+    <body class="relative" x-data="{}">
         <header>
             <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
                 <div class="flex flex-wrap gap-x-2 items-center mx-auto max-w-screen-xl">
@@ -79,15 +85,15 @@
                                 >
                                     <li>
                                         <a
-                                            href="#"
+                                            href="/user/my-account"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                         >
-                                            Tài khoản cuả tôi
+                                            Tài khoản của tôi
                                         </a>
                                     </li>
                                     <li>
                                         <a
-                                            href="#"
+                                            href="/user/my-order"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                         >
                                             Đơn hàng
@@ -95,7 +101,7 @@
                                     </li>
                                     <li>
                                         <a
-                                            href="#"
+                                            href="/user/my-cart"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                         >
                                             Giỏ hàng
@@ -230,15 +236,15 @@
             </nav>
         </header>
 
-        <div class="fixed">
+        <div class="fixed z-[999] top-20 right-5">
             <template x-for="toast in $store.toast.toasts" :key="toast.id">
                 <div class="toast">
                     <div
-                        class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+                        class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-md dark:text-gray-400 dark:bg-gray-800"
                         role="alert"
                     >
                         <div
-                            class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200"
+                            class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg"
                             x-html="$store.toast.icons[toast.type]"
                             :class="$store.toast.classes[toast.type]"
                         ></div>
@@ -279,7 +285,7 @@
                     toasts: [],
                     classes: {
                         success: "bg-green-500 text-green-100",
-                        danger: "bg-red-500 text-red-100",
+                        error: "bg-red-500 text-red-100",
                         warning: "bg-yellow-500 text-yellow-100",
                         info: "bg-blue-500 text-blue-100",
                     },
@@ -296,10 +302,17 @@
                             '<svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">\n' +
                             '            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z"/>\n' +
                             "        </svg>",
-                        info: "information-circle",
+                        info:
+                            '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-square-rounded" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">\n' +
+                            '  <path stroke="none" d="M0 0h24v24H0z" fill="currentColor"/>\n' +
+                            '  <path d="M12 9h.01" />\n' +
+                            '  <path d="M11 12h1v4h1" />\n' +
+                            '  <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />\n' +
+                            "</svg>",
                     },
                     add(type, title, description, timeout = 5000) {
                         const id = Date.now();
+                        console.log(this.icons[type]);
                         this.toasts.push({
                             id: id,
                             type,
