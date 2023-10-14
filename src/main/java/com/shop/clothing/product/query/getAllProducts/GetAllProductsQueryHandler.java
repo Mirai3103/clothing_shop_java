@@ -66,7 +66,8 @@ public class GetAllProductsQueryHandler implements IRequestHandler<GetAllProduct
 
         var count = productRepository.count();
         var paginated = Paginated.<ProductBriefDto>builder().size(getAllProductsQuery.getSize()).page(getAllProductsQuery.getPage()).data(productBriefDtos).totalElements(count).totalPages((int) Math.ceil((double) count / getAllProductsQuery.getSize())).build();
-
+    paginated.setHasNext(paginated.getPage() < paginated.getTotalPages());
+    paginated.setHasPrevious(paginated.getPage() > 1);
 
         return HandleResponse.ok(paginated);
     }

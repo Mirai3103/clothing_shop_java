@@ -27,6 +27,7 @@ public class CreateProductCommand implements IRequest<Integer> {
     @Min(value = 1000, message = "Giá sản phẩm phải lớn hơn 1000")
     private double price;
     @Min(value = 0, message = "Giảm giá sản phẩm phải lớn hơn 0")
+    @Max(value = 100, message = "Giảm giá sản phẩm phải nhỏ hơn 100")
     @Builder.Default
     private double discount = 0;
     @NotEmpty(message = "Ảnh sản phẩm không được để trống")

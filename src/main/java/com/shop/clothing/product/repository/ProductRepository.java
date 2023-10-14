@@ -2,6 +2,7 @@ package com.shop.clothing.product.repository;
 
 import com.shop.clothing.product.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Optional<Product> findBySlug(String slug);
 
     @Query(value = "delete from Product p where p.product_id = ?1", nativeQuery = true)
+    @Modifying
     void hardDeleteById(int id);
 
 }

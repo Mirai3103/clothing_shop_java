@@ -5,6 +5,8 @@ import com.shop.clothing.category.queries.getAllCategories.GetAllCategoriesQueri
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.category.commands.createCategory.CreateCategoryCommand;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 @Controller
 @RequestMapping("/admin/category")
-
+@PreAuthorize("hasAnyAuthority('CREATE_CATEGORY','UPDATE_CATEGORY','DELETE_CATEGORY')")
 public class CategoryController {
     private final ISender sender;
 
     @GetMapping()
+    @Secured("CREATE_CATEGORY")
     public String getCategories(Model model, CreateCategoryCommand createCategoryCommand) {
         var page =new GetAllCategoriesQueries();
         page.setSize(100);

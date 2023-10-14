@@ -11,6 +11,5 @@ import lombok.*;
 public class CategoryBriefDto extends AuditableDto{
     private int categoryId;
     private String name;
-    private String slug;
     private CategoryBriefDto parent;
 }

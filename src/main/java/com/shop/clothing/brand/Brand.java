@@ -29,8 +29,6 @@ public class Brand extends AuditableEntity {
     private String name;
 
 
-    @Column(nullable = true,length = 100)
-    private String slug;
 
 
     @Temporal(TemporalType.TIMESTAMP)

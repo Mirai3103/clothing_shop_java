@@ -7,6 +7,6 @@ import java.util.Collection;
 public interface IFileService {
     String uploadFile(MultipartFile file);
 //    void deleteFiles(Collection<String> urls);
-//    void deleteFile(String url);
+    void deleteFile(String url);
 
 }

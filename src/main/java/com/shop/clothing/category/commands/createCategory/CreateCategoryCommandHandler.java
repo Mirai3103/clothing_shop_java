@@ -29,7 +29,6 @@ public class CreateCategoryCommandHandler implements IRequestHandler<CreateCateg
         }
         category.setName(request.getName());
         category.setParent(parent.orElse(null));
-        category.setSlug(slugUtil.slugify(request.getName()));
         categoryRepository.save(category);
         return HandleResponse.ok(category.getCategoryId());
     }

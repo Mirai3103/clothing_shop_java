@@ -17,6 +17,7 @@ public class DeleteProductCommandHandler implements IRequestHandler<DeleteProduc
         if (product.isEmpty()) {
             return HandleResponse.error("Product not found");
         }
+
         productRepository.delete(product.get());
         return HandleResponse.ok();
     }

@@ -8,7 +8,6 @@ import lombok.*;
 
 
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetAllCategoriesQueries extends PaginationRequest implements IRequest<Paginated<CategoryBriefDto>> {

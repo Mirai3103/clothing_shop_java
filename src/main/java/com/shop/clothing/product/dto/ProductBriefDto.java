@@ -27,5 +27,24 @@ public class ProductBriefDto  extends AuditableDto {
     private String displayImage;
     private CategoryBriefDto category;
     private LocalDateTime deletedDate;
+    public String getVietnamesePrice(){
+        // 200.000đ
+        return String.format("%,.0fđ", price);
+    }
+    public String getForGenderDisplay(){
+        switch (forGender){
+            case FOR_BOTH -> {
+                return "Nam và nữ";
+            }
+            case FOR_MALE -> {
+                return "Nam";
+            }
+            case FOR_FEMALE -> {
+                return "Nữ";
+            }
+
+        }
+        return "";
+    }
 
 }

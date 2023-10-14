@@ -82,6 +82,7 @@ public class User implements UserDetails {
 
     public List<String> getPermissions() {
 
+
         List<String> permissions = new ArrayList<>();
         List<Permission> collection = new ArrayList<>();
         for (Role role : this.getRoles()) {
@@ -90,6 +91,8 @@ public class User implements UserDetails {
         }
         for (Permission item : collection) {
             permissions.add(item.getNormalizedName());
+        } if(!this.isCustomer){
+            permissions.add("ADMIN_ACCESS");
         }
         return permissions;
     }

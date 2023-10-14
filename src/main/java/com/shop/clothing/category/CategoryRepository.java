@@ -14,7 +14,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Page<Category> findAllByParentCategoryIdIsNull(org.springframework.data.domain.Pageable pageable);
     Page<Category> findAllByParentCategoryIdIsNotNull(org.springframework.data.domain.Pageable pageable);
     Page<Category> findAllByNameContaining(String keyword, org.springframework.data.domain.Pageable pageable);
-    Optional<Category> findBySlug(String slug);
     Optional<Category> findByName(String name);
     @Modifying
     @Query(value = "DELETE FROM category WHERE category_id = ?1", nativeQuery = true)

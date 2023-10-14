@@ -4,6 +4,7 @@ import com.shop.clothing.common.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SortComparator;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;

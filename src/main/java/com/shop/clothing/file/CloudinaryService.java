@@ -36,5 +36,15 @@ public class CloudinaryService implements IFileService {
         }
 
     }
+//https://res.cloudinary.com/dkvga054t/image/upload/v1696932430/clothing/2a8ca9a4-1c8b-4fed-963a-fbdb5e2aa477.jpg.jpg
+    @Override
+    public void deleteFile(String url) {
+        try {
+            var publicId = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("."));
+            cloudinary.uploader().destroy("clothing/" + publicId, ObjectUtils.emptyMap());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

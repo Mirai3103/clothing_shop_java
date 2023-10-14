@@ -10,3 +10,7 @@ body {
 a {
     cursor: pointer;
 }
+
+#description{
+    font-family: "Inter", sans-serif !important;
+}

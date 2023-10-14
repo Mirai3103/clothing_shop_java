@@ -21,9 +21,8 @@ public class UpdateCategoryCommandHandler implements IRequestHandler<UpdateCateg
             return HandleResponse.error("Danh mục không tồn tại");
         }
         var isUpdateName = exist.get().getName().equals(updateCategoryCommand.getName());
-        var isUpdateSlug = exist.get().getSlug().equals(updateCategoryCommand.getSlug());
         var isUpdateParent = exist.get().getParent() == null && updateCategoryCommand.getParentId() == 0 || exist.get().getParent() != null && exist.get().getParent().getCategoryId() == updateCategoryCommand.getParentId();
-        if (isUpdateName && isUpdateSlug && isUpdateParent) {
+        if (isUpdateName && isUpdateParent) {
             return HandleResponse.error("Không có gì thay đổi");
         }
 
@@ -33,13 +32,6 @@ public class UpdateCategoryCommandHandler implements IRequestHandler<UpdateCateg
                 return HandleResponse.error("Tên danh mục đã tồn tại");
             }
             exist.get().setName(updateCategoryCommand.getName());
-        }
-        if (!isUpdateSlug) {
-            var existWithSlug = categoryRepository.findBySlug(updateCategoryCommand.getSlug());
-            if (existWithSlug.isPresent()) {
-                return HandleResponse.error("Url danh mục đã tồn tại");
-            }
-            exist.get().setSlug(updateCategoryCommand.getSlug());
         }
         if (!isUpdateParent) {
             var parentCategory = categoryRepository.findById(updateCategoryCommand.getParentId());

@@ -9,10 +9,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateProductOptionCommand implements IRequest<Void> {
+public class CreateProductOptionCommand implements IRequest<Integer> {
     @NotNull(message = "Màu không được để trống")
-    @Min(value = 1, message = "Màu không hợp lệ")
-    private int colorId;
+    @NotEmpty(message = "Màu không được để trống")
+    private String colorName;
     @NotEmpty(message = "Size không được để trống")
     @NotNull(message = "Size không được để trống")
     private String size;

@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @AllArgsConstructor
-public class GiaoHangNhanhService {
+public class GiaoHangNhanhService  {
     private final GiaoHangNhanhConfig giaoHangNhanhConfig;
 
     public int findProvinceId(String provinceName) {
