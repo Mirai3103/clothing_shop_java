@@ -2171,6 +2171,12 @@ input:checked + .toggle-bg{
 .min-h-full{
   min-height: 100%;
 }
+.min-h-\[12rem\]{
+  min-height: 12rem;
+}
+.min-h-\[24rem\]{
+  min-height: 24rem;
+}
 .\!w-full{
   width: 100% !important;
 }
@@ -3621,11 +3627,6 @@ a {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-gray-800:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-primary-100:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(241 245 249 / var(--tw-bg-opacity));
@@ -4319,6 +4320,12 @@ a {
   .md\:hidden{
     display: none;
   }
+  .md\:h-64{
+    height: 16rem;
+  }
+  .md\:h-72{
+    height: 18rem;
+  }
   .md\:h-auto{
     height: auto;
   }
@@ -4413,6 +4420,9 @@ a {
   }
   .lg\:grow{
     flex-grow: 1;
+  }
+  .lg\:grid-cols-4{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
   .lg\:flex-row{
     flex-direction: row;

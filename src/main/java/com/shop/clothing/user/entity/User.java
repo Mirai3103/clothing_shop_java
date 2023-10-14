@@ -92,7 +92,7 @@ public class User implements UserDetails {
         for (Permission item : collection) {
             permissions.add(item.getNormalizedName());
         } if(!this.isCustomer){
-            permissions.add("ADMIN_ACCESS");
+            permissions.add("ADMIN_DASHBOARD");
         }
         return permissions;
     }
