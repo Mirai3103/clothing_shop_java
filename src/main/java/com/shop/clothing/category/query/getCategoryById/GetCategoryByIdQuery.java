@@ -1,4 +1,4 @@
-package com.shop.clothing.category.queries.getCategoryById;
+package com.shop.clothing.category.query.getCategoryById;
 
 import com.shop.clothing.category.CategoryDetailDto;
 import com.shop.clothing.common.Cqrs.IRequest;

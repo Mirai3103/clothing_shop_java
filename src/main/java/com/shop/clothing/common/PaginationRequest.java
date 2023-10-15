@@ -1,6 +1,5 @@
 package com.shop.clothing.common;
 
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,7 @@ public class PaginationRequest {
     @Min(value = 1,message = "Page must be greater than 0")
 
     protected int page = 1;
-    protected int size = 10;
+    protected int pageSize = 10;
     protected String sortField="";
     protected String sortDir="asc";
     protected String keyword = "";
@@ -27,6 +26,6 @@ public class PaginationRequest {
         if (sortField.isEmpty()) {
             sortField = defaultSortField;
         }
-        return org.springframework.data.domain.PageRequest.of(page - 1, size, getSortDirection(), sortField);
+        return org.springframework.data.domain.PageRequest.of(page - 1, pageSize, getSortDirection(), sortField);
     }
 }

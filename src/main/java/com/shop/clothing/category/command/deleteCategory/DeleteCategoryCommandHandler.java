@@ -1,4 +1,4 @@
-package com.shop.clothing.category.commands.deleteCategory;
+package com.shop.clothing.category.command.deleteCategory;
 
 import com.shop.clothing.category.CategoryRepository;
 import com.shop.clothing.common.Cqrs.HandleResponse;

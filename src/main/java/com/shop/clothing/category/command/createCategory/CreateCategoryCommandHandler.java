@@ -1,4 +1,4 @@
-package com.shop.clothing.category.commands.createCategory;
+package com.shop.clothing.category.command.createCategory;
 
 import com.shop.clothing.category.Category;
 import com.shop.clothing.category.CategoryRepository;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateCategoryCommandHandler implements IRequestHandler<CreateCategoryCommand, Integer> {
 
     private final CategoryRepository categoryRepository;
-    private final SlugUtil slugUtil;
     @Override
     @Transactional
     public HandleResponse<Integer> handle(CreateCategoryCommand request)  {

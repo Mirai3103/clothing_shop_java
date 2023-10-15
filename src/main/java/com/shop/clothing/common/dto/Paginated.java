@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.util.Streamable;
 
 import java.util.Collection;
 
@@ -18,7 +16,7 @@ import java.util.Collection;
 public class Paginated<T>  {
     private Collection<T> data;
     private int page;
-    private int size;
+    private int pageSize;
     private int totalPages;
     private long totalElements;
     private boolean hasNext;

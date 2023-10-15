@@ -46,5 +46,7 @@ public class ProductBriefDto  extends AuditableDto {
         }
         return "";
     }
-
+    public int getFinalPrice(){
+        return (int) (price*(100.0-discount)/100);
+    }
 }

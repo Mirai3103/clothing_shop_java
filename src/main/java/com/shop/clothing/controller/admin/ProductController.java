@@ -1,6 +1,6 @@
 package com.shop.clothing.controller.admin;
 
-import com.shop.clothing.category.queries.getAllCategories.GetAllCategoriesQueries;
+import com.shop.clothing.category.query.getAllCategories.GetAllCategoriesQueries;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.product.command.deleteProduct.DeleteProductCommand;
 import com.shop.clothing.product.query.getAllColors.GetAllColorQuery;
@@ -31,7 +31,7 @@ public class ProductController {
     @GetMapping("/create")
     public String createProduct(Model model) {
         var query = new GetAllCategoriesQueries();
-        query.setSize(200);
+        query.setPageSize(200);
         query.setSortDir("asc");
         query.setSortField("name");
         var categories = sender.send(query).get();
@@ -67,7 +67,7 @@ public class ProductController {
     public String editProduct(Model model, @PathVariable int id) {
         var query = new GetAllCategoriesQueries();
         var product = sender.send(new GetProductByIdQuery(id)).get();
-        query.setSize(200);
+        query.setPageSize(200);
         query.setSortDir("asc");
         query.setSortField("name");
         var categories = sender.send(query).get();

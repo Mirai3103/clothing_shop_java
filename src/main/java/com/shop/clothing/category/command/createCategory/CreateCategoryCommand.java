@@ -1,4 +1,4 @@
-package com.shop.clothing.category.commands.createCategory;
+package com.shop.clothing.category.command.createCategory;
 
 import com.shop.clothing.common.Cqrs.IRequest;
 import jakarta.validation.constraints.NotEmpty;

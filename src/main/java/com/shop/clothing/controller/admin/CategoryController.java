@@ -1,9 +1,9 @@
 package com.shop.clothing.controller.admin;
 
-import com.shop.clothing.category.commands.updateCategory.UpdateCategoryCommand;
-import com.shop.clothing.category.queries.getAllCategories.GetAllCategoriesQueries;
+import com.shop.clothing.category.command.updateCategory.UpdateCategoryCommand;
+import com.shop.clothing.category.query.getAllCategories.GetAllCategoriesQueries;
 import com.shop.clothing.common.Cqrs.ISender;
-import com.shop.clothing.category.commands.createCategory.CreateCategoryCommand;
+import com.shop.clothing.category.command.createCategory.CreateCategoryCommand;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +23,7 @@ public class CategoryController {
     @Secured("CREATE_CATEGORY")
     public String getCategories(Model model, CreateCategoryCommand createCategoryCommand) {
         var page =new GetAllCategoriesQueries();
-        page.setSize(100);
+        page.setPageSize(100);
         var allCategories = sender.send(page).get();
         model.addAttribute("categories", allCategories);
         model.addAttribute("createCategoryRequest", createCategoryCommand);

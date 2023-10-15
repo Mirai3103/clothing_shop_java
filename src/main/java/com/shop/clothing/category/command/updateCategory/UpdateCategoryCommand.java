@@ -1,4 +1,4 @@
-package com.shop.clothing.category.commands.updateCategory;
+package com.shop.clothing.category.command.updateCategory;
 
 import com.shop.clothing.common.Cqrs.IRequest;
 import jakarta.validation.constraints.*;

@@ -1,10 +1,11 @@
 package com.shop.clothing.category.endpoint;
 
 import com.shop.clothing.category.CategoryBriefDto;
-import com.shop.clothing.category.commands.createCategory.CreateCategoryCommand;
-import com.shop.clothing.category.commands.deleteCategory.DeleteCategoryCommand;
-import com.shop.clothing.category.commands.updateCategory.UpdateCategoryCommand;
-import com.shop.clothing.category.queries.getAllCategories.GetAllCategoriesQueries;
+import com.shop.clothing.category.command.createCategory.CreateCategoryCommand;
+import com.shop.clothing.category.command.deleteCategory.DeleteCategoryCommand;
+import com.shop.clothing.category.command.updateCategory.UpdateCategoryCommand;
+import com.shop.clothing.category.query.getAllCategories.GetAllCategoriesQueries;
+import com.shop.clothing.category.query.getAllCategoriesGroupByParentQuery.GetAllCategoriesGroupByParentQuery;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.common.dto.Paginated;
 import jakarta.validation.Valid;
@@ -51,5 +52,11 @@ public class CategoryApiController {
         if (id.isBlank()) throw new IllegalArgumentException("id is null");
         var result = sender.send(new DeleteCategoryCommand(Integer.parseInt(id)));
         ResponseEntity.ok(result.orThrow());
+    }
+
+    @GetMapping("/getAllCategoriesGroupByParent")
+    public ResponseEntity<Object> getAllCategoriesGroupByParent() {
+        var result = sender.send(new GetAllCategoriesGroupByParentQuery());
+        return ResponseEntity.ok(result.orThrow());
     }
 }

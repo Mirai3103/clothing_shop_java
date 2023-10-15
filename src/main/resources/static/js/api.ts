@@ -27,6 +27,57 @@ class Client {
     /**
      * @return OK
      */
+    updateProduct(body: UpdateProductCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/product/update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateProduct(_response);
+        });
+    }
+
+    protected processUpdateProduct(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     createCategory(body: UpdateCategoryCommand, cancelToken?: CancelToken | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/category/update";
         url_ = url_.replace(/[?&]$/, "");
@@ -1009,13 +1060,13 @@ class Client {
      * @param maxPrice (optional) 
      * @param includeDeleted (optional) 
      * @param page (optional) 
-     * @param size (optional) 
+     * @param pageSize (optional) 
      * @param sortField (optional) 
      * @param sortDir (optional) 
      * @param keyword (optional) 
      * @return OK
      */
-    getProducts(categoryId: number | undefined, forGender: ForGender | undefined, minPrice: number | undefined, maxPrice: number | undefined, includeDeleted: boolean | undefined, page: number | undefined, size: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedProductBriefDto> {
+    getProducts(categoryId: number | undefined, forGender: ForGender | undefined, minPrice: number | undefined, maxPrice: number | undefined, includeDeleted: boolean | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedProductBriefDto> {
         let url_ = this.baseUrl + "/api/product/?";
         if (categoryId === null)
             throw new Error("The parameter 'categoryId' cannot be null.");
@@ -1041,10 +1092,10 @@ class Client {
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
             url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (size === null)
-            throw new Error("The parameter 'size' cannot be null.");
-        else if (size !== undefined)
-            url_ += "size=" + encodeURIComponent("" + size) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         if (sortField === null)
             throw new Error("The parameter 'sortField' cannot be null.");
         else if (sortField !== undefined)
@@ -1175,13 +1226,13 @@ class Client {
     /**
      * @param eyword (optional) 
      * @param page (optional) 
-     * @param size (optional) 
+     * @param pageSize (optional) 
      * @param sortField (optional) 
      * @param sortDir (optional) 
      * @param keyword (optional) 
      * @return OK
      */
-    getCategories(eyword: string | undefined, page: number | undefined, size: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedCategoryBriefDto> {
+    getCategories(eyword: string | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedCategoryBriefDto> {
         let url_ = this.baseUrl + "/api/category?";
         if (eyword === null)
             throw new Error("The parameter 'eyword' cannot be null.");
@@ -1191,10 +1242,10 @@ class Client {
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
             url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (size === null)
-            throw new Error("The parameter 'size' cannot be null.");
-        else if (size !== undefined)
-            url_ += "size=" + encodeURIComponent("" + size) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         if (sortField === null)
             throw new Error("The parameter 'sortField' cannot be null.");
         else if (sortField !== undefined)
@@ -1251,6 +1302,62 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<PaginatedCategoryBriefDto>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getAllCategoriesGroupByParent( cancelToken?: CancelToken | undefined): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/category/getAllCategoriesGroupByParent";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            responseType: "blob",
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllCategoriesGroupByParent(_response);
+        });
+    }
+
+    protected processGetAllCategoriesGroupByParent(response: AxiosResponse): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FileResponse>(null as any);
     }
 
     /**
@@ -1642,6 +1749,86 @@ class ClearCartClient {
         }
         return Promise.resolve<void>(null as any);
     }
+}
+
+class UpdateProductCommand implements IUpdateProductCommand {
+    productId!: number;
+    name!: string;
+    forGender?: UpdateProductCommandForGender;
+    description!: string;
+    price!: number;
+    discount?: number;
+    displayImage!: string;
+    brandId?: number;
+    categoryId!: number;
+
+    [key: string]: any;
+
+    constructor(data?: IUpdateProductCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.productId = _data["productId"];
+            this.name = _data["name"];
+            this.forGender = _data["forGender"];
+            this.description = _data["description"];
+            this.price = _data["price"];
+            this.discount = _data["discount"];
+            this.displayImage = _data["displayImage"];
+            this.brandId = _data["brandId"];
+            this.categoryId = _data["categoryId"];
+        }
+    }
+
+    static fromJS(data: any): UpdateProductCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateProductCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["productId"] = this.productId;
+        data["name"] = this.name;
+        data["forGender"] = this.forGender;
+        data["description"] = this.description;
+        data["price"] = this.price;
+        data["discount"] = this.discount;
+        data["displayImage"] = this.displayImage;
+        data["brandId"] = this.brandId;
+        data["categoryId"] = this.categoryId;
+        return data;
+    }
+}
+
+interface IUpdateProductCommand {
+    productId: number;
+    name: string;
+    forGender?: UpdateProductCommandForGender;
+    description: string;
+    price: number;
+    discount?: number;
+    displayImage: string;
+    brandId?: number;
+    categoryId: number;
+
+    [key: string]: any;
 }
 
 class UpdateCategoryCommand implements IUpdateCategoryCommand {
@@ -2525,9 +2712,9 @@ class UserDto implements IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    customer?: boolean;
     emailVerified?: boolean;
     accountEnabled?: boolean;
+    customer?: boolean;
 
     [key: string]: any;
 
@@ -2559,9 +2746,9 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
-            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
+            this.customer = _data["customer"];
         }
     }
 
@@ -2591,9 +2778,9 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
+        data["customer"] = this.customer;
         return data;
     }
 }
@@ -2608,9 +2795,9 @@ interface IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    customer?: boolean;
     emailVerified?: boolean;
     accountEnabled?: boolean;
+    customer?: boolean;
 
     [key: string]: any;
 }
@@ -2760,8 +2947,9 @@ class ProductDetailDto implements IProductDetailDto {
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
-    vietnamesePrice?: string;
     forGenderDisplay?: string;
+    vietnamesePrice?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 
@@ -2804,8 +2992,9 @@ class ProductDetailDto implements IProductDetailDto {
                     this.images!.push(ProductImageDto.fromJS(item));
             }
             this.description = _data["description"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
 
@@ -2846,8 +3035,9 @@ class ProductDetailDto implements IProductDetailDto {
                 data["images"].push(item.toJSON());
         }
         data["description"] = this.description;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -2869,8 +3059,9 @@ interface IProductDetailDto {
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
-    vietnamesePrice?: string;
     forGenderDisplay?: string;
+    vietnamesePrice?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 }
@@ -3010,7 +3201,7 @@ interface IProductOptionDto {
 class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
     data?: ProductBriefDto[];
     page?: number;
-    size?: number;
+    pageSize?: number;
     totalPages?: number;
     totalElements?: number;
     hasNext?: boolean;
@@ -3039,7 +3230,7 @@ class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
                     this.data!.push(ProductBriefDto.fromJS(item));
             }
             this.page = _data["page"];
-            this.size = _data["size"];
+            this.pageSize = _data["pageSize"];
             this.totalPages = _data["totalPages"];
             this.totalElements = _data["totalElements"];
             this.hasNext = _data["hasNext"];
@@ -3066,7 +3257,7 @@ class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
                 data["data"].push(item.toJSON());
         }
         data["page"] = this.page;
-        data["size"] = this.size;
+        data["pageSize"] = this.pageSize;
         data["totalPages"] = this.totalPages;
         data["totalElements"] = this.totalElements;
         data["hasNext"] = this.hasNext;
@@ -3078,7 +3269,7 @@ class PaginatedProductBriefDto implements IPaginatedProductBriefDto {
 interface IPaginatedProductBriefDto {
     data?: ProductBriefDto[];
     page?: number;
-    size?: number;
+    pageSize?: number;
     totalPages?: number;
     totalElements?: number;
     hasNext?: boolean;
@@ -3101,8 +3292,9 @@ class ProductBriefDto implements IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
-    vietnamesePrice?: string;
     forGenderDisplay?: string;
+    vietnamesePrice?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 
@@ -3134,8 +3326,9 @@ class ProductBriefDto implements IProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
 
@@ -3165,8 +3358,9 @@ class ProductBriefDto implements IProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -3185,8 +3379,9 @@ interface IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
-    vietnamesePrice?: string;
     forGenderDisplay?: string;
+    vietnamesePrice?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 }
@@ -3194,7 +3389,7 @@ interface IProductBriefDto {
 class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
     data?: CategoryBriefDto[];
     page?: number;
-    size?: number;
+    pageSize?: number;
     totalPages?: number;
     totalElements?: number;
     hasNext?: boolean;
@@ -3223,7 +3418,7 @@ class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
                     this.data!.push(CategoryBriefDto.fromJS(item));
             }
             this.page = _data["page"];
-            this.size = _data["size"];
+            this.pageSize = _data["pageSize"];
             this.totalPages = _data["totalPages"];
             this.totalElements = _data["totalElements"];
             this.hasNext = _data["hasNext"];
@@ -3250,7 +3445,7 @@ class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
                 data["data"].push(item.toJSON());
         }
         data["page"] = this.page;
-        data["size"] = this.size;
+        data["pageSize"] = this.pageSize;
         data["totalPages"] = this.totalPages;
         data["totalElements"] = this.totalElements;
         data["hasNext"] = this.hasNext;
@@ -3262,7 +3457,7 @@ class PaginatedCategoryBriefDto implements IPaginatedCategoryBriefDto {
 interface IPaginatedCategoryBriefDto {
     data?: CategoryBriefDto[];
     page?: number;
-    size?: number;
+    pageSize?: number;
     totalPages?: number;
     totalElements?: number;
     hasNext?: boolean;
@@ -3565,6 +3760,12 @@ enum ForGender {
     FOR_BOTH = "FOR_BOTH",
 }
 
+enum UpdateProductCommandForGender {
+    FOR_MALE = "FOR_MALE",
+    FOR_FEMALE = "FOR_FEMALE",
+    FOR_BOTH = "FOR_BOTH",
+}
+
 enum CreateProductCommandForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
@@ -3598,6 +3799,13 @@ enum ProductBriefDtoForGender {
 interface FileParameter {
     data: any;
     fileName: string;
+}
+
+interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 class ApiException extends Error {

@@ -103,7 +103,9 @@
                                         </a>
                                     </li>
 
-                                    <li>
+                                    <li
+                                    th:unless="${#authorization.expression('hasAuthority(''ADMIN_DASHBOARD'')')}"
+                                    >
                                         <a
                                             href="/user/my-order"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -111,7 +113,9 @@
                                             Đơn hàng
                                         </a>
                                     </li>
-                                    <li>
+                                    <li
+                                    th:unless="${#authorization.expression('hasAuthority(''ADMIN_DASHBOARD'')')}"
+                                    >
                                         <a
                                             href="/user/my-cart"
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"

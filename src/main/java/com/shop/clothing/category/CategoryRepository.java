@@ -6,12 +6,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Page<Category> findAllByParentCategoryId(Integer parentCategoryId, org.springframework.data.domain.Pageable pageable);
     Page<Category> findAllByParentCategoryIdIsNull(org.springframework.data.domain.Pageable pageable);
+    List<Category> findAllByParentCategoryIdIsNull();
     Page<Category> findAllByParentCategoryIdIsNotNull(org.springframework.data.domain.Pageable pageable);
     Page<Category> findAllByNameContaining(String keyword, org.springframework.data.domain.Pageable pageable);
     Optional<Category> findByName(String name);

@@ -1,4 +1,4 @@
-package com.shop.clothing.category.queries.getAllCategories;
+package com.shop.clothing.category.query.getAllCategories;
 
 import com.shop.clothing.category.CategoryBriefDto;
 import com.shop.clothing.common.Cqrs.IRequest;

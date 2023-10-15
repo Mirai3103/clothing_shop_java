@@ -57,15 +57,15 @@ public class GetAllProductsQueryHandler implements IRequestHandler<GetAllProduct
         }
         cq.where(predicates);
         var query = entityManager.createQuery(cq);
-        query.setFirstResult((getAllProductsQuery.getPage() - 1) * getAllProductsQuery.getSize());
-        query.setMaxResults(getAllProductsQuery.getSize());
+        query.setFirstResult((getAllProductsQuery.getPage() - 1) * getAllProductsQuery.getPageSize());
+        query.setMaxResults(getAllProductsQuery.getPageSize());
         Collection<Product> result = query.getResultList();
         List<ProductBriefDto> productBriefDtos = result.stream().map(product ->{
             return modelMapper.map(product, ProductBriefDto.class);
         }).toList();
 
         var count = productRepository.count();
-        var paginated = Paginated.<ProductBriefDto>builder().size(getAllProductsQuery.getSize()).page(getAllProductsQuery.getPage()).data(productBriefDtos).totalElements(count).totalPages((int) Math.ceil((double) count / getAllProductsQuery.getSize())).build();
+        var paginated = Paginated.<ProductBriefDto>builder().pageSize(getAllProductsQuery.getPageSize()).page(getAllProductsQuery.getPage()).data(productBriefDtos).totalElements(count).totalPages((int) Math.ceil((double) count / getAllProductsQuery.getPageSize())).build();
     paginated.setHasNext(paginated.getPage() < paginated.getTotalPages());
     paginated.setHasPrevious(paginated.getPage() > 1);
 

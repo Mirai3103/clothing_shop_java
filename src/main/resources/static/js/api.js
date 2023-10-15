@@ -16,6 +16,53 @@ class Client {
     /**
      * @return OK
      */
+    updateProduct(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/product/update";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processUpdateProduct(_response);
+        });
+    }
+    processUpdateProduct(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
     createCategory(body, cancelToken) {
         let url_ = this.baseUrl + "/api/category/update";
         url_ = url_.replace(/[?&]$/, "");
@@ -922,13 +969,13 @@ class Client {
      * @param maxPrice (optional)
      * @param includeDeleted (optional)
      * @param page (optional)
-     * @param size (optional)
+     * @param pageSize (optional)
      * @param sortField (optional)
      * @param sortDir (optional)
      * @param keyword (optional)
      * @return OK
      */
-    getProducts(categoryId, forGender, minPrice, maxPrice, includeDeleted, page, size, sortField, sortDir, keyword, cancelToken) {
+    getProducts(categoryId, forGender, minPrice, maxPrice, includeDeleted, page, pageSize, sortField, sortDir, keyword, cancelToken) {
         let url_ = this.baseUrl + "/api/product/?";
         if (categoryId === null)
             throw new Error("The parameter 'categoryId' cannot be null.");
@@ -954,10 +1001,10 @@ class Client {
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
             url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (size === null)
-            throw new Error("The parameter 'size' cannot be null.");
-        else if (size !== undefined)
-            url_ += "size=" + encodeURIComponent("" + size) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         if (sortField === null)
             throw new Error("The parameter 'sortField' cannot be null.");
         else if (sortField !== undefined)
@@ -1081,13 +1128,13 @@ class Client {
     /**
      * @param eyword (optional)
      * @param page (optional)
-     * @param size (optional)
+     * @param pageSize (optional)
      * @param sortField (optional)
      * @param sortDir (optional)
      * @param keyword (optional)
      * @return OK
      */
-    getCategories(eyword, page, size, sortField, sortDir, keyword, cancelToken) {
+    getCategories(eyword, page, pageSize, sortField, sortDir, keyword, cancelToken) {
         let url_ = this.baseUrl + "/api/category?";
         if (eyword === null)
             throw new Error("The parameter 'eyword' cannot be null.");
@@ -1097,10 +1144,10 @@ class Client {
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
             url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (size === null)
-            throw new Error("The parameter 'size' cannot be null.");
-        else if (size !== undefined)
-            url_ += "size=" + encodeURIComponent("" + size) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
         if (sortField === null)
             throw new Error("The parameter 'sortField' cannot be null.");
         else if (sortField !== undefined)
@@ -1149,6 +1196,61 @@ class Client {
             let resultData200 = _responseText;
             result200 = PaginatedCategoryBriefDto.fromJS(resultData200);
             return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    getAllCategoriesGroupByParent(cancelToken) {
+        let url_ = this.baseUrl + "/api/category/getAllCategoriesGroupByParent";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            responseType: "blob",
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllCategoriesGroupByParent(_response);
+        });
+    }
+    processGetAllCategoriesGroupByParent(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers["content-disposition"] : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            }
+            else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return Promise.resolve({ fileName: fileName, status: status, data: new Blob([response.data], { type: response.headers["content-type"] }), headers: _headers });
         }
         else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
@@ -1503,6 +1605,56 @@ class ClearCartClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve(null);
+    }
+}
+class UpdateProductCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.productId = _data["productId"];
+            this.name = _data["name"];
+            this.forGender = _data["forGender"];
+            this.description = _data["description"];
+            this.price = _data["price"];
+            this.discount = _data["discount"];
+            this.displayImage = _data["displayImage"];
+            this.brandId = _data["brandId"];
+            this.categoryId = _data["categoryId"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateProductCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["productId"] = this.productId;
+        data["name"] = this.name;
+        data["forGender"] = this.forGender;
+        data["description"] = this.description;
+        data["price"] = this.price;
+        data["discount"] = this.discount;
+        data["displayImage"] = this.displayImage;
+        data["brandId"] = this.brandId;
+        data["categoryId"] = this.categoryId;
+        return data;
     }
 }
 class UpdateCategoryCommand {
@@ -2114,9 +2266,9 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
-            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
+            this.customer = _data["customer"];
         }
     }
     static fromJS(data) {
@@ -2144,9 +2296,9 @@ class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
+        data["customer"] = this.customer;
         return data;
     }
 }
@@ -2273,8 +2425,9 @@ class ProductDetailDto {
                     this.images.push(ProductImageDto.fromJS(item));
             }
             this.description = _data["description"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
     static fromJS(data) {
@@ -2313,8 +2466,9 @@ class ProductDetailDto {
                 data["images"].push(item.toJSON());
         }
         data["description"] = this.description;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -2425,7 +2579,7 @@ class PaginatedProductBriefDto {
                     this.data.push(ProductBriefDto.fromJS(item));
             }
             this.page = _data["page"];
-            this.size = _data["size"];
+            this.pageSize = _data["pageSize"];
             this.totalPages = _data["totalPages"];
             this.totalElements = _data["totalElements"];
             this.hasNext = _data["hasNext"];
@@ -2450,7 +2604,7 @@ class PaginatedProductBriefDto {
                 data["data"].push(item.toJSON());
         }
         data["page"] = this.page;
-        data["size"] = this.size;
+        data["pageSize"] = this.pageSize;
         data["totalPages"] = this.totalPages;
         data["totalElements"] = this.totalElements;
         data["hasNext"] = this.hasNext;
@@ -2486,8 +2640,9 @@ class ProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
     static fromJS(data) {
@@ -2515,8 +2670,9 @@ class ProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -2541,7 +2697,7 @@ class PaginatedCategoryBriefDto {
                     this.data.push(CategoryBriefDto.fromJS(item));
             }
             this.page = _data["page"];
-            this.size = _data["size"];
+            this.pageSize = _data["pageSize"];
             this.totalPages = _data["totalPages"];
             this.totalElements = _data["totalElements"];
             this.hasNext = _data["hasNext"];
@@ -2566,7 +2722,7 @@ class PaginatedCategoryBriefDto {
                 data["data"].push(item.toJSON());
         }
         data["page"] = this.page;
-        data["size"] = this.size;
+        data["pageSize"] = this.pageSize;
         data["totalPages"] = this.totalPages;
         data["totalElements"] = this.totalElements;
         data["hasNext"] = this.hasNext;
@@ -2774,6 +2930,12 @@ var ForGender;
     ForGender["FOR_FEMALE"] = "FOR_FEMALE";
     ForGender["FOR_BOTH"] = "FOR_BOTH";
 })(ForGender || (ForGender = {}));
+var UpdateProductCommandForGender;
+(function (UpdateProductCommandForGender) {
+    UpdateProductCommandForGender["FOR_MALE"] = "FOR_MALE";
+    UpdateProductCommandForGender["FOR_FEMALE"] = "FOR_FEMALE";
+    UpdateProductCommandForGender["FOR_BOTH"] = "FOR_BOTH";
+})(UpdateProductCommandForGender || (UpdateProductCommandForGender = {}));
 var CreateProductCommandForGender;
 (function (CreateProductCommandForGender) {
     CreateProductCommandForGender["FOR_MALE"] = "FOR_MALE";

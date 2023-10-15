@@ -2,7 +2,7 @@ package com.shop.clothing.config.startup;
 
 
 import com.shop.clothing.category.CategoryRepository;
-import com.shop.clothing.category.commands.createCategory.CreateCategoryCommand;
+import com.shop.clothing.category.command.createCategory.CreateCategoryCommand;
 import com.shop.clothing.common.Cqrs.ISender;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
