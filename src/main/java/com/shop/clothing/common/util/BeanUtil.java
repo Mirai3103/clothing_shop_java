@@ -1,5 +1,7 @@
 package com.shop.clothing.common.util;
 
+import com.shop.clothing.common.Cqrs.ISender;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@AllArgsConstructor
 public class BeanUtil {
+    private final ISender   sender;
 
     @Bean
     public PasswordEncoder encoder() {
@@ -15,7 +19,7 @@ public class BeanUtil {
     }
     @Bean
     public ClientUtil clientUtil() {
-        return new ClientUtil();
+        return new ClientUtil(sender);
     }
     @Bean
     public SlugUtil slugUtil() {

@@ -1958,6 +1958,9 @@ input:checked + .toggle-bg{
 .ml-2{
   margin-left: 0.5rem;
 }
+.ml-2\.5{
+  margin-left: 0.625rem;
+}
 .ml-3{
   margin-left: 0.75rem;
 }
@@ -2084,6 +2087,9 @@ input:checked + .toggle-bg{
 .h-2{
   height: 0.5rem;
 }
+.h-2\.5{
+  height: 0.625rem;
+}
 .h-20{
   height: 5rem;
 }
@@ -2203,6 +2209,9 @@ input:checked + .toggle-bg{
 }
 .w-2{
   width: 0.5rem;
+}
+.w-2\.5{
+  width: 0.625rem;
 }
 .w-28{
   width: 7rem;

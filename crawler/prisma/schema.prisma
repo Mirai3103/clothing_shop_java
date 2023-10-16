@@ -8,8 +8,9 @@ datasource db {
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model rder {
+model order {
   delivery_fee           Float?
+  payment_method         Int          @db.TinyInt
   promotion_promotion_id Int?
   status                 Int?         @db.TinyInt
   total_amount           Int?
@@ -17,7 +18,6 @@ model rder {
   last_modified_date     DateTime?    @db.DateTime(6)
   phone_number           String?      @db.VarChar(20)
   order_id               String       @id @db.VarChar(36)
-  user_id                String?      @db.VarChar(36)
   customer_name          String?      @db.VarChar(100)
   address                String?      @db.VarChar(500)
   cancel_reason          String?      @db.VarChar(500)
@@ -25,14 +25,14 @@ model rder {
   created_by             String?      @db.VarChar(255)
   last_modified_by       String?      @db.VarChar(255)
   user_user_id           String?      @db.VarChar(255)
-  promotion              promotion?   @relation(fields: [promotion_promotion_id], references: [promotion_id], onDelete: NoAction, onUpdate: NoAction, map: "FK317caxcyxnxcxg30sajv0t0qe")
-  user                   user?        @relation(fields: [user_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FKhvrdgf5m0lijlbx6q6jxgn05h")
+  promotion              promotion?   @relation(fields: [promotion_promotion_id], references: [promotion_id], onDelete: NoAction, onUpdate: NoAction, map: "FKkgpbw4fb1s5r7v0tlathrxp7s")
+  user                   user?        @relation(fields: [user_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FKktqkl7kou3pykq8fnm4rr9jmy")
   order_item             order_item[]
   payment                payment[]
 
-  @@index([promotion_promotion_id], map: "FK317caxcyxnxcxg30sajv0t0qe")
-  @@index([user_user_id], map: "FKhvrdgf5m0lijlbx6q6jxgn05h")
-  @@map("0rder")
+  @@index([promotion_promotion_id], map: "FKkgpbw4fb1s5r7v0tlathrxp7s")
+  @@index([user_user_id], map: "FKktqkl7kou3pykq8fnm4rr9jmy")
+  @@map("_order")
 }
 
 model brand {
@@ -47,6 +47,17 @@ model brand {
   product            product[]
 }
 
+model cart_item {
+  product_option_id Int
+  quantity          Int
+  user_id           String         @db.VarChar(255)
+  user              user           @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FKjnaj4sjyqjkr4ivemf9gb25w")
+  product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onDelete: NoAction, onUpdate: NoAction, map: "FKqxba177rqvv0cfr83bq1g396a")
+
+  @@id([product_option_id, user_id])
+  @@index([user_id], map: "FKjnaj4sjyqjkr4ivemf9gb25w")
+}
+
 model category {
   category_id        Int        @id @default(autoincrement())
   parent_category_id Int?
@@ -54,7 +65,6 @@ model category {
   deleted_date       DateTime?  @db.DateTime(6)
   last_modified_date DateTime?  @db.DateTime(6)
   name               String     @unique(map: "UK_46ccwnsi9409t36lurvtyljak") @db.VarChar(100)
-  slug               String?    @db.VarChar(100)
   created_by         String?    @db.VarChar(255)
   last_modified_by   String?    @db.VarChar(255)
   category           category?  @relation("categoryTocategory", fields: [parent_category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "FKs2ride9gvilxy2tcuv7witnxc")
@@ -81,17 +91,16 @@ model order_item {
   product_option_id Int
   quantity          Int
   order_id          String         @db.VarChar(255)
-  rder              rder           @relation(fields: [order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction, map: "FKmby8xiy5kpsm8p3283gaowrv9")
+  order             order          @relation(fields: [order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction, map: "FKryn1sdluxcjfeu891k75myheu")
   product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onDelete: NoAction, onUpdate: NoAction, map: "FKsoimewh387var4rtx7v1wa2wv")
 
   @@id([product_option_id, order_id])
-  @@index([order_id], map: "FKmby8xiy5kpsm8p3283gaowrv9")
+  @@index([order_id], map: "FKryn1sdluxcjfeu891k75myheu")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model payment {
   amount             Float     @db.Float
-  payment_method     Int       @db.TinyInt
   status             Int       @db.TinyInt
   created_date       DateTime? @db.DateTime(6)
   last_modified_date DateTime? @db.DateTime(6)
@@ -101,10 +110,9 @@ model payment {
   last_modified_by   String?   @db.VarChar(255)
   payment_details    String    @db.VarChar(255)
   payment_response   String?   @db.VarChar(255)
-  transaction_id     String    @db.VarChar(255)
-  rder               rder?     @relation(fields: [order_order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction, map: "FKq554b1a52h8gomsx6uouax918")
+  order              order?    @relation(fields: [order_order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction, map: "FKhobhqk8v7ohgfr56r725x80y5")
 
-  @@index([order_order_id], map: "FKq554b1a52h8gomsx6uouax918")
+  @@index([order_order_id], map: "FKhobhqk8v7ohgfr56r725x80y5")
 }
 
 model permission {
@@ -112,6 +120,13 @@ model permission {
   normalized_name  String             @id @db.VarChar(50)
   description      String?            @db.VarChar(100)
   role_permissions role_permissions[] @ignore
+}
+
+model persistent_logins {
+  username  String   @db.VarChar(64)
+  series    String   @id @db.VarChar(64)
+  token     String   @db.VarChar(64)
+  last_used DateTime @db.Timestamp(0)
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -157,18 +172,20 @@ model product_image {
 
 model product_option {
   color_color_id     Int?
-  product_option_id  Int          @id @default(autoincrement())
+  product_option_id  Int                  @id @default(autoincrement())
   product_product_id Int?
   stock              Int
-  created_date       DateTime?    @db.DateTime(6)
-  deleted_date       DateTime?    @db.DateTime(6)
-  last_modified_date DateTime?    @db.DateTime(6)
-  size               String       @db.VarChar(50)
-  created_by         String?      @db.VarChar(255)
-  last_modified_by   String?      @db.VarChar(255)
+  created_date       DateTime?            @db.DateTime(6)
+  deleted_date       DateTime?            @db.DateTime(6)
+  last_modified_date DateTime?            @db.DateTime(6)
+  size               String               @db.VarChar(50)
+  created_by         String?              @db.VarChar(255)
+  last_modified_by   String?              @db.VarChar(255)
+  cart_item          cart_item[]
   order_item         order_item[]
-  color              color?       @relation(fields: [color_color_id], references: [color_id], onDelete: NoAction, onUpdate: NoAction, map: "FK19qrg9y80nlioamtmiq57lukp")
-  product            product?     @relation(fields: [product_product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "FKf135hq0tq3mo9dttbfhcidbac")
+  color              color?               @relation(fields: [color_color_id], references: [color_id], onDelete: NoAction, onUpdate: NoAction, map: "FK19qrg9y80nlioamtmiq57lukp")
+  product            product?             @relation(fields: [product_product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "FKf135hq0tq3mo9dttbfhcidbac")
+  stock_receipt_item stock_receipt_item[]
 
   @@index([color_color_id], map: "FK19qrg9y80nlioamtmiq57lukp")
   @@index([product_product_id], map: "FKf135hq0tq3mo9dttbfhcidbac")
@@ -193,7 +210,7 @@ model promotion {
   created_by         String?   @db.VarChar(255)
   description        String?   @db.VarChar(255)
   last_modified_by   String?   @db.VarChar(255)
-  rder               rder[]
+  order              order[]
 }
 
 model role {
@@ -220,6 +237,50 @@ model role_permissions {
   @@ignore
 }
 
+model sessions {
+  session_id String  @id @db.VarChar(128)
+  expires    Int     @db.UnsignedInt
+  data       String? @db.MediumText
+}
+
+model stock_receipt {
+  stock_receipt_id     Int                  @id @default(autoincrement())
+  created_by           String?              @db.VarChar(255)
+  created_date         DateTime?            @db.DateTime(6)
+  last_modified_by     String?              @db.VarChar(255)
+  last_modified_date   DateTime?            @db.DateTime(6)
+  note                 String?              @db.VarChar(100)
+  supplier_id          Int
+  total                Int
+  supplier_supplier_id Int?
+  supplier             supplier?            @relation(fields: [supplier_supplier_id], references: [supplier_id], onDelete: NoAction, onUpdate: NoAction, map: "FK678jx4bl2bkhm462ayepips03")
+  stock_receipt_item   stock_receipt_item[]
+
+  @@index([supplier_supplier_id], map: "FK678jx4bl2bkhm462ayepips03")
+}
+
+model stock_receipt_item {
+  product_option_id Int
+  stock_receipt_id  Int
+  price             Int
+  quantity          Int
+  product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onDelete: NoAction, onUpdate: NoAction, map: "FK4kcswjsn2tyx8q33uh4pe0hd6")
+  stock_receipt     stock_receipt  @relation(fields: [stock_receipt_id], references: [stock_receipt_id], onDelete: NoAction, onUpdate: NoAction, map: "FKkbjrplw2p70quxcawmoia5efu")
+
+  @@id([product_option_id, stock_receipt_id])
+  @@index([stock_receipt_id], map: "FKkbjrplw2p70quxcawmoia5efu")
+}
+
+model supplier {
+  supplier_id   Int             @id
+  address       String?         @db.VarChar(255)
+  description   String?         @db.VarChar(255)
+  email         String?         @db.VarChar(255)
+  name          String?         @db.VarChar(255)
+  phone         String?         @db.VarChar(255)
+  stock_receipt stock_receipt[]
+}
+
 model user {
   is_account_enabled Boolean      @db.Bit(1)
   is_customer        Boolean      @db.Bit(1)
@@ -233,7 +294,8 @@ model user {
   avatar_url         String?      @db.VarChar(200)
   address            String?      @db.VarChar(500)
   user_id            String       @id @db.VarChar(255)
-  rder               rder[]
+  order              order[]
+  cart_item          cart_item[]
   user_roles         user_roles[] @ignore
 }
 
