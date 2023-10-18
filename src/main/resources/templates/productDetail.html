@@ -306,9 +306,19 @@
                 </div>
 
                 <button type="button"
+                        sec:authorize="isAuthenticated()"
+                        x-show="selectedSize"
                         class="text-white mt-1 min-w-[300px] flex justify-center items-center bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2  ">
                    <span
-                   x-text="selectedSize ? 'Thêm vào giỏ hàng' : 'Chọn kích cỡ'"
+
+                   >
+                          Thêm vào giỏ hàng
+                   </span>
+                </button>
+                <button type="button"
+                        class="text-white mt-1  flex justify-center items-center bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2  ">
+                   <span
+                           x-text="selectedSize ? 'Mua ngay' : 'Chọn kích cỡ'"
                    >
 
                    </span>
@@ -316,6 +326,38 @@
             </div>
         </div>
     </div>
+
+    <div class="mt-12">
+        <div class="text-lg  font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+            <ul class="grid grid-cols-2  -mb-px">
+                <li >
+                    <a href="#" class="block w-full p-2 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  " aria-current="page">
+                        Mô tả sản phẩm
+
+                    </a>
+                </li>
+                <li >
+                    <a href="#" class="block w-full p-2  border-b-2 border-transparent rounded-t-lg active hover:text-gray-600 hover:border-gray-300 ">
+                        Đánh giá sản phẩm
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="ml-6">
+            <div
+                    class="prose  mt-8 px-3"
+                    x-html="descriptionHtml"
+                    style="max-width: none !important;"
+            ></div>
+        </div>
+    </div>
+
+    <div class="mt-6 border-t py-6">
+        <h2 class="uppercase font-bold text-3xl my-3 text-center">
+            Sản phẩm tương tự
+        </h2>
+    </div>
+
 </div>
 
 </body>
