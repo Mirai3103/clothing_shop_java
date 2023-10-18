@@ -13,12 +13,309 @@
 </head>
 
 <body>
-<div layout:fragment="content" class="max-w-screen-xl mx-auto">
-    <h1 class="text-2xl mt-4 font-bold text-center text-gray-900 dark:text-white">
-        Đây là trang chi tiết sản phẩm:
-    <span  th:text="${product.name}"></span>
+<div layout:fragment="content" class="max-w-screen-xl mx-auto px-3">
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.2/markdown-it.min.js"
+            integrity="sha512-ohlWmsCxOu0bph1om5eDL0jm/83eH09fvqLDhiEdiqfDeJbEvz4FSbeY0gLJSVJwQAp0laRhTXbUQG+ZUuifUQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    ></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const descriptionMarkDown = /*[[${product.description}]]*/ '';
+        const md = markdownit();
+        const productOptions = /*[[${product.productOptions}]]*/ [];
+        const descriptionHtml = md.render(descriptionMarkDown);
+        const productImages = /*[[${product.images}]]*/ [];
+        const productId = /*[[${product.productId}]]*/ 0;
 
-    </h1>
+        /*]]>*/
+        const validColors = [];
+        productOptions.forEach((option) => {
+            if (!validColors.find((color) => color.colorId === option.color.colorId)) {
+                validColors.push(option.color);
+            }
+        });
+        validColors.forEach((color) => {
+            color.images = [];
+            productImages.forEach((image) => {
+                if (image.forColor.colorId === color.colorId) {
+                    color.images.push(image);
+                }
+            });
+            color.sizeOptions = [];
+            productOptions.forEach((option) => {
+                if (option.color.colorId === color.colorId) {
+                    color.sizeOptions.push({
+                        size: option.size,
+                        stock: option.stock,
+                    });
+                }
+            });
+        });
+        console.log(validColors);
+    </script>
+
+    <nav class="flex ml-1 mt-3" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="#"
+                   class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="currentColor" viewBox="0 0 20 20">
+                        <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                    </svg>
+                    Trang chủ
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="m1 9 4-4-4-4"/>
+                    </svg>
+                    <a href="#"
+                       class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                       th:text="${product.getForGenderDisplay()}"
+                    >
+
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="m1 9 4-4-4-4"/>
+                    </svg>
+                    <a class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                       th:text="${product.category.name}"
+                    ></a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="m1 9 4-4-4-4"/>
+                    </svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+                          th:text="${product.name}"
+                    ></span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 mx-auto gap-x-6 grid-cols-1 gap-y-6 mt-8"
+         x-data="{
+     selectedColor : null,
+     selectedSize : null,
+    }"
+         x-init="
+    selectedColor = validColors[0];
+
+    function  refresh(){
+      if (selectedColor){
+
+    setTimeout(()=>{
+     var  items = document.querySelectorAll('[data-carousel-item]');
+    var itemOptions = [...items].map((item, index) => ({
+        el: item,
+        position: index,
+    }));
+    console.log(itemOptions);
+    const carousel = new Carousel(itemOptions, {});},300)}}
+    refresh();
+    $watch('selectedColor',()=>{
+        selectedSize = null;
+        refresh();
+    })
+
+    "
+    >
+        <div class="col-span-1 ">
+            <div class="mx-auto w-[90%] aspect-[3/4]" x-show="!selectedColor">
+                <img th:src="${product.displayImage}"
+                     class="  w-full "
+                     alt="...">
+            </div>
+            <div
+                    x-show="selectedColor"
+                    id="default-carousel" class="relative mx-auto w-[90%] aspect-[3/4]" data-carousel="static">
+                <!-- Carousel wrapper -->
+                <div class="relative h-full  overflow-hidden rounded-lg ">
+                    <template x-for="(im,index) in selectedColor?.images??[]" :key="index">
+                        <div class="hidden duration-700  ease-in-out" data-carousel-item>
+                            <img :src="im.url"
+                                 class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                                 alt="...">
+                        </div>
+                    </template>
+                </div>
+                <!-- Slider indicators -->
+                <!--                <div class="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">-->
+                <!--                    <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1"-->
+                <!--                            data-carousel-slide-to="0"></button>-->
+                <!--                    <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2"-->
+                <!--                            data-carousel-slide-to="1"></button>-->
+                <!--                    <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3"-->
+                <!--                            data-carousel-slide-to="2"></button>-->
+                <!--                    <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4"-->
+                <!--                            data-carousel-slide-to="3"></button>-->
+                <!--                    <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5"-->
+                <!--                            data-carousel-slide-to="4"></button>-->
+                <!--                </div>-->
+                <!-- Slider controls -->
+                <button type="button"
+                        class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                        data-carousel-prev>
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <svg class="w-4 h-4 text-white dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                 fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5 1 1 5l4 4"/>
+            </svg>
+            <span class="sr-only">Previous</span>
+        </span>
+                </button>
+                <button type="button"
+                        class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                        data-carousel-next>
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <svg class="w-4 h-4 text-white dark:text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                 fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="m1 9 4-4-4-4"/>
+            </svg>
+            <span class="sr-only">Next</span>
+        </span>
+                </button>
+            </div>
+
+        </div>
+        <div class="lg:col-span-2 mx-2 md:mx-0 flex flex-col gap-y-1">
+            <h1 class="font-extrabold text-4xl" th:text="${product.name}">
+
+            </h1>
+            <div class="flex items-center ">
+                <svg class="w-4 h-4 text-yellow-300 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                     fill="currentColor" viewBox="0 0 22 20">
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                </svg>
+                <p class="ml-2 text-sm font-bold text-gray-900 dark:text-white">4.95</p>
+                <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
+                <a href="#" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">73
+                    reviews</a>
+            </div>
+            <div class="flex text-3xl mt-2  gap-x-4 items-center"
+                 th:with="discount=${product.discount},price=${product.price}"
+            >
+                <div class="flex gap-1 items-center gap-x-4">
+                    <div
+                            class="font-bold"
+                            th:text="${@clientUtil.toVietnameseCurrency(product.getFinalPrice())}"
+                            th:if="${discount > 0}"
+                    ></div>
+                    <div
+                            class="font-bold"
+                            th:text="${@clientUtil.toVietnameseCurrency(price)}"
+                            th:class="${product.discount > 0} ? ' line-through text-gray-500 ' : ''"
+
+                    ></div>
+
+
+                </div>
+                <span
+                        class="bg-red-100 text-red-800 mr-2 px-2.5 py-0.5 rounded font-bold"
+                        th:text="'-'+${discount}+'%'"
+                        th:if="${discount > 0}"
+                ></span
+                >
+            </div>
+            <div class="flex gap-x-2  text-xl mt-1 ">
+                <h3 class="font-bold">
+                    Giới tính:
+                </h3>
+                <span th:text="${product.getForGenderDisplay()}"></span>
+            </div>
+            <div class=" flex gap-x-2  text-xl ">
+                <h3 class="font-bold ">
+                    Danh mục:
+                </h3>
+                <span th:text="${product.getCategory().name}"></span>
+            </div>
+            <div class="py-4 border-t mt-2 border-primary-200">
+                <h3 class="font-bold mb-1 text-xl">
+                    Màu sắc
+                </h3>
+                <div class="flex gap-1 flex-wrap ml-3 ">
+                    <template x-for="(color,index) in validColors" :key="index">
+                        <span class="  font-medium mr-2 px-2.5 py-0.5 rounded"
+                              :class="{
+                               'bg-gray-100 text-gray-800 cursor-pointer':selectedColor?.colorId !== color.colorId,
+                                 'bg-primary-700 text-white':selectedColor?.colorId === color.colorId
+                              }"
+                                @click="selectedColor = color"
+
+                        >
+                            <span x-text="color.name"></span>
+                        </span>
+                    </template>
+                </div>
+            </div>
+            <div class="py-4 border-t mt-2 border-primary-200">
+                <h3 class="font-bold text-xl">
+                    Kích cỡ
+                </h3>
+                <div class="flex gap-1 mt-1 flex-wrap ml-3 ">
+                    <template x-for="(size,index) in selectedColor?.sizeOptions??[]" :key="index">
+                        <span class="  font-medium mr-2 px-2.5 py-0.5 rounded"
+                              :class="{
+                               'cursor-not-allowed line-through':size.stock === 0,
+                                 'bg-primary-700 text-white':selectedSize === size.size,
+                                 'bg-gray-100 text-gray-800 cursor-pointer'  :selectedSize !== size.size
+                              }"
+                              @click="if(size.stock > 0) selectedSize = size.size"
+
+                        >
+                            <abbr class="no-underline border-none " x-text="size.size"
+                                    :title="size.stock === 0 ? 'Hết hàng' : size.stock + ' sản phẩm' "
+                            >
+                            </abbr>
+                        </span>
+                    </template>
+                </div>
+            </div>
+            <div class="py-4 border-t mt-2 flex gap-x-6 items-center border-primary-200">
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                    <button type="button"
+                            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white">
+                        -
+                    </button>
+                    <input readonly type="number"
+                           class="bg-white  text-gray-900 text-sm border border-gray-200 focus:ring-primary-500 focus:border-blue-500 block w-[100px]   p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-blue-500"
+                           value="1"
+                           placeholder="0" required>
+                    <button type="button"
+                            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white">
+                        +
+                    </button>
+                </div>
+
+                <button type="button"
+                        class="text-white mt-1 min-w-[300px] flex justify-center items-center bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2  ">
+                   <span
+                   x-text="selectedSize ? 'Thêm vào giỏ hàng' : 'Chọn kích cỡ'"
+                   >
+
+                   </span>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

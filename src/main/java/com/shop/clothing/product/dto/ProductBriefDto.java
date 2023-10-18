@@ -22,7 +22,7 @@ public class ProductBriefDto  extends AuditableDto {
 
     private String slug;
     private double price;
-    private double discount;
+    private int discount;
 
     private String displayImage;
     private CategoryBriefDto category;

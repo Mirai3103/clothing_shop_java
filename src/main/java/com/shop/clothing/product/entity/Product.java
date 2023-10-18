@@ -50,7 +50,7 @@ public class Product extends AuditableEntity{
 
 
     @Column(nullable = false)
-    private double discount;
+    private int discount;
 
 
     @Column(nullable = false)

@@ -53,7 +53,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
             promotion = promotionRepository.findByCodeIgnoreCase(createOrderCommand.getPromotionCode()).orElse(null);
         }
         var totalPrice = cartItems.stream().mapToDouble(cartItem -> cartItem.getProductOption().getProduct().getPrice() * cartItem.getQuantity() *
-                ((100 - cartItem.getProductOption().getProduct().getDiscount()) / 100)
+                ((double) (100 - cartItem.getProductOption().getProduct().getDiscount()) / 100)
         ).sum();
 
         var addressList = createOrderCommand.getAddress().split(",");
