@@ -4,6 +4,7 @@ import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.config.ICurrentUserService;
 import com.shop.clothing.order.command.createOrder.CreateOrderCommand;
 import com.shop.clothing.order.command.createQuickOrder.CreateQuickOrderCommand;
+import com.shop.clothing.payment.command.createPayment.CreatePaymentCommand;
 import com.shop.clothing.product.query.getProductOptionById.GetProductOptionByIdQuery;
 import com.shop.clothing.product.query.getProductOptionsByListId.GetProductOptionsByListIdQuery;
 import com.shop.clothing.user.entity.User;
@@ -14,6 +15,7 @@ import lombok.Getter;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,6 +77,23 @@ public class ShopOrderController {
         var productOption = sender.send(new GetProductOptionByIdQuery(productOptionId)).get();
         model.addAttribute("productOption", productOption);
         model.addAttribute("command", createOrderCommand);
+        return "order/quick";
+    }
+    @PostMapping("/quick")
+    public String createQuickOrder(@Valid CreateQuickOrderCommand command, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "order/quick";
+        }
+        var response = sender.send(command);
+        if(response.isOk()){
+            var createPaymentCommand = new CreatePaymentCommand();
+            createPaymentCommand.setOrderId(response.get());
+            var paymentResponse = sender.send(createPaymentCommand);
+            if(paymentResponse.isOk() && paymentResponse.get().isRedirect()){
+                return "redirect:" + paymentResponse.get().getRedirectUrl();
+            }
+            return "redirect:/order/success";
+        }
         return "order/quick";
     }
 }

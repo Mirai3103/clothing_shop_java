@@ -6,6 +6,8 @@ import com.shop.clothing.category.query.getAllCategoriesGroupByParentQuery.GetAl
 import com.shop.clothing.common.Cqrs.ISender;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +37,12 @@ public class ClientUtil {
         return String.format("%,d", priceInt).replace(',', '.') + "đ";
     }
 
+    @Caching(cacheable = {
+            @Cacheable(value = "homePage", key = "'categories'"),
+    })
     public List<CategoryDetailDto> getCategoryTree() {
         return sender.send(new GetAllCategoriesGroupByParentQuery()).get();
     }
+
 
 }

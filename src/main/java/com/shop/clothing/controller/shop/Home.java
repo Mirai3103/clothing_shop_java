@@ -20,14 +20,19 @@ public class Home {
         return "redirect:/home";
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return "order/quick";
+    }
+
     @GetMapping("/home")
     public String home(Model model) {
-        var newProductQuery = new  GetAllProductsQuery();
+        var newProductQuery = new GetAllProductsQuery();
         newProductQuery.setSortField("id");
         newProductQuery.setSortDir("desc");
         newProductQuery.setPage(1);
         newProductQuery.setPageSize(10);
-        var hotProductQuery =new  GetAllProductsQuery();
+        var hotProductQuery = new GetAllProductsQuery();
         hotProductQuery.setSortField("name");
         hotProductQuery.setSortDir("desc");
         hotProductQuery.setPage(1);

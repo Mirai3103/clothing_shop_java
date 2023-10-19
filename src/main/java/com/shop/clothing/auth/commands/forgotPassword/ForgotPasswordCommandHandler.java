@@ -6,11 +6,13 @@ import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.config.AppProperties;
 import com.shop.clothing.mail.MailService;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class ForgotPasswordCommandHandler implements IRequestHandler<ForgotPassw
     private final AppProperties appProperties;
 
     @Override
-    public HandleResponse<Void> handle(ForgotPasswordCommand forgotPasswordCommand) throws Exception {
+    public HandleResponse<Void> handle(ForgotPasswordCommand forgotPasswordCommand){
         var user = userRepository.findByEmail(forgotPasswordCommand.email());
         if (user.isEmpty()) {
             return HandleResponse.error("Email không tồn tại");
@@ -33,9 +35,16 @@ public class ForgotPasswordCommandHandler implements IRequestHandler<ForgotPassw
         String token = jwtService.generateToken(claims, 15 * 60 * 1000);
         var to = user.get().getEmail();
         var subject = "Reset password";
-        var url = appProperties.getHost() + "/reset-password?token=" + token;
+        var url = appProperties.getHost() + "/auth/reset-password?token=" + token;
         var content = "Click vào link sau để reset password: " + url;
-        mailService.sendEmail(to, subject, content);
+        CompletableFuture.runAsync(() -> {
+            try {
+                mailService.sendEmail(to, subject, content);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        });
         return HandleResponse.ok();
+
     }
 }

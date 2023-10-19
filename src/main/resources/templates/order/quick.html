@@ -1,0 +1,249 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Mua ngay
+    </title>
+
+</head>
+<body>
+<div layout:fragment="content" class="max-w-screen-xl px-3 mx-auto">
+    <script src="/js/addressUtil.js"></script>
+    <section class="my-5" x-data="addressPicker">
+        <div class="">
+            <div class="flex flex-col gap-y-1">
+                <div>
+                    <h1 class="text-3xl  py-4 font-bold leading-tight tracking-tight text-gray-900">
+                        Tiến hành đặt hàng
+                    </h1>
+                </div>
+
+                <div class="grid grid-cols-1  lg:grid-cols-3 gap-8">
+                    <div class="col-span-1 order-1 lg:order-2  ">
+                        <div class="mf qf hg">
+                            <div class="bg-gray-100 shadow  p-6 rounded-lg">
+                                <h3 class="text-2xl font-bold leading-tight tracking-tight text-gray-900 ">
+                                    Chi tiết đơn hàng
+                                </h3>
+
+                                <div class="pc wb">
+                                    <ul role="list" class=" divide-y divide-gray-200">
+                                        <li class="flex py-6">
+                                            <div class="h-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                                <img src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/August2022/tanktop_trang_1.jpg"
+                                                     alt="Salmon"
+                                                     class="h-full aspect-[3/4] object-cover object-center">
+                                            </div>
+
+                                            <div class="ml-4 flex flex-1 flex-col">
+                                                <div>
+                                                    <div class="flex justify-between text-base font-medium text-gray-900">
+                                                        <h3>
+                                                            <a href="#">Throwback Hip Bag</a>
+                                                        </h3>
+                                                        <p class="ml-4">$90.00</p>
+                                                    </div>
+                                                    <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                                                </div>
+                                                <div class="flex flex-1 items-end justify-between text-sm">
+                                                    <p class="text-gray-500">Qty 1</p>
+
+                                                    <div class="flex">
+                                                        <button type="button"
+                                                                class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="flex py-6">
+                                            <div class="h-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                                <img src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/August2022/tanktop_trang_1.jpg"
+                                                     alt="Salmon"
+                                                     class="h-full aspect-[3/4] object-cover object-center">
+                                            </div>
+
+                                            <div class="ml-4 flex flex-1 flex-col">
+                                                <div>
+                                                    <div class="flex justify-between text-base font-medium text-gray-900">
+                                                        <h3>
+                                                            <a href="#">Throwback Hip Bag</a>
+                                                        </h3>
+                                                        <p class="ml-4">$90.00</p>
+                                                    </div>
+                                                    <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                                                </div>
+                                                <div class="flex flex-1 items-end justify-between text-sm">
+                                                    <p class="text-gray-500">Qty 1</p>
+
+                                                    <div class="flex">
+                                                        <button type="button"
+                                                                class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+
+                                <div class="border-t border-primary-500 py-4">
+                                    <div class="flex flex-col gap-y-4 text-lg">
+                                        <div class=" flex justify-between">
+                                            <p class="text-gray-600">
+                                                Tổng giá trị đơn hàng
+                                            </p>
+                                            <p class="text-gray-600">$589</p>
+                                        </div>
+
+                                        <div class=" flex justify-between">
+
+                                            <p class="text-gray-600">Giảm giá</p>
+                                            <p class="text-gray-600">-$100</p>
+                                        </div>
+
+                                        <div class=" flex justify-between">
+
+                                            <p class="text-gray-600">Phí vận chuyển
+                                            </p>
+                                            <p class="text-gray-600">$10</p>
+                                        </div>
+
+                                        <div class=" flex justify-between font-semibold text-xl">
+
+                                            <p class="ci ji ri">Thành tiền</p>
+                                            <p class="ci ji ai ri">$599</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex w-full mt-2 justify-center">
+                                    <button type="button"
+                                            class="text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-md text-xl px-5 py-2.5 text-center mb-2 ">
+                                        Tiến hành đặt hàng
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-1  border-t py-2 order-2 lg:order-1 lg:col-span-2"
+                         x-data="{
+                     isUseMyAddress: false,
+                    }"
+                    >
+                        <div class="pc">
+                            <div class="if kf kb">
+                                <div class="p-2">
+                                    <div class="flex gap-x-6">
+                                        <h2 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+                                            Thông tin giao hàng
+
+                                        </h2>
+                                        <div class="flex items-center">
+                                            <input id="use-my-address" type="checkbox" value=""
+                                                   x-model="isUseMyAddress"
+                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="use-my-address"
+                                                   class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                Sử dụng địa chỉ của tôi
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div x-show="!isUseMyAddress">
+                                        <div class="my-6">
+                                            <label for="name"
+                                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                Họ và tên người nhận
+                                            </label>
+                                            <input
+                                                    placeholder="Họ và tên người nhận"
+                                                    type="text" id="name"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        </div>
+                                        <div class="my-6">
+                                            <label for="phoneNumber"
+                                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                Số điện thoại
+                                            </label>
+                                            <input
+                                                    placeholder="Số điện thoại người nhận"
+                                                    type="text" id="phoneNumber"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        </div>
+                                        <div class="my-6">
+                                            <label for="email"
+                                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                Địa chỉ email
+                                            </label>
+                                            <input
+                                                    placeholder="Địa chỉ email nhận thông báo"
+                                                    type="text" id="email"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        </div>
+                                        <div th:replace="~{components/AddressPicker::addressPicker()} ">
+                                        </div>
+                                        <div class="flex w-full mt-4 justify-end">
+                                            <button type="button"
+                                                    class="text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-md text-sm px-3 py-2.5 text-center mb-2 ">
+                                                Xác nhận địa chỉ
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="flex flex-col gap-x-2 mt-5  border-t py-2">
+                                    <h2 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+                                        Phương thức vận chuyển</h2>
+
+                                </div>
+
+                                <div class="flex flex-col gap-x-2  border-t py-2">
+                                    <h2 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+                                        Phương thức thanh toán</h2>
+                                    <div class="flex flex-col pt-4 pl-4 gap-y-4">
+                                        <div class="flex items-center">
+                                            <input id="default-radio-1" type="radio" value="" name="default-radio"
+                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="default-radio-1"
+                                                   class="ml-2  font-medium text-gray-900 dark:text-gray-300">
+                                                Thanh toán khi nhận hàng (COD)
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input checked id="default-radio-2" type="radio" value=""
+                                                   name="default-radio"
+                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="default-radio-2"
+                                                   class="ml-2  font-medium text-gray-900 dark:text-gray-300">
+                                                Thanh toán qua thẻ ngân hàng
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input checked id="default-radio-3" type="radio" value=""
+                                                   name="default-radio"
+                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            <label for="default-radio-3"
+                                                   class="ml-2  font-medium text-gray-900 dark:text-gray-300">
+                                                Thanh toán qua ví điện tử momo
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

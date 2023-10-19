@@ -126,7 +126,6 @@
         el: item,
         position: index,
     }));
-    console.log(itemOptions);
     const carousel = new Carousel(itemOptions, {});},300)}}
     refresh();
     $watch('selectedColor',()=>{
@@ -275,10 +274,10 @@
                         <span class="  font-medium mr-2 px-2.5 py-0.5 rounded"
                               :class="{
                                'cursor-not-allowed line-through':size.stock === 0,
-                                 'bg-primary-700 text-white':selectedSize === size.size,
-                                 'bg-gray-100 text-gray-800 cursor-pointer'  :selectedSize !== size.size
+                                 'bg-primary-700 text-white':selectedSize.size === size.size,
+                                 'bg-gray-100 text-gray-800 cursor-pointer'  :selectedSize.size !== size.size
                               }"
-                              @click="if(size.stock > 0) selectedSize = size.size"
+                              @click="if(size.stock > 0) selectedSize = size"
 
                         >
                             <abbr class="no-underline border-none " x-text="size.size"
@@ -289,17 +288,49 @@
                     </template>
                 </div>
             </div>
-            <div class="py-4 border-t mt-2 flex gap-x-6 items-center border-primary-200">
+            <div class="py-4 border-t mt-2 flex gap-x-6 items-center border-primary-200"
+            x-data="{
+            quantity : 0,
+            increment(){
+               if(!selectedSize){
+                $store.toast.add('error','Lỗi','Vui lòng chọn kích cỡ');
+                return;
+               }
+                if(this.quantity < selectedSize.stock){
+                 this.quantity++;
+                }else {
+                $store.toast.add('error','Lỗi','Số lượng sản phẩm không đủ');
+                }
+            },
+            decrement(){
+             if(!selectedSize){
+                $store.toast.add('error','Lỗi','Vui lòng chọn kích cỡ');
+                return;
+               }
+                if(this.quantity > 1){
+                 this.quantity--;
+                }
+                }
+
+            }"
+x-init="$watch('selectedSize',()=>{
+quantity = 0;
+})"
+            >
                 <div class="inline-flex rounded-md shadow-sm" role="group">
                     <button type="button"
+                            @click="decrement()"
                             class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white">
                         -
                     </button>
                     <input readonly type="number"
                            class="bg-white  text-gray-900 text-sm border border-gray-200 focus:ring-primary-500 focus:border-blue-500 block w-[100px]   p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-blue-500"
                            value="1"
-                           placeholder="0" required>
+                           placeholder="0" required
+                            x-model="quantity"
+                    >
                     <button type="button"
+                            @click="increment()"
                             class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-primary-500 dark:focus:text-white">
                         +
                     </button>

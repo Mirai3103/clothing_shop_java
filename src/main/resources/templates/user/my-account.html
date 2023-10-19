@@ -12,62 +12,8 @@
 
   <body>
     <div layout:fragment="content" class="max-w-screen-xl mx-auto">
-      <script>
-        async function fetchProvince() {
-          const response = await axios.get("/data/tinh_tp.json");
-          return Object.values(response.data);
-        }
+      <script src="/js/addressUtil.js">
 
-        async function fetchDistrict(provinceCode) {
-          const response = await axios.get("/data/quan-huyen/" + provinceCode + ".json");
-          return Object.values(response.data);
-        }
-
-        async function fetchWard(districtCode) {
-          //https://huuhoang.dev/data/xa_phuong.json
-          const response = await axios.get("/data/xa-phuong/" + districtCode + ".json");
-          return Object.values(response.data);
-        }
-        function toFullAddress({
-          provinces,
-          districts,
-          wards,
-          selectedProvince,
-          selectedDistrict,
-          selectedWard,
-          detailAddress,
-        }) {
-          let province = provinces.find((p) => p.code == selectedProvince);
-          let district = districts.find((d) => d.code == selectedDistrict);
-          let ward = wards.find((w) => w.code == selectedWard);
-          return `${detailAddress}, ${ward.name_with_type}, ${district.name_with_type}, ${province.name_with_type}`;
-        }
-        async function toAddress(fullAddress) {
-          let address = fullAddress.split(",");
-          let provinceIndex = address.length - 1;
-          let districtIndex = address.length - 2;
-          let wardIndex = address.length - 3;
-          let provinces = await fetchProvince();
-          let province = provinces.find(
-            (p) => p.name_with_type.toLowerCase() == address[provinceIndex].trim().toLowerCase()
-          );
-          let districts = await fetchDistrict(province.code);
-          let district = districts.find(
-            (d) => d.name_with_type.toLowerCase() == address[districtIndex].trim().toLowerCase()
-          );
-          let wards = await fetchWard(district.code);
-          let ward = wards.find((w) => w.name_with_type.toLowerCase() == address[wardIndex].trim().toLowerCase());
-          console.log(province, district, ward);
-          return {
-            provinces: provinces,
-            districts: districts,
-            wards: wards,
-            selectedProvince: province.code,
-            selectedDistrict: district.code,
-            selectedWard: ward.code,
-            detailAddress: address.slice(0, wardIndex).join(","),
-          };
-        }
       </script>
       <script th:inline="javascript">
         /*<![CDATA[*/
@@ -259,11 +205,11 @@
             let currentPassword = document.getElementById('current-password').value;
             let newPassword = document.getElementById('new-password').value;
             let confirmNewPassword = document.getElementById('confirm-new-password').value;
-            if(newPassword == currentPassword){
+            if(newPassword === currentPassword){
                 errors['newPassword'] = 'Mật khẩu mới không được trùng với mật khẩu hiện tại';
                 return;
             }
-            if(newPassword != confirmNewPassword){
+            if(newPassword !== confirmNewPassword){
                 errors['confirmNewPassword'] = 'Mật khẩu xác nhận không khớp';
                 return;
             }
@@ -339,15 +285,7 @@
         <div class="col-span-2">
           <div
             class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 sm:p-6"
-            x-data="{
-                                    provinces: {},
-                                    districts: [],
-                                    wards: [],
-                                    selectedProvince: '',
-                                    selectedDistrict: '',
-                                    selectedWard:'',
-                                    detailAddress: ''
-                                }"
+            x-data="addressPicker"
             x-init="
                         if(addressFromModel){
                             toAddress(addressFromModel).then(address => {
@@ -423,88 +361,7 @@
                     required
                   />
                 </div>
-                <div
-                  class="col-span-6 grid grid-cols-4 gap-x-1"
-                  x-init="fetchProvince().then(p => {
-                                            provinces = p;
-                                     });
-                                    $watch('selectedProvince', (provinceCode) => {
-                                        if (provinceCode) {
-                                            fetchDistrict(provinceCode).then(d => {
-                                                districts = d;
-                                            selecteDistrict = '';
-                                                
-                                            });
-                                        }else{
-                                            districts = [];
-                                            selectedDistrict = '';
-                                        }
-                                    });
-                                    $watch('selectedDistrict', (districtCode) => {
-                                        if (districtCode) {
-                                            fetchWard(districtCode).then(w => {
-                                                wards = w;
-                                            });
-                                        }else{
-                                            wards = [];
-                                            selectedWard = '';
-                                        }
-                                    });
-                            "
-                >
-                  <div>
-                    <label for="province" class="block mb-2 text-sm font-medium text-gray-900">Tỉnh/Thành phố</label>
-                    <select
-                      id="province"
-                      x-model="selectedProvince"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                    >
-                      <option selected value="">Chọn tỉnh/thành phố</option>
-                      <template x-for="province in provinces" :key="province.code">
-                        <option x-text="province.name_with_type" :value="province.code"></option>
-                      </template>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="district" class="block mb-2 text-sm font-medium text-gray-900">Quận/Huyện</label>
-                    <select
-                      id="district"
-                      x-model="selectedDistrict"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                    >
-                      <option selected value="">Chọn quận/huyện</option>
-                      <template x-for="province in districts" :key="province.code">
-                        <option x-text="province.name_with_type" :value="province.code"></option>
-                      </template>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="ward" x-model="selectedWard" class="block mb-2 text-sm font-medium text-gray-900"
-                      >Phường/Xã</label
-                    >
-                    <select
-                      id="ward"
-                      x-model="selectedWard"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                    >
-                      <option selected value="">Chọn phường/xã</option>
-                      <template x-for="ward in wards" :key="ward.code">
-                        <option x-text="ward.name_with_type" :value="ward.code"></option>
-                      </template>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="address" class="block mb-2 text-sm font-medium text-gray-900">Chi tiết</label>
-                    <input
-                      type="text"
-                      name="address"
-                      id="address"
-                      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                      placeholder="273 Đường A"
-                      required
-                      x-model="detailAddress"
-                    />
-                  </div>
+                <div th:replace="~{components/AddressPicker::addressPicker()} ">
                 </div>
                 <div class="col-span-6 sm:col-span-3">
                   <label for="phonenumber" class="block mb-2 text-sm font-medium text-gray-900"> Số điện thoại </label>

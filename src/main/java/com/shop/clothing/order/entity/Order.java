@@ -31,6 +31,8 @@ public class Order extends AuditableEntity {
 
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
+    @Column(name = "email", length = 100)
+    private String email;
 
     @Column(name = "total_amount")
     private int totalAmount;
@@ -43,7 +45,6 @@ public class Order extends AuditableEntity {
 
     @Column(name = "cancel_reason", length = 500)
     private String cancelReason;
-
 
 
     @Column()
