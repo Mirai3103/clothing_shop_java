@@ -38,9 +38,7 @@ public class TestGoShip {
         Assertions.assertDoesNotThrow(() -> {
             GetValidShipServiceRequest request = GetValidShipServiceRequest.builder()
                     .cod(0)
-                    .fromDistrict("Quận 1")
                     .toDistrict("Nghĩa Hành")
-                    .fromCity("Hồ chí Minh")
                     .toCity("Quảng Ngãi")
                     .orderValue(200000)
                     .build();
@@ -55,9 +53,7 @@ public class TestGoShip {
         Assertions.assertDoesNotThrow(() -> {
             GetValidShipServiceRequest getValidShipServiceRequest = GetValidShipServiceRequest.builder()
                     .cod(0)
-                    .fromDistrict("Quận 1")
                     .toDistrict("Nghĩa Hành")
-                    .fromCity("Hồ chí Minh")
                     .toCity("Quảng Ngãi")
                     .orderValue(200000)
                     .build();

@@ -44,5 +44,23 @@ public class ClientUtil {
         return sender.send(new GetAllCategoriesGroupByParentQuery()).get();
     }
 
-
+    @AllArgsConstructor
+    public static class Address {
+        public String ward;
+        public String district;
+        public String city;
+        public String detail;
+    }
+    public Address from(String address) {
+        var addressList = address.split(",");
+        var ward = addressList[addressList.length - 3].trim();
+        var district = addressList[addressList.length - 2].trim();
+        var city = addressList[addressList.length - 1].trim();
+        // 0 to length - 3 is detail
+        StringBuilder detail = new StringBuilder();
+        for (int i = 0; i < addressList.length - 3; i++) {
+            detail.append(addressList[i].trim()).append(", ");
+        }
+        return new Address(ward, district, city, detail.toString());
+    }
 }

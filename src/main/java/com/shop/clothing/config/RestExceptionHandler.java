@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -25,7 +26,7 @@ import java.util.Map;
 public class RestExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             WebRequest request) {
@@ -51,6 +52,14 @@ public class RestExceptionHandler {
 
         ErrorResponse error = ErrorResponse.builder().error(ex.getMessage()).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+
+    public ResponseEntity<?> businessLogicExceptionHandler(ResponseStatusException ex) {
+
+//        ErrorResponse error = ErrorResponse.builder().error(ex.getMessage()).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return new ResponseEntity<>(ex.getReason(), ex.getStatusCode());
     }
 
     @ExceptionHandler(Exception.class)

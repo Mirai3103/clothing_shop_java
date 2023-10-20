@@ -29,9 +29,9 @@ public class GoShipService implements IDeliveryService {
 
     @Override
     public List<GetValidShipServiceResponse> getValidShipService(GetValidShipServiceRequest request) {
-        var fromCityId = addressService.findProvinceId(request.getFromCity());
+        var fromCityId = addressService.findProvinceId(goShipProperties.getShopCity());
         var toCityId = addressService.findProvinceId(request.getToCity());
-        var fromDistrictId = addressService.findDistrictId(request.getFromDistrict(), fromCityId);
+        var fromDistrictId = addressService.findDistrictId(goShipProperties.getShopDistrict(), fromCityId);
         var toDistrictId = addressService.findDistrictId(request.getToDistrict(), toCityId);
         var restTemplate = new RestTemplate();
         var accessToken = goShipProperties.getAccessToken();

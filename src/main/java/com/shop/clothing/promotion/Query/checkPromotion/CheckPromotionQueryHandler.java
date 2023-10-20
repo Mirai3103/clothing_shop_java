@@ -1,0 +1,45 @@
+package com.shop.clothing.promotion.Query.checkPromotion;
+
+import com.shop.clothing.common.Cqrs.HandleResponse;
+import com.shop.clothing.common.Cqrs.IRequestHandler;
+import com.shop.clothing.promotion.PromotionDto;
+import com.shop.clothing.promotion.repository.PromotionRepository;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@AllArgsConstructor
+@Service
+public class CheckPromotionQueryHandler implements IRequestHandler<CheckPromotionQuery, PromotionDto> {
+    private final PromotionRepository promotionRepository;
+    private final ModelMapper modelMapper;
+    @Override
+    @Transactional(readOnly = true)
+    public HandleResponse<PromotionDto> handle(CheckPromotionQuery checkPromotionQuery) throws Exception {
+        var promotionOptional = promotionRepository.findByCodeIgnoreCase(checkPromotionQuery.getCode());
+        if (promotionOptional.isEmpty()) {
+            return HandleResponse.error("Mã giảm giá không hợp lệ", HttpStatus.NOT_FOUND);
+        }
+        var promotion = promotionOptional.get();
+        if (!promotion.isActive()) {
+            return HandleResponse.error("Mã giảm giá không hợp lệ", HttpStatus.NOT_FOUND);
+        }
+        if (promotion.getMinOrderAmount() > checkPromotionQuery.getOrderValue()) {
+            return HandleResponse.error("Chưa đạt giá trị đơn hàng tối thiểu (" + promotion.getMinOrderAmount() + ")", HttpStatus.NOT_FOUND);
+        }
+        var today = new java.sql.Date(System.currentTimeMillis());
+        if (promotion.getStartDate().after(today) || promotion.getEndDate().before(today)) {
+            return HandleResponse.error("Mã giảm giá không hợp lệ", HttpStatus.NOT_FOUND);
+        }
+        if (promotion.getStock() <= 0) {
+            return HandleResponse.error("Mã giảm giá đã hết", HttpStatus.NOT_FOUND);
+        }
+        var promotionDto = modelMapper.map(promotion, PromotionDto.class);
+        return HandleResponse.ok(promotionDto);
+
+
+
+    }
+}

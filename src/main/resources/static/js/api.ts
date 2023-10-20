@@ -839,6 +839,124 @@ class Client {
     /**
      * @return OK
      */
+    getDeliveryOption(body: GetDeliveryOptionQuery, cancelToken?: CancelToken | undefined): Promise<GetValidShipServiceResponse[]> {
+        let url_ = this.baseUrl + "/api/delivery/option";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetDeliveryOption(_response);
+        });
+    }
+
+    protected processGetDeliveryOption(response: AxiosResponse): Promise<GetValidShipServiceResponse[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(GetValidShipServiceResponse.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<GetValidShipServiceResponse[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<GetValidShipServiceResponse[]>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getDeliveryFee(body: GetDeliveryFeeQuery, cancelToken?: CancelToken | undefined): Promise<number> {
+        let url_ = this.baseUrl + "/api/delivery/fee";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetDeliveryFee(_response);
+        });
+    }
+
+    protected processGetDeliveryFee(response: AxiosResponse): Promise<number> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return Promise.resolve<number>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<number>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     createColor(body: CreateColorCommand, cancelToken?: CancelToken | undefined): Promise<number> {
         let url_ = this.baseUrl + "/api/color/create";
         url_ = url_.replace(/[?&]$/, "");
@@ -1152,75 +1270,6 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<PaginatedProductBriefDto>(null as any);
-    }
-
-    /**
-     * @param totalPrice (optional) 
-     * @return OK
-     */
-    getDeliveryFee(toProvince: string, toDistrict: string, toWard: string, totalPrice: number | undefined, cancelToken?: CancelToken | undefined): Promise<number> {
-        let url_ = this.baseUrl + "/api/delivery/fee?";
-        if (toProvince === undefined || toProvince === null)
-            throw new Error("The parameter 'toProvince' must be defined and cannot be null.");
-        else
-            url_ += "toProvince=" + encodeURIComponent("" + toProvince) + "&";
-        if (toDistrict === undefined || toDistrict === null)
-            throw new Error("The parameter 'toDistrict' must be defined and cannot be null.");
-        else
-            url_ += "toDistrict=" + encodeURIComponent("" + toDistrict) + "&";
-        if (toWard === undefined || toWard === null)
-            throw new Error("The parameter 'toWard' must be defined and cannot be null.");
-        else
-            url_ += "toWard=" + encodeURIComponent("" + toWard) + "&";
-        if (totalPrice === null)
-            throw new Error("The parameter 'totalPrice' cannot be null.");
-        else if (totalPrice !== undefined)
-            url_ += "totalPrice=" + encodeURIComponent("" + totalPrice) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "*/*"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetDeliveryFee(_response);
-        });
-    }
-
-    protected processGetDeliveryFee(response: AxiosResponse): Promise<number> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return Promise.resolve<number>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<number>(null as any);
     }
 
     /**
@@ -2546,6 +2595,226 @@ interface ICreateOrderCommand {
     [key: string]: any;
 }
 
+class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
+    toAddress?: string;
+    orderValue?: number;
+    cod?: number;
+    widthInCm?: number;
+    heightInCm?: number;
+    lengthInCm?: number;
+    weightInGram?: number;
+    toDistrict?: string;
+    toProvince?: string;
+    toWard?: string;
+    toDetailAddress?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IGetDeliveryOptionQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.toAddress = _data["toAddress"];
+            this.orderValue = _data["orderValue"];
+            this.cod = _data["cod"];
+            this.widthInCm = _data["widthInCm"];
+            this.heightInCm = _data["heightInCm"];
+            this.lengthInCm = _data["lengthInCm"];
+            this.weightInGram = _data["weightInGram"];
+            this.toDistrict = _data["toDistrict"];
+            this.toProvince = _data["toProvince"];
+            this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
+        }
+    }
+
+    static fromJS(data: any): GetDeliveryOptionQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDeliveryOptionQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["toAddress"] = this.toAddress;
+        data["orderValue"] = this.orderValue;
+        data["cod"] = this.cod;
+        data["widthInCm"] = this.widthInCm;
+        data["heightInCm"] = this.heightInCm;
+        data["lengthInCm"] = this.lengthInCm;
+        data["weightInGram"] = this.weightInGram;
+        data["toDistrict"] = this.toDistrict;
+        data["toProvince"] = this.toProvince;
+        data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
+        return data;
+    }
+}
+
+interface IGetDeliveryOptionQuery {
+    toAddress?: string;
+    orderValue?: number;
+    cod?: number;
+    widthInCm?: number;
+    heightInCm?: number;
+    lengthInCm?: number;
+    weightInGram?: number;
+    toDistrict?: string;
+    toProvince?: string;
+    toWard?: string;
+    toDetailAddress?: string;
+
+    [key: string]: any;
+}
+
+class GetValidShipServiceResponse implements IGetValidShipServiceResponse {
+    id?: string;
+    carrierName?: string;
+    carrierLogo?: string;
+    service?: string;
+    expected?: string;
+    totalFree?: number;
+    totalAmount?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IGetValidShipServiceResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.carrierName = _data["carrierName"];
+            this.carrierLogo = _data["carrierLogo"];
+            this.service = _data["service"];
+            this.expected = _data["expected"];
+            this.totalFree = _data["totalFree"];
+            this.totalAmount = _data["totalAmount"];
+        }
+    }
+
+    static fromJS(data: any): GetValidShipServiceResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetValidShipServiceResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["carrierName"] = this.carrierName;
+        data["carrierLogo"] = this.carrierLogo;
+        data["service"] = this.service;
+        data["expected"] = this.expected;
+        data["totalFree"] = this.totalFree;
+        data["totalAmount"] = this.totalAmount;
+        return data;
+    }
+}
+
+interface IGetValidShipServiceResponse {
+    id?: string;
+    carrierName?: string;
+    carrierLogo?: string;
+    service?: string;
+    expected?: string;
+    totalFree?: number;
+    totalAmount?: number;
+
+    [key: string]: any;
+}
+
+class GetDeliveryFeeQuery implements IGetDeliveryFeeQuery {
+    toProvince!: string;
+    toDistrict!: string;
+    toWard!: string;
+    totalPrice?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IGetDeliveryFeeQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.toProvince = _data["toProvince"];
+            this.toDistrict = _data["toDistrict"];
+            this.toWard = _data["toWard"];
+            this.totalPrice = _data["totalPrice"];
+        }
+    }
+
+    static fromJS(data: any): GetDeliveryFeeQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDeliveryFeeQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["toProvince"] = this.toProvince;
+        data["toDistrict"] = this.toDistrict;
+        data["toWard"] = this.toWard;
+        data["totalPrice"] = this.totalPrice;
+        return data;
+    }
+}
+
+interface IGetDeliveryFeeQuery {
+    toProvince: string;
+    toDistrict: string;
+    toWard: string;
+    totalPrice?: number;
+
+    [key: string]: any;
+}
+
 class CreateColorCommand implements ICreateColorCommand {
     name!: string;
     image?: string;
@@ -2712,8 +2981,8 @@ class UserDto implements IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    emailVerified?: boolean;
     accountEnabled?: boolean;
+    emailVerified?: boolean;
     customer?: boolean;
 
     [key: string]: any;
@@ -2746,8 +3015,8 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
-            this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
+            this.emailVerified = _data["emailVerified"];
             this.customer = _data["customer"];
         }
     }
@@ -2778,8 +3047,8 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
+        data["emailVerified"] = this.emailVerified;
         data["customer"] = this.customer;
         return data;
     }
@@ -2795,8 +3064,8 @@ interface IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    emailVerified?: boolean;
     accountEnabled?: boolean;
+    emailVerified?: boolean;
     customer?: boolean;
 
     [key: string]: any;
@@ -2948,8 +3217,8 @@ class ProductDetailDto implements IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     forGenderDisplay?: string;
-    vietnamesePrice?: string;
     finalPrice?: number;
+    vietnamesePrice?: string;
 
     [key: string]: any;
 
@@ -2993,8 +3262,8 @@ class ProductDetailDto implements IProductDetailDto {
             }
             this.description = _data["description"];
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
 
@@ -3036,8 +3305,8 @@ class ProductDetailDto implements IProductDetailDto {
         }
         data["description"] = this.description;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -3060,8 +3329,8 @@ interface IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     forGenderDisplay?: string;
-    vietnamesePrice?: string;
     finalPrice?: number;
+    vietnamesePrice?: string;
 
     [key: string]: any;
 }
@@ -3293,8 +3562,8 @@ class ProductBriefDto implements IProductBriefDto {
     category?: CategoryBriefDto;
     deletedDate?: Date;
     forGenderDisplay?: string;
-    vietnamesePrice?: string;
     finalPrice?: number;
+    vietnamesePrice?: string;
 
     [key: string]: any;
 
@@ -3327,8 +3596,8 @@ class ProductBriefDto implements IProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
 
@@ -3359,8 +3628,8 @@ class ProductBriefDto implements IProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -3380,8 +3649,8 @@ interface IProductBriefDto {
     category?: CategoryBriefDto;
     deletedDate?: Date;
     forGenderDisplay?: string;
-    vietnamesePrice?: string;
     finalPrice?: number;
+    vietnamesePrice?: string;
 
     [key: string]: any;
 }

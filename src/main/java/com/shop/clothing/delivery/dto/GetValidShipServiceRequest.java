@@ -10,8 +10,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class GetValidShipServiceRequest {
-    private String fromCity;
-    private String fromDistrict;
     public  String toCity;
     public  String toDistrict;
     public int orderValue;

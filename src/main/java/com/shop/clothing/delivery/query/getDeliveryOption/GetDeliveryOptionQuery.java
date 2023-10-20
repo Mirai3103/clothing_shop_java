@@ -1,24 +1,25 @@
-package com.shop.clothing.delivery.dto;
+package com.shop.clothing.delivery.query.getDeliveryOption;
 
+import com.shop.clothing.common.Cqrs.IRequest;
+import com.shop.clothing.delivery.dto.GetValidShipServiceResponse;
+import jakarta.validation.constraints.Min;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
+
+import java.util.List;
 
 @AllArgsConstructor
+@Builder
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@Builder
-public class CreateShipOrderRequest {
-    private String rateServiceId;
-    //    private String fromName;
-//    private String fromPhone;
-//    private String fromAddress;
-    private String toName;
-    private String orderID;
-    private String toPhone;
-    private String toAddress;
+public class GetDeliveryOptionQuery implements IRequest<List<GetValidShipServiceResponse>> {
+    @Length(min = 10, max = 200, message = "Địa chỉ nhận hàng không hợp lệ")
+    public String toAddress;
+    @Min(value = 0, message = "Giá trị đơn hàng không hợp lệ")
+    public int orderValue;
     @Builder.Default
-    private String cod = "0";
-    private int orderAmount;
+    public int cod = 0;
     @Builder.Default
     public int widthInCm = 20;
     @Builder.Default
@@ -67,7 +68,4 @@ public class CreateShipOrderRequest {
     public String getToDetailAddress() {
         return getDetailAddress(toAddress);
     }
-
-
-
 }

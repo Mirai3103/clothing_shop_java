@@ -15,6 +15,4 @@ public class GetValidShipServiceResponse {
     private  String expected;
     private int totalFree;
     private int totalAmount;
-   
-
 }

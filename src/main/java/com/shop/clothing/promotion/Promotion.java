@@ -45,8 +45,8 @@ public class Promotion extends AuditableEntity {
     @Column()
     private int minOrderAmount;
 
-    @Column()
-    private int maxValue;
+    @Column( nullable = true)
+    private Integer maxValue;
 
     @Column(nullable = false)
     private Date startDate;

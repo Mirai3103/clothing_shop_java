@@ -61,6 +61,9 @@ document.addEventListener('alpine:init', () => {
         selectedProvince: '',
         selectedDistrict: '',
         selectedWard:'',
-        detailAddress: ''
+        detailAddress: '',
+        getfullAddress() {
+            return toFullAddress(this);
+        }
     }))
 })

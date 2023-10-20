@@ -18,8 +18,16 @@ import java.util.List;
 @Setter
 
 public class CreateOrderCommand implements IRequest<String> {
+
+    @Getter
+    @Setter
+    public static class OrderItem {
+
+        private int productOptionId;
+        private int quantity;
+    }
     @NotEmpty(message = "Cần chọn sản phẩm")
-    public List<Integer> productOptionIds;
+    public List<OrderItem> orderItems;
     @NotEmpty(message = "Cần nhập tên khách hàng")
     private String customerName;
     @NotEmpty(message = "Cần nhập địa chỉ")

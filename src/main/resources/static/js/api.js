@@ -764,6 +764,115 @@ class Client {
     /**
      * @return OK
      */
+    getDeliveryOption(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/delivery/option";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetDeliveryOption(_response);
+        });
+    }
+    processGetDeliveryOption(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(GetValidShipServiceResponse.fromJS(item));
+            }
+            else {
+                result200 = null;
+            }
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    getDeliveryFee(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/delivery/fee";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetDeliveryFee(_response);
+        });
+    }
+    processGetDeliveryFee(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : null;
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
     createColor(body, cancelToken) {
         let url_ = this.baseUrl + "/api/color/create";
         url_ = url_.replace(/[?&]$/, "");
@@ -1052,71 +1161,6 @@ class Client {
             let result200 = null;
             let resultData200 = _responseText;
             result200 = PaginatedProductBriefDto.fromJS(resultData200);
-            return Promise.resolve(result200);
-        }
-        else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve(null);
-    }
-    /**
-     * @param totalPrice (optional)
-     * @return OK
-     */
-    getDeliveryFee(toProvince, toDistrict, toWard, totalPrice, cancelToken) {
-        let url_ = this.baseUrl + "/api/delivery/fee?";
-        if (toProvince === undefined || toProvince === null)
-            throw new Error("The parameter 'toProvince' must be defined and cannot be null.");
-        else
-            url_ += "toProvince=" + encodeURIComponent("" + toProvince) + "&";
-        if (toDistrict === undefined || toDistrict === null)
-            throw new Error("The parameter 'toDistrict' must be defined and cannot be null.");
-        else
-            url_ += "toDistrict=" + encodeURIComponent("" + toDistrict) + "&";
-        if (toWard === undefined || toWard === null)
-            throw new Error("The parameter 'toWard' must be defined and cannot be null.");
-        else
-            url_ += "toWard=" + encodeURIComponent("" + toWard) + "&";
-        if (totalPrice === null)
-            throw new Error("The parameter 'totalPrice' cannot be null.");
-        else if (totalPrice !== undefined)
-            url_ += "totalPrice=" + encodeURIComponent("" + totalPrice) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-        let options_ = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "*/*"
-            },
-            cancelToken
-        };
-        return this.instance.request(options_).catch((_error) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            }
-            else {
-                throw _error;
-            }
-        }).then((_response) => {
-            return this.processGetDeliveryFee(_response);
-        });
-    }
-    processGetDeliveryFee(response) {
-        const status = response.status;
-        let _headers = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200 = null;
-            let resultData200 = _responseText;
-            result200 = resultData200 !== undefined ? resultData200 : null;
             return Promise.resolve(result200);
         }
         else if (status !== 200 && status !== 204) {
@@ -2130,6 +2174,146 @@ class CreateOrderCommand {
         return data;
     }
 }
+class GetDeliveryOptionQuery {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.toAddress = _data["toAddress"];
+            this.orderValue = _data["orderValue"];
+            this.cod = _data["cod"];
+            this.widthInCm = _data["widthInCm"];
+            this.heightInCm = _data["heightInCm"];
+            this.lengthInCm = _data["lengthInCm"];
+            this.weightInGram = _data["weightInGram"];
+            this.toDistrict = _data["toDistrict"];
+            this.toProvince = _data["toProvince"];
+            this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDeliveryOptionQuery();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["toAddress"] = this.toAddress;
+        data["orderValue"] = this.orderValue;
+        data["cod"] = this.cod;
+        data["widthInCm"] = this.widthInCm;
+        data["heightInCm"] = this.heightInCm;
+        data["lengthInCm"] = this.lengthInCm;
+        data["weightInGram"] = this.weightInGram;
+        data["toDistrict"] = this.toDistrict;
+        data["toProvince"] = this.toProvince;
+        data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
+        return data;
+    }
+}
+class GetValidShipServiceResponse {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.carrierName = _data["carrierName"];
+            this.carrierLogo = _data["carrierLogo"];
+            this.service = _data["service"];
+            this.expected = _data["expected"];
+            this.totalFree = _data["totalFree"];
+            this.totalAmount = _data["totalAmount"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetValidShipServiceResponse();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["carrierName"] = this.carrierName;
+        data["carrierLogo"] = this.carrierLogo;
+        data["service"] = this.service;
+        data["expected"] = this.expected;
+        data["totalFree"] = this.totalFree;
+        data["totalAmount"] = this.totalAmount;
+        return data;
+    }
+}
+class GetDeliveryFeeQuery {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.toProvince = _data["toProvince"];
+            this.toDistrict = _data["toDistrict"];
+            this.toWard = _data["toWard"];
+            this.totalPrice = _data["totalPrice"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetDeliveryFeeQuery();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["toProvince"] = this.toProvince;
+        data["toDistrict"] = this.toDistrict;
+        data["toWard"] = this.toWard;
+        data["totalPrice"] = this.totalPrice;
+        return data;
+    }
+}
 class CreateColorCommand {
     constructor(data) {
         if (data) {
@@ -2266,8 +2450,8 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
-            this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
+            this.emailVerified = _data["emailVerified"];
             this.customer = _data["customer"];
         }
     }
@@ -2296,8 +2480,8 @@ class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
+        data["emailVerified"] = this.emailVerified;
         data["customer"] = this.customer;
         return data;
     }
@@ -2426,8 +2610,8 @@ class ProductDetailDto {
             }
             this.description = _data["description"];
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
     static fromJS(data) {
@@ -2467,8 +2651,8 @@ class ProductDetailDto {
         }
         data["description"] = this.description;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -2641,8 +2825,8 @@ class ProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
     static fromJS(data) {
@@ -2671,8 +2855,8 @@ class ProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
