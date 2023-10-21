@@ -3,6 +3,7 @@ package com.shop.clothing.order.command.createOrder;
 import com.shop.clothing.common.Cqrs.IRequest;
 import com.shop.clothing.common.validation.NullOrNotBlank;
 import com.shop.clothing.payment.entity.enums.PaymentMethod;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -34,10 +35,15 @@ public class CreateOrderCommand implements IRequest<String> {
     private String address;
     @NotEmpty(message = "Cần nhập số điện thoại")
     private String phoneNumber;
+    @Email(message = "Email không đúng định dạng")
+    private String email;
     @NotEmpty(message = "Cần nhập email")
     private String note;
     @NullOrNotBlank(message = "Cần nhập mã giảm giá")
     private String promotionCode;
     @NotNull(message = "Phương thức thanh toán không được để trống")
     private PaymentMethod paymentMethod = PaymentMethod.COD;
+    @NullOrNotBlank(message = "Cần chọn dịch vụ vận chuyển")
+
+    private String shipServiceId;
 }

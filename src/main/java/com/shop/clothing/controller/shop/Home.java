@@ -1,6 +1,5 @@
 package com.shop.clothing.controller.shop;
 
-import com.shop.clothing.common.Cqrs.IRequest;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.product.query.getAllProducts.GetAllProductsQuery;
 import lombok.AllArgsConstructor;
@@ -22,7 +21,7 @@ public class Home {
 
     @GetMapping("/test")
     public String test() {
-        return "order/quick";
+        return "index";
     }
 
     @GetMapping("/home")

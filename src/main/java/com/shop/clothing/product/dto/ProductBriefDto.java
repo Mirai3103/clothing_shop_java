@@ -14,7 +14,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class ProductBriefDto  extends AuditableDto {
+public class ProductBriefDto extends AuditableDto {
     private int productId;
     private String name;
 
@@ -27,12 +27,13 @@ public class ProductBriefDto  extends AuditableDto {
     private String displayImage;
     private CategoryBriefDto category;
     private LocalDateTime deletedDate;
-    public String getVietnamesePrice(){
-        // 200.000đ
-        return String.format("%,.0fđ", price);
+
+    public String getVietnamesePrice() {
+        return String.format("%,dđ", (int) price);
     }
-    public String getForGenderDisplay(){
-        switch (forGender){
+
+    public String getForGenderDisplay() {
+        switch (forGender) {
             case FOR_BOTH -> {
                 return "Nam và nữ";
             }
@@ -46,7 +47,8 @@ public class ProductBriefDto  extends AuditableDto {
         }
         return "";
     }
-    public int getFinalPrice(){
-        return (int) (price*(100.0-discount)/100);
+
+    public int getFinalPrice() {
+        return (int) (price * (100.0 - discount) / 100);
     }
 }

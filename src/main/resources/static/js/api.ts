@@ -1118,6 +1118,67 @@ class Client {
     }
 
     /**
+     * @param code (optional) 
+     * @param orderValue (optional) 
+     * @return OK
+     */
+    checkPromotion(code: string | undefined, orderValue: number | undefined, cancelToken?: CancelToken | undefined): Promise<PromotionDto> {
+        let url_ = this.baseUrl + "/api/promotion/check?";
+        if (code === null)
+            throw new Error("The parameter 'code' cannot be null.");
+        else if (code !== undefined)
+            url_ += "code=" + encodeURIComponent("" + code) + "&";
+        if (orderValue === null)
+            throw new Error("The parameter 'orderValue' cannot be null.");
+        else if (orderValue !== undefined)
+            url_ += "orderValue=" + encodeURIComponent("" + orderValue) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCheckPromotion(_response);
+        });
+    }
+
+    protected processCheckPromotion(response: AxiosResponse): Promise<PromotionDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PromotionDto.fromJS(resultData200);
+            return Promise.resolve<PromotionDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PromotionDto>(null as any);
+    }
+
+    /**
      * @return OK
      */
     getProductById(productId: number, cancelToken?: CancelToken | undefined): Promise<ProductDetailDto> {
@@ -2513,7 +2574,7 @@ interface ICreatePaymentResponse {
 }
 
 class CreateOrderCommand implements ICreateOrderCommand {
-    productOptionIds!: number[];
+    orderItems!: OrderItem[];
     customerName!: string;
     address!: string;
     phoneNumber!: string;
@@ -2531,7 +2592,7 @@ class CreateOrderCommand implements ICreateOrderCommand {
             }
         }
         if (!data) {
-            this.productOptionIds = [];
+            this.orderItems = [];
         }
     }
 
@@ -2541,10 +2602,10 @@ class CreateOrderCommand implements ICreateOrderCommand {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            if (Array.isArray(_data["productOptionIds"])) {
-                this.productOptionIds = [] as any;
-                for (let item of _data["productOptionIds"])
-                    this.productOptionIds!.push(item);
+            if (Array.isArray(_data["orderItems"])) {
+                this.orderItems = [] as any;
+                for (let item of _data["orderItems"])
+                    this.orderItems!.push(OrderItem.fromJS(item));
             }
             this.customerName = _data["customerName"];
             this.address = _data["address"];
@@ -2568,10 +2629,10 @@ class CreateOrderCommand implements ICreateOrderCommand {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        if (Array.isArray(this.productOptionIds)) {
-            data["productOptionIds"] = [];
-            for (let item of this.productOptionIds)
-                data["productOptionIds"].push(item);
+        if (Array.isArray(this.orderItems)) {
+            data["orderItems"] = [];
+            for (let item of this.orderItems)
+                data["orderItems"].push(item.toJSON());
         }
         data["customerName"] = this.customerName;
         data["address"] = this.address;
@@ -2584,13 +2645,65 @@ class CreateOrderCommand implements ICreateOrderCommand {
 }
 
 interface ICreateOrderCommand {
-    productOptionIds: number[];
+    orderItems: OrderItem[];
     customerName: string;
     address: string;
     phoneNumber: string;
     note: string;
     promotionCode?: string;
     paymentMethod: CreateOrderCommandPaymentMethod;
+
+    [key: string]: any;
+}
+
+class OrderItem implements IOrderItem {
+    productOptionId?: number;
+    quantity?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IOrderItem) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.productOptionId = _data["productOptionId"];
+            this.quantity = _data["quantity"];
+        }
+    }
+
+    static fromJS(data: any): OrderItem {
+        data = typeof data === 'object' ? data : {};
+        let result = new OrderItem();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["productOptionId"] = this.productOptionId;
+        data["quantity"] = this.quantity;
+        return data;
+    }
+}
+
+interface IOrderItem {
+    productOptionId?: number;
+    quantity?: number;
 
     [key: string]: any;
 }
@@ -2604,9 +2717,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
-    toProvince?: string;
-    toWard?: string;
     toDetailAddress?: string;
+    toWard?: string;
+    toProvince?: string;
 
     [key: string]: any;
 
@@ -2633,9 +2746,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toProvince = _data["toProvince"];
-            this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
+            this.toWard = _data["toWard"];
+            this.toProvince = _data["toProvince"];
         }
     }
 
@@ -2660,9 +2773,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toProvince"] = this.toProvince;
-        data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
+        data["toWard"] = this.toWard;
+        data["toProvince"] = this.toProvince;
         return data;
     }
 }
@@ -2676,9 +2789,9 @@ interface IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
-    toProvince?: string;
-    toWard?: string;
     toDetailAddress?: string;
+    toWard?: string;
+    toProvince?: string;
 
     [key: string]: any;
 }
@@ -2981,8 +3094,8 @@ class UserDto implements IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    accountEnabled?: boolean;
     emailVerified?: boolean;
+    accountEnabled?: boolean;
     customer?: boolean;
 
     [key: string]: any;
@@ -3015,8 +3128,8 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
-            this.accountEnabled = _data["accountEnabled"];
             this.emailVerified = _data["emailVerified"];
+            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
         }
     }
@@ -3047,8 +3160,8 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["accountEnabled"] = this.accountEnabled;
         data["emailVerified"] = this.emailVerified;
+        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
         return data;
     }
@@ -3064,9 +3177,101 @@ interface IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    accountEnabled?: boolean;
     emailVerified?: boolean;
+    accountEnabled?: boolean;
     customer?: boolean;
+
+    [key: string]: any;
+}
+
+class PromotionDto implements IPromotionDto {
+    promotionId?: number;
+    code?: string;
+    name?: string;
+    description?: string;
+    discount?: number;
+    type?: PromotionDtoType;
+    minOrderAmount?: number;
+    maxValue?: number;
+    startDate?: Date;
+    endDate?: Date;
+    active?: boolean;
+    stock?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IPromotionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.promotionId = _data["promotionId"];
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discount = _data["discount"];
+            this.type = _data["type"];
+            this.minOrderAmount = _data["minOrderAmount"];
+            this.maxValue = _data["maxValue"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.active = _data["active"];
+            this.stock = _data["stock"];
+        }
+    }
+
+    static fromJS(data: any): PromotionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PromotionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["promotionId"] = this.promotionId;
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discount"] = this.discount;
+        data["type"] = this.type;
+        data["minOrderAmount"] = this.minOrderAmount;
+        data["maxValue"] = this.maxValue;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["active"] = this.active;
+        data["stock"] = this.stock;
+        return data;
+    }
+}
+
+interface IPromotionDto {
+    promotionId?: number;
+    code?: string;
+    name?: string;
+    description?: string;
+    discount?: number;
+    type?: PromotionDtoType;
+    minOrderAmount?: number;
+    maxValue?: number;
+    startDate?: Date;
+    endDate?: Date;
+    active?: boolean;
+    stock?: number;
 
     [key: string]: any;
 }
@@ -3217,8 +3422,8 @@ class ProductDetailDto implements IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     forGenderDisplay?: string;
-    finalPrice?: number;
     vietnamesePrice?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 
@@ -3262,8 +3467,8 @@ class ProductDetailDto implements IProductDetailDto {
             }
             this.description = _data["description"];
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
 
@@ -3305,8 +3510,8 @@ class ProductDetailDto implements IProductDetailDto {
         }
         data["description"] = this.description;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -3329,8 +3534,8 @@ interface IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     forGenderDisplay?: string;
-    finalPrice?: number;
     vietnamesePrice?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 }
@@ -3562,8 +3767,8 @@ class ProductBriefDto implements IProductBriefDto {
     category?: CategoryBriefDto;
     deletedDate?: Date;
     forGenderDisplay?: string;
-    finalPrice?: number;
     vietnamesePrice?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 
@@ -3596,8 +3801,8 @@ class ProductBriefDto implements IProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
 
@@ -3628,8 +3833,8 @@ class ProductBriefDto implements IProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -3649,8 +3854,8 @@ interface IProductBriefDto {
     category?: CategoryBriefDto;
     deletedDate?: Date;
     forGenderDisplay?: string;
-    finalPrice?: number;
     vietnamesePrice?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 }
@@ -3806,6 +4011,9 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
     deletedDate?: Date;
     color?: ColorDto;
     product?: ProductBriefDto;
+    quantity?: number;
+    finalPriceDisplay?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 
@@ -3834,6 +4042,9 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
             this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : <any>undefined;
             this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : <any>undefined;
+            this.quantity = _data["quantity"];
+            this.finalPriceDisplay = _data["finalPriceDisplay"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
 
@@ -3860,6 +4071,9 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
         data["color"] = this.color ? this.color.toJSON() : <any>undefined;
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["quantity"] = this.quantity;
+        data["finalPriceDisplay"] = this.finalPriceDisplay;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -3875,6 +4089,9 @@ interface IProductOptionDetailDto {
     deletedDate?: Date;
     color?: ColorDto;
     product?: ProductBriefDto;
+    quantity?: number;
+    finalPriceDisplay?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 }
@@ -4051,6 +4268,11 @@ enum CreateOrderCommandPaymentMethod {
     COD = "COD",
     MOMO_QR = "MOMO_QR",
     MOMO_ATM = "MOMO_ATM",
+}
+
+enum PromotionDtoType {
+    PERCENTAGE = "PERCENTAGE",
+    FIXED_AMOUNT = "FIXED_AMOUNT",
 }
 
 enum ProductDetailDtoForGender {

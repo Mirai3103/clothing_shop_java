@@ -58,8 +58,8 @@ public class RestExceptionHandler {
 
     public ResponseEntity<?> businessLogicExceptionHandler(ResponseStatusException ex) {
 
-//        ErrorResponse error = ErrorResponse.builder().error(ex.getMessage()).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        return new ResponseEntity<>(ex.getReason(), ex.getStatusCode());
+        ErrorResponse error = ErrorResponse.builder().error(ex.getReason()).httpStatus(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return new ResponseEntity<>(error, ex.getStatusCode());
     }
 
     @ExceptionHandler(Exception.class)

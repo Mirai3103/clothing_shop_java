@@ -22,16 +22,18 @@ public class CheckPromotionQueryHandler implements IRequestHandler<CheckPromotio
         if (promotionOptional.isEmpty()) {
             return HandleResponse.error("Mã giảm giá không hợp lệ", HttpStatus.NOT_FOUND);
         }
+        var today = new java.sql.Date(System.currentTimeMillis());
+
         var promotion = promotionOptional.get();
-        if (!promotion.isActive()) {
+        if (!promotion.isActive()||promotion.getStartDate().after(today)) {
             return HandleResponse.error("Mã giảm giá không hợp lệ", HttpStatus.NOT_FOUND);
         }
         if (promotion.getMinOrderAmount() > checkPromotionQuery.getOrderValue()) {
             return HandleResponse.error("Chưa đạt giá trị đơn hàng tối thiểu (" + promotion.getMinOrderAmount() + ")", HttpStatus.NOT_FOUND);
         }
-        var today = new java.sql.Date(System.currentTimeMillis());
-        if (promotion.getStartDate().after(today) || promotion.getEndDate().before(today)) {
-            return HandleResponse.error("Mã giảm giá không hợp lệ", HttpStatus.NOT_FOUND);
+
+        if(promotion.getEndDate().before(today)){
+            return HandleResponse.error("Mã giảm giá đã hết hạn", HttpStatus.BAD_REQUEST);
         }
         if (promotion.getStock() <= 0) {
             return HandleResponse.error("Mã giảm giá đã hết", HttpStatus.NOT_FOUND);

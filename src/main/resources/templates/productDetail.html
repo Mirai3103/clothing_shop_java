@@ -257,7 +257,7 @@
                                'bg-gray-100 text-gray-800 cursor-pointer':selectedColor?.colorId !== color.colorId,
                                  'bg-primary-700 text-white':selectedColor?.colorId === color.colorId
                               }"
-                                @click="selectedColor = color"
+                              @click="selectedColor = color"
 
                         >
                             <span x-text="color.name"></span>
@@ -274,14 +274,14 @@
                         <span class="  font-medium mr-2 px-2.5 py-0.5 rounded"
                               :class="{
                                'cursor-not-allowed line-through':size.stock === 0,
-                                 'bg-primary-700 text-white':selectedSize.size === size.size,
-                                 'bg-gray-100 text-gray-800 cursor-pointer'  :selectedSize.size !== size.size
+                                 'bg-primary-700 text-white':selectedSize?.size === size.size,
+                                 'bg-gray-100 text-gray-800 cursor-pointer'  :selectedSize?.size  !== size.size
                               }"
                               @click="if(size.stock > 0) selectedSize = size"
 
                         >
                             <abbr class="no-underline border-none " x-text="size.size"
-                                    :title="size.stock === 0 ? 'Hết hàng' : size.stock + ' sản phẩm' "
+                                  :title="size.stock === 0 ? 'Hết hàng' : size.stock + ' sản phẩm' "
                             >
                             </abbr>
                         </span>
@@ -289,7 +289,7 @@
                 </div>
             </div>
             <div class="py-4 border-t mt-2 flex gap-x-6 items-center border-primary-200"
-            x-data="{
+                 x-data="{
             quantity : 0,
             increment(){
                if(!selectedSize){
@@ -313,7 +313,7 @@
                 }
 
             }"
-x-init="$watch('selectedSize',()=>{
+                 x-init="$watch('selectedSize',()=>{
 quantity = 0;
 })"
             >
@@ -327,7 +327,7 @@ quantity = 0;
                            class="bg-white  text-gray-900 text-sm border border-gray-200 focus:ring-primary-500 focus:border-blue-500 block w-[100px]   p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-blue-500"
                            value="1"
                            placeholder="0" required
-                            x-model="quantity"
+                           x-model="quantity"
                     >
                     <button type="button"
                             @click="increment()"
@@ -346,14 +346,42 @@ quantity = 0;
                           Thêm vào giỏ hàng
                    </span>
                 </button>
-                <button type="button"
-                        class="text-white mt-1  flex justify-center items-center bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2  ">
+                <form th:action="@{/order}" th:method="POST"
+                      x-on:submit="
+                       console.log(document.getElementById('orderItemsJson'));
+                    if(!selectedSize){
+                        $store.toast.add('error','Lỗi','Vui lòng chọn kích cỡ');
+                        $event.preventDefault();
+                        return false;
+                    }
+                    if(quantity === 0){
+                        $store.toast.add('error','Lỗi','Vui lòng chọn số lượng');
+                        $event.preventDefault();
+                        return false;
+                    }
+                    const  optionsId = productOptions.filter((option)=>option.color.colorId === selectedColor.colorId && option.size === selectedSize.size)[0].productOptionId;
+                    const orderItem = {
+                    productOptionId : optionsId,
+                    quantity : quantity
+                    }
+                    document.getElementById('orderItemsJson').value = JSON.stringify([orderItem]);
+                    console.log(document.getElementById('orderItemsJson'));
+                    return true;
+                "
+                >
+                    <input hidden="hidden" type="text" name="orderItemsJson" id="orderItemsJson"
+
+                    >
+
+                    <button type="submit"
+                            class="text-white mt-1  flex justify-center items-center bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2  ">
                    <span
                            x-text="selectedSize ? 'Mua ngay' : 'Chọn kích cỡ'"
                    >
 
                    </span>
-                </button>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -361,14 +389,16 @@ quantity = 0;
     <div class="mt-12">
         <div class="text-lg  font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
             <ul class="grid grid-cols-2  -mb-px">
-                <li >
-                    <a href="#" class="block w-full p-2 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  " aria-current="page">
+                <li>
+                    <a href="#" class="block w-full p-2 text-blue-600 border-b-2 border-blue-600 rounded-t-lg  "
+                       aria-current="page">
                         Mô tả sản phẩm
 
                     </a>
                 </li>
-                <li >
-                    <a href="#" class="block w-full p-2  border-b-2 border-transparent rounded-t-lg active hover:text-gray-600 hover:border-gray-300 ">
+                <li>
+                    <a href="#"
+                       class="block w-full p-2  border-b-2 border-transparent rounded-t-lg active hover:text-gray-600 hover:border-gray-300 ">
                         Đánh giá sản phẩm
                     </a>
                 </li>

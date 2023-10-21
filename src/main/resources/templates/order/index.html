@@ -17,10 +17,39 @@
         /*<![CDATA[*/
         //principal.address
         const myAddress = /*[[${currentUser=="anonymousUser"?null:currentUser.address}]]*/ null;
-        const totalValue = /*[[${totalValue}]]*/ 100000;
+        const totalValue = /*[[${orderModel.getTotalPrice()}]]*/ 0;
+        const  myFirstName = /*[[${currentUser=="anonymousUser"?null:currentUser.firstName}]]*/ null;
+        const  myLastName = /*[[${currentUser=="anonymousUser"?null:currentUser.lastName}]]*/ null;
+        const  myPhoneNumber = /*[[${currentUser=="anonymousUser"?null:currentUser.phoneNumber}]]*/ null;
+        const  myEmail = /*[[${currentUser=="anonymousUser"?null:currentUser.email}]]*/ null;
+        const myFullName = myFirstName + ' ' + myLastName;
+
         /*]]>*/
 
+        function calculateReducePrice(promotion) {
+            if (!promotion) {
+                return 0;
+            }
+            const discount = promotion.discount;
+            const price = totalValue;
+            const max = promotion.maxValue;
+            const type = promotion.type;
+            if (type === 'PERCENTAGE') {
+                const reduce = price * discount / 100;
+                if (reduce > max) {
+                    return max;
+                } else {
+                    return reduce;
+                }
 
+            } else {
+                if (discount > totalValue) {
+                    return totalValue;
+                } else {
+                    return discount;
+                }
+            }
+        }
     </script>
     <section
 
@@ -28,6 +57,20 @@
         <div class="" x-data="{
          listShipService:null,
          isLoading: false,
+         selectedShipServiceId: null,
+            promotion: null,
+                     isUseMyAddress: false,
+
+        getSelectedShipService: function (){
+
+            return this.listShipService?.find(p=>p.id == this.selectedShipServiceId);
+        },
+         onShipServiceChange: function (e) {
+             if(e.target.checked){
+             console.log(e.target.value);
+                    this.selectedShipServiceId = e.target.value;
+             }
+         },
          getShipService: function (myAddressPr=null) {
 
                 if(myAddress ==null){
@@ -47,16 +90,55 @@
                 this.listShipService = [...p];
                 console.log(p);
                 }).finally(()=> this.isLoading = false);
-        }
+        },
+        handleSubmit: function () {
+           const commandForm = document.getElementById('commandForm');
+            if (!this.selectedShipServiceId) {
+                $store.toast.add('error', 'Lỗi', 'Vui lòng chọn dịch vụ vận chuyển');
+                return;
+            }
+            commandForm.shipServiceId.value = this.selectedShipServiceId;
+
+            const checkedPayment = document.querySelector('input[name=payment-method]:checked');
+            if (!checkedPayment) {
+                $store.toast.add('error', 'Lỗi', 'Vui lòng chọn phương thức thanh toán');
+                return;
+            }
+            commandForm.paymentMethod.value = checkedPayment.value;
+            commandForm.customerName.value = this.isUseMyAddress?myFullName:document.getElementById('name').value;
+            commandForm.phoneNumber.value =  this.isUseMyAddress?myPhoneNumber:document.getElementById('phoneNumber').value;
+            commandForm.address.value =  this.isUseMyAddress?myAddress:getfullAddress();
+            commandForm.note.value = ''
+            commandForm.promotionCode.value = this.promotion?.code;
+            commandForm.email.value =  this.isUseMyAddress?myEmail:document.getElementById('email').value;
+            console.log(commandForm);
+            }
         }">
+            <form hidden="hidden" id="commandForm" th:method="post" th:action="@{/order/create}" th:object="${command}"
+            >
+                <input type="text" th:field="*{customerName}" name="customerName"/>
+                <input type="text" th:field="*{address}" name="address"/>
+                <input type="text" th:field="*{phoneNumber}" name="phoneNumber"/>
+                <input type="text" th:field="*{email}" name="email"/>
+
+                <input type="text" th:field="*{note}"/>
+                <input type="text" th:field="*{promotionCode}" name="promotionCode"/>
+                <input type="text" th:field="*{paymentMethod}" name="paymentMethod"/>
+                <input type="text" th:field="*{shipServiceId}" name="shipServiceId"/>
+            </form>
             <div class="flex flex-col gap-y-1">
                 <div>
-                    <h1 class="text-3xl  py-4 font-bold leading-tight tracking-tight text-gray-900">
+                    <h1
+                            class="text-3xl  py-4 font-bold leading-tight tracking-tight text-gray-900">
                         Tiến hành đặt hàng
                     </h1>
                 </div>
 
-                <div class="grid grid-cols-1  lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1  lg:grid-cols-3 gap-8"
+                     x-data="{
+
+                }"
+                >
                     <div class="col-span-1 order-1 lg:order-2  ">
                         <div class="flex flex-col gap-y-2">
                             <div class="bg-gray-100 shadow  p-6 rounded-lg">
@@ -64,20 +146,57 @@
                                     Mã giảm giá
                                 </h3>
 
-                                <div class="flex p-4 gap-x-2 items-center">
+                                <div class="flex p-4 gap-x-2 items-center"
+                                     :class="{'hidden':promotion}"
+                                     x-data="{
+                                    loadingPromotion: false,
+                                    checkPromotion:function (){
+                                        if(!this.code.trim()){
+                                            $store.toast.add('error','Lỗi','Vui lòng nhập mã giảm giá');
+                                            return;
+                                        }
+                                        this.loadingPromotion = true;
+                                        window.apiClient.checkPromotion(this.code.trim(),totalValue).then(p=>{
+                                            this.promotion = p;
+                                        }).catch(e=>{
+                                            $store.toast.add('error','Lỗi',e.response.error);
+                                        }).finally(()=> this.loadingPromotion = false);
+
+                                    },
+
+                                    code: ''
+                                }"
+
+                                >
                                     <div class="grow">
                                         <input type="text" id="promotion"
+
+                                               x-model="code"
                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                placeholder="Nhập mã giảm giá">
                                     </div>
                                     <div class="flex items-end">
                                         <button type="button"
+                                                :disabled="loadingPromotion"
+                                                @click="checkPromotion()"
                                                 class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5     focus:outline-none ">
                                             Áp dụng
                                         </button>
                                     </div>
-                                </div>
 
+                                </div>
+                                <div class="flex  m-2 p-4 rounded-md bg-gray-200 gap-y-1 items-center"
+                                     :class="{'hidden':!promotion}"
+                                >
+                                    <h3 class="text-xl grow font-bold leading-tight tracking-tight text-gray-900 "
+                                        x-text="promotion?.name">
+                                    </h3>
+                                    <button type="button"
+                                            @click="promotion = null"
+                                            class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5     focus:outline-none ">
+                                        Xóa
+                                    </button>
+                                </div>
                             </div>
                             <div class="bg-gray-100 shadow  p-6 rounded-lg">
                                 <h3 class="text-2xl font-bold leading-tight tracking-tight text-gray-900 ">
@@ -86,64 +205,53 @@
 
                                 <div class="pc wb">
                                     <ul role="list" class=" divide-y divide-gray-200">
-                                        <li class="flex py-6">
-                                            <div class="h-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                                <img src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/August2022/tanktop_trang_1.jpg"
-                                                     alt="Salmon"
-                                                     class="h-full aspect-[3/4] object-cover object-center">
-                                            </div>
-
-                                            <div class="ml-4 flex flex-1 flex-col">
-                                                <div>
-                                                    <div class="flex justify-between text-base font-medium text-gray-900">
-                                                        <h3>
-                                                            <a href="#">Throwback Hip Bag</a>
-                                                        </h3>
-                                                        <p class="ml-4">$90.00</p>
-                                                    </div>
-                                                    <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                                        <th:block th:each="item : ${orderModel.getOrderItems()}">
+                                            <li class="flex py-6">
+                                                <div class="h-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                                    <img th:src="${item.product.displayImage}"
+                                                         th:alt="${item.product.name}"
+                                                         class="h-full aspect-[3/4] object-cover object-center"/>
                                                 </div>
-                                                <div class="flex flex-1 items-end justify-between text-sm">
-                                                    <p class="text-gray-500">Qty 1</p>
 
-                                                    <div class="flex">
-                                                        <button type="button"
-                                                                class="font-medium text-indigo-600 hover:text-indigo-500">
-                                                            Remove
-                                                        </button>
+                                                <div class="ml-4 flex flex-1 flex-col">
+                                                    <div>
+                                                        <div class="flex justify-between text-base font-medium text-gray-900">
+                                                            <h3>
+                                                                <span th:text="${item.product.name}">
+
+                                                                </span>
+                                                            </h3>
+                                                            <p class="ml-4"
+                                                               th:text="${item.product.getVietnamesePrice()}">
+
+                                                            </p>
+                                                        </div>
+                                                        <p class="mt-1 text-sm text-gray-500">
+                                                            <span th:text="${item.color.name}">
+
+                                                            </span>
+                                                            <span>, </span>
+                                                            <span th:text="${item.size}">
+                                                            </span>
+
+                                                        </p>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="flex py-6">
-                                            <div class="h-28 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                                <img src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/August2022/tanktop_trang_1.jpg"
-                                                     alt="Salmon"
-                                                     class="h-full aspect-[3/4] object-cover object-center">
-                                            </div>
+                                                    <div class="flex flex-1 items-end justify-between text-sm">
+                                                        <p class="text-gray-500" th:inline="text">
+                                                            <b>Số lượng</b>: x [[${item.quantity}]]
 
-                                            <div class="ml-4 flex flex-1 flex-col">
-                                                <div>
-                                                    <div class="flex justify-between text-base font-medium text-gray-900">
-                                                        <h3>
-                                                            <a href="#">Throwback Hip Bag</a>
-                                                        </h3>
-                                                        <p class="ml-4">$90.00</p>
-                                                    </div>
-                                                    <p class="mt-1 text-sm text-gray-500">Salmon</p>
-                                                </div>
-                                                <div class="flex flex-1 items-end justify-between text-sm">
-                                                    <p class="text-gray-500">Qty 1</p>
+                                                        </p>
 
-                                                    <div class="flex">
-                                                        <button type="button"
-                                                                class="font-medium text-indigo-600 hover:text-indigo-500">
-                                                            Remove
-                                                        </button>
+                                                        <div class="flex">
+                                                            <p class="text-gray-500" th:inline="text">
+                                                                <b>Thành tiền</b>: [[${item.getFinalPriceDisplay()}]]
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </li>
+                                            </li>
+
+                                        </th:block>
                                     </ul>
                                 </div>
 
@@ -154,32 +262,46 @@
                                             <p class="text-gray-600">
                                                 Tổng giá trị đơn hàng
                                             </p>
-                                            <p class="text-gray-600">$589</p>
+                                            <p class="text-gray-600" th:text="${orderModel.getVietnameseTotalPrice()}">
+
+                                            </p>
                                         </div>
 
                                         <div class=" flex justify-between">
 
                                             <p class="text-gray-600">Giảm giá</p>
-                                            <p class="text-gray-600">-$100</p>
+                                            <p class="text-gray-600"
+                                               x-text="VND.format(calculateReducePrice(promotion))">
+
+
+                                            </p>
                                         </div>
 
                                         <div class=" flex justify-between">
 
                                             <p class="text-gray-600">Phí vận chuyển
                                             </p>
-                                            <p class="text-gray-600">$10</p>
+                                            <p class="text-gray-600"
+                                               x-text="VND.format(getSelectedShipService()?.totalFree??0)">
+
+                                            </p>
                                         </div>
 
                                         <div class=" flex justify-between font-semibold text-xl">
 
                                             <p class="ci ji ri">Thành tiền</p>
-                                            <p class="ci ji ai ri">$599</p>
+                                            <p class="ci ji ai ri"
+                                               x-text="VND.format(totalValue - calculateReducePrice(promotion) + (getSelectedShipService()?.totalFree??0))">
+
+
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="flex w-full mt-2 justify-center">
                                     <button type="button"
+                                            @click="handleSubmit()"
                                             class="text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-md text-xl px-5 py-2.5 text-center mb-2 ">
                                         Tiến hành đặt hàng
                                     </button>
@@ -189,9 +311,7 @@
                     </div>
 
                     <div class="col-span-1  border-t py-2 order-2 lg:order-1 lg:col-span-2"
-                         x-data="{
-                     isUseMyAddress: false,
-                    }"
+
                          x-init="
                         $watch('isUseMyAddress', value => {
                             if(value){
@@ -299,8 +419,11 @@
                                             <div class="flex items-center gap-x-2 p-4 shadow-sm">
                                                 <input :id="service.id"
 
-                                                       type="radio" value=""
+                                                       type="radio"
                                                        name="ship-service"
+                                                       :value="service.id"
+                                                       @change="onShipServiceChange($event)"
+
                                                        class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"/>
 
                                                 <label
@@ -337,7 +460,7 @@
                                         Phương thức thanh toán</h2>
                                     <div class="flex flex-col pt-4 pl-4 gap-y-4">
                                         <div class="flex items-center">
-                                            <input id="cod" checked type="radio" value="" name="payment-method"
+                                            <input id="cod" checked type="radio" value="COD" name="payment-method"
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="cod"
                                                    class="ml-2  font-medium text-gray-900 dark:text-gray-300">
@@ -345,7 +468,7 @@
                                             </label>
                                         </div>
                                         <div class="flex items-center">
-                                            <input checked id="atm" type="radio" value=""
+                                            <input checked id="atm" type="radio" value="MOMO_ATM"
                                                    name="payment-method"
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="atm"
@@ -354,7 +477,7 @@
                                             </label>
                                         </div>
                                         <div class="flex items-center">
-                                            <input checked id="momo" type="radio" value=""
+                                            <input checked id="momo" type="radio" value="MOMO_QR"
                                                    name="payment-method"
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="momo"

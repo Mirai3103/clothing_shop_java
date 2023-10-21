@@ -1021,6 +1021,64 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param code (optional)
+     * @param orderValue (optional)
+     * @return OK
+     */
+    checkPromotion(code, orderValue, cancelToken) {
+        let url_ = this.baseUrl + "/api/promotion/check?";
+        if (code === null)
+            throw new Error("The parameter 'code' cannot be null.");
+        else if (code !== undefined)
+            url_ += "code=" + encodeURIComponent("" + code) + "&";
+        if (orderValue === null)
+            throw new Error("The parameter 'orderValue' cannot be null.");
+        else if (orderValue !== undefined)
+            url_ += "orderValue=" + encodeURIComponent("" + orderValue) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processCheckPromotion(_response);
+        });
+    }
+    processCheckPromotion(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = PromotionDto.fromJS(resultData200);
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @return OK
      */
     getProductById(productId, cancelToken) {
@@ -2126,7 +2184,7 @@ class CreateOrderCommand {
             }
         }
         if (!data) {
-            this.productOptionIds = [];
+            this.orderItems = [];
         }
     }
     init(_data) {
@@ -2135,10 +2193,10 @@ class CreateOrderCommand {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            if (Array.isArray(_data["productOptionIds"])) {
-                this.productOptionIds = [];
-                for (let item of _data["productOptionIds"])
-                    this.productOptionIds.push(item);
+            if (Array.isArray(_data["orderItems"])) {
+                this.orderItems = [];
+                for (let item of _data["orderItems"])
+                    this.orderItems.push(OrderItem.fromJS(item));
             }
             this.customerName = _data["customerName"];
             this.address = _data["address"];
@@ -2160,10 +2218,10 @@ class CreateOrderCommand {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        if (Array.isArray(this.productOptionIds)) {
-            data["productOptionIds"] = [];
-            for (let item of this.productOptionIds)
-                data["productOptionIds"].push(item);
+        if (Array.isArray(this.orderItems)) {
+            data["orderItems"] = [];
+            for (let item of this.orderItems)
+                data["orderItems"].push(item.toJSON());
         }
         data["customerName"] = this.customerName;
         data["address"] = this.address;
@@ -2171,6 +2229,42 @@ class CreateOrderCommand {
         data["note"] = this.note;
         data["promotionCode"] = this.promotionCode;
         data["paymentMethod"] = this.paymentMethod;
+        return data;
+    }
+}
+class OrderItem {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.productOptionId = _data["productOptionId"];
+            this.quantity = _data["quantity"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new OrderItem();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["productOptionId"] = this.productOptionId;
+        data["quantity"] = this.quantity;
         return data;
     }
 }
@@ -2197,9 +2291,9 @@ class GetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toProvince = _data["toProvince"];
-            this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
+            this.toWard = _data["toWard"];
+            this.toProvince = _data["toProvince"];
         }
     }
     static fromJS(data) {
@@ -2222,9 +2316,9 @@ class GetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toProvince"] = this.toProvince;
-        data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
+        data["toWard"] = this.toWard;
+        data["toProvince"] = this.toProvince;
         return data;
     }
 }
@@ -2450,8 +2544,8 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
-            this.accountEnabled = _data["accountEnabled"];
             this.emailVerified = _data["emailVerified"];
+            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
         }
     }
@@ -2480,9 +2574,65 @@ class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["accountEnabled"] = this.accountEnabled;
         data["emailVerified"] = this.emailVerified;
+        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        return data;
+    }
+}
+class PromotionDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.promotionId = _data["promotionId"];
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discount = _data["discount"];
+            this.type = _data["type"];
+            this.minOrderAmount = _data["minOrderAmount"];
+            this.maxValue = _data["maxValue"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : undefined;
+            this.active = _data["active"];
+            this.stock = _data["stock"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new PromotionDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["promotionId"] = this.promotionId;
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discount"] = this.discount;
+        data["type"] = this.type;
+        data["minOrderAmount"] = this.minOrderAmount;
+        data["maxValue"] = this.maxValue;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : undefined;
+        data["active"] = this.active;
+        data["stock"] = this.stock;
         return data;
     }
 }
@@ -2610,8 +2760,8 @@ class ProductDetailDto {
             }
             this.description = _data["description"];
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
     static fromJS(data) {
@@ -2651,8 +2801,8 @@ class ProductDetailDto {
         }
         data["description"] = this.description;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -2825,8 +2975,8 @@ class ProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
     static fromJS(data) {
@@ -2855,8 +3005,8 @@ class ProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -2979,6 +3129,9 @@ class ProductOptionDetailDto {
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
             this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : undefined;
             this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : undefined;
+            this.quantity = _data["quantity"];
+            this.finalPriceDisplay = _data["finalPriceDisplay"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
     static fromJS(data) {
@@ -3003,6 +3156,9 @@ class ProductOptionDetailDto {
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
         data["color"] = this.color ? this.color.toJSON() : undefined;
         data["product"] = this.product ? this.product.toJSON() : undefined;
+        data["quantity"] = this.quantity;
+        data["finalPriceDisplay"] = this.finalPriceDisplay;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
@@ -3138,6 +3294,11 @@ var CreateOrderCommandPaymentMethod;
     CreateOrderCommandPaymentMethod["MOMO_QR"] = "MOMO_QR";
     CreateOrderCommandPaymentMethod["MOMO_ATM"] = "MOMO_ATM";
 })(CreateOrderCommandPaymentMethod || (CreateOrderCommandPaymentMethod = {}));
+var PromotionDtoType;
+(function (PromotionDtoType) {
+    PromotionDtoType["PERCENTAGE"] = "PERCENTAGE";
+    PromotionDtoType["FIXED_AMOUNT"] = "FIXED_AMOUNT";
+})(PromotionDtoType || (PromotionDtoType = {}));
 var ProductDetailDtoForGender;
 (function (ProductDetailDtoForGender) {
     ProductDetailDtoForGender["FOR_MALE"] = "FOR_MALE";
