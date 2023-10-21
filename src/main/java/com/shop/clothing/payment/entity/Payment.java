@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table
+@Table(name = "payment")
 public class Payment extends AuditableEntity{
     @Id
    @Column(updatable = false, nullable = false,name = "payment_id",length = 36)

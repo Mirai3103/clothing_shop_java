@@ -37,9 +37,7 @@ public class CreateOrderCommand implements IRequest<String> {
     private String phoneNumber;
     @Email(message = "Email không đúng định dạng")
     private String email;
-    @NotEmpty(message = "Cần nhập email")
     private String note;
-    @NullOrNotBlank(message = "Cần nhập mã giảm giá")
     private String promotionCode;
     @NotNull(message = "Phương thức thanh toán không được để trống")
     private PaymentMethod paymentMethod = PaymentMethod.COD;

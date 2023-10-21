@@ -17,7 +17,7 @@ public class CreateShipOrderRequest {
     private String toPhone;
     private String toAddress;
     @Builder.Default
-    private String cod = "0";
+    private int cod = 0;
     private int orderAmount;
     @Builder.Default
     public int widthInCm = 20;

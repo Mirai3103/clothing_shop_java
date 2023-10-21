@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 public class CreateShipOrderResponse {
     private String id;
-    private String cod;
-    private String fee;
+    private int cod;
+    private int fee;
     private String trackingNumber;
     private String carrier;
     private String createdAt;

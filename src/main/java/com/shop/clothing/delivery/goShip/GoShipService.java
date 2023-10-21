@@ -147,12 +147,12 @@ public class GoShipService implements IDeliveryService {
         );
         JSONObject obj = new JSONObject(response.getBody());
         var id = obj.getString("id");
-        var cod = obj.getString("cod");
-        var fee = obj.getString("fee");
-        var trackingNumber = obj.getString("tracking_number");
-        var carrier = obj.getString("carrier");
-        var createdAt = obj.getString("created_at");
-        return CreateShipOrderResponse.builder().fee(fee).id(id).cod(cod).trackingNumber(trackingNumber).carrier(carrier).createdAt(createdAt).build();
+        var cod = obj.getInt("cod");
+        var fee = obj.getInt("fee");
+//        var trackingNumber = obj.getString("tracking_number");
+//        var carrier = obj.getString("carrier");
+//        var createdAt = obj.getString("created_at");
+        return CreateShipOrderResponse.builder().fee(fee).id(id).cod(cod).build();
 
     }
 

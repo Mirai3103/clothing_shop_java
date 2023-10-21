@@ -7,11 +7,15 @@ import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.common.util.ClientUtil;
 import com.shop.clothing.config.ICurrentUserService;
+import com.shop.clothing.delivery.IDeliveryService;
+import com.shop.clothing.delivery.dto.CreateShipOrderRequest;
+import com.shop.clothing.delivery.dto.GetValidShipServiceRequest;
 import com.shop.clothing.delivery.query.getDeliveryFee.GetDeliveryFeeQuery;
 import com.shop.clothing.order.entity.Order;
 import com.shop.clothing.order.entity.OrderItem;
 import com.shop.clothing.order.repository.OrderItemRepository;
 import com.shop.clothing.order.repository.OrderRepository;
+import com.shop.clothing.payment.entity.enums.PaymentMethod;
 import com.shop.clothing.product.entity.ProductOption;
 import com.shop.clothing.product.repository.ProductOptionRepository;
 import com.shop.clothing.promotion.Promotion;
@@ -32,41 +36,63 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final PromotionRepository promotionRepository;
-    private final ISender sender;
     private final ProductOptionRepository productOptionRepository;
     private final ClientUtil clientUtil;
+    private final IDeliveryService deliveryService;
 
     @Override
     @Transactional(rollbackFor = {BusinessLogicException.class, Throwable.class})
     public HandleResponse<String> handle(CreateOrderCommand createOrderCommand) {
-        var currentUserId = currentUserService.getCurrentUserId();
-        if (currentUserId.isEmpty()) {
-            return HandleResponse.error("Bạn chưa đăng nhập");
-        }
+
         var productOptionsThatWillBuy = productOptionRepository.findAllByProductOptionIdIn(createOrderCommand.getOrderItems().stream().map(CreateOrderCommand.OrderItem::getProductOptionId).toList());
         Promotion promotion = null;
-        if (createOrderCommand.getPromotionCode() != null) {
+        if (createOrderCommand.getPromotionCode().isBlank()) {
             promotion = promotionRepository.findByCodeIgnoreCase(createOrderCommand.getPromotionCode()).orElse(null);
         }
+
         Map<Integer, Integer> productOptionIdToQuantity = createOrderCommand.getOrderItems().stream().collect(
                 java.util.stream.Collectors.toMap(CreateOrderCommand.OrderItem::getProductOptionId, CreateOrderCommand.OrderItem::getQuantity));
         var totalPrice = productOptionsThatWillBuy.stream().mapToDouble(productOption -> productOption.getProduct().getPrice() * productOptionIdToQuantity.get(productOption.getProductOptionId()) *
                 ((double) (100 - productOption.getProduct().getDiscount()) / 100)
         ).sum();
+        if (promotion != null) {
+            totalPrice = totalPrice - promotion.getFinalDiscount((int) totalPrice);
+
+        }
 
         var address = clientUtil.from(createOrderCommand.getAddress());
         int fee = 0;
-        var deliveryFee = sender.send(GetDeliveryFeeQuery.builder().totalPrice((int) totalPrice).toWard(address.ward).toDistrict(address.district).toProvince(address.city).build());
-        if (deliveryFee.isOk()) {
-            fee = deliveryFee.get();
+        var orderId = UUID.randomUUID().toString();
+        var validShipService = deliveryService.getValidShipService(GetValidShipServiceRequest.builder()
+                .orderValue((int) totalPrice)
+                .cod(createOrderCommand.getPaymentMethod() == PaymentMethod.COD ? (int) totalPrice : 0)
+                .toCity(address.city)
+                .toDistrict(address.district)
+                .build());
+        var chooseShipService = validShipService.stream().filter(shipService -> shipService.getId().trim().equalsIgnoreCase(createOrderCommand.getShipServiceId().trim())).findFirst();
+        if (chooseShipService.isEmpty()) {
+            throw new BusinessLogicException("Dịch vụ vận chuyển không hợp lệ");
         }
-        var newOrder = Order.builder().orderId(UUID.randomUUID().toString())
+        fee = chooseShipService.get().getTotalFree();
+        var createDeliveryOrder = CreateShipOrderRequest.builder()
+                .orderAmount((int) totalPrice)
+                .orderID(orderId)
+                .cod(createOrderCommand.getPaymentMethod() == PaymentMethod.COD ? (int) totalPrice + fee : 0)
+                .rateServiceId(createOrderCommand.getShipServiceId())
+                .toName(createOrderCommand.getCustomerName())
+                .toAddress(createOrderCommand.getAddress())
+                .toPhone(createOrderCommand.getPhoneNumber())
+                .build();
+//        var deliveryOrder = deliveryService.createOrder(createDeliveryOrder);
+
+        var newOrder = Order.builder().orderId(orderId)
                 .address(createOrderCommand.getAddress())
                 .customerName(createOrderCommand.getCustomerName())
                 .phoneNumber(createOrderCommand.getPhoneNumber())
                 .note(createOrderCommand.getNote())
-                .user((User) currentUserService.getCurrentUser().orElseThrow())
+                .user((User) currentUserService.getCurrentUser().orElse(null))
                 .promotion(promotion)
+                .email(createOrderCommand.getEmail())
                 .payments(null)
                 .deliveryFee(fee)
                 .totalAmount((int) totalPrice + fee)

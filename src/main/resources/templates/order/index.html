@@ -18,10 +18,10 @@
         //principal.address
         const myAddress = /*[[${currentUser=="anonymousUser"?null:currentUser.address}]]*/ null;
         const totalValue = /*[[${orderModel.getTotalPrice()}]]*/ 0;
-        const  myFirstName = /*[[${currentUser=="anonymousUser"?null:currentUser.firstName}]]*/ null;
-        const  myLastName = /*[[${currentUser=="anonymousUser"?null:currentUser.lastName}]]*/ null;
-        const  myPhoneNumber = /*[[${currentUser=="anonymousUser"?null:currentUser.phoneNumber}]]*/ null;
-        const  myEmail = /*[[${currentUser=="anonymousUser"?null:currentUser.email}]]*/ null;
+        const myFirstName = /*[[${currentUser=="anonymousUser"?null:currentUser.firstName}]]*/ null;
+        const myLastName = /*[[${currentUser=="anonymousUser"?null:currentUser.lastName}]]*/ null;
+        const myPhoneNumber = /*[[${currentUser=="anonymousUser"?null:currentUser.phoneNumber}]]*/ null;
+        const myEmail = /*[[${currentUser=="anonymousUser"?null:currentUser.email}]]*/ null;
         const myFullName = myFirstName + ' ' + myLastName;
 
         /*]]>*/
@@ -109,9 +109,9 @@
             commandForm.phoneNumber.value =  this.isUseMyAddress?myPhoneNumber:document.getElementById('phoneNumber').value;
             commandForm.address.value =  this.isUseMyAddress?myAddress:getfullAddress();
             commandForm.note.value = ''
-            commandForm.promotionCode.value = this.promotion?.code;
+            commandForm.promotionCode.value = this.promotion?.code ||'';
             commandForm.email.value =  this.isUseMyAddress?myEmail:document.getElementById('email').value;
-            console.log(commandForm);
+            commandForm.submit();
             }
         }">
             <form hidden="hidden" id="commandForm" th:method="post" th:action="@{/order/create}" th:object="${command}"
@@ -120,11 +120,16 @@
                 <input type="text" th:field="*{address}" name="address"/>
                 <input type="text" th:field="*{phoneNumber}" name="phoneNumber"/>
                 <input type="text" th:field="*{email}" name="email"/>
-
                 <input type="text" th:field="*{note}"/>
                 <input type="text" th:field="*{promotionCode}" name="promotionCode"/>
                 <input type="text" th:field="*{paymentMethod}" name="paymentMethod"/>
                 <input type="text" th:field="*{shipServiceId}" name="shipServiceId"/>
+                <th:block th:each="item, iterStat : *{orderItems}">
+                    <input th:field="*{orderItems[__${iterStat.index}__].productOptionId}"/>
+
+                    <input th:field="*{orderItems[__${iterStat.index}__].quantity}"/>
+
+                </th:block>
             </form>
             <div class="flex flex-col gap-y-1">
                 <div>
@@ -468,7 +473,7 @@
                                             </label>
                                         </div>
                                         <div class="flex items-center">
-                                            <input checked id="atm" type="radio" value="MOMO_ATM"
+                                            <input id="atm" type="radio" value="MOMO_ATM"
                                                    name="payment-method"
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="atm"
@@ -477,7 +482,7 @@
                                             </label>
                                         </div>
                                         <div class="flex items-center">
-                                            <input checked id="momo" type="radio" value="MOMO_QR"
+                                            <input id="momo" type="radio" value="MOMO_QR"
                                                    name="payment-method"
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="momo"

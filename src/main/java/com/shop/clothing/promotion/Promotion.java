@@ -67,4 +67,21 @@ public class Promotion extends AuditableEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate = null;
+    public int getFinalDiscount(int totalPrice) {
+        if (type == PromotionType.PERCENTAGE) {
+            int reduce = totalPrice * discount / 100;
+            if (reduce > maxValue) {
+                return maxValue;
+            } else {
+                return reduce;
+            }
+
+        } else {
+            if (discount > totalPrice) {
+                return totalPrice;
+            } else {
+                return discount;
+            }
+        }
+    }
 }

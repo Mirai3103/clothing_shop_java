@@ -28,6 +28,11 @@ public class UserDetailServiceImpl implements UserDetailsService, UserDetailsPas
         if (userByPhoneNumber.isPresent()) {
             return userByPhoneNumber.get();
         }
+        var userById = userRepository.findById(username);
+        if (userById.isPresent()) {
+            return userById.get();
+        }
+
         throw new UsernameNotFoundException("User not found");
     }
 
