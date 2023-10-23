@@ -7,7 +7,9 @@
 >
   <head>
     <meta charset="UTF-8" />
-    <title>Cửa hàng bán quần áo</title>
+    <title>
+      Thông tin tài khoản
+    </title>
   </head>
 
   <body>
@@ -18,8 +20,8 @@
       <script th:inline="javascript">
         /*<![CDATA[*/
 
-        var addressFromModel = /*[[${user.address}]]*/ "";
-        var avatarFromModel = /*[[${user.avatarUrl}]]*/ "";
+        const addressFromModel = /*[[${user.address}]]*/ "";
+        const avatarFromModel = /*[[${user.avatarUrl}]]*/ "";
       </script>
       <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4">
         <div class="mb-4 col-span-full xl:mb-2">

@@ -1839,6 +1839,9 @@ input:checked + .toggle-bg{
 .m-0{
   margin: 0px;
 }
+.m-2{
+  margin: 0.5rem;
+}
 .m-3{
   margin: 0.75rem;
 }
@@ -1928,6 +1931,10 @@ input:checked + .toggle-bg{
 .my-6{
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+}
+.my-2{
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .-mb-px{
   margin-bottom: -1px;
@@ -2264,6 +2271,9 @@ input:checked + .toggle-bg{
 }
 .w-2\.5{
   width: 0.625rem;
+}
+.w-20{
+  width: 5rem;
 }
 .w-24{
   width: 6rem;
@@ -3508,6 +3518,10 @@ input:checked + .toggle-bg{
   --tw-text-opacity: 1;
   color: rgb(194 120 3 / var(--tw-text-opacity));
 }
+.text-red-400{
+  --tw-text-opacity: 1;
+  color: rgb(249 128 128 / var(--tw-text-opacity));
+}
 .underline{
   text-decoration-line: underline;
 }
@@ -3833,6 +3847,21 @@ a {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-red-400:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 128 128 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-200:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 213 213 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-100:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 232 232 / var(--tw-bg-opacity));
+}
+
 .hover\:text-blue-500:hover{
   --tw-text-opacity: 1;
   color: rgb(63 131 248 / var(--tw-text-opacity));
@@ -3846,6 +3875,11 @@ a {
 .hover\:text-blue-700:hover{
   --tw-text-opacity: 1;
   color: rgb(26 86 219 / var(--tw-text-opacity));
+}
+
+.hover\:text-gray-500:hover{
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
 .hover\:text-gray-600:hover{

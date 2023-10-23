@@ -1,0 +1,17 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Mua ngay
+    </title>
+
+</head>
+<body>
+<div layout:fragment="content"
+     th:with="currentUser=${#authentication.principal}"
+     class="max-w-screen-xl px-3 mx-auto">
+</div>
+</body>
+</html>

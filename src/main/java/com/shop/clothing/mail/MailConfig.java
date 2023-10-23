@@ -7,9 +7,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.util.Properties;
 
@@ -20,6 +25,7 @@ public class MailConfig {
     private String username;
     @Value("${spring.mail.password}")
     private String password;
+
 //    @Bean("gmail")
 //    public JavaMailSender gmailMailSender() {
 //        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

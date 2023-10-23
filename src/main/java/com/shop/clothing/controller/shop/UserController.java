@@ -1,5 +1,6 @@
 package com.shop.clothing.controller.shop;
 
+import com.shop.clothing.cart.query.getMyCart.GetMyCartQuery;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.user.query.getMyProfile.GetMyProfileQuery;
 import lombok.AllArgsConstructor;
@@ -23,5 +24,14 @@ public class UserController {
             return new ModelAndView("redirect:/auth/login");
         }
         return new ModelAndView("user/my-account", "user", result.get());
+    }
+
+    @GetMapping("my-cart")
+    public ModelAndView myCart() {
+        var result = _sender.send(new GetMyCartQuery());
+        if (result.hasError()) {
+            return new ModelAndView("redirect:/auth/login");
+        }
+        return new ModelAndView("user/my-cart", "cartItems", result.orThrow());
     }
 }

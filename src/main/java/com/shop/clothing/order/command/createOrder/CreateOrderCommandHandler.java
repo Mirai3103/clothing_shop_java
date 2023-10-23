@@ -11,6 +11,7 @@ import com.shop.clothing.delivery.IDeliveryService;
 import com.shop.clothing.delivery.dto.CreateShipOrderRequest;
 import com.shop.clothing.delivery.dto.GetValidShipServiceRequest;
 import com.shop.clothing.delivery.query.getDeliveryFee.GetDeliveryFeeQuery;
+import com.shop.clothing.mail.MailService;
 import com.shop.clothing.order.entity.Order;
 import com.shop.clothing.order.entity.OrderItem;
 import com.shop.clothing.order.repository.OrderItemRepository;
@@ -21,6 +22,7 @@ import com.shop.clothing.product.repository.ProductOptionRepository;
 import com.shop.clothing.promotion.Promotion;
 import com.shop.clothing.promotion.repository.PromotionRepository;
 import com.shop.clothing.user.entity.User;
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @AllArgsConstructor
 @Service
@@ -39,6 +42,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
     private final ProductOptionRepository productOptionRepository;
     private final ClientUtil clientUtil;
     private final IDeliveryService deliveryService;
+    private final MailService mailService;
 
     @Override
     @Transactional(rollbackFor = {BusinessLogicException.class, Throwable.class})
@@ -114,6 +118,13 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
             }
             productOption.setStock(productOption.getStock() - quantity);
             productOptionRepository.save(productOption);
+        });
+        CompletableFuture.runAsync(() -> {
+            try {
+                mailService.sendEmail(newOrder.getEmail(), "Đặt hàng thành công", "<h1>Đặt hàng thành công</h1> <p>Mã đơn hàng của bạn là: " + newOrder.getOrderId() + "</p>");
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
         });
         return HandleResponse.ok(newOrder.getOrderId());
     }

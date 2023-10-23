@@ -1,6 +1,7 @@
 package com.shop.clothing.payment.momo;
 
 import com.shop.clothing.config.RestExceptionHandler;
+import com.shop.clothing.payment.entity.Payment;
 import com.shop.clothing.payment.entity.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
@@ -133,7 +134,7 @@ public class MomoService {
         return response.getBody();
     }
 
-    public PaymentStatus handleCallback(MomoCallbackParam momoCallbackParam) {
+    public Payment handleCallback(MomoCallbackParam momoCallbackParam) {
         var payment = paymentRepository.findById(momoCallbackParam.getRequestId()).orElseThrow();
             var message = momoCallbackParam.getMessage();
         payment.setPaymentResponse(message);
@@ -166,7 +167,7 @@ public class MomoService {
                 payment.setStatus(PaymentStatus.FAILED);
         }
         paymentRepository.save(payment);
-        return payment.getStatus();
+        return payment;
     }
 
 

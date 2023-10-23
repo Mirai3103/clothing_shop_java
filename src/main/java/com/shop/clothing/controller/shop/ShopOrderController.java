@@ -67,7 +67,11 @@ public class ShopOrderController {
             if (paymentResponse.isOk() && paymentResponse.get().isRedirect()) {
                 return "redirect:" + paymentResponse.get().getRedirectUrl();
             }
-            return "redirect:/order/success";
+            model.addAttribute("message", "Đơn hàng #" + response.get() + " đã được tạo thành công");
+            model.addAttribute("header", "Đặt hàng thành công");
+            model.addAttribute("subMessage", "Cảm ơn bạn đã mua hàng tại shop");
+            model.addAttribute("detailUrl", "/order/" + response.get());
+            return "order/success";
         }
         return "order/index";
     }

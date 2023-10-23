@@ -12,14 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/momo")
 @AllArgsConstructor
-public class MomoController {
+public class MomoApiController {
     private final MomoService momoService;
 
-    @GetMapping("/callback")
-    public String callback(MomoCallbackParam param) {
-        return momoService.handleCallback(param).name();
-
-    }
 
     @PostMapping("/ipn")
     public ResponseEntity<Void> ipn(MomoCallbackParam param) {

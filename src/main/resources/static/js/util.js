@@ -4,3 +4,5 @@ const GENDER = {
     FOR_MALE:"Nam",
     FOR_BOTH:"Nam và Nữ"
 }
+
+
