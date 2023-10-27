@@ -106,7 +106,7 @@ const prisma = new PrismaClient();
         address: user.address,
         customer_name: user.first_name + " " + user.last_name,
         delivery_fee: randomVietNameseMoney({ min: 10000, max: 40000 }),
-        note: faker.lorem.sentences(),
+        note: faker.lorem.sentences({ max: 50 }),
         payment_method: paymentMethod,
         phone_number: user.phone_number,
         status: status,
@@ -180,18 +180,40 @@ async function createFakePayment() {
   const listOrders = await prisma.order.findMany({});
   const listPayment = [];
   for (const order of listOrders) {
+    const isFailed = faker.number.int({ min: 0, max: 6 }) == 0;
+    const refDate = faker.date.soon({
+      refDate: order.created_date,
+      days: 2,
+    });
+    if (isFailed) {
+      const payment = {
+        payment_id: randomUUID(),
+        amount: order.total_amount,
+        payment_details: "Thanh toán cho đơn hàng " + order.order_id + ".",
+        status: 4,
+        order_order_id: order.order_id,
+        created_by: order.user_user_id,
+        created_date: refDate,
+      };
+      listPayment.push(payment);
+    }
     const payment = {
       payment_id: randomUUID(),
       amount: order.total_amount,
-      payment_details: faker.lorem.sentences(),
+      payment_details: "Thanh toán cho đơn hàng " + order.order_id + ".",
       status: 1,
       order_order_id: order.order_id,
       created_by: order.user_user_id,
       created_date: faker.date.soon({
-        refDate: order.created_date,
+        refDate: refDate,
         days: 2,
       }),
     };
     listPayment.push(payment);
   }
+  await prisma.payment.createMany({
+    data: listPayment,
+  });
 }
+
+// createFakePayment();
