@@ -6,8 +6,10 @@ import com.shop.clothing.payment.dto.CreatePaymentResponse;
 import com.shop.clothing.payment.entity.Payment;
 import com.shop.clothing.payment.entity.enums.PaymentMethod;
 import com.shop.clothing.payment.entity.enums.PaymentStatus;
+import com.shop.clothing.payment.momo.MomoCreatePaymentResponse;
 import com.shop.clothing.payment.momo.MomoService;
 import lombok.AllArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -35,6 +37,7 @@ public class MomoQrPaymentStrategy implements PaymentStrategy {
                     .amount(order.getTotalAmount())
                     .paymentDetails("Thanh toán bằng quét mã QR")
                     .order(order)
+                    .paymentResponse(JSONObject.valueToString(response))
                     .build();
             paymentRepository.save(payment);
         }

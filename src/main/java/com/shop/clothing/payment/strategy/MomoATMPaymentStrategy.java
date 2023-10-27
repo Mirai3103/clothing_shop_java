@@ -6,9 +6,11 @@ import com.shop.clothing.payment.dto.CreatePaymentResponse;
 import com.shop.clothing.payment.entity.Payment;
 import com.shop.clothing.payment.entity.enums.PaymentMethod;
 import com.shop.clothing.payment.entity.enums.PaymentStatus;
+import com.shop.clothing.payment.momo.MomoCreatePaymentResponse;
 import com.shop.clothing.payment.momo.MomoService;
 import com.shop.clothing.payment.repository.PaymentRepository;
 import lombok.AllArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,7 @@ public class MomoATMPaymentStrategy implements PaymentStrategy {
                     .amount(order.getTotalAmount())
                     .paymentDetails("Thanh toán bằng ATM")
                     .order(order)
+                    .paymentResponse(JSONObject.valueToString(response))
                     .build();
             paymentRepository.save(payment);
         }

@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-    font-family: "Nunito", sans-serif;
+    font-family: "Roboto", sans-serif !important;
 }
 
 a {
@@ -12,5 +12,25 @@ a {
 }
 
 #description{
-    font-family: "Nunito", sans-serif !important;
+    font-family: "Roboto", sans-serif !important;
+}
+
+.has-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #f8fafc;
+}
+
+.has-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    max-height: 8px;
+}
+
+.has-scrollbar::-webkit-scrollbar-track {
+    background: #f8fafc;
+}
+
+.has-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #64748b;
+    border-radius: 19px;
+    border: 3px solid #f8fafc;
 }
