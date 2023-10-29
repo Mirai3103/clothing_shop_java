@@ -2,6 +2,7 @@ package com.shop.clothing.controller.shop;
 
 import com.shop.clothing.cart.query.getMyCart.GetMyCartQuery;
 import com.shop.clothing.common.Cqrs.ISender;
+import com.shop.clothing.order.query.getMyOrders.GetMyOrderQuery;
 import com.shop.clothing.user.query.getMyProfile.GetMyProfileQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,5 +34,12 @@ public class UserController {
             return new ModelAndView("redirect:/auth/login");
         }
         return new ModelAndView("user/my-cart", "cartItems", result.orThrow());
+    }
+
+    @GetMapping("my-order")
+    public ModelAndView myOrder() {
+        var result = _sender.send(new GetMyOrderQuery());
+        return new ModelAndView("user/my-order", "orders", result.orThrow());
+
     }
 }

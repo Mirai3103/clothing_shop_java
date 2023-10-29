@@ -25,4 +25,5 @@ public class Paginated<T>  {
     public static <T> Paginated<T> of(Page<T> page) {
         return new Paginated<>(page.getContent(), page.getNumber(), page.getSize(), page.getTotalPages(), page.getTotalElements(), page.hasNext(), page.hasPrevious());
     }
+
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="admin/layout"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Home</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section
+            class="bg-gray-50 p-3 sm:p-5 antialiased"
+            x-data="{
+    page: 1,
+    perPage: 10,
+    data: [],
+    total: 0,
+    totalElement: 0,
+    hasNextPage: true,
+    hasPreviousPage: true,
+    loading : false,
+    currentSortField: 'createdDate',
+    currentSortDir: 'DESC',
+    }">
+
+    </section>
+</div>
+
+</body>
+</html>

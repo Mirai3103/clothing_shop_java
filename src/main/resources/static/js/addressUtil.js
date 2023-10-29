@@ -32,15 +32,18 @@ async function toAddress(fullAddress) {
     let districtIndex = address.length - 2;
     let wardIndex = address.length - 3;
     let provinces = await fetchProvince();
+    console.log(address[provinceIndex].trim().toLowerCase())
+    console.log(provinces)
     let province = provinces.find(
-        (p) => p.name_with_type.toLowerCase() == address[provinceIndex].trim().toLowerCase()
+        (p) => p.name_with_type.toLowerCase().endsWith(address[provinceIndex].trim().toLowerCase())
     );
     let districts = await fetchDistrict(province.code);
     let district = districts.find(
-        (d) => d.name_with_type.toLowerCase() == address[districtIndex].trim().toLowerCase()
+        (d) => d.name_with_type.toLowerCase().endsWith(address[districtIndex].trim().toLowerCase())
     );
+
     let wards = await fetchWard(district.code);
-    let ward = wards.find((w) => w.name_with_type.toLowerCase() == address[wardIndex].trim().toLowerCase());
+    let ward = wards.find((w) => w.name_with_type.toLowerCase().endsWith(address[wardIndex].trim().toLowerCase()));
     console.log(province, district, ward);
     return {
         provinces: provinces,

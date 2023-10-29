@@ -145,12 +145,12 @@ imagesOfColor = [...validColors[0].images];
     "
     >
         <div class="lg:col-span-2 gap-x-2 flex">
-            <div class="hidden lg:flex md:basis-[150px]  flex-col gap-y-2 bg-gray-100 overflow-y-scroll max-h-[550px] has-scrollbar box-content pr-2">
+            <div class="hidden lg:flex md:basis-[150px]  flex-col gap-y-2  overflow-y-scroll max-h-[550px] has-scrollbar box-content pr-2">
                 <template x-for="(im,index) in imagesOfColor" :key="index">
-                    <div class="duration-700  ease-in-out">
+                    <div class="duration-700 rounded-md hover:shadow-md ease-in-out">
                         <img :src="im.url"
                              @click="carousel?.slideTo(index)"
-                             class="block w-full cursor-pointer"
+                             class="block w-full rounded-md  cursor-pointer"
                              alt="...">
                     </div>
                 </template>
@@ -255,7 +255,7 @@ imagesOfColor = [...validColors[0].images];
                 <span th:text="${product.getCategory().name}"></span>
             </div>
             <div class="py-4 border-t mt-2 border-primary-200">
-                <h3 class="font-bold mb-2 text-xl">
+                <h3 class="font-bold mb-3 text-xl">
                     Màu sắc
                 </h3>
                 <div class="flex gap-1 flex-wrap ml-3 ">
@@ -274,7 +274,7 @@ imagesOfColor = [...validColors[0].images];
                 </div>
             </div>
             <div class="py-4 border-t mt-2 border-primary-200">
-                <h3 class="font-bold  mb-1 text-xl">
+                <h3 class="font-bold  mb-2 text-xl">
                     Kích cỡ
                 </h3>
                 <div class="flex gap-1 mt-1 flex-wrap ml-3 ">
@@ -419,13 +419,14 @@ quantity = 0;
     </div>
 
     <div class="mt-12" x-data="{
-     currentShow : 1,
+     currentShow : 0,
     }">
         <div class="text-lg  font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
             <ul class="grid grid-cols-2  -mb-px">
                 <li>
-                    <a href="#"
-                       @click.prevent="currentShow = 0"
+                    <button
+                       id="product_details"
+                       @click="currentShow = 0"
                        :class="{
                        'block w-full p-2 text-blue-600 border-b-2 border-blue-600 rounded-t-lg':currentShow === 0,
                        'block w-full p-2  border-b-2 border-transparent rounded-t-lg active hover:text-gray-600 hover:border-gray-300':currentShow !== 0
@@ -433,28 +434,30 @@ quantity = 0;
                        aria-current="page">
                         Mô tả sản phẩm
 
-                    </a>
+                    </button>
                 </li>
                 <li>
-                    <a
-                            @click.prevent="currentShow = 1"
+                    <button
+
+                            @click="currentShow = 1"
+                            id="rating_reply"
                             :class="{
                        'block w-full p-2 text-blue-600 border-b-2 border-blue-600 rounded-t-lg':currentShow === 1,
                        'block w-full p-2  border-b-2 border-transparent rounded-t-lg active hover:text-gray-600 hover:border-gray-300':currentShow !== 1
                        }">
                         Đánh giá sản phẩm
-                    </a>
+                    </button>
                 </li>
             </ul>
         </div>
-        <div class="ml-6" x-show="currentShow === 0">
+        <div class="ml-6" id="product_details_form">
             <div
                     class="prose  mt-8 px-3"
                     x-html="descriptionHtml"
                     style="max-width: none !important;"
             ></div>
         </div>
-        <div class="ml-6" x-show="currentShow === 1">
+        <div class="ml-6 hidden" id="rating_reply_form">
             <div class="w-full flex flex-col relative mt-8">
                 <!-- rr header -->
                 <div class="w-full h-8 flex justify-between items-center">
@@ -558,8 +561,8 @@ quantity = 0;
             Sản phẩm tương tự
         </h2>
     </div>
+    <script src="/js/producDetail.js"></script>
 
 </div>
-
 </body>
 </html>

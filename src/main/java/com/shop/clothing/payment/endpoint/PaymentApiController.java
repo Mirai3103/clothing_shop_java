@@ -26,4 +26,5 @@ public class PaymentApiController {
         return ResponseEntity.ok(sender.send(command).orThrow());
     }
 
+
 }

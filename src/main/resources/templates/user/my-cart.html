@@ -86,10 +86,10 @@
             <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl">
                 Giỏ hàng của bạn
             </h1>
-            <div class="grid-cols-6 grid gap-8"
+            <div class="grid-cols-1 grid lg:grid-cols-6 gap-8"
                  x-data="cartItems"
             >
-                <div class="col-span-4 flex flex-col gap-y-1 mt-5 p-2 border shadow-md rounded-md">
+                <div class="lg:col-span-4 col-span-1 flex flex-col gap-y-1 mt-5 p-2 border shadow-md rounded-md">
                     <template x-for="item in cartItems">
                         <div class="flex flex-row gap-x-4 p-4 border-b">
                             <img
@@ -176,7 +176,7 @@
 
 
                 </div>
-                <div class="col-span-2">
+                <div class="lg:col-span-2 col-span-1">
                     <div class="border shadow-md flex mt-5 p-3 rounded-md flex-col gap-y-1">
                         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl py-1 px-4">
                             Thông tin đơn hàng
