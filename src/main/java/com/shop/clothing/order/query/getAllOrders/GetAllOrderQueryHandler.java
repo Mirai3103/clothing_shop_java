@@ -32,10 +32,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Service
 public class GetAllOrderQueryHandler implements IRequestHandler<GetAllOrderQuery, Paginated<OrderBriefDto>> {
-    private final OrderRepository _orderRepository;
     private final EntityManager _entityManager;
     private final ModelMapper _mapper;
-    private final PaymentRepository _paymentRepository;
 
     @Override
     @Transactional(readOnly = true)

@@ -1,5 +1,6 @@
 package com.shop.clothing.order.dto;
 
+import com.shop.clothing.common.dto.AuditableDto;
 import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.payment.dto.PaymentDto;
 import com.shop.clothing.payment.entity.enums.PaymentMethod;
@@ -9,10 +10,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class OrderBriefDto {
-
+public class OrderBriefDto extends AuditableDto {
     private String orderId;
-
     private String customerName;
     private String address;
     private PaymentMethod paymentMethod;

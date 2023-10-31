@@ -7,26 +7,17 @@
 >
 <head>
     <meta charset="UTF-8"/>
-    <title>
-        Giỏ hàng của bạn
-    </title>
+    <title>Giỏ hàng của bạn</title>
 </head>
 
 <body>
 <div layout:fragment="content" class="max-w-screen-xl mx-auto">
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        const orders = [[${orders}]];
-        console.log(orders);
-        /*]]>*/
-    </script>
     <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4">
         <div class="mb-4 col-span-full xl:mb-2">
             <nav class="flex mb-5" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
                     <li class="inline-flex items-center">
-                        <a th:href="@{/home}"
-                           class="inline-flex items-center text-gray-700 hover:text-primary-600">
+                        <a th:href="@{/home}" class="inline-flex items-center text-gray-700 hover:text-primary-600">
                             <svg
                                     class="w-5 h-5 mr-2.5"
                                     fill="currentColor"
@@ -54,19 +45,144 @@
                                         clip-rule="evenodd"
                                 ></path>
                             </svg>
-                            <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2">
-                                Giỏ hàng
-                            </a>
+                            <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2"> Đơn hàng của tôi </a>
                         </div>
                     </li>
                 </ol>
             </nav>
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl">
-                Giỏ hàng của bạn
-            </h1>
+            <!-- order wrapper -->
+            <!-- header -->
+            <h1 class="text-3xl font-extrabold mt-4">Lịch sử đơn hàng</h1>
+            <p class="text-base text-black text-opacity-60 leading-normal mt-1 mb-4">
+                Kiểm tra trạng thái đơn hàng gần đây, quản lý đơn hàng trả lại và tải xuống hóa đơn.
+            </p>
+            <!-- date, odersnumber, total amount HEADER-->
+            <div class="flex flex-col gap-y-8">
+                <th:block th:each="order : ${orders} ">
+                    <div class="flex flex-col gap-y-2 shadow-md">
+                        <div class="w-full bg-gray-100 flex justify-between p-4 items-center rounded-md">
+                            <div class="ml-6">
+                                <ul class="w-full list-none flex gap-x-4 items-start">
+                                    <li class="text-base font-extrabold">
+                                        <div class="mb-2"> Ngày đặt hàng</div>
+                                        <div class="">
+                                            <span class="text-sm"
+                                                  th:text="${@clientUtil.formatDateTime(order.getCreatedDate())}"> </span>
+                                        </div>
+                                    </li>
+                                    <li class="text-base font-extrabold">
+                                        <div class="mb-2"> Mã đơn hàng</div>
+                                        <div class="font-normal flex">
+                                            <span class="text-sm whitespace-pre-wrap max-w-[200px]"
+                                                  th:text="${order.orderId}"> </span>
+                                        </div>
+                                    </li>
+                                    <li class="text-base font-extrabold">
+                                        <div class="mb-2">Tổng tiền</div>
+                                        <div
+                                                class="font-extrabold text-base"
+                                                th:text="${@clientUtil.toVietnameseCurrency(order.getTotalAmount())}"
+                                        ></div>
+                                    </li>
+
+                                    <li class="text-base font-extrabold">
+                                        <div class="mb-2"> Trạng thái đơn hàng</div>
+                                        <div
+                                                class="w-full flex justify-center items-center"
+                                        >
+                                            <th:block
+                                                    th:replace="~{components/StatusBadge :: orderStatusBadge(${order.getStatus().name()})}"></th:block>
+                                        </div>
+                                    </li>
+                                    <li class="text-base font-extrabold">
+                                        <div class="mb-2"> Phương thức thanh toán</div>
+                                        <div
+                                                class="w-full font-normal flex justify-center items-center"
+                                                th:text="${@clientUtil.toReadableString(order.getPaymentMethod())}"
+                                        >
+
+                                        </div>
+                                    </li>
+                                    <li class="text-base font-extrabold">
+                                        <div class="mb-2"> Trạng thái thanh toán</div>
+                                        <div
+                                                class="w-full flex justify-center items-center"
+                                        >
+                                            <th:block
+                                                    th:replace="~{components/StatusBadge :: paymentStatusBadge(${order.getLatestPayment().getStatus().name()})}"></th:block>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="w-139 h-full mr-6 flex justify-center items-center">
+                                <button id="viewinvoicebtn"
+                                        class="bg-white px-4 py-1 rounded-md font-extrabold border-2">
+                                    Xem hóa đơn
+                                </button>
+                            </div>
+                        </div>
+                        <!-- order details -->
+
+                        <div class="p-3 rounded-md">
+                            <table class="w-full">
+                                <thead class="min-w-full h-10 divide-y divide-gray-200 border-b-2 border-opacity-10 py-10">
+                                <tr class="">
+                                    <th class="text-lg text-black text-opacity-60 text-left h-full">Sản phẩm</th>
+                                    <th class="text-lg text-black text-opacity-60 text-left">Giá</th>
+                                    <th class="text-lg text-black text-opacity-60 text-left">Số lượng</th>
+                                    <th class="text-lg text-black text-opacity-60 text-right">Info</th>
+                                </tr>
+                                </thead>
+                                <tbody class="w-full">
+                                <th:block th:each="item : ${order.getOrderItems()}">
+                                    <tr class="w-full h-40 border-b-2 border-opacity-10">
+                                        <td class="py-2 h-full flex items-center gap-x-2">
+                                            <img
+                                                    class="w-100 items-center h-full"
+                                                    th:src="${item.getProductOption().getProduct().getDisplayImage()}"
+                                                    alt=""
+                                            />
+                                            <div class="flex flex-col grow">
+                                                <div
+                                                        class="font-extrabold text-xl"
+                                                        th:text="${item.getProductOption().getProduct().getName()}"
+                                                ></div>
+                                                <div>
+                                                    <span class="font-semibold text-sm"> Màu sắc: </span>
+                                                    <span class="text-sm"
+                                                          th:text="${item.getProductOption().getColor().getName()}"></span>
+                                                </div>
+                                                <div>
+                                                    <span class="font-semibold text-sm"> Kích cỡ: </span>
+                                                    <span class="text-sm"
+                                                          th:text="${item.getProductOption().getSize()}"></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                            <span
+                                    class="flex"
+                                    th:text="${@clientUtil.toVietnameseCurrency(item.getProductOption().getProduct().getFinalPrice())}"
+                            ></span>
+                                        </td>
+
+                                        <td>
+                                            <span class="flex" th:text="${item.getQuantity()}"> </span>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="#" class="text-blue-700 font-extrabold hover:bg-black,text-white">View
+                                                Product</a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>

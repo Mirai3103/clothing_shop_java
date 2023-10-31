@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 @Controller
 @RequestMapping("/admin/category")
-@PreAuthorize("hasAnyAuthority('CREATE_CATEGORY','UPDATE_CATEGORY','DELETE_CATEGORY')")
+
 public class CategoryController {
     private final ISender sender;
 
     @GetMapping()
-    @Secured("CREATE_CATEGORY")
+//    @PreAuthorize("hasAnyAuthority('CREATE_CATEGORY','UPDATE_CATEGORY','DELETE_CATEGORY')")
     public String getCategories(Model model, CreateCategoryCommand createCategoryCommand) {
-        var page =new GetAllCategoriesQueries();
+        var page = new GetAllCategoriesQueries();
         page.setPageSize(100);
         var allCategories = sender.send(page).get();
         model.addAttribute("categories", allCategories);

@@ -15,4 +15,7 @@ public class OrderItemDto {
     private int quantity;
     private double price;
     private ProductOptionDetailDto productOption;
+    public int getTotalPrice() {
+        return (int) (quantity * productOption.getFinalPrice());
+    }
 }

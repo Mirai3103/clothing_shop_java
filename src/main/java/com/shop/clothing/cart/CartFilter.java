@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
+//@Component
 @AllArgsConstructor
 public class CartFilter implements Filter {
     private final ISender _sender;

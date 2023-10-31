@@ -16,11 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Controller
 @RequestMapping("/admin/product")
-@PreAuthorize("hasAnyAuthority('CREATE_PRODUCT','UPDATE_PRODUCT','DELETE_PRODUCT')")
+
 public class ProductController {
     private final ISender sender;
 
     @GetMapping()
+    @PreAuthorize("hasAnyAuthority('CREATE_PRODUCT','UPDATE_PRODUCT','DELETE_PRODUCT')")
     public String getProducts(Model model, GetAllProductsQuery getAllProductsQuery) {
         getAllProductsQuery.setIncludeDeleted(true);
         var allProducts = sender.send(getAllProductsQuery).get();
@@ -29,6 +30,7 @@ public class ProductController {
     }
 
     @GetMapping("/create")
+    @PreAuthorize("hasAnyAuthority('CREATE_PRODUCT')")
     public String createProduct(Model model) {
         var query = new GetAllCategoriesQueries();
         query.setPageSize(200);
@@ -40,6 +42,7 @@ public class ProductController {
     }
 
     @GetMapping("{id}/view")
+
     public String viewProduct(Model model, @PathVariable int id) {
 
         var query = new GetProductByIdQuery(id);
@@ -57,6 +60,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('DELETE_PRODUCT')")
     public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
         var command = new DeleteProductCommand(id);
         sender.send(command);
@@ -64,6 +68,7 @@ public class ProductController {
     }
 
     @GetMapping("{id}/edit")
+    @PreAuthorize("hasAnyAuthority('UPDATE_PRODUCT')")
     public String editProduct(Model model, @PathVariable int id) {
         var query = new GetAllCategoriesQueries();
         var product = sender.send(new GetProductByIdQuery(id)).get();
@@ -77,11 +82,13 @@ public class ProductController {
     }
 
     @GetMapping("{id}/options/create")
+    @PreAuthorize("hasAnyAuthority('UPDATE_PRODUCT')")
     public String createProductOption(Model model, @PathVariable String id) {
         return "admin/product/option/create";
     }
 
     @GetMapping("options/{id}/view")
+    @PreAuthorize("hasAnyAuthority('UPDATE_PRODUCT')")
     public String viewProductOptions(Model model, @PathVariable String id) {
         return "admin/product/option/view";
     }

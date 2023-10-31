@@ -1,15 +1,17 @@
 package com.shop.clothing.order.dto;
 
+import com.shop.clothing.common.dto.AuditableDto;
 import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.payment.dto.PaymentDto;
 import com.shop.clothing.payment.entity.enums.PaymentMethod;
 import com.shop.clothing.promotion.PromotionDto;
+import com.shop.clothing.user.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class OrderDto {
+public class OrderDto extends AuditableDto {
 
     private String orderId;
 
@@ -25,7 +27,13 @@ public class OrderDto {
     private OrderStatus status = OrderStatus.PENDING;
     private PaymentDto latestPayment;
     private PromotionDto promotion;
-
+    private UserDto user;
 
     private java.util.List<OrderItemDto> orderItems;
+    public int getTotalPrice() {
+        return orderItems.stream().mapToInt(OrderItemDto::getTotalPrice).sum();
+    }
+    public int getReducePrice() {
+        return (int) (getTotalPrice() + deliveryFee - totalAmount);
+    }
 }

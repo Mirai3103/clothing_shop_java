@@ -26,6 +26,7 @@ public class CurrentUserService implements ICurrentUserService {
 
 
     public Optional<UserDetails> getCurrentUser() {
+        System.out.println("getCurrentUser");
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             return Optional.empty();

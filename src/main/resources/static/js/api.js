@@ -969,58 +969,6 @@ class Client {
         return Promise.resolve(null);
     }
     /**
-     * @return OK
-     */
-    callback(param, cancelToken) {
-        let url_ = this.baseUrl + "/momo/callback?";
-        if (param === undefined || param === null)
-            throw new Error("The parameter 'param' must be defined and cannot be null.");
-        else
-            url_ += "param=" + encodeURIComponent("" + param) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-        let options_ = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "*/*"
-            },
-            cancelToken
-        };
-        return this.instance.request(options_).catch((_error) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            }
-            else {
-                throw _error;
-            }
-        }).then((_response) => {
-            return this.processCallback(_response);
-        });
-    }
-    processCallback(response) {
-        const status = response.status;
-        let _headers = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200 = null;
-            let resultData200 = _responseText;
-            result200 = resultData200 !== undefined ? resultData200 : null;
-            return Promise.resolve(result200);
-        }
-        else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve(null);
-    }
-    /**
      * @param code (optional)
      * @param orderValue (optional)
      * @return OK
@@ -1219,6 +1167,109 @@ class Client {
             let result200 = null;
             let resultData200 = _responseText;
             result200 = PaginatedProductBriefDto.fromJS(resultData200);
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @param paymentStatus (optional)
+     * @param startDate (optional)
+     * @param endDate (optional)
+     * @param orderStatus (optional)
+     * @param amountFrom (optional)
+     * @param amountTo (optional)
+     * @param page (optional)
+     * @param pageSize (optional)
+     * @param sortField (optional)
+     * @param sortDir (optional)
+     * @param keyword (optional)
+     * @return OK
+     */
+    getAllOrders(paymentStatus, startDate, endDate, orderStatus, amountFrom, amountTo, page, pageSize, sortField, sortDir, keyword, cancelToken) {
+        let url_ = this.baseUrl + "/api/order?";
+        if (paymentStatus === null)
+            throw new Error("The parameter 'paymentStatus' cannot be null.");
+        else if (paymentStatus !== undefined)
+            url_ += "paymentStatus=" + encodeURIComponent("" + paymentStatus) + "&";
+        if (startDate === null)
+            throw new Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "startDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+        if (endDate === null)
+            throw new Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "endDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+        if (orderStatus === null)
+            throw new Error("The parameter 'orderStatus' cannot be null.");
+        else if (orderStatus !== undefined)
+            url_ += "orderStatus=" + encodeURIComponent("" + orderStatus) + "&";
+        if (amountFrom === null)
+            throw new Error("The parameter 'amountFrom' cannot be null.");
+        else if (amountFrom !== undefined)
+            url_ += "amountFrom=" + encodeURIComponent("" + amountFrom) + "&";
+        if (amountTo === null)
+            throw new Error("The parameter 'amountTo' cannot be null.");
+        else if (amountTo !== undefined)
+            url_ += "amountTo=" + encodeURIComponent("" + amountTo) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllOrders(_response);
+        });
+    }
+    processGetAllOrders(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = PaginatedOrderBriefDto.fromJS(resultData200);
             return Promise.resolve(result200);
         }
         else if (status !== 200 && status !== 204) {
@@ -2201,9 +2252,11 @@ class CreateOrderCommand {
             this.customerName = _data["customerName"];
             this.address = _data["address"];
             this.phoneNumber = _data["phoneNumber"];
+            this.email = _data["email"];
             this.note = _data["note"];
             this.promotionCode = _data["promotionCode"];
             this.paymentMethod = _data["paymentMethod"];
+            this.shipServiceId = _data["shipServiceId"];
         }
     }
     static fromJS(data) {
@@ -2226,9 +2279,11 @@ class CreateOrderCommand {
         data["customerName"] = this.customerName;
         data["address"] = this.address;
         data["phoneNumber"] = this.phoneNumber;
+        data["email"] = this.email;
         data["note"] = this.note;
         data["promotionCode"] = this.promotionCode;
         data["paymentMethod"] = this.paymentMethod;
+        data["shipServiceId"] = this.shipServiceId;
         return data;
     }
 }
@@ -2291,8 +2346,8 @@ class GetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
             this.toProvince = _data["toProvince"];
         }
     }
@@ -2316,8 +2371,8 @@ class GetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
         data["toProvince"] = this.toProvince;
         return data;
     }
@@ -2545,8 +2600,8 @@ class UserDto {
                     this.permissions.push(item);
             }
             this.emailVerified = _data["emailVerified"];
-            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
+            this.accountEnabled = _data["accountEnabled"];
         }
     }
     static fromJS(data) {
@@ -2575,8 +2630,8 @@ class UserDto {
                 data["permissions"].push(item);
         }
         data["emailVerified"] = this.emailVerified;
-        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        data["accountEnabled"] = this.accountEnabled;
         return data;
     }
 }
@@ -2759,9 +2814,9 @@ class ProductDetailDto {
                     this.images.push(ProductImageDto.fromJS(item));
             }
             this.description = _data["description"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
         }
     }
     static fromJS(data) {
@@ -2800,9 +2855,9 @@ class ProductDetailDto {
                 data["images"].push(item.toJSON());
         }
         data["description"] = this.description;
-        data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         return data;
     }
 }
@@ -2974,9 +3029,9 @@ class ProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
-            this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
         }
     }
     static fromJS(data) {
@@ -3004,9 +3059,171 @@ class ProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
-        data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
+        return data;
+    }
+}
+class OrderBriefDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdBy = _data["createdBy"];
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : undefined;
+            this.lastModifiedBy = _data["lastModifiedBy"];
+            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : undefined;
+            this.orderId = _data["orderId"];
+            this.customerName = _data["customerName"];
+            this.address = _data["address"];
+            this.paymentMethod = _data["paymentMethod"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.email = _data["email"];
+            this.totalAmount = _data["totalAmount"];
+            this.note = _data["note"];
+            this.deliveryFee = _data["deliveryFee"];
+            this.cancelReason = _data["cancelReason"];
+            this.status = _data["status"];
+            this.latestPayment = _data["latestPayment"] ? PaymentDto.fromJS(_data["latestPayment"]) : undefined;
+            this.promotion = _data["promotion"] ? PromotionDto.fromJS(_data["promotion"]) : undefined;
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new OrderBriefDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdBy"] = this.createdBy;
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : undefined;
+        data["lastModifiedBy"] = this.lastModifiedBy;
+        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : undefined;
+        data["orderId"] = this.orderId;
+        data["customerName"] = this.customerName;
+        data["address"] = this.address;
+        data["paymentMethod"] = this.paymentMethod;
+        data["phoneNumber"] = this.phoneNumber;
+        data["email"] = this.email;
+        data["totalAmount"] = this.totalAmount;
+        data["note"] = this.note;
+        data["deliveryFee"] = this.deliveryFee;
+        data["cancelReason"] = this.cancelReason;
+        data["status"] = this.status;
+        data["latestPayment"] = this.latestPayment ? this.latestPayment.toJSON() : undefined;
+        data["promotion"] = this.promotion ? this.promotion.toJSON() : undefined;
+        return data;
+    }
+}
+class PaginatedOrderBriefDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [];
+                for (let item of _data["data"])
+                    this.data.push(OrderBriefDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedOrderBriefDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+class PaymentDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.paymentId = _data["paymentId"];
+            this.status = _data["status"];
+            this.paymentDetails = _data["paymentDetails"];
+            this.paymentResponse = _data["paymentResponse"];
+            this.amount = _data["amount"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaymentDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["paymentId"] = this.paymentId;
+        data["status"] = this.status;
+        data["paymentDetails"] = this.paymentDetails;
+        data["paymentResponse"] = this.paymentResponse;
+        data["amount"] = this.amount;
         return data;
     }
 }
@@ -3130,8 +3347,8 @@ class ProductOptionDetailDto {
             this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : undefined;
             this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : undefined;
             this.quantity = _data["quantity"];
-            this.finalPriceDisplay = _data["finalPriceDisplay"];
             this.finalPrice = _data["finalPrice"];
+            this.finalPriceDisplay = _data["finalPriceDisplay"];
         }
     }
     static fromJS(data) {
@@ -3157,8 +3374,8 @@ class ProductOptionDetailDto {
         data["color"] = this.color ? this.color.toJSON() : undefined;
         data["product"] = this.product ? this.product.toJSON() : undefined;
         data["quantity"] = this.quantity;
-        data["finalPriceDisplay"] = this.finalPriceDisplay;
         data["finalPrice"] = this.finalPrice;
+        data["finalPriceDisplay"] = this.finalPriceDisplay;
         return data;
     }
 }
@@ -3270,6 +3487,24 @@ var ForGender;
     ForGender["FOR_FEMALE"] = "FOR_FEMALE";
     ForGender["FOR_BOTH"] = "FOR_BOTH";
 })(ForGender || (ForGender = {}));
+var PaymentStatus;
+(function (PaymentStatus) {
+    PaymentStatus["PENDING"] = "PENDING";
+    PaymentStatus["PAID"] = "PAID";
+    PaymentStatus["CANCELLED"] = "CANCELLED";
+    PaymentStatus["REFUNDED"] = "REFUNDED";
+    PaymentStatus["FAILED"] = "FAILED";
+})(PaymentStatus || (PaymentStatus = {}));
+var OrderStatus;
+(function (OrderStatus) {
+    OrderStatus["PENDING"] = "PENDING";
+    OrderStatus["PROCESSING"] = "PROCESSING";
+    OrderStatus["SHIPPING"] = "SHIPPING";
+    OrderStatus["DELIVERED"] = "DELIVERED";
+    OrderStatus["CANCELLED"] = "CANCELLED";
+    OrderStatus["RETURNED"] = "RETURNED";
+    OrderStatus["REFUNDED"] = "REFUNDED";
+})(OrderStatus || (OrderStatus = {}));
 var UpdateProductCommandForGender;
 (function (UpdateProductCommandForGender) {
     UpdateProductCommandForGender["FOR_MALE"] = "FOR_MALE";
@@ -3311,6 +3546,30 @@ var ProductBriefDtoForGender;
     ProductBriefDtoForGender["FOR_FEMALE"] = "FOR_FEMALE";
     ProductBriefDtoForGender["FOR_BOTH"] = "FOR_BOTH";
 })(ProductBriefDtoForGender || (ProductBriefDtoForGender = {}));
+var OrderBriefDtoPaymentMethod;
+(function (OrderBriefDtoPaymentMethod) {
+    OrderBriefDtoPaymentMethod["COD"] = "COD";
+    OrderBriefDtoPaymentMethod["MOMO_QR"] = "MOMO_QR";
+    OrderBriefDtoPaymentMethod["MOMO_ATM"] = "MOMO_ATM";
+})(OrderBriefDtoPaymentMethod || (OrderBriefDtoPaymentMethod = {}));
+var OrderBriefDtoStatus;
+(function (OrderBriefDtoStatus) {
+    OrderBriefDtoStatus["PENDING"] = "PENDING";
+    OrderBriefDtoStatus["PROCESSING"] = "PROCESSING";
+    OrderBriefDtoStatus["SHIPPING"] = "SHIPPING";
+    OrderBriefDtoStatus["DELIVERED"] = "DELIVERED";
+    OrderBriefDtoStatus["CANCELLED"] = "CANCELLED";
+    OrderBriefDtoStatus["RETURNED"] = "RETURNED";
+    OrderBriefDtoStatus["REFUNDED"] = "REFUNDED";
+})(OrderBriefDtoStatus || (OrderBriefDtoStatus = {}));
+var PaymentDtoStatus;
+(function (PaymentDtoStatus) {
+    PaymentDtoStatus["PENDING"] = "PENDING";
+    PaymentDtoStatus["PAID"] = "PAID";
+    PaymentDtoStatus["CANCELLED"] = "CANCELLED";
+    PaymentDtoStatus["REFUNDED"] = "REFUNDED";
+    PaymentDtoStatus["FAILED"] = "FAILED";
+})(PaymentDtoStatus || (PaymentDtoStatus = {}));
 class ApiException extends Error {
     constructor(message, status, response, headers, result) {
         super();

@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 @Configuration
 @AllArgsConstructor
 public class BeanUtil {
@@ -29,4 +32,7 @@ public class BeanUtil {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+    // hh:mm dd/MM/yyyy
+    // date formatter
+   
 }

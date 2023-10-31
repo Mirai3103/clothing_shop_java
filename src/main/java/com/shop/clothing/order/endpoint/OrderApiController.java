@@ -28,6 +28,7 @@ public class OrderApiController {
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority('CREATE_ORDER','UPDATE_ORDER','VIEW_ORDER')")
     public ResponseEntity<Paginated<OrderBriefDto>> getAllOrders(@Valid @ParameterObject GetAllOrderQuery getAllOrderQuery) {
+        System.err.println("================================");
         return ResponseEntity.ok(sender.send(getAllOrderQuery).orThrow());
     }
 

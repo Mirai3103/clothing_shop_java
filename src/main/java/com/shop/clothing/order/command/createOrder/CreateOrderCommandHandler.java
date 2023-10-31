@@ -24,8 +24,10 @@ import com.shop.clothing.promotion.repository.PromotionRepository;
 import com.shop.clothing.user.entity.User;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.Optional;
@@ -75,7 +77,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
                 .build());
         var chooseShipService = validShipService.stream().filter(shipService -> shipService.getId().trim().equalsIgnoreCase(createOrderCommand.getShipServiceId().trim())).findFirst();
         if (chooseShipService.isEmpty()) {
-            throw new BusinessLogicException("Dịch vụ vận chuyển không hợp lệ");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Dịch vụ vận chuyển không hợp lệ");
         }
         fee = chooseShipService.get().getTotalFree();
         var createDeliveryOrder = CreateShipOrderRequest.builder()

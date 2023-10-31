@@ -26,7 +26,7 @@ public class MomoATMPaymentStrategy implements PaymentStrategy {
     @Override
     @Transactional
     public CreatePaymentResponse createPayment(String orderId) throws Exception {
-        var order = orderRepository.findById(orderId).orElseThrow(() -> new BusinessLogicException("Đon hàng không tồn tại"));
+        var order = orderRepository.findById(orderId).orElseThrow(() -> new BusinessLogicException("Đơn hàng không tồn tại"));
         var paymentId = UUID.randomUUID().toString();
         var lastPayment = paymentRepository.findFirstByOrderIdSortedByCreatedDateDesc(orderId).orElse(null);
         if(lastPayment != null &&( lastPayment.getStatus() == PaymentStatus.FAILED||  lastPayment.getStatus() == PaymentStatus.CANCELLED)){

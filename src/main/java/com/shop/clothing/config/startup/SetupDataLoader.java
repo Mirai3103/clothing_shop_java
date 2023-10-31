@@ -53,7 +53,7 @@ public class SetupDataLoader implements
     public void onApplicationEvent(ContextRefreshedEvent event) {
         var admin = userRepository.findByEmail("admin@admin.com");
         seedCategory.seedCategory();
-        
+
         seedRole();
         seedPermission();
         if (admin.isPresent()) {
@@ -102,6 +102,7 @@ public class SetupDataLoader implements
         }
         return role;
     }
+
     @Transactional
     public void seedRole() {
 
@@ -113,9 +114,9 @@ public class SetupDataLoader implements
         createRoleIfNotFound("ROLE_MANAGER", "Quản lý", "Vai trò quản lý", new ArrayList<>());
 
     }
-    @Transactional
-    public  void seedPermission() {
 
+    @Transactional
+    public void seedPermission() {
 
 
         createPermissionIfNotFound("CREATE_PRODUCT", "Tạo sản phẩm", "Quyền tạo sản phẩm mới.");
@@ -124,6 +125,7 @@ public class SetupDataLoader implements
         createPermissionIfNotFound("VIEW_PRODUCT", "Xem sản phẩm", "Quyền xem thông tin sản phẩm.");
         createPermissionIfNotFound("CREATE_ORDER", "Tạo đơn đặt hàng", "Quyền tạo đơn đặt hàng.");
         createPermissionIfNotFound("UPDATE_ORDER", "Cập nhật đơn đặt hàng", "Quyền cập nhật thông tin đơn đặt hàng.");
+        createPermissionIfNotFound("VIEW_ORDERS", "Xem đơn đặt hàng", "Quyền xem thông tin đơn đặt hàng.");
         createPermissionIfNotFound("DELETE_ORDER", "Xóa đơn đặt hàng", "Quyền xóa đơn đặt hàng.");
         createPermissionIfNotFound("VIEW_ORDER", "Xem đơn đặt hàng", "Quyền xem thông tin đơn đặt hàng.");
         createPermissionIfNotFound("PROCESS_ORDER", "Xử lý đơn đặt hàng", "Quyền xử lý đơn đặt hàng.");
@@ -154,5 +156,8 @@ public class SetupDataLoader implements
         createPermissionIfNotFound("MANAGE_BRANDS", "Quản lý thương hiệu", "Quyền quản lý thông tin thương hiệu.");
         createPermissionIfNotFound("MANAGE_CATEGORIES", "Quản lý danh mục", "Quyền quản lý thông tin danh mục.");
         createPermissionIfNotFound("ADMIN_DASHBOARD", "Truy cập bảng điều khiển", "Quyền truy cập bảng điều khiển.");
+        createPermissionIfNotFound("CREATE_CATEGORY", "Tạo danh mục", "Quyền tạo danh mục mới.");
+        createPermissionIfNotFound("UPDATE_CATEGORY", "Cập nhật danh mục", "Quyền cập nhật thông tin danh mục.");
+        createPermissionIfNotFound("DELETE_CATEGORY", "Xóa danh mục", "Quyền xóa danh mục.");
     }
 }
