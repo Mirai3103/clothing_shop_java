@@ -58,11 +58,13 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
 
         Map<Integer, Integer> productOptionIdToQuantity = createOrderCommand.getOrderItems().stream().collect(
                 java.util.stream.Collectors.toMap(CreateOrderCommand.OrderItem::getProductOptionId, CreateOrderCommand.OrderItem::getQuantity));
-        var totalPrice = productOptionsThatWillBuy.stream().mapToDouble(productOption -> productOption.getProduct().getPrice() * productOptionIdToQuantity.get(productOption.getProductOptionId()) *
-                ((double) (100 - productOption.getProduct().getDiscount()) / 100)
+        var totalPrice = productOptionsThatWillBuy.stream().mapToInt(productOption -> {
+                    var quantity = productOptionIdToQuantity.get(productOption.getProductOptionId());
+                    return productOption.getProduct().getFinalPrice() * quantity;
+                }
         ).sum();
         if (promotion != null) {
-            totalPrice = totalPrice - promotion.getFinalDiscount((int) totalPrice);
+            totalPrice = totalPrice - promotion.getFinalDiscount(totalPrice);
 
         }
 
@@ -70,14 +72,14 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
         int fee = 0;
         var orderId = UUID.randomUUID().toString();
         var validShipService = deliveryService.getValidShipService(GetValidShipServiceRequest.builder()
-                .orderValue((int) totalPrice)
+                .orderValue(totalPrice)
                 .cod(createOrderCommand.getPaymentMethod() == PaymentMethod.COD ? (int) totalPrice : 0)
                 .toCity(address.city)
                 .toDistrict(address.district)
                 .build());
         var chooseShipService = validShipService.stream().filter(shipService -> shipService.getId().trim().equalsIgnoreCase(createOrderCommand.getShipServiceId().trim())).findFirst();
         if (chooseShipService.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Dịch vụ vận chuyển không hợp lệ");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dịch vụ vận chuyển không hợp lệ");
         }
         fee = chooseShipService.get().getTotalFree();
         var createDeliveryOrder = CreateShipOrderRequest.builder()
@@ -116,7 +118,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
             var productOption = productOptionRepository.findById(productOptionId).orElseThrow();
             if (productOption.getStock() < quantity) {
                 // rollback
-                throw new BusinessLogicException("Số lượng sản phẩm" + productOption.getProduct().getName() + " không đủ");
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Số lượng sản phẩm" + productOption.getProduct().getName() + " không đủ");
             }
             productOption.setStock(productOption.getStock() - quantity);
             productOptionRepository.save(productOption);

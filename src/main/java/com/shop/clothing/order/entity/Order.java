@@ -51,7 +51,7 @@ public class Order extends AuditableEntity {
     @Builder.Default
     private OrderStatus status = OrderStatus.PENDING;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private java.util.List<Payment> payments;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -63,4 +63,8 @@ public class Order extends AuditableEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private java.util.List<OrderItem> orderItems;
+
+    @Column(name = "completed_date")
+    private java.time.LocalDateTime completedDate;
+
 }

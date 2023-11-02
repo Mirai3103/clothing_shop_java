@@ -7,6 +7,8 @@ import com.shop.clothing.product.command.updateProduct.UpdateProductCommand;
 import com.shop.clothing.product.dto.ProductBriefDto;
 import com.shop.clothing.product.dto.ProductDetailDto;
 import com.shop.clothing.product.entity.Product;
+import com.shop.clothing.product.query.advanceSearchProduct.AdvanceSearchAllProductsQuery;
+import com.shop.clothing.product.query.advanceSearchProduct.AdvanceSearchAllProductsQueryHandler;
 import com.shop.clothing.product.query.getAllProducts.GetAllProductsQuery;
 import com.shop.clothing.product.query.getProductById.GetProductByIdQuery;
 import jakarta.validation.Valid;
@@ -28,12 +30,21 @@ public class ProductApiController {
         var result = sender.send(getAllProductsQuery);
         return ResponseEntity.ok(result.orThrow());
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Paginated<ProductBriefDto>> searchProducts(@Valid @ParameterObject AdvanceSearchAllProductsQuery query) {
+
+        var result = sender.send(query);
+        return ResponseEntity.ok(result.orThrow());
+    }
+
     @Secured("CREATE_PRODUCT")
     @PostMapping("/create")
     public ResponseEntity<Integer> createProduct(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid CreateProductCommand createProductCommand) {
         var result = sender.send(createProductCommand);
         return ResponseEntity.ok(result.orThrow());
     }
+
     @Secured("UPDATE_PRODUCT")
     @PutMapping("/update")
     public ResponseEntity<Void> updateProduct(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid UpdateProductCommand command) {

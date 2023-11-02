@@ -27,21 +27,20 @@ public class AuditingEntityListener implements ConfigurableObject {
         }
         var domainAuthen = (User) authen.getPrincipal();
         return domainAuthen.getUserId();
-
-
     }
+
     @PrePersist
     public void touchForCreate(AuditableEntity target) {
 
-      var currentUserId = getCurrentUserId();
-        target.setCreatedBy(currentUserId);
+        var currentUserId = getCurrentUserId();
+//        target.setCreatedBy(currentUserId);
         target.setCreatedDate(java.time.LocalDateTime.now());
     }
 
     @PreUpdate
     public void touchForUpdate(AuditableEntity target) {
-        var currentUserId = getCurrentUserId();
-        target.setLastModifiedBy(currentUserId);
-        target.setLastModifiedDate(java.time.LocalDateTime.now());
+//        var currentUserId = getCurrentUserId();
+//        target.setLastModifiedBy(currentUserId);
+//        target.setLastModifiedDate(java.time.LocalDateTime.now());
     }
 }

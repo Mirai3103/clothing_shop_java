@@ -2,7 +2,6 @@ package com.shop.clothing.product.entity;
 
 import com.shop.clothing.category.Category;
 import com.shop.clothing.common.AuditableEntity;
-import com.shop.clothing.brand.Brand;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -19,19 +18,20 @@ import java.time.LocalDateTime;
 @Table
 @SQLDelete(sql = "UPDATE product SET deleted_date = NOW() WHERE product_id=?")
 @Where(clause = "deleted_date is null")
-public class Product extends AuditableEntity{
-    public enum ProductGender{
+public class Product extends AuditableEntity {
+    public enum ProductGender {
         FOR_MALE,
         FOR_FEMALE,
         FOR_BOTH
     }
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(updatable = false, nullable = false,name = "product_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, nullable = false, name = "product_id")
     private int productId;
 
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
@@ -41,12 +41,12 @@ public class Product extends AuditableEntity{
     private String slug;
 
 
-    @Column(nullable = false,columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
 
     @Column(nullable = false)
-    private double price;
+    private int price;
 
 
     @Column(nullable = false)
@@ -61,20 +61,22 @@ public class Product extends AuditableEntity{
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate = null;
 
-    @ManyToOne()
-    private Brand brand;
+//    @ManyToOne()
+//    private Brand brand;
 
 
     @ManyToOne
     private Category category;
 
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "product")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private java.util.List<ProductOption> productOptions;
 
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
-    private java.util.List<ProductImage>images;
+    private java.util.List<ProductImage> images;
 
+    public int getFinalPrice() {
+        return (int) (price - price * discount / 100.0);
+    }
 }

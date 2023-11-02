@@ -1,6 +1,5 @@
 package com.shop.clothing.product.command.createProduct;
 
-import com.shop.clothing.brand.Brand;
 import com.shop.clothing.category.Category;
 import com.shop.clothing.common.Cqrs.IRequest;
 import com.shop.clothing.product.entity.Product;
@@ -25,7 +24,7 @@ public class CreateProductCommand implements IRequest<Integer> {
     private String description;
     @NotNull(message = "Giá sản phẩm không được để trống")
     @Min(value = 1000, message = "Giá sản phẩm phải lớn hơn 1000")
-    private double price;
+    private int price;
     @Min(value = 0, message = "Giảm giá sản phẩm phải lớn hơn 0")
     @Max(value = 100, message = "Giảm giá sản phẩm phải nhỏ hơn 100")
     @Builder.Default
@@ -33,9 +32,7 @@ public class CreateProductCommand implements IRequest<Integer> {
     @NotEmpty(message = "Ảnh sản phẩm không được để trống")
     @URL(message = "Ảnh sản phẩm không hợp lệ")
     private String displayImage;
-    private int brandId;
     @NotNull(message = "Danh mục sản phẩm không được để trống")
     @Min(value = 1, message = "Danh mục sản phẩm không hợp lệ")
     private int categoryId;
-
 }

@@ -28,7 +28,7 @@ public class GetAllProductsQueryHandler implements IRequestHandler<GetAllProduct
         var root = cq.from(Product.class);
         var predicates = cb.conjunction();
         if (getAllProductsQuery.getCategoryId() != 0) {
-            predicates = cb.and(predicates, cb.equal(root.get("category").get("id"), getAllProductsQuery.getCategoryId()));
+            predicates = cb.and(predicates, cb.equal(root.get("category").get("categoryId"), getAllProductsQuery.getCategoryId()));
         }
         if (getAllProductsQuery.getForGender() != null) {
             predicates = cb.and(predicates, cb.equal(root.get("forGender"), getAllProductsQuery.getForGender()));
@@ -60,14 +60,14 @@ public class GetAllProductsQueryHandler implements IRequestHandler<GetAllProduct
         query.setFirstResult((getAllProductsQuery.getPage() - 1) * getAllProductsQuery.getPageSize());
         query.setMaxResults(getAllProductsQuery.getPageSize());
         Collection<Product> result = query.getResultList();
-        List<ProductBriefDto> productBriefDtos = result.stream().map(product ->{
+        List<ProductBriefDto> productBriefDtos = result.stream().map(product -> {
             return modelMapper.map(product, ProductBriefDto.class);
         }).toList();
 
         var count = productRepository.count();
         var paginated = Paginated.<ProductBriefDto>builder().pageSize(getAllProductsQuery.getPageSize()).page(getAllProductsQuery.getPage()).data(productBriefDtos).totalElements(count).totalPages((int) Math.ceil((double) count / getAllProductsQuery.getPageSize())).build();
-    paginated.setHasNext(paginated.getPage() < paginated.getTotalPages());
-    paginated.setHasPrevious(paginated.getPage() > 1);
+        paginated.setHasNext(paginated.getPage() < paginated.getTotalPages());
+        paginated.setHasPrevious(paginated.getPage() > 1);
 
         return HandleResponse.ok(paginated);
     }

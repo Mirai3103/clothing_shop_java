@@ -22,7 +22,7 @@ public class UpdateProductCommand  implements IRequest<Void> {
     private String description;
     @NotNull(message = "Giá sản phẩm không được để trống")
     @Min(value = 1000, message = "Giá sản phẩm phải lớn hơn 1000")
-    private double price;
+    private int price;
     @Min(value = 0, message = "Giảm giá sản phẩm phải lớn hơn 0")
     @Max(value = 100, message = "Giảm giá sản phẩm phải nhỏ hơn 100")
     @Builder.Default

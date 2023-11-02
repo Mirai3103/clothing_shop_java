@@ -1,6 +1,9 @@
 package com.shop.clothing.product.repository;
 
+import com.shop.clothing.product.entity.Product;
 import com.shop.clothing.product.entity.ProductOption;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +27,6 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, In
     void hardDeleteById(int id);
 
     List<ProductOption> findAllByProductOptionIdIn(List<Integer> ids);
+
+
 }

@@ -14,9 +14,9 @@ import lombok.*;
 @Getter
 @Setter
 @Table(name = "payment")
-public class Payment extends AuditableEntity{
+public class Payment extends AuditableEntity {
     @Id
-   @Column(updatable = false, nullable = false,name = "payment_id",length = 36)
+    @Column(updatable = false, nullable = false, name = "payment_id", length = 36)
     private String paymentId;
 
     @Column(nullable = false)
@@ -26,9 +26,9 @@ public class Payment extends AuditableEntity{
     private String paymentDetails;
     @Column()
     private String paymentResponse;
-    private float amount;
+    private int amount;
 
-  @ManyToOne(fetch = FetchType.LAZY)
- private Order order;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Order order;
 
 }

@@ -12,8 +12,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 @Setter
 @NoArgsConstructor
 public class AuditableDto {
-    private String createdBy;
+    //    private String createdBy;
     private java.time.LocalDateTime createdDate;
-    private String lastModifiedBy;
-    private java.time.LocalDateTime lastModifiedDate;
+//    private String lastModifiedBy;
+//    private java.time.LocalDateTime lastModifiedDate;
 }
