@@ -76,7 +76,10 @@ public class Product extends AuditableEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private java.util.List<ProductImage> images;
 
+    private int totalSold = 0;
+
     public int getFinalPrice() {
         return (int) (price - price * discount / 100.0);
     }
+
 }

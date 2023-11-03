@@ -8,9 +8,11 @@ import com.shop.clothing.product.entity.Product;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
+@ToString
 public class AdvanceSearchAllProductsQuery extends PaginationRequest implements IRequest<Paginated<ProductBriefDto>> {
 
     private int[] categoryIds;
@@ -21,5 +23,6 @@ public class AdvanceSearchAllProductsQuery extends PaginationRequest implements 
     private int maxPrice = Integer.MAX_VALUE;
     private int[] colorIds;
     private String[] sizes;
+
 
 }

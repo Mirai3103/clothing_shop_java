@@ -2,15 +2,18 @@ package com.shop.clothing.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableCaching
 public class CachingConfig {
-@Bean
+    @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("homePage");
+        return new ConcurrentMapCacheManager("searchProduct", "homePage");
     }
 }
