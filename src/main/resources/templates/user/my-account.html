@@ -7,16 +7,12 @@
 >
   <head>
     <meta charset="UTF-8" />
-    <title>
-      Thông tin tài khoản
-    </title>
+    <title>Thông tin tài khoản</title>
   </head>
 
   <body>
     <div layout:fragment="content" class="max-w-screen-xl mx-auto">
-      <script src="/js/addressUtil.js">
-
-      </script>
+      <script src="/js/addressUtil.js"></script>
       <script th:inline="javascript">
         /*<![CDATA[*/
 
@@ -28,8 +24,7 @@
           <nav class="flex mb-5" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
               <li class="inline-flex items-center">
-                <a th:href="@{/home}"
-                   class="inline-flex items-center text-gray-700 hover:text-primary-600">
+                <a th:href="@{/home}" class="inline-flex items-center text-gray-700 hover:text-primary-600">
                   <svg
                     class="w-5 h-5 mr-2.5"
                     fill="currentColor"
@@ -57,9 +52,7 @@
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                  <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2">
-                    Tài khoản
-                  </a>
+                  <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2"> Tài khoản </a>
                 </div>
               </li>
               <li>
@@ -76,9 +69,7 @@
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                  <span class="ml-1 text-gray-400 md:ml-2" aria-current="page">
-                    Thông tin tài khoản
-                  </span>
+                  <span class="ml-1 text-gray-400 md:ml-2" aria-current="page"> Thông tin tài khoản </span>
                 </div>
               </li>
             </ol>
@@ -363,8 +354,7 @@
                     required
                   />
                 </div>
-                <div th:replace="~{components/AddressPicker::addressPicker()} ">
-                </div>
+                <div th:replace="~{components/AddressPicker::addressPicker()} "></div>
                 <div class="col-span-6 sm:col-span-3">
                   <label for="phonenumber" class="block mb-2 text-sm font-medium text-gray-900"> Số điện thoại </label>
                   <input

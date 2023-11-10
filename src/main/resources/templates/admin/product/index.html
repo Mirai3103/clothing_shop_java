@@ -99,11 +99,7 @@
               <div class="flex-1 flex items-center space-x-2">
                 <h5>
                   <span class="text-gray-500"> Tổng số sản phẩm:</span>
-                  <span class=""
-                  x-text="totalElement"
-                  >
-
-                  </span>
+                  <span class="" x-text="totalElement"> </span>
                 </h5>
               </div>
               <div
@@ -888,17 +884,18 @@
                 </thead>
                 <tbody>
                   <template x-for="p in data" :key="p.productId">
-                    <tr class="border-b hover:bg-gray-100 cursor-pointer"
-                    >
+                    <tr class="border-b hover:bg-gray-100 cursor-pointer">
                       <th
-                              x-on:click="window.location.href = '/admin/product/' + p.productId+'/view' "
-                              scope="row" class=" cursor-pointer px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        x-on:click="window.location.href = '/admin/product/' + p.productId+'/view' "
+                        scope="row"
+                        class="cursor-pointer px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
+                      >
                         <div class="flex items-center mr-3">
                           <img x-bind:src="p.displayImage" :alt="p.name" class="h-20 w-auto mr-3" />
                           <span x-text="p.name"></span>
                         </div>
                       </th>
-                      <td class="px-1 py-3 ">
+                      <td class="px-1 py-3">
                         <span
                           class="bg-green-100 text-center text-green-800 text-xs font-medium px-2 py-0.5 rounded"
                           x-text="p.category.name"
@@ -911,20 +908,26 @@
                         class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
                         x-text="'- ' + p.discount + ' %'"
                       ></td>
-                      <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
-
-                     x-text="GENDER[p.forGender]"
+                      <td
+                        class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
+                        x-text="GENDER[p.forGender]"
                       ></td>
-
 
                       <td
                         class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
                         x-text="new Date(p.lastModifiedDate||p.createdDate).toLocaleString()"
                       ></td>
-                      <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"> <input id="default-checkbox" disabled type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" readonly
-                                                                                                :checked="p.deletedDate != null"
-                      /></td>
-
+                      <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <input
+                          id="default-checkbox"
+                          disabled
+                          type="checkbox"
+                          value=""
+                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          readonly
+                          :checked="p.deletedDate != null"
+                        />
+                      </td>
                     </tr>
                   </template>
                 </tbody>
