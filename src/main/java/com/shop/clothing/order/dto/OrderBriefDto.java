@@ -8,6 +8,8 @@ import com.shop.clothing.promotion.PromotionDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 public class OrderBriefDto extends AuditableDto {
@@ -24,4 +26,5 @@ public class OrderBriefDto extends AuditableDto {
     private OrderStatus status = OrderStatus.PENDING;
     private PaymentDto latestPayment;
     private PromotionDto promotion;
+    private LocalDateTime completedDate;
 }

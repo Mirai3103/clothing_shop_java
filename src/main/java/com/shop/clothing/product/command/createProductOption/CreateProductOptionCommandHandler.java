@@ -34,8 +34,10 @@ public class CreateProductOptionCommandHandler implements IRequestHandler<Create
             newColor.setImage(null);
             colorRepository.save(newColor);
             color = newColor;
+        } else {
+            color = colorOptional.get();
         }
-        color = colorOptional.get();
+
 
         var productOption = productOptionRepository.findFirstByProductIdAndColorIdAndSize(createProductOptionCommand.getProductId(), color.getColorId(), createProductOptionCommand.getSize());
         if (productOption.isPresent()) {

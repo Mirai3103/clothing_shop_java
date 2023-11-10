@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 public class AppProperties {
     @Value("${app.host}")
     private String host ;
-    @Value("${app.owner.email}")
+    @Value("${spring.mail.username}")
     private String ownerEmail;
-    @Value("${app.owner.name}")
-    private String ownerName;
-
 
 }

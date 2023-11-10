@@ -1,6 +1,7 @@
 package com.shop.clothing.product.entity;
 
 import com.shop.clothing.common.AuditableEntity;
+import com.shop.clothing.rating.Rating;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
@@ -24,7 +25,7 @@ public class ProductOption extends AuditableEntity {
     @Column(updatable = false, nullable = false, name = "product_option_id")
     private int productOptionId;
 
-  @Column(nullable = false, name = "size", length = 50)
+    @Column(nullable = false, name = "size", length = 50)
     private String size;
 
 
@@ -42,4 +43,6 @@ public class ProductOption extends AuditableEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private Color color;
 
+    @OneToMany(mappedBy = "productOption", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private java.util.List<Rating> ratings;
 }

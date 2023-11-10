@@ -15,6 +15,7 @@ import lombok.ToString;
 @ToString
 public class AdvanceSearchAllProductsQuery extends PaginationRequest implements IRequest<Paginated<ProductBriefDto>> {
 
+
     private int[] categoryIds;
     private Product.ProductGender[] forGenders;
     @Builder.Default
@@ -23,6 +24,5 @@ public class AdvanceSearchAllProductsQuery extends PaginationRequest implements 
     private int maxPrice = Integer.MAX_VALUE;
     private int[] colorIds;
     private String[] sizes;
-
 
 }

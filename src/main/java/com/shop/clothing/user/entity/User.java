@@ -5,6 +5,7 @@ import com.shop.clothing.auth.entity.Role;
 import com.shop.clothing.cart.CartItem;
 import com.shop.clothing.order.entity.Order;
 import com.shop.clothing.order.entity.OrderItem;
+import com.shop.clothing.rating.Rating;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -79,6 +80,11 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private java.util.List<Order> orders;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private java.util.List<Rating> ratings;
+
+
 
     public List<String> getPermissions() {
 

@@ -442,9 +442,7 @@
                           x-on:click="
                           const id = $event.target.value;
                           console.log(id);
-window.confirm('Bạn có chắc chắn muốn xóa kiểu dáng này không?') &&await window.apiClient.deleteProductOption( id, null)
-$store.toast.add('success', 'Thành công', 'Xóa kiểu dáng thành công!');
-setTimeout(()=>{
+window.confirm('Bạn có chắc chắn muốn xóa kiểu dáng này không?') &&await window.apiClient.deleteProductOption( id, null)&&$store.toast.add('success', 'Thành công', 'Xóa kiểu dáng thành công!')&&setTimeout(()=>{
                                         window.location.reload();
                                     },1000);
 "

@@ -61,11 +61,19 @@ public class GetAllOrderQueryHandler implements IRequestHandler<GetAllOrderQuery
         if (getAllOrderQuery.getPaymentStatus() != null) {
             predicates = cb.and(predicates, cb.equal(paymentJoin.get("status"), getAllOrderQuery.getPaymentStatus()));
         }
-        if (getAllOrderQuery.getStartDate() != null) {
-            predicates = cb.and(predicates, cb.greaterThanOrEqualTo(root.get("createdDate"), getAllOrderQuery.getStartDate()));
+        if (getAllOrderQuery.getStartDateObj() != null) {
+            predicates = cb.and(predicates, cb.greaterThanOrEqualTo(root.get("createdDate"), getAllOrderQuery.getStartDateObj()));
         }
-        if (getAllOrderQuery.getEndDate() != null) {
-            predicates = cb.and(predicates, cb.lessThanOrEqualTo(root.get("createdDate"), getAllOrderQuery.getEndDate()));
+        if (getAllOrderQuery.getEndDateObj() != null) {
+            predicates = cb.and(predicates, cb.lessThanOrEqualTo(root.get("createdDate"), getAllOrderQuery.getEndDateObj()));
+        }
+        if (getAllOrderQuery.getKeyword() != null) {
+            predicates = cb.and(predicates, cb.or(
+                    cb.like(root.get("orderId"), "%" + getAllOrderQuery.getKeyword() + "%"),
+                    cb.like(root.get("phoneNumber"), "%" + getAllOrderQuery.getKeyword() + "%"),
+                    cb.like(root.get("email"), "%" + getAllOrderQuery.getKeyword() + "%"),
+                    cb.like(root.get("customerName"), "%" + getAllOrderQuery.getKeyword() + "%")
+            ));
         }
         String sortField = getAllOrderQuery.getSortField();
 
@@ -85,7 +93,7 @@ public class GetAllOrderQueryHandler implements IRequestHandler<GetAllOrderQuery
         query.setFirstResult((getAllOrderQuery.getPage() - 1) * getAllOrderQuery.getPageSize());
         query.setMaxResults(getAllOrderQuery.getPageSize());
         var orders = query.getResultList();
-        Collection<OrderBriefDto> orderBriefDtos = orders.stream().map(tuple ->{
+        Collection<OrderBriefDto> orderBriefDtos = orders.stream().map(tuple -> {
             var order = tuple.get(0, Order.class);
             var payment = tuple.get(1, Payment.class);
             var orderBriefDto = _mapper.map(order, OrderBriefDto.class);

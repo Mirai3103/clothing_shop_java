@@ -115,4 +115,11 @@ public class ClientUtil {
             case FAILED -> "Thanh toán thất bại";
         };
     }
+
+    public OrderStatus[] orderStatuses() {
+        return OrderStatus.values();
+    }
+    public PaymentStatus[] paymentStatuses() {
+        return PaymentStatus.values();
+    }
 }

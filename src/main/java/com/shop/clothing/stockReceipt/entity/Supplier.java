@@ -12,7 +12,8 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @Table
-
+@SQLDelete(sql = "UPDATE product SET deleted_date = NOW() WHERE product_id = ?")
+@Where(clause = "deleted_date is null")
 public class Supplier {
     @Id
     private int supplierId;
@@ -21,6 +22,6 @@ public class Supplier {
     private String phone;
     private String email;
     private String description;
-@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "supplier")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "supplier")
     private java.util.List<StockReceipt> stockReceipts;
 }

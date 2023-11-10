@@ -12,6 +12,7 @@ async function fetchWard(districtCode) {
     const response = await axios.get("/data/xa-phuong/" + districtCode + ".json");
     return Object.values(response.data);
 }
+
 function toFullAddress({
                            provinces,
                            districts,
@@ -26,6 +27,7 @@ function toFullAddress({
     let ward = wards.find((w) => w.code == selectedWard);
     return `${detailAddress}, ${ward.name_with_type}, ${district.name_with_type}, ${province.name_with_type}`;
 }
+
 async function toAddress(fullAddress) {
     let address = fullAddress.split(",");
     let provinceIndex = address.length - 1;
@@ -43,6 +45,10 @@ async function toAddress(fullAddress) {
     );
 
     let wards = await fetchWard(district.code);
+    console.log({
+        wards: wards,
+        raw: address[wardIndex].trim().toLowerCase(),
+    })
     let ward = wards.find((w) => w.name_with_type.toLowerCase().endsWith(address[wardIndex].trim().toLowerCase()));
     console.log(province, district, ward);
     return {
@@ -63,10 +69,22 @@ document.addEventListener('alpine:init', () => {
         wards: [],
         selectedProvince: '',
         selectedDistrict: '',
-        selectedWard:'',
+        selectedWard: '',
         detailAddress: '',
         getfullAddress() {
             return toFullAddress(this);
-        }
+        },
+        isValidAddress() {
+            return this.selectedProvince && this.selectedDistrict && this.selectedWard && this.detailAddress;
+        },
+        getSelectedProvinceName() {
+            return this.provinces.find((p) => p.code == this.selectedProvince).name_with_type;
+        },
+        getSelectedDistrictName() {
+            return this.districts.find((d) => d.code == this.selectedDistrict).name_with_type;
+        },
+        getSelectedWardName() {
+            return this.wards.find((w) => w.code == this.selectedWard).name_with_type;
+        },
     }))
 })

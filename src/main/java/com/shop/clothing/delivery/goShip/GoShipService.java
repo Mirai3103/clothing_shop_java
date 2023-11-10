@@ -7,6 +7,7 @@ import com.shop.clothing.delivery.dto.CreateShipOrderResponse;
 import com.shop.clothing.delivery.dto.GetValidShipServiceRequest;
 import com.shop.clothing.delivery.dto.GetValidShipServiceResponse;
 import com.shop.clothing.order.entity.enums.OrderStatus;
+import com.shop.clothing.shop.ShopSetting;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -25,13 +26,14 @@ import java.util.UUID;
 public class GoShipService implements IDeliveryService {
     private final IAddressService addressService;
     private final GoShipProperties goShipProperties;
+    private final ShopSetting shopSetting;
 
 
     @Override
     public List<GetValidShipServiceResponse> getValidShipService(GetValidShipServiceRequest request) {
-        var fromCityId = addressService.findProvinceId(goShipProperties.getShopCity());
+        var fromCityId = addressService.findProvinceId(shopSetting.getShopCity());
         var toCityId = addressService.findProvinceId(request.getToCity());
-        var fromDistrictId = addressService.findDistrictId(goShipProperties.getShopDistrict(), fromCityId);
+        var fromDistrictId = addressService.findDistrictId(shopSetting.getShopDistrict(), fromCityId);
         var toDistrictId = addressService.findDistrictId(request.getToDistrict(), toCityId);
         var restTemplate = new RestTemplate();
         var accessToken = goShipProperties.getAccessToken();
@@ -94,14 +96,14 @@ public class GoShipService implements IDeliveryService {
 
     @Override
     public CreateShipOrderResponse createOrder(CreateShipOrderRequest request) {
-        var a = goShipProperties.getShopCity();
-        var fromCityId = addressService.findProvinceId(goShipProperties.getShopCity());
+
+        var fromCityId = addressService.findProvinceId(shopSetting.getShopCity());
         var toCityId = addressService.findProvinceId(request.getToProvince());
-        var fromDistrictId = addressService.findDistrictId(goShipProperties.getShopDistrict(), fromCityId);
+        var fromDistrictId = addressService.findDistrictId(shopSetting.getShopDistrict(), fromCityId);
         var toDistrictId = addressService.findDistrictId(request.getToDistrict(), toCityId);
-        var fromWardId = addressService.findWardId(goShipProperties.getShopWard(), fromDistrictId);
+        var fromWardId = addressService.findWardId(shopSetting.getShopWard(), fromDistrictId);
         var toWardId = addressService.findWardId(request.getToWard(), toDistrictId);
-        var fromStreetId = goShipProperties.getShopStreet();
+        var fromStreetId = shopSetting.getShopStreet();
         var toStreetId = request.getToDetailAddress();
         var restTemplate = new RestTemplate();
         var accessToken = goShipProperties.getAccessToken();
@@ -110,8 +112,8 @@ public class GoShipService implements IDeliveryService {
         headers.set("Content-Type", "application/json");
         JSONObject shipment = new JSONObject();
         JSONObject addressFrom = new JSONObject();
-        addressFrom.put("name", goShipProperties.getShopName());
-        addressFrom.put("phone", goShipProperties.getShopPhone());
+        addressFrom.put("name", shopSetting.getShopName());
+        addressFrom.put("phone", shopSetting.getShopPhone());
         addressFrom.put("street", fromStreetId);
         addressFrom.put("ward", fromWardId);
         addressFrom.put("district", fromDistrictId);

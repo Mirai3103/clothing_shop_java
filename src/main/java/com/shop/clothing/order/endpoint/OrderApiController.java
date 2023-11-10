@@ -3,6 +3,7 @@ package com.shop.clothing.order.endpoint;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.common.dto.Paginated;
 import com.shop.clothing.order.command.createOrder.CreateOrderCommand;
+import com.shop.clothing.order.command.updateStatus.UpdateOrderStatusCommand;
 import com.shop.clothing.order.dto.OrderBriefDto;
 import com.shop.clothing.order.query.getAllOrders.GetAllOrderQuery;
 import jakarta.validation.Valid;
@@ -31,5 +32,13 @@ public class OrderApiController {
         System.err.println("================================");
         return ResponseEntity.ok(sender.send(getAllOrderQuery).orThrow());
     }
+
+    @PatchMapping("/updateStatus")
+    @PreAuthorize("hasAuthority('UPDATE_ORDER')")
+    public ResponseEntity<Void> updateOrderStatus(@Valid @RequestBody UpdateOrderStatusCommand updateOrderStatusCommand) {
+        var result = sender.send(updateOrderStatusCommand);
+        return ResponseEntity.ok(result.orThrow());
+    }
+
 
 }

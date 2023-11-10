@@ -446,6 +446,57 @@ class Client {
     /**
      * @return OK
      */
+    updateShopSetting(body: UpdateShopInfoCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/shop-setting/update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateShopSetting(_response);
+        });
+    }
+
+    protected processUpdateShopSetting(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     createProduct(body: CreateProductCommand, cancelToken?: CancelToken | undefined): Promise<number> {
         let url_ = this.baseUrl + "/api/product/create";
         url_ = url_.replace(/[?&]$/, "");
@@ -1062,6 +1113,57 @@ class Client {
     }
 
     /**
+     * @return OK
+     */
+    updateOrderStatus(body: UpdateOrderStatusCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/order/updateStatus";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateOrderStatus(_response);
+        });
+    }
+
+    protected processUpdateOrderStatus(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
      * @param code (optional) 
      * @param orderValue (optional) 
      * @return OK
@@ -1174,6 +1276,112 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<ProductDetailDto>(null as any);
+    }
+
+    /**
+     * @param categoryIds (optional) 
+     * @param forGenders (optional) 
+     * @param minPrice (optional) 
+     * @param maxPrice (optional) 
+     * @param colorIds (optional) 
+     * @param sizes (optional) 
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param sortField (optional) 
+     * @param sortDir (optional) 
+     * @param keyword (optional) 
+     * @return OK
+     */
+    searchProducts(categoryIds: number[] | undefined, forGenders: ForGenders[] | undefined, minPrice: number | undefined, maxPrice: number | undefined, colorIds: number[] | undefined, sizes: string[] | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedProductBriefDto> {
+        let url_ = this.baseUrl + "/api/product/search?";
+        if (categoryIds === null)
+            throw new Error("The parameter 'categoryIds' cannot be null.");
+        else if (categoryIds !== undefined)
+            categoryIds && categoryIds.forEach(item => { url_ += "categoryIds=" + encodeURIComponent("" + item) + "&"; });
+        if (forGenders === null)
+            throw new Error("The parameter 'forGenders' cannot be null.");
+        else if (forGenders !== undefined)
+            forGenders && forGenders.forEach(item => { url_ += "forGenders=" + encodeURIComponent("" + item) + "&"; });
+        if (minPrice === null)
+            throw new Error("The parameter 'minPrice' cannot be null.");
+        else if (minPrice !== undefined)
+            url_ += "minPrice=" + encodeURIComponent("" + minPrice) + "&";
+        if (maxPrice === null)
+            throw new Error("The parameter 'maxPrice' cannot be null.");
+        else if (maxPrice !== undefined)
+            url_ += "maxPrice=" + encodeURIComponent("" + maxPrice) + "&";
+        if (colorIds === null)
+            throw new Error("The parameter 'colorIds' cannot be null.");
+        else if (colorIds !== undefined)
+            colorIds && colorIds.forEach(item => { url_ += "colorIds=" + encodeURIComponent("" + item) + "&"; });
+        if (sizes === null)
+            throw new Error("The parameter 'sizes' cannot be null.");
+        else if (sizes !== undefined)
+            sizes && sizes.forEach(item => { url_ += "sizes=" + encodeURIComponent("" + item) + "&"; });
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSearchProducts(_response);
+        });
+    }
+
+    protected processSearchProducts(response: AxiosResponse): Promise<PaginatedProductBriefDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PaginatedProductBriefDto.fromJS(resultData200);
+            return Promise.resolve<PaginatedProductBriefDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PaginatedProductBriefDto>(null as any);
     }
 
     /**
@@ -1291,7 +1499,7 @@ class Client {
      * @param keyword (optional) 
      * @return OK
      */
-    getAllOrders(paymentStatus: PaymentStatus | undefined, startDate: Date | undefined, endDate: Date | undefined, orderStatus: OrderStatus | undefined, amountFrom: number | undefined, amountTo: number | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedOrderBriefDto> {
+    getAllOrders(paymentStatus: PaymentStatus | undefined, startDate: number | undefined, endDate: number | undefined, orderStatus: OrderStatus | undefined, amountFrom: number | undefined, amountTo: number | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedOrderBriefDto> {
         let url_ = this.baseUrl + "/api/order?";
         if (paymentStatus === null)
             throw new Error("The parameter 'paymentStatus' cannot be null.");
@@ -1300,11 +1508,11 @@ class Client {
         if (startDate === null)
             throw new Error("The parameter 'startDate' cannot be null.");
         else if (startDate !== undefined)
-            url_ += "startDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+            url_ += "startDate=" + encodeURIComponent("" + startDate) + "&";
         if (endDate === null)
             throw new Error("The parameter 'endDate' cannot be null.");
         else if (endDate !== undefined)
-            url_ += "endDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+            url_ += "endDate=" + encodeURIComponent("" + endDate) + "&";
         if (orderStatus === null)
             throw new Error("The parameter 'orderStatus' cannot be null.");
         else if (orderStatus !== undefined)
@@ -2315,6 +2523,86 @@ interface IUpdateProfileCommand {
     [key: string]: any;
 }
 
+class UpdateShopInfoCommand implements IUpdateShopInfoCommand {
+    shopName!: string;
+    shopPhone?: string;
+    shopEmail?: string;
+    shopCity!: string;
+    shopWard!: string;
+    shopDistrict!: string;
+    shopStreet!: string;
+    shopOwner!: string;
+    shopLogo?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IUpdateShopInfoCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.shopName = _data["shopName"];
+            this.shopPhone = _data["shopPhone"];
+            this.shopEmail = _data["shopEmail"];
+            this.shopCity = _data["shopCity"];
+            this.shopWard = _data["shopWard"];
+            this.shopDistrict = _data["shopDistrict"];
+            this.shopStreet = _data["shopStreet"];
+            this.shopOwner = _data["shopOwner"];
+            this.shopLogo = _data["shopLogo"];
+        }
+    }
+
+    static fromJS(data: any): UpdateShopInfoCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateShopInfoCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["shopName"] = this.shopName;
+        data["shopPhone"] = this.shopPhone;
+        data["shopEmail"] = this.shopEmail;
+        data["shopCity"] = this.shopCity;
+        data["shopWard"] = this.shopWard;
+        data["shopDistrict"] = this.shopDistrict;
+        data["shopStreet"] = this.shopStreet;
+        data["shopOwner"] = this.shopOwner;
+        data["shopLogo"] = this.shopLogo;
+        return data;
+    }
+}
+
+interface IUpdateShopInfoCommand {
+    shopName: string;
+    shopPhone?: string;
+    shopEmail?: string;
+    shopCity: string;
+    shopWard: string;
+    shopDistrict: string;
+    shopStreet: string;
+    shopOwner: string;
+    shopLogo?: string;
+
+    [key: string]: any;
+}
+
 class CreateProductCommand implements ICreateProductCommand {
     name!: string;
     forGender?: CreateProductCommandForGender;
@@ -2322,7 +2610,6 @@ class CreateProductCommand implements ICreateProductCommand {
     price!: number;
     discount?: number;
     displayImage!: string;
-    brandId?: number;
     categoryId!: number;
 
     [key: string]: any;
@@ -2348,7 +2635,6 @@ class CreateProductCommand implements ICreateProductCommand {
             this.price = _data["price"];
             this.discount = _data["discount"];
             this.displayImage = _data["displayImage"];
-            this.brandId = _data["brandId"];
             this.categoryId = _data["categoryId"];
         }
     }
@@ -2372,7 +2658,6 @@ class CreateProductCommand implements ICreateProductCommand {
         data["price"] = this.price;
         data["discount"] = this.discount;
         data["displayImage"] = this.displayImage;
-        data["brandId"] = this.brandId;
         data["categoryId"] = this.categoryId;
         return data;
     }
@@ -2385,7 +2670,6 @@ interface ICreateProductCommand {
     price: number;
     discount?: number;
     displayImage: string;
-    brandId?: number;
     categoryId: number;
 
     [key: string]: any;
@@ -3142,6 +3426,58 @@ interface IAddToCartCommand {
     [key: string]: any;
 }
 
+class UpdateOrderStatusCommand implements IUpdateOrderStatusCommand {
+    orderId?: string;
+    status?: UpdateOrderStatusCommandStatus;
+
+    [key: string]: any;
+
+    constructor(data?: IUpdateOrderStatusCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.orderId = _data["orderId"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): UpdateOrderStatusCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateOrderStatusCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["orderId"] = this.orderId;
+        data["status"] = this.status;
+        return data;
+    }
+}
+
+interface IUpdateOrderStatusCommand {
+    orderId?: string;
+    status?: UpdateOrderStatusCommandStatus;
+
+    [key: string]: any;
+}
+
 class UserDto implements IUserDto {
     userId?: string;
     firstName?: string;
@@ -3335,10 +3671,7 @@ interface IPromotionDto {
 }
 
 class CategoryBriefDto implements ICategoryBriefDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     categoryId?: number;
     name?: string;
     parent?: CategoryBriefDto;
@@ -3360,10 +3693,7 @@ class CategoryBriefDto implements ICategoryBriefDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.categoryId = _data["categoryId"];
             this.name = _data["name"];
             this.parent = _data["parent"] ? CategoryBriefDto.fromJS(_data["parent"]) : <any>undefined;
@@ -3383,10 +3713,7 @@ class CategoryBriefDto implements ICategoryBriefDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
         data["categoryId"] = this.categoryId;
         data["name"] = this.name;
         data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
@@ -3395,10 +3722,7 @@ class CategoryBriefDto implements ICategoryBriefDto {
 }
 
 interface ICategoryBriefDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     categoryId?: number;
     name?: string;
     parent?: CategoryBriefDto;
@@ -3463,10 +3787,7 @@ interface IColorDto {
 }
 
 class ProductDetailDto implements IProductDetailDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     productId?: number;
     name?: string;
     forGender?: ProductDetailDtoForGender;
@@ -3479,9 +3800,9 @@ class ProductDetailDto implements IProductDetailDto {
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
+    forGenderDisplay?: string;
     finalPrice?: number;
     vietnamesePrice?: string;
-    forGenderDisplay?: string;
 
     [key: string]: any;
 
@@ -3500,10 +3821,7 @@ class ProductDetailDto implements IProductDetailDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.productId = _data["productId"];
             this.name = _data["name"];
             this.forGender = _data["forGender"];
@@ -3524,9 +3842,9 @@ class ProductDetailDto implements IProductDetailDto {
                     this.images!.push(ProductImageDto.fromJS(item));
             }
             this.description = _data["description"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
         }
     }
 
@@ -3543,10 +3861,7 @@ class ProductDetailDto implements IProductDetailDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
         data["productId"] = this.productId;
         data["name"] = this.name;
         data["forGender"] = this.forGender;
@@ -3567,18 +3882,15 @@ class ProductDetailDto implements IProductDetailDto {
                 data["images"].push(item.toJSON());
         }
         data["description"] = this.description;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         return data;
     }
 }
 
 interface IProductDetailDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     productId?: number;
     name?: string;
     forGender?: ProductDetailDtoForGender;
@@ -3591,9 +3903,9 @@ interface IProductDetailDto {
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
+    forGenderDisplay?: string;
     finalPrice?: number;
     vietnamesePrice?: string;
-    forGenderDisplay?: string;
 
     [key: string]: any;
 }
@@ -3651,10 +3963,7 @@ interface IProductImageDto {
 }
 
 class ProductOptionDto implements IProductOptionDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     productOptionId?: number;
     size?: string;
     stock?: number;
@@ -3678,10 +3987,7 @@ class ProductOptionDto implements IProductOptionDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.productOptionId = _data["productOptionId"];
             this.size = _data["size"];
             this.stock = _data["stock"];
@@ -3703,10 +4009,7 @@ class ProductOptionDto implements IProductOptionDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
         data["productOptionId"] = this.productOptionId;
         data["size"] = this.size;
         data["stock"] = this.stock;
@@ -3717,10 +4020,7 @@ class ProductOptionDto implements IProductOptionDto {
 }
 
 interface IProductOptionDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     productOptionId?: number;
     size?: string;
     stock?: number;
@@ -3811,10 +4111,7 @@ interface IPaginatedProductBriefDto {
 }
 
 class ProductBriefDto implements IProductBriefDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     productId?: number;
     name?: string;
     forGender?: ProductBriefDtoForGender;
@@ -3824,9 +4121,9 @@ class ProductBriefDto implements IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
+    forGenderDisplay?: string;
     finalPrice?: number;
     vietnamesePrice?: string;
-    forGenderDisplay?: string;
 
     [key: string]: any;
 
@@ -3845,10 +4142,7 @@ class ProductBriefDto implements IProductBriefDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.productId = _data["productId"];
             this.name = _data["name"];
             this.forGender = _data["forGender"];
@@ -3858,9 +4152,9 @@ class ProductBriefDto implements IProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
         }
     }
 
@@ -3877,10 +4171,7 @@ class ProductBriefDto implements IProductBriefDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
         data["productId"] = this.productId;
         data["name"] = this.name;
         data["forGender"] = this.forGender;
@@ -3890,18 +4181,15 @@ class ProductBriefDto implements IProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         return data;
     }
 }
 
 interface IProductBriefDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     productId?: number;
     name?: string;
     forGender?: ProductBriefDtoForGender;
@@ -3911,18 +4199,15 @@ interface IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
+    forGenderDisplay?: string;
     finalPrice?: number;
     vietnamesePrice?: string;
-    forGenderDisplay?: string;
 
     [key: string]: any;
 }
 
 class OrderBriefDto implements IOrderBriefDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     orderId?: string;
     customerName?: string;
     address?: string;
@@ -3936,6 +4221,7 @@ class OrderBriefDto implements IOrderBriefDto {
     status?: OrderBriefDtoStatus;
     latestPayment?: PaymentDto;
     promotion?: PromotionDto;
+    completedDate?: Date;
 
     [key: string]: any;
 
@@ -3954,10 +4240,7 @@ class OrderBriefDto implements IOrderBriefDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.orderId = _data["orderId"];
             this.customerName = _data["customerName"];
             this.address = _data["address"];
@@ -3971,6 +4254,7 @@ class OrderBriefDto implements IOrderBriefDto {
             this.status = _data["status"];
             this.latestPayment = _data["latestPayment"] ? PaymentDto.fromJS(_data["latestPayment"]) : <any>undefined;
             this.promotion = _data["promotion"] ? PromotionDto.fromJS(_data["promotion"]) : <any>undefined;
+            this.completedDate = _data["completedDate"] ? new Date(_data["completedDate"].toString()) : <any>undefined;
         }
     }
 
@@ -3987,10 +4271,7 @@ class OrderBriefDto implements IOrderBriefDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
         data["orderId"] = this.orderId;
         data["customerName"] = this.customerName;
         data["address"] = this.address;
@@ -4004,15 +4285,13 @@ class OrderBriefDto implements IOrderBriefDto {
         data["status"] = this.status;
         data["latestPayment"] = this.latestPayment ? this.latestPayment.toJSON() : <any>undefined;
         data["promotion"] = this.promotion ? this.promotion.toJSON() : <any>undefined;
+        data["completedDate"] = this.completedDate ? this.completedDate.toISOString() : <any>undefined;
         return data;
     }
 }
 
 interface IOrderBriefDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     orderId?: string;
     customerName?: string;
     address?: string;
@@ -4026,6 +4305,7 @@ interface IOrderBriefDto {
     status?: OrderBriefDtoStatus;
     latestPayment?: PaymentDto;
     promotion?: PromotionDto;
+    completedDate?: Date;
 
     [key: string]: any;
 }
@@ -4315,10 +4595,7 @@ interface ICartItemDto {
 }
 
 class ProductOptionDetailDto implements IProductOptionDetailDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     productOptionId?: number;
     size?: string;
     stock?: number;
@@ -4326,8 +4603,8 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
     color?: ColorDto;
     product?: ProductBriefDto;
     quantity?: number;
-    finalPrice?: number;
     finalPriceDisplay?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 
@@ -4346,10 +4623,7 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.createdBy = _data["createdBy"];
             this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.lastModifiedBy = _data["lastModifiedBy"];
-            this.lastModifiedDate = _data["lastModifiedDate"] ? new Date(_data["lastModifiedDate"].toString()) : <any>undefined;
             this.productOptionId = _data["productOptionId"];
             this.size = _data["size"];
             this.stock = _data["stock"];
@@ -4357,8 +4631,8 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
             this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : <any>undefined;
             this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : <any>undefined;
             this.quantity = _data["quantity"];
-            this.finalPrice = _data["finalPrice"];
             this.finalPriceDisplay = _data["finalPriceDisplay"];
+            this.finalPrice = _data["finalPrice"];
         }
     }
 
@@ -4375,10 +4649,7 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["createdBy"] = this.createdBy;
         data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["lastModifiedBy"] = this.lastModifiedBy;
-        data["lastModifiedDate"] = this.lastModifiedDate ? this.lastModifiedDate.toISOString() : <any>undefined;
         data["productOptionId"] = this.productOptionId;
         data["size"] = this.size;
         data["stock"] = this.stock;
@@ -4386,17 +4657,14 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
         data["color"] = this.color ? this.color.toJSON() : <any>undefined;
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         data["quantity"] = this.quantity;
-        data["finalPrice"] = this.finalPrice;
         data["finalPriceDisplay"] = this.finalPriceDisplay;
+        data["finalPrice"] = this.finalPrice;
         return data;
     }
 }
 
 interface IProductOptionDetailDto {
-    createdBy?: string;
     createdDate?: Date;
-    lastModifiedBy?: string;
-    lastModifiedDate?: Date;
     productOptionId?: number;
     size?: string;
     stock?: number;
@@ -4404,8 +4672,8 @@ interface IProductOptionDetailDto {
     color?: ColorDto;
     product?: ProductBriefDto;
     quantity?: number;
-    finalPrice?: number;
     finalPriceDisplay?: string;
+    finalPrice?: number;
 
     [key: string]: any;
 }
@@ -4554,6 +4822,12 @@ interface IBody2 {
     [key: string]: any;
 }
 
+enum ForGenders {
+    FOR_MALE = "FOR_MALE",
+    FOR_FEMALE = "FOR_FEMALE",
+    FOR_BOTH = "FOR_BOTH",
+}
+
 enum ForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
@@ -4600,6 +4874,16 @@ enum CreateOrderCommandPaymentMethod {
     COD = "COD",
     MOMO_QR = "MOMO_QR",
     MOMO_ATM = "MOMO_ATM",
+}
+
+enum UpdateOrderStatusCommandStatus {
+    PENDING = "PENDING",
+    PROCESSING = "PROCESSING",
+    SHIPPING = "SHIPPING",
+    DELIVERED = "DELIVERED",
+    CANCELLED = "CANCELLED",
+    RETURNED = "RETURNED",
+    REFUNDED = "REFUNDED",
 }
 
 enum PromotionDtoType {
