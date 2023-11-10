@@ -11,13 +11,53 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const orderId = [[${order.orderId}]];
+        const orderStatus = [[${order.status}]];
+        const paymentStatus = [[${order.latestPayment.status}]];
+        const paymentId = [[${order.latestPayment.paymentId}]];
+    </script>
     <section
+            x-data="{
+                isUpdating: false,
+                saveChange: async function () {
+                this.isUpdating = true;
+                    const newOrderStatus = document.getElementById('orderStatus').value;
+                    const newPaymentStatus = document.getElementById('paymentStatus').value;
+                    const listPromise = [];
+                   if(newOrderStatus !== orderStatus){
+                        listPromise.push( window.apiClient.updateOrderStatus({
+                    orderId: orderId,
+                     status: newOrderStatus
+                    }));
+                   }
+                     if(newPaymentStatus !== paymentStatus){
+                            listPromise.push( window.apiClient.updatePaymentStatus({
+                        status: newPaymentStatus,
+                        paymentId: paymentId
+                      }));
+                     }
+                     try {
+                        await Promise.all(listPromise);
+                        $store.toast.add('success', 'Thành công', 'Cập nhật thành công');
+                     } catch (e) {
+                        $store.toast.add('error', 'Thất bại', 'Cập nhật thất bại');
+                        console.log({e});
+                     }finally {
+                        this.isUpdating = false;
+                     }
+}
+
+            }"
             class="bg-gray-50 p-3 sm:p-5 antialiased">
         <div class="flex justify-between">
             <h2 class="font-bold text-2xl mb-4">Chi tiết đơn hàng</h2>
-                <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none ">Lưu thay  đổi
-                </button>
-
+            <button
+                    x-on:click="saveChange()"
+                    class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none ">
+                Lưu thay đổi
+            </button>
         </div>
 
         <div class="mx-auto max-w-screen-2xl bg-white rounded-md shadow-lg px-2 py-4 lg:px-8">
@@ -159,7 +199,7 @@
                             </span>
 
                             <select
-
+                                    id="paymentStatus"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 ">
                                 <th:block th:each="status : ${@clientUtil.paymentStatuses()}">
                                     <option th:value="${status}" th:text="${@clientUtil.toReadableString(status)}"

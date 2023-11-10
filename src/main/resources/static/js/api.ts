@@ -27,6 +27,110 @@ class Client {
     /**
      * @return OK
      */
+    updateSupplier(id: number, body: UpdateSupplierCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/supplier/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateSupplier(_response);
+        });
+    }
+
+    protected processUpdateSupplier(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    deleteSupplier(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/supplier/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDeleteSupplier(_response);
+        });
+    }
+
+    protected processDeleteSupplier(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     updateProduct(body: UpdateProductCommand, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/product/update";
         url_ = url_.replace(/[?&]$/, "");
@@ -441,6 +545,194 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param sortField (optional) 
+     * @param sortDir (optional) 
+     * @param keyword (optional) 
+     * @return OK
+     */
+    getAllReceipts(page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedSupplierDto> {
+        let url_ = this.baseUrl + "/api/supplier/?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllReceipts(_response);
+        });
+    }
+
+    protected processGetAllReceipts(response: AxiosResponse): Promise<PaginatedSupplierDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PaginatedSupplierDto.fromJS(resultData200);
+            return Promise.resolve<PaginatedSupplierDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PaginatedSupplierDto>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    createSupplier(body: CreateSupplierCommand, cancelToken?: CancelToken | undefined): Promise<number> {
+        let url_ = this.baseUrl + "/api/supplier/";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateSupplier(_response);
+        });
+    }
+
+    protected processCreateSupplier(response: AxiosResponse): Promise<number> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return Promise.resolve<number>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<number>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    createReceipt(body: CreateStockReceiptCommand, cancelToken?: CancelToken | undefined): Promise<number> {
+        let url_ = this.baseUrl + "/api/stock-receipt/";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateReceipt(_response);
+        });
+    }
+
+    protected processCreateReceipt(response: AxiosResponse): Promise<number> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return Promise.resolve<number>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<number>(null as any);
     }
 
     /**
@@ -1092,6 +1384,57 @@ class Client {
     }
 
     protected processAddToCart(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    updatePaymentStatus(body: UpdatePaymentStatusCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/payment/update-status";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdatePaymentStatus(_response);
+        });
+    }
+
+    protected processUpdatePaymentStatus(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1789,6 +2132,56 @@ class Client {
     /**
      * @return OK
      */
+    deleteReceipt(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/stock-receipt/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDeleteReceipt(_response);
+        });
+    }
+
+    protected processDeleteReceipt(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     deleteProductOption(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/product-option/{id}";
         if (id === undefined || id === null)
@@ -1988,6 +2381,111 @@ class Client {
     }
 }
 
+class GetAllReceiptsClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
+
+    }
+
+    /**
+     * @param supplierId (optional) 
+     * @param totalFrom (optional) 
+     * @param totalTo (optional) 
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param sortField (optional) 
+     * @param sortDir (optional) 
+     * @param keyword (optional) 
+     * @return OK
+     */
+    1(supplierId: number | undefined, totalFrom: number | undefined, totalTo: number | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedStockReceiptBriefDto> {
+        let url_ = this.baseUrl + "/api/stock-receipt/?";
+        if (supplierId === null)
+            throw new Error("The parameter 'supplierId' cannot be null.");
+        else if (supplierId !== undefined)
+            url_ += "supplierId=" + encodeURIComponent("" + supplierId) + "&";
+        if (totalFrom === null)
+            throw new Error("The parameter 'totalFrom' cannot be null.");
+        else if (totalFrom !== undefined)
+            url_ += "totalFrom=" + encodeURIComponent("" + totalFrom) + "&";
+        if (totalTo === null)
+            throw new Error("The parameter 'totalTo' cannot be null.");
+        else if (totalTo !== undefined)
+            url_ += "totalTo=" + encodeURIComponent("" + totalTo) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.process1(_response);
+        });
+    }
+
+    protected process1(response: AxiosResponse): Promise<PaginatedStockReceiptBriefDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PaginatedStockReceiptBriefDto.fromJS(resultData200);
+            return Promise.resolve<PaginatedStockReceiptBriefDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PaginatedStockReceiptBriefDto>(null as any);
+    }
+}
+
 class CreateCategoryClient {
     private instance: AxiosInstance;
     private baseUrl: string;
@@ -2117,6 +2615,74 @@ class ClearCartClient {
         }
         return Promise.resolve<void>(null as any);
     }
+}
+
+class UpdateSupplierCommand implements IUpdateSupplierCommand {
+    supplierId?: number;
+    name!: string;
+    address!: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IUpdateSupplierCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.supplierId = _data["supplierId"];
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): UpdateSupplierCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateSupplierCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["supplierId"] = this.supplierId;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+interface IUpdateSupplierCommand {
+    supplierId?: number;
+    name: string;
+    address: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+
+    [key: string]: any;
 }
 
 class UpdateProductCommand implements IUpdateProductCommand {
@@ -2519,6 +3085,190 @@ interface IUpdateProfileCommand {
     email?: string;
     address?: string;
     phoneNumber?: string;
+
+    [key: string]: any;
+}
+
+class CreateSupplierCommand implements ICreateSupplierCommand {
+    name!: string;
+    address!: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+
+    [key: string]: any;
+
+    constructor(data?: ICreateSupplierCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): CreateSupplierCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateSupplierCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+interface ICreateSupplierCommand {
+    name: string;
+    address: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+
+    [key: string]: any;
+}
+
+class CreateItemCommand implements ICreateItemCommand {
+    productOptionId?: number;
+    quantity?: number;
+    price?: number;
+
+    [key: string]: any;
+
+    constructor(data?: ICreateItemCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.productOptionId = _data["productOptionId"];
+            this.quantity = _data["quantity"];
+            this.price = _data["price"];
+        }
+    }
+
+    static fromJS(data: any): CreateItemCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateItemCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["productOptionId"] = this.productOptionId;
+        data["quantity"] = this.quantity;
+        data["price"] = this.price;
+        return data;
+    }
+}
+
+interface ICreateItemCommand {
+    productOptionId?: number;
+    quantity?: number;
+    price?: number;
+
+    [key: string]: any;
+}
+
+class CreateStockReceiptCommand implements ICreateStockReceiptCommand {
+    note?: string;
+    supplierId?: number;
+    stockReceiptItems?: CreateItemCommand[];
+
+    [key: string]: any;
+
+    constructor(data?: ICreateStockReceiptCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.note = _data["note"];
+            this.supplierId = _data["supplierId"];
+            if (Array.isArray(_data["stockReceiptItems"])) {
+                this.stockReceiptItems = [] as any;
+                for (let item of _data["stockReceiptItems"])
+                    this.stockReceiptItems!.push(CreateItemCommand.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CreateStockReceiptCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateStockReceiptCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["note"] = this.note;
+        data["supplierId"] = this.supplierId;
+        if (Array.isArray(this.stockReceiptItems)) {
+            data["stockReceiptItems"] = [];
+            for (let item of this.stockReceiptItems)
+                data["stockReceiptItems"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+interface ICreateStockReceiptCommand {
+    note?: string;
+    supplierId?: number;
+    stockReceiptItems?: CreateItemCommand[];
 
     [key: string]: any;
 }
@@ -3426,6 +4176,58 @@ interface IAddToCartCommand {
     [key: string]: any;
 }
 
+class UpdatePaymentStatusCommand implements IUpdatePaymentStatusCommand {
+    paymentId?: string;
+    status?: UpdatePaymentStatusCommandStatus;
+
+    [key: string]: any;
+
+    constructor(data?: IUpdatePaymentStatusCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.paymentId = _data["paymentId"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePaymentStatusCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePaymentStatusCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["paymentId"] = this.paymentId;
+        data["status"] = this.status;
+        return data;
+    }
+}
+
+interface IUpdatePaymentStatusCommand {
+    paymentId?: string;
+    status?: UpdatePaymentStatusCommandStatus;
+
+    [key: string]: any;
+}
+
 class UpdateOrderStatusCommand implements IUpdateOrderStatusCommand {
     orderId?: string;
     status?: UpdateOrderStatusCommandStatus;
@@ -3488,8 +4290,8 @@ class UserDto implements IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    emailVerified?: boolean;
     customer?: boolean;
+    emailVerified?: boolean;
     accountEnabled?: boolean;
 
     [key: string]: any;
@@ -3522,8 +4324,8 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
-            this.emailVerified = _data["emailVerified"];
             this.customer = _data["customer"];
+            this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
         }
     }
@@ -3554,8 +4356,8 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["emailVerified"] = this.emailVerified;
         data["customer"] = this.customer;
+        data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
         return data;
     }
@@ -3571,9 +4373,305 @@ interface IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    emailVerified?: boolean;
     customer?: boolean;
+    emailVerified?: boolean;
     accountEnabled?: boolean;
+
+    [key: string]: any;
+}
+
+class PaginatedSupplierDto implements IPaginatedSupplierDto {
+    data?: SupplierDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+
+    constructor(data?: IPaginatedSupplierDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(SupplierDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedSupplierDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedSupplierDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+
+interface IPaginatedSupplierDto {
+    data?: SupplierDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+}
+
+class SupplierDto implements ISupplierDto {
+    supplierId?: number;
+    name?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+
+    [key: string]: any;
+
+    constructor(data?: ISupplierDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.supplierId = _data["supplierId"];
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.phone = _data["phone"];
+            this.email = _data["email"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): SupplierDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SupplierDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["supplierId"] = this.supplierId;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["phone"] = this.phone;
+        data["email"] = this.email;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+interface ISupplierDto {
+    supplierId?: number;
+    name?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    description?: string;
+
+    [key: string]: any;
+}
+
+class PaginatedStockReceiptBriefDto implements IPaginatedStockReceiptBriefDto {
+    data?: StockReceiptBriefDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+
+    constructor(data?: IPaginatedStockReceiptBriefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(StockReceiptBriefDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedStockReceiptBriefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedStockReceiptBriefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+
+interface IPaginatedStockReceiptBriefDto {
+    data?: StockReceiptBriefDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+}
+
+class StockReceiptBriefDto implements IStockReceiptBriefDto {
+    createdDate?: Date;
+    stockReceiptId?: number;
+    total?: number;
+    note?: string;
+    supplierId?: number;
+    supplier?: SupplierDto;
+
+    [key: string]: any;
+
+    constructor(data?: IStockReceiptBriefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.stockReceiptId = _data["stockReceiptId"];
+            this.total = _data["total"];
+            this.note = _data["note"];
+            this.supplierId = _data["supplierId"];
+            this.supplier = _data["supplier"] ? SupplierDto.fromJS(_data["supplier"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): StockReceiptBriefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StockReceiptBriefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["stockReceiptId"] = this.stockReceiptId;
+        data["total"] = this.total;
+        data["note"] = this.note;
+        data["supplierId"] = this.supplierId;
+        data["supplier"] = this.supplier ? this.supplier.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+interface IStockReceiptBriefDto {
+    createdDate?: Date;
+    stockReceiptId?: number;
+    total?: number;
+    note?: string;
+    supplierId?: number;
+    supplier?: SupplierDto;
 
     [key: string]: any;
 }
@@ -3800,8 +4898,8 @@ class ProductDetailDto implements IProductDetailDto {
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
-    forGenderDisplay?: string;
     finalPrice?: number;
+    forGenderDisplay?: string;
     vietnamesePrice?: string;
 
     [key: string]: any;
@@ -3842,8 +4940,8 @@ class ProductDetailDto implements IProductDetailDto {
                     this.images!.push(ProductImageDto.fromJS(item));
             }
             this.description = _data["description"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
             this.finalPrice = _data["finalPrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
@@ -3882,8 +4980,8 @@ class ProductDetailDto implements IProductDetailDto {
                 data["images"].push(item.toJSON());
         }
         data["description"] = this.description;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         data["finalPrice"] = this.finalPrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
@@ -3903,8 +5001,8 @@ interface IProductDetailDto {
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
-    forGenderDisplay?: string;
     finalPrice?: number;
+    forGenderDisplay?: string;
     vietnamesePrice?: string;
 
     [key: string]: any;
@@ -4121,8 +5219,8 @@ class ProductBriefDto implements IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
-    forGenderDisplay?: string;
     finalPrice?: number;
+    forGenderDisplay?: string;
     vietnamesePrice?: string;
 
     [key: string]: any;
@@ -4152,8 +5250,8 @@ class ProductBriefDto implements IProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            this.forGenderDisplay = _data["forGenderDisplay"];
             this.finalPrice = _data["finalPrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
@@ -4181,8 +5279,8 @@ class ProductBriefDto implements IProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         data["finalPrice"] = this.finalPrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
@@ -4199,8 +5297,8 @@ interface IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
-    forGenderDisplay?: string;
     finalPrice?: number;
+    forGenderDisplay?: string;
     vietnamesePrice?: string;
 
     [key: string]: any;
@@ -4603,8 +5701,8 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
     color?: ColorDto;
     product?: ProductBriefDto;
     quantity?: number;
-    finalPriceDisplay?: string;
     finalPrice?: number;
+    finalPriceDisplay?: string;
 
     [key: string]: any;
 
@@ -4631,8 +5729,8 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
             this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : <any>undefined;
             this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : <any>undefined;
             this.quantity = _data["quantity"];
-            this.finalPriceDisplay = _data["finalPriceDisplay"];
             this.finalPrice = _data["finalPrice"];
+            this.finalPriceDisplay = _data["finalPriceDisplay"];
         }
     }
 
@@ -4657,8 +5755,8 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
         data["color"] = this.color ? this.color.toJSON() : <any>undefined;
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         data["quantity"] = this.quantity;
-        data["finalPriceDisplay"] = this.finalPriceDisplay;
         data["finalPrice"] = this.finalPrice;
+        data["finalPriceDisplay"] = this.finalPriceDisplay;
         return data;
     }
 }
@@ -4672,8 +5770,8 @@ interface IProductOptionDetailDto {
     color?: ColorDto;
     product?: ProductBriefDto;
     quantity?: number;
-    finalPriceDisplay?: string;
     finalPrice?: number;
+    finalPriceDisplay?: string;
 
     [key: string]: any;
 }
@@ -4874,6 +5972,14 @@ enum CreateOrderCommandPaymentMethod {
     COD = "COD",
     MOMO_QR = "MOMO_QR",
     MOMO_ATM = "MOMO_ATM",
+}
+
+enum UpdatePaymentStatusCommandStatus {
+    PENDING = "PENDING",
+    PAID = "PAID",
+    CANCELLED = "CANCELLED",
+    REFUNDED = "REFUNDED",
+    FAILED = "FAILED",
 }
 
 enum UpdateOrderStatusCommandStatus {
