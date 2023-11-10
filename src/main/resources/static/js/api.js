@@ -503,7 +503,7 @@ class Client {
      * @param keyword (optional)
      * @return OK
      */
-    getAllReceipts(page, pageSize, sortField, sortDir, keyword, cancelToken) {
+    getAllSuppliers(page, pageSize, sortField, sortDir, keyword, cancelToken) {
         let url_ = this.baseUrl + "/api/supplier/?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
@@ -542,10 +542,10 @@ class Client {
                 throw _error;
             }
         }).then((_response) => {
-            return this.processGetAllReceipts(_response);
+            return this.processGetAllSuppliers(_response);
         });
     }
-    processGetAllReceipts(response) {
+    processGetAllSuppliers(response) {
         const status = response.status;
         let _headers = {};
         if (response.headers && typeof response.headers === "object") {
@@ -620,9 +620,107 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param startDate (optional)
+     * @param endDate (optional)
+     * @param supplierId (optional)
+     * @param totalFrom (optional)
+     * @param totalTo (optional)
+     * @param page (optional)
+     * @param pageSize (optional)
+     * @param sortField (optional)
+     * @param sortDir (optional)
+     * @param keyword (optional)
      * @return OK
      */
-    createReceipt(body, cancelToken) {
+    getAllStockReceipts(startDate, endDate, supplierId, totalFrom, totalTo, page, pageSize, sortField, sortDir, keyword, cancelToken) {
+        let url_ = this.baseUrl + "/api/stock-receipt/?";
+        if (startDate === null)
+            throw new Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "startDate=" + encodeURIComponent("" + startDate) + "&";
+        if (endDate === null)
+            throw new Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "endDate=" + encodeURIComponent("" + endDate) + "&";
+        if (supplierId === null)
+            throw new Error("The parameter 'supplierId' cannot be null.");
+        else if (supplierId !== undefined)
+            url_ += "supplierId=" + encodeURIComponent("" + supplierId) + "&";
+        if (totalFrom === null)
+            throw new Error("The parameter 'totalFrom' cannot be null.");
+        else if (totalFrom !== undefined)
+            url_ += "totalFrom=" + encodeURIComponent("" + totalFrom) + "&";
+        if (totalTo === null)
+            throw new Error("The parameter 'totalTo' cannot be null.");
+        else if (totalTo !== undefined)
+            url_ += "totalTo=" + encodeURIComponent("" + totalTo) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllStockReceipts(_response);
+        });
+    }
+    processGetAllStockReceipts(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = PaginatedStockReceiptBriefDto.fromJS(resultData200);
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    createStockReceipt(body, cancelToken) {
         let url_ = this.baseUrl + "/api/stock-receipt/";
         url_ = url_.replace(/[?&]$/, "");
         const content_ = JSON.stringify(body);
@@ -644,10 +742,10 @@ class Client {
                 throw _error;
             }
         }).then((_response) => {
-            return this.processCreateReceipt(_response);
+            return this.processCreateStockReceipt(_response);
         });
     }
-    processCreateReceipt(response) {
+    processCreateStockReceipt(response) {
         const status = response.status;
         let _headers = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1984,7 +2082,7 @@ class Client {
     /**
      * @return OK
      */
-    deleteReceipt(id, cancelToken) {
+    deleteStockReceipt(id, cancelToken) {
         let url_ = this.baseUrl + "/api/stock-receipt/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2004,10 +2102,10 @@ class Client {
                 throw _error;
             }
         }).then((_response) => {
-            return this.processDeleteReceipt(_response);
+            return this.processDeleteStockReceipt(_response);
         });
     }
-    processDeleteReceipt(response) {
+    processDeleteStockReceipt(response) {
         const status = response.status;
         let _headers = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2205,101 +2303,6 @@ class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve(null);
-        }
-        else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve(null);
-    }
-}
-class GetAllReceiptsClient {
-    constructor(baseUrl, instance) {
-        this.jsonParseReviver = undefined;
-        this.instance = instance ? instance : axios.create();
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
-    }
-    /**
-     * @param supplierId (optional)
-     * @param totalFrom (optional)
-     * @param totalTo (optional)
-     * @param page (optional)
-     * @param pageSize (optional)
-     * @param sortField (optional)
-     * @param sortDir (optional)
-     * @param keyword (optional)
-     * @return OK
-     */
-    1(supplierId, totalFrom, totalTo, page, pageSize, sortField, sortDir, keyword, cancelToken) {
-        let url_ = this.baseUrl + "/api/stock-receipt/?";
-        if (supplierId === null)
-            throw new Error("The parameter 'supplierId' cannot be null.");
-        else if (supplierId !== undefined)
-            url_ += "supplierId=" + encodeURIComponent("" + supplierId) + "&";
-        if (totalFrom === null)
-            throw new Error("The parameter 'totalFrom' cannot be null.");
-        else if (totalFrom !== undefined)
-            url_ += "totalFrom=" + encodeURIComponent("" + totalFrom) + "&";
-        if (totalTo === null)
-            throw new Error("The parameter 'totalTo' cannot be null.");
-        else if (totalTo !== undefined)
-            url_ += "totalTo=" + encodeURIComponent("" + totalTo) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortField === null)
-            throw new Error("The parameter 'sortField' cannot be null.");
-        else if (sortField !== undefined)
-            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
-        if (sortDir === null)
-            throw new Error("The parameter 'sortDir' cannot be null.");
-        else if (sortDir !== undefined)
-            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
-        if (keyword === null)
-            throw new Error("The parameter 'keyword' cannot be null.");
-        else if (keyword !== undefined)
-            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-        let options_ = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "*/*"
-            },
-            cancelToken
-        };
-        return this.instance.request(options_).catch((_error) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            }
-            else {
-                throw _error;
-            }
-        }).then((_response) => {
-            return this.process1(_response);
-        });
-    }
-    process1(response) {
-        const status = response.status;
-        let _headers = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200 = null;
-            let resultData200 = _responseText;
-            result200 = PaginatedStockReceiptBriefDto.fromJS(resultData200);
-            return Promise.resolve(result200);
         }
         else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
@@ -3221,8 +3224,8 @@ class GetDeliveryOptionQuery {
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
             this.toWard = _data["toWard"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toProvince = _data["toProvince"];
+            this.toDetailAddress = _data["toDetailAddress"];
         }
     }
     static fromJS(data) {
@@ -3246,8 +3249,8 @@ class GetDeliveryOptionQuery {
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
         data["toWard"] = this.toWard;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toProvince"] = this.toProvince;
+        data["toDetailAddress"] = this.toDetailAddress;
         return data;
     }
 }
@@ -3545,8 +3548,8 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
-            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
+            this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
         }
     }
@@ -3575,8 +3578,8 @@ class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
+        data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
         return data;
     }

@@ -555,7 +555,7 @@ class Client {
      * @param keyword (optional) 
      * @return OK
      */
-    getAllReceipts(page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedSupplierDto> {
+    getAllSuppliers(page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedSupplierDto> {
         let url_ = this.baseUrl + "/api/supplier/?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
@@ -595,11 +595,11 @@ class Client {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processGetAllReceipts(_response);
+            return this.processGetAllSuppliers(_response);
         });
     }
 
-    protected processGetAllReceipts(response: AxiosResponse): Promise<PaginatedSupplierDto> {
+    protected processGetAllSuppliers(response: AxiosResponse): Promise<PaginatedSupplierDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -680,9 +680,110 @@ class Client {
     }
 
     /**
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @param supplierId (optional) 
+     * @param totalFrom (optional) 
+     * @param totalTo (optional) 
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param sortField (optional) 
+     * @param sortDir (optional) 
+     * @param keyword (optional) 
      * @return OK
      */
-    createReceipt(body: CreateStockReceiptCommand, cancelToken?: CancelToken | undefined): Promise<number> {
+    getAllStockReceipts(startDate: number | undefined, endDate: number | undefined, supplierId: number | undefined, totalFrom: number | undefined, totalTo: number | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedStockReceiptBriefDto> {
+        let url_ = this.baseUrl + "/api/stock-receipt/?";
+        if (startDate === null)
+            throw new Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "startDate=" + encodeURIComponent("" + startDate) + "&";
+        if (endDate === null)
+            throw new Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "endDate=" + encodeURIComponent("" + endDate) + "&";
+        if (supplierId === null)
+            throw new Error("The parameter 'supplierId' cannot be null.");
+        else if (supplierId !== undefined)
+            url_ += "supplierId=" + encodeURIComponent("" + supplierId) + "&";
+        if (totalFrom === null)
+            throw new Error("The parameter 'totalFrom' cannot be null.");
+        else if (totalFrom !== undefined)
+            url_ += "totalFrom=" + encodeURIComponent("" + totalFrom) + "&";
+        if (totalTo === null)
+            throw new Error("The parameter 'totalTo' cannot be null.");
+        else if (totalTo !== undefined)
+            url_ += "totalTo=" + encodeURIComponent("" + totalTo) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllStockReceipts(_response);
+        });
+    }
+
+    protected processGetAllStockReceipts(response: AxiosResponse): Promise<PaginatedStockReceiptBriefDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PaginatedStockReceiptBriefDto.fromJS(resultData200);
+            return Promise.resolve<PaginatedStockReceiptBriefDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PaginatedStockReceiptBriefDto>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    createStockReceipt(body: CreateStockReceiptCommand, cancelToken?: CancelToken | undefined): Promise<number> {
         let url_ = this.baseUrl + "/api/stock-receipt/";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -706,11 +807,11 @@ class Client {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCreateReceipt(_response);
+            return this.processCreateStockReceipt(_response);
         });
     }
 
-    protected processCreateReceipt(response: AxiosResponse): Promise<number> {
+    protected processCreateStockReceipt(response: AxiosResponse): Promise<number> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2132,7 +2233,7 @@ class Client {
     /**
      * @return OK
      */
-    deleteReceipt(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
+    deleteStockReceipt(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/stock-receipt/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2154,11 +2255,11 @@ class Client {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processDeleteReceipt(_response);
+            return this.processDeleteStockReceipt(_response);
         });
     }
 
-    protected processDeleteReceipt(response: AxiosResponse): Promise<void> {
+    protected processDeleteStockReceipt(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2378,111 +2479,6 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<void>(null as any);
-    }
-}
-
-class GetAllReceiptsClient {
-    private instance: AxiosInstance;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, instance?: AxiosInstance) {
-
-        this.instance = instance ? instance : axios.create();
-
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
-
-    }
-
-    /**
-     * @param supplierId (optional) 
-     * @param totalFrom (optional) 
-     * @param totalTo (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortField (optional) 
-     * @param sortDir (optional) 
-     * @param keyword (optional) 
-     * @return OK
-     */
-    1(supplierId: number | undefined, totalFrom: number | undefined, totalTo: number | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedStockReceiptBriefDto> {
-        let url_ = this.baseUrl + "/api/stock-receipt/?";
-        if (supplierId === null)
-            throw new Error("The parameter 'supplierId' cannot be null.");
-        else if (supplierId !== undefined)
-            url_ += "supplierId=" + encodeURIComponent("" + supplierId) + "&";
-        if (totalFrom === null)
-            throw new Error("The parameter 'totalFrom' cannot be null.");
-        else if (totalFrom !== undefined)
-            url_ += "totalFrom=" + encodeURIComponent("" + totalFrom) + "&";
-        if (totalTo === null)
-            throw new Error("The parameter 'totalTo' cannot be null.");
-        else if (totalTo !== undefined)
-            url_ += "totalTo=" + encodeURIComponent("" + totalTo) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortField === null)
-            throw new Error("The parameter 'sortField' cannot be null.");
-        else if (sortField !== undefined)
-            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
-        if (sortDir === null)
-            throw new Error("The parameter 'sortDir' cannot be null.");
-        else if (sortDir !== undefined)
-            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
-        if (keyword === null)
-            throw new Error("The parameter 'keyword' cannot be null.");
-        else if (keyword !== undefined)
-            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "*/*"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.process1(_response);
-        });
-    }
-
-    protected process1(response: AxiosResponse): Promise<PaginatedStockReceiptBriefDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-            result200 = PaginatedStockReceiptBriefDto.fromJS(resultData200);
-            return Promise.resolve<PaginatedStockReceiptBriefDto>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PaginatedStockReceiptBriefDto>(null as any);
     }
 }
 
@@ -3810,8 +3806,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     weightInGram?: number;
     toDistrict?: string;
     toWard?: string;
-    toDetailAddress?: string;
     toProvince?: string;
+    toDetailAddress?: string;
 
     [key: string]: any;
 
@@ -3839,8 +3835,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
             this.toWard = _data["toWard"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toProvince = _data["toProvince"];
+            this.toDetailAddress = _data["toDetailAddress"];
         }
     }
 
@@ -3866,8 +3862,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
         data["toWard"] = this.toWard;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toProvince"] = this.toProvince;
+        data["toDetailAddress"] = this.toDetailAddress;
         return data;
     }
 }
@@ -3882,8 +3878,8 @@ interface IGetDeliveryOptionQuery {
     weightInGram?: number;
     toDistrict?: string;
     toWard?: string;
-    toDetailAddress?: string;
     toProvince?: string;
+    toDetailAddress?: string;
 
     [key: string]: any;
 }
@@ -4290,8 +4286,8 @@ class UserDto implements IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    customer?: boolean;
     emailVerified?: boolean;
+    customer?: boolean;
     accountEnabled?: boolean;
 
     [key: string]: any;
@@ -4324,8 +4320,8 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
-            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
+            this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
         }
     }
@@ -4356,8 +4352,8 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
+        data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
         return data;
     }
@@ -4373,8 +4369,8 @@ interface IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    customer?: boolean;
     emailVerified?: boolean;
+    customer?: boolean;
     accountEnabled?: boolean;
 
     [key: string]: any;
