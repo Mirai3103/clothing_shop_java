@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier,Integer> {
 
-    @Query(value = "DELETE  FROM supplier WHERE supplier_id = ?1", nativeQuery = true)
+    @Query(value = "DELETE  FROM Supplier s where s.supplierId = ?1")
     @Modifying
     void hardDeleteById(int supplierId);
 }

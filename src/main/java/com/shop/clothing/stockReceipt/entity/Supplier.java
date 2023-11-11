@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Where(clause = "deleted_date is null")
 public class Supplier {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int supplierId;
     private String name;
     private String address;

@@ -52,32 +52,32 @@ public class SetupDataLoader implements
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        var admin = userRepository.findByEmail("admin@admin.com");
-        seedCategory.seedCategory();
-
-        seedRole();
-        seedPermission();
-        if (admin.isPresent()) {
-            alreadySetup = true;
-
-        }
-        if (alreadySetup)
-            return;
-
-
-        createRoleIfNotFound("ROLE_EMPLOYEE", "Nhân viên", "Nhân viên", new ArrayList<>());
-
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
-        User user = new User();
-        user.setFirstName("Admin");
-        user.setLastName("Admin");
-        user.setPasswordHash(passwordEncoder.encode("admin"));
-        user.setEmail("admin@admin.com");
-        user.setRoles(List.of(adminRole));
-        user.setAccountEnabled(true);
-        user.setCustomer(false);
-        userRepository.save(user);
-        this.alreadySetup = true;
+//        var admin = userRepository.findByEmail("admin@admin.com");
+//        seedCategory.seedCategory();
+//
+//        seedRole();
+//        seedPermission();
+//        if (admin.isPresent()) {
+//            alreadySetup = true;
+//
+//        }
+//        if (alreadySetup)
+//            return;
+//
+//
+//        createRoleIfNotFound("ROLE_EMPLOYEE", "Nhân viên", "Nhân viên", new ArrayList<>());
+//
+//        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElseThrow();
+//        User user = new User();
+//        user.setFirstName("Admin");
+//        user.setLastName("Admin");
+//        user.setPasswordHash(passwordEncoder.encode("admin"));
+//        user.setEmail("admin@admin.com");
+//        user.setRoles(List.of(adminRole));
+//        user.setAccountEnabled(true);
+//        user.setCustomer(false);
+//        userRepository.save(user);
+//        this.alreadySetup = true;
 
     }
 

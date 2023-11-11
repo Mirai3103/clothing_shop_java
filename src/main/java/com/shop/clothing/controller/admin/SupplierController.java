@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SupplierController {
     private final ISender sender;
 
-    @GetMapping("/")
+    @GetMapping()
     public String index(Model model) {
 
         return "admin/supplier/index";

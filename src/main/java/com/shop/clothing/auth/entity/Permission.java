@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 @Table
 
-public class Permission {
+public class Permission implements java.io.Serializable {
     @Id
     @Column(name = "normalized_name", length = 50,updatable = false)
     private String normalizedName;

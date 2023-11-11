@@ -24,6 +24,13 @@
             amountTo: undefined,
             })"
         x-init="
+          const queryStr = window.location.search;
+            const queryOBJ = queryString.parse(queryStr);
+            queryData = {
+                ...queryData,
+                ...queryOBJ,
+            };
+
           const fetchData    = (...params) =>{
             loading = true;
             window.apiClient.getAllOrders(...params)
@@ -150,8 +157,8 @@
                                     // this format dd/mm/yyyy
                                     const fromDate =fromDateStr&& new Date(fromDateStr.split('/')[2], fromDateStr.split('/')[1] - 1, fromDateStr.split('/')[0]);
                                     const toDate =fromDateStr&& new Date(toDateStr.split('/')[2], toDateStr.split('/')[1] - 1, toDateStr.split('/')[0]);
-                                    queryData.startDate = fromDate?.getTime()||undefined;
-                                    queryData.endDate = toDate?.getTime()||undefined;
+                                    queryData.startDate = fromDate? fromDate.getTime():undefined;
+                                    queryData.endDate = toDate ? toDate.getTime():undefined;
                                     queryData.amountFrom = Number(document.getElementById('amount-start').value)||undefined;
                                     queryData.amountTo = Number(document.getElementById('amount-end').value)||undefined;
                                     const statusFilter = document.getElementById('status-filter').value

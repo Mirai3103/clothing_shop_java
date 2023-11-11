@@ -7,7 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/api.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <link rel="stylesheet" href="/css/style.css" />
     <script>
@@ -22,9 +21,10 @@
   <body class="relative" x-data="{}">
     <script type="module">
       import queryString from "https://cdn.jsdelivr.net/npm/query-string@8.1.0/+esm";
-
       window.queryString = queryString;
     </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 
     <div class="antialiased bg-gray-50 dark:bg-gray-900">
       <nav
@@ -667,18 +667,26 @@
                 </li>
                 <li>
                   <a
-                    href="#"
+                    th:href="@{/admin/user}"
                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Quản lý nhân viên
+                    Quản lý người dùng
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
+                          th:href="@{/admin/supplier}"
+                          class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Quản lý nhà cung cấp
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="@{/admin/role}"
                     class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Phân quyền
+                    Quản lý vai trò
                   </a>
                 </li>
               </ul>

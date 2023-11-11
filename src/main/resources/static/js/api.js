@@ -504,7 +504,7 @@ class Client {
      * @return OK
      */
     getAllSuppliers(page, pageSize, sortField, sortDir, keyword, cancelToken) {
-        let url_ = this.baseUrl + "/api/supplier/?";
+        let url_ = this.baseUrl + "/api/supplier?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -572,7 +572,7 @@ class Client {
      * @return OK
      */
     createSupplier(body, cancelToken) {
-        let url_ = this.baseUrl + "/api/supplier/";
+        let url_ = this.baseUrl + "/api/supplier";
         url_ = url_.replace(/[?&]$/, "");
         const content_ = JSON.stringify(body);
         let options_ = {
@@ -3223,9 +3223,9 @@ class GetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
+            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
             this.toProvince = _data["toProvince"];
-            this.toDetailAddress = _data["toDetailAddress"];
         }
     }
     static fromJS(data) {
@@ -3248,9 +3248,9 @@ class GetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
+        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
         data["toProvince"] = this.toProvince;
-        data["toDetailAddress"] = this.toDetailAddress;
         return data;
     }
 }
@@ -3548,9 +3548,9 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
-            this.emailVerified = _data["emailVerified"];
             this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
+            this.emailVerified = _data["emailVerified"];
         }
     }
     static fromJS(data) {
@@ -3578,9 +3578,9 @@ class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["emailVerified"] = this.emailVerified;
         data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
+        data["emailVerified"] = this.emailVerified;
         return data;
     }
 }

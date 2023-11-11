@@ -21,7 +21,7 @@ public class SupplierApiController {
     private final ISender sender;
     // delete and create receipt
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Integer> createSupplier(@Valid @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody CreateSupplierCommand command) throws Exception {
         var result = sender.send(command);
         return ResponseEntity.created(new java.net.URI("/api/supplier/" + result.orThrow())).build();
@@ -33,7 +33,7 @@ public class SupplierApiController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<Paginated<SupplierDto>> getAllSuppliers(@ParameterObject GetAllSuppliersQuery query) {
         var result = sender.send(query).orThrow();
         return ResponseEntity.ok(result);

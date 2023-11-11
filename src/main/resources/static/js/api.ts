@@ -556,7 +556,7 @@ class Client {
      * @return OK
      */
     getAllSuppliers(page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedSupplierDto> {
-        let url_ = this.baseUrl + "/api/supplier/?";
+        let url_ = this.baseUrl + "/api/supplier?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -627,7 +627,7 @@ class Client {
      * @return OK
      */
     createSupplier(body: CreateSupplierCommand, cancelToken?: CancelToken | undefined): Promise<number> {
-        let url_ = this.baseUrl + "/api/supplier/";
+        let url_ = this.baseUrl + "/api/supplier";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -3805,9 +3805,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
+    toDetailAddress?: string;
     toWard?: string;
     toProvince?: string;
-    toDetailAddress?: string;
 
     [key: string]: any;
 
@@ -3834,9 +3834,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
+            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
             this.toProvince = _data["toProvince"];
-            this.toDetailAddress = _data["toDetailAddress"];
         }
     }
 
@@ -3861,9 +3861,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
+        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
         data["toProvince"] = this.toProvince;
-        data["toDetailAddress"] = this.toDetailAddress;
         return data;
     }
 }
@@ -3877,9 +3877,9 @@ interface IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
+    toDetailAddress?: string;
     toWard?: string;
     toProvince?: string;
-    toDetailAddress?: string;
 
     [key: string]: any;
 }
@@ -4286,9 +4286,9 @@ class UserDto implements IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    emailVerified?: boolean;
     customer?: boolean;
     accountEnabled?: boolean;
+    emailVerified?: boolean;
 
     [key: string]: any;
 
@@ -4320,9 +4320,9 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
-            this.emailVerified = _data["emailVerified"];
             this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
+            this.emailVerified = _data["emailVerified"];
         }
     }
 
@@ -4352,9 +4352,9 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["emailVerified"] = this.emailVerified;
         data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
+        data["emailVerified"] = this.emailVerified;
         return data;
     }
 }
@@ -4369,9 +4369,9 @@ interface IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    emailVerified?: boolean;
     customer?: boolean;
     accountEnabled?: boolean;
+    emailVerified?: boolean;
 
     [key: string]: any;
 }

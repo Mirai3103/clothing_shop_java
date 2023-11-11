@@ -1,5 +1,6 @@
 package com.shop.clothing.config;
 
+import com.shop.clothing.auth.Permissions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true,jsr250Enabled = true)
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -44,25 +45,23 @@ public class SecurityConfig {
         http.getSharedObject(AuthenticationManagerBuilder.class).authenticationProvider(daoAuthenticationProvider());
 
         http.authorizeHttpRequests(authConfig -> {
-//            authConfig.requestMatchers(HttpMethod.GET, "/admin/brand/**").hasAuthority("MANAGE_BRANDS");
-//            authConfig.requestMatchers(HttpMethod.GET, "/admin/category/**").hasxx("CATEGORY_MANAGEMENT");
-//            authConfig.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("ADMIN_DASHBOARD");
-            authConfig.anyRequest().permitAll();
+                    authConfig.requestMatchers(HttpMethod.GET, "/admin/**").hasAuthority(Permissions.ADMIN_DASHBOARD.toString());
+                    authConfig.anyRequest().permitAll();
 
-        }).rememberMe(rememberMe -> {
-            rememberMe.key("remember-me");
-            rememberMe.tokenValiditySeconds(7 * 24 * 60 * 60); // 7 days
-            rememberMe.tokenRepository(persistentTokenRepository());
-        }).formLogin(login -> {
-            login.loginPage("/auth/login");
-            login.failureUrl("/auth/login?error=true");
-            login.defaultSuccessUrl("/");
-        }).logout(logout -> {
-            logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-            logout.logoutSuccessUrl("/");
-            logout.deleteCookies("JSESSIONID");
-            logout.invalidateHttpSession(true);
-        })
+                }).rememberMe(rememberMe -> {
+                    rememberMe.key("remember-me");
+                    rememberMe.tokenValiditySeconds(7 * 24 * 60 * 60); // 7 days
+                    rememberMe.tokenRepository(persistentTokenRepository());
+                }).formLogin(login -> {
+                    login.loginPage("/auth/login");
+                    login.failureUrl("/auth/login?error=true");
+                    login.defaultSuccessUrl("/");
+                }).logout(logout -> {
+                    logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+                    logout.logoutSuccessUrl("/");
+                    logout.deleteCookies("JSESSIONID");
+                    logout.invalidateHttpSession(true);
+                })
 
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
@@ -78,11 +77,13 @@ public class SecurityConfig {
         provider.setUserDetailsService(this.userDetailsService);
         return provider;
     }
+
     private DataSource dataSource;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         var tokenRepository = new JdbcTokenRepositoryImpl();
-        tokenRepository.setCreateTableOnStartup(false);
+//        tokenRepository.setCreateTableOnStartup(true);
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;
     }

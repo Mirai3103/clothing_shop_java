@@ -143,13 +143,13 @@
                         class="flex items-center space-x-3"
                         x-data="{
                                 onApplyFilter(){
-                                    const fromDateStr = document.getElementById('date-start').value;
-                                    const toDateStr = document.getElementById('date-end').value;
+                                    const fromDateStr = document.getElementById('date-start').value||undefined;
+                                    const toDateStr = document.getElementById('date-end').value||undefined;
                                     // this format dd/mm/yyyy
                                     const fromDate =fromDateStr&& new Date(fromDateStr.split('/')[2], fromDateStr.split('/')[1] - 1, fromDateStr.split('/')[0]);
                                     const toDate =fromDateStr&& new Date(toDateStr.split('/')[2], toDateStr.split('/')[1] - 1, toDateStr.split('/')[0]);
-                                    queryData.startDate = fromDate?.getTime()||undefined;
-                                    queryData.endDate = toDate?.getTime()||undefined;
+                                    queryData.startDate = fromDate? fromDate.getTime():undefined;
+                                    queryData.endDate = toDate? toDate.getTime():undefined;
                                     queryData.totalFrom = Number(document.getElementById('amount-start').value)||undefined;
                                     queryData.totalTo = Number(document.getElementById('amount-end').value)||undefined;
                                     const supplierId = document.getElementById('supplier-filter').value;
@@ -189,8 +189,9 @@
                       data-accordion="collapse"
                       data-active-classes="text-black"
                       data-inactive-classes="text-gray-500"
+                      class=""
               >
-                <h2 id="category-heading">
+                <h2 id="category-heading" class="">
                   <button
                           type="button"
                           class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
@@ -243,7 +244,7 @@
                   </div>
                 </div>
                 <!-- Price -->
-                <h2 id="price-heading">
+                <h2 id="price-heading" class="">
                   <button
                           type="button"
                           class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
@@ -306,7 +307,7 @@
                   <button
                           type="button"
                           class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
-                          data-accordion-target="#status-body"
+                          data-accordion-target="#supplier-body"
                           aria-expanded="true"
                           aria-controls="price-body"
                   >
