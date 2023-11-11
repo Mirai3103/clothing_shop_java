@@ -1,5 +1,6 @@
 package com.shop.clothing.config.startup;
 
+import com.shop.clothing.auth.Permissions;
 import com.shop.clothing.auth.entity.Permission;
 import com.shop.clothing.auth.entity.Role;
 import com.shop.clothing.user.entity.User;
@@ -109,7 +110,6 @@ public class SetupDataLoader implements
         createRoleIfNotFound("ROLE_ADMIN", "Quản trị viên", "Quản trị viên", new ArrayList<>());
         createRoleIfNotFound("ROLE_SALES_STAFF", "Nhân viên bán hàng", "Vai trò nhân viên bán hàng", new ArrayList<>());
         createRoleIfNotFound("ROLE_STOCK_CLERK", "Nhân viên nhập hàng", "Vai trò nhân viên nhập hàng", new ArrayList<>());
-        createRoleIfNotFound("ROLE_ACCOUNTANT", "Kế toán", "Vai trò kế toán", new ArrayList<>());
         createRoleIfNotFound("ROLE_CUSTOMER", "Khách hàng", "Vai trò khách hàng", new ArrayList<>());
         createRoleIfNotFound("ROLE_MANAGER", "Quản lý", "Vai trò quản lý", new ArrayList<>());
 
@@ -117,47 +117,19 @@ public class SetupDataLoader implements
 
     @Transactional
     public void seedPermission() {
+        createPermissionIfNotFound(Permissions.PRODUCT_MANAGEMENT.toString(), "Quản lý sản phẩm", "Quyền quản lý sản phẩm.");
+        createPermissionIfNotFound(Permissions.USER_MANAGEMENT.toString(), "Quản lý người dùng", "Quyền quản lý người dùng.");
+        createPermissionIfNotFound(Permissions.ORDER_MANAGEMENT.toString(), "Quản lý đơn hàng", "Quyền quản lý đơn hàng.");
+        createPermissionIfNotFound(Permissions.CATEGORY_MANAGEMENT.toString(), "Quản lý danh mục", "Quyền quản lý danh mục.");
+        createPermissionIfNotFound(Permissions.PROMOTION_MANAGEMENT.toString(), "Quản lý khuyến mãi", "Quyền quản lý khuyến mãi.");
+        createPermissionIfNotFound(Permissions.STOCK_RECEIPT_MANAGEMENT.toString(), "Quản lý nhập hàng", "Quyền quản lý nhập hàng.");
+        createPermissionIfNotFound(Permissions.RATING_MANAGEMENT.toString(), "Quản lý đánh giá", "Quyền quản lý đánh giá.");
+        createPermissionIfNotFound(Permissions.PAYMENT_MANAGEMENT.toString(), "Quản lý thanh toán", "Quyền quản lý thanh toán.");
+        createPermissionIfNotFound(Permissions.SUPPLIER_MANAGEMENT.toString(), "Quản lý nhà cung cấp", "Quyền quản lý nhà cung cấp.");
+        createPermissionIfNotFound(Permissions.REPORT_MANAGEMENT.toString(), "Quản lý báo cáo", "Quyền quản lý báo cáo.");
+        createPermissionIfNotFound(Permissions.ROLE_MANAGEMENT.toString(), "Quản lý vai trò", "Quyền quản lý vai trò.");
+        createPermissionIfNotFound(Permissions.CAN_ORDER.toString(), "Đặt hàng", "Quyền đặt hàng.");
+        createPermissionIfNotFound(Permissions.ADMIN_DASHBOARD.toString(), "Đặt hàng", "Quyền đặt hàng.");
 
-
-        createPermissionIfNotFound("CREATE_PRODUCT", "Tạo sản phẩm", "Quyền tạo sản phẩm mới.");
-        createPermissionIfNotFound("UPDATE_PRODUCT", "Cập nhật sản phẩm", "Quyền cập nhật thông tin sản phẩm.");
-        createPermissionIfNotFound("DELETE_PRODUCT", "Xóa sản phẩm", "Quyền xóa sản phẩm.");
-        createPermissionIfNotFound("VIEW_PRODUCT", "Xem sản phẩm", "Quyền xem thông tin sản phẩm.");
-        createPermissionIfNotFound("CREATE_ORDER", "Tạo đơn đặt hàng", "Quyền tạo đơn đặt hàng.");
-        createPermissionIfNotFound("UPDATE_ORDER", "Cập nhật đơn đặt hàng", "Quyền cập nhật thông tin đơn đặt hàng.");
-        createPermissionIfNotFound("VIEW_ORDERS", "Xem đơn đặt hàng", "Quyền xem thông tin đơn đặt hàng.");
-        createPermissionIfNotFound("DELETE_ORDER", "Xóa đơn đặt hàng", "Quyền xóa đơn đặt hàng.");
-        createPermissionIfNotFound("VIEW_ORDER", "Xem đơn đặt hàng", "Quyền xem thông tin đơn đặt hàng.");
-        createPermissionIfNotFound("PROCESS_ORDER", "Xử lý đơn đặt hàng", "Quyền xử lý đơn đặt hàng.");
-        createPermissionIfNotFound("CREATE_PROMOTION", "Tạo chương trình khuyến mãi", "Quyền tạo chương trình khuyến mãi mới.");
-        createPermissionIfNotFound("UPDATE_PROMOTION", "Cập nhật chương trình khuyến mãi", "Quyền cập nhật thông tin chương trình khuyến mãi.");
-        createPermissionIfNotFound("DELETE_PROMOTION", "Xóa chương trình khuyến mãi", "Quyền xóa chương trình khuyến mãi.");
-        createPermissionIfNotFound("VIEW_PROMOTION", "Xem chương trình khuyến mãi", "Quyền xem thông tin chương trình khuyến mãi.");
-        createPermissionIfNotFound("CREATE_USER", "Tạo người dùng", "Quyền tạo người dùng mới.");
-        createPermissionIfNotFound("UPDATE_USER", "Cập nhật người dùng", "Quyền cập nhật thông tin người dùng.");
-        createPermissionIfNotFound("DELETE_USER", "Xóa người dùng", "Quyền xóa người dùng.");
-        createPermissionIfNotFound("VIEW_USER", "Xem người dùng", "Quyền xem thông tin người dùng.");
-        createPermissionIfNotFound("CREATE_ROLE", "Tạo vai trò", "Quyền tạo vai trò mới.");
-        createPermissionIfNotFound("UPDATE_ROLE", "Cập nhật vai trò", "Quyền cập nhật thông tin vai trò.");
-        createPermissionIfNotFound("DELETE_ROLE", "Xóa vai trò", "Quyền xóa vai trò.");
-        createPermissionIfNotFound("VIEW_ROLE", "Xem vai trò", "Quyền xem thông tin vai trò.");
-        createPermissionIfNotFound("ASSIGN_ROLES", "Gán vai trò", "Quyền gán vai trò cho người dùng.");
-        createPermissionIfNotFound("CREATE_PERMISSION", "Tạo quyền", "Quyền tạo quyền mới.");
-        createPermissionIfNotFound("UPDATE_PERMISSION", "Cập nhật quyền", "Quyền cập nhật thông tin quyền.");
-        createPermissionIfNotFound("DELETE_PERMISSION", "Xóa quyền", "Quyền xóa quyền.");
-        createPermissionIfNotFound("VIEW_PERMISSION", "Xem quyền", "Quyền xem thông tin quyền.");
-        createPermissionIfNotFound("VIEW_REPORTS", "Xem báo cáo", "Quyền xem báo cáo và thống kê.");
-        createPermissionIfNotFound("MANAGE_INVENTORY", "Quản lý tồn kho", "Quyền quản lý tồn kho sản phẩm.");
-        createPermissionIfNotFound("MANAGE_PROVIDERS", "Quản lý nhà cung cấp", "Quyền quản lý thông tin nhà cung cấp.");
-        createPermissionIfNotFound("MANAGE_IMPORT_INVOICES", "Quản lý hóa đơn nhập hàng", "Quyền quản lý hóa đơn nhập hàng.");
-        createPermissionIfNotFound("VIEW_RATINGS", "Xem đánh giá", "Quyền xem đánh giá sản phẩm từ khách hàng.");
-        createPermissionIfNotFound("MANAGE_ACCOUNTING", "Quản lý kế toán", "Quyền quản lý công việc kế toán.");
-        createPermissionIfNotFound("MANAGE_CUSTOMERS", "Quản lý khách hàng", "Quyền quản lý thông tin khách hàng.");
-        createPermissionIfNotFound("MANAGE_BRANDS", "Quản lý thương hiệu", "Quyền quản lý thông tin thương hiệu.");
-        createPermissionIfNotFound("MANAGE_CATEGORIES", "Quản lý danh mục", "Quyền quản lý thông tin danh mục.");
-        createPermissionIfNotFound("ADMIN_DASHBOARD", "Truy cập bảng điều khiển", "Quyền truy cập bảng điều khiển.");
-        createPermissionIfNotFound("CREATE_CATEGORY", "Tạo danh mục", "Quyền tạo danh mục mới.");
-        createPermissionIfNotFound("UPDATE_CATEGORY", "Cập nhật danh mục", "Quyền cập nhật thông tin danh mục.");
-        createPermissionIfNotFound("DELETE_CATEGORY", "Xóa danh mục", "Quyền xóa danh mục.");
     }
 }

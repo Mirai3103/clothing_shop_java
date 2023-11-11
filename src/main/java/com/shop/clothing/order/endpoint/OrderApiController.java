@@ -27,14 +27,14 @@ public class OrderApiController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('CREATE_ORDER','UPDATE_ORDER','VIEW_ORDER')")
+    @PreAuthorize("hasAnyAuthority('ORDER_MANAGEMENT')")
     public ResponseEntity<Paginated<OrderBriefDto>> getAllOrders(@Valid @ParameterObject GetAllOrderQuery getAllOrderQuery) {
         System.err.println("================================");
         return ResponseEntity.ok(sender.send(getAllOrderQuery).orThrow());
     }
 
     @PatchMapping("/updateStatus")
-    @PreAuthorize("hasAuthority('UPDATE_ORDER')")
+    @PreAuthorize("hasAuthority('ORDER_MANAGEMENT')")
     public ResponseEntity<Void> updateOrderStatus(@Valid @RequestBody UpdateOrderStatusCommand updateOrderStatusCommand) {
         var result = sender.send(updateOrderStatusCommand);
         return ResponseEntity.ok(result.orThrow());

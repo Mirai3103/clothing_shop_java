@@ -28,6 +28,7 @@ public class UserController {
     }
 
     @GetMapping("my-cart")
+    @PreAuthorize("hasAuthority('CAN_ORDER')")
     public ModelAndView myCart() {
         var result = _sender.send(new GetMyCartQuery());
         if (result.hasError()) {
@@ -37,6 +38,7 @@ public class UserController {
     }
 
     @GetMapping("my-order")
+    @PreAuthorize("hasAuthority('CAN_ORDER')")
     public ModelAndView myOrder() {
         var result = _sender.send(new GetMyOrderQuery());
         return new ModelAndView("user/my-order", "orders", result.orThrow());

@@ -7,14 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model order {
   order_id               String       @id @db.VarChar(36)
-  created_by             String?      @db.VarChar(255)
   created_date           DateTime?    @db.DateTime(6)
-  last_modified_by       String?      @db.VarChar(255)
-  last_modified_date     DateTime?    @db.DateTime(6)
   address                String?      @db.VarChar(500)
   cancel_reason          String?      @db.VarChar(500)
+  completed_date         DateTime?    @db.DateTime(6)
   customer_name          String?      @db.VarChar(100)
   delivery_fee           Float?
   email                  String?      @db.VarChar(100)
@@ -25,9 +24,8 @@ model order {
   total_amount           Int?
   promotion_promotion_id Int?
   user_user_id           String?      @db.VarChar(255)
-  completed_date         DateTime?    @db.DateTime(6)
-  promotion              promotion?   @relation(fields: [promotion_promotion_id], references: [promotion_id], onDelete: Restrict, onUpdate: Restrict, map: "FKkgpbw4fb1s5r7v0tlathrxp7s")
-  user                   user?        @relation(fields: [user_user_id], references: [user_id], onDelete: Restrict, onUpdate: Restrict, map: "FKktqkl7kou3pykq8fnm4rr9jmy")
+  promotion              promotion?   @relation(fields: [promotion_promotion_id], references: [promotion_id], onDelete: NoAction, onUpdate: NoAction, map: "FKkgpbw4fb1s5r7v0tlathrxp7s")
+  user                   user?        @relation(fields: [user_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FKktqkl7kou3pykq8fnm4rr9jmy")
   order_item             order_item[]
   payment                payment[]
 
@@ -36,23 +34,12 @@ model order {
   @@map("_order")
 }
 
-model brand {
-  brand_id           Int       @id @default(autoincrement())
-  created_by         String?   @db.VarChar(255)
-  created_date       DateTime? @db.DateTime(6)
-  last_modified_by   String?   @db.VarChar(255)
-  last_modified_date DateTime? @db.DateTime(6)
-  deleted_date       DateTime? @db.DateTime(6)
-  name               String?   @db.VarChar(255)
-  product            product[]
-}
-
 model cart_item {
   product_option_id Int
   user_id           String         @db.VarChar(255)
   quantity          Int
-  user              user           @relation(fields: [user_id], references: [user_id], onUpdate: Restrict, map: "FKjnaj4sjyqjkr4ivemf9gb25w")
-  product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onUpdate: Restrict, map: "FKqxba177rqvv0cfr83bq1g396a")
+  user              user           @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FKjnaj4sjyqjkr4ivemf9gb25w")
+  product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onDelete: NoAction, onUpdate: NoAction, map: "FKqxba177rqvv0cfr83bq1g396a")
 
   @@id([product_option_id, user_id])
   @@index([user_id], map: "FKjnaj4sjyqjkr4ivemf9gb25w")
@@ -60,14 +47,11 @@ model cart_item {
 
 model category {
   category_id        Int        @id @default(autoincrement())
-  created_by         String?    @db.VarChar(255)
   created_date       DateTime?  @db.DateTime(6)
-  last_modified_by   String?    @db.VarChar(255)
-  last_modified_date DateTime?  @db.DateTime(6)
   deleted_date       DateTime?  @db.DateTime(6)
   name               String     @unique(map: "UK_46ccwnsi9409t36lurvtyljak") @db.VarChar(100)
   parent_category_id Int?
-  category           category?  @relation("categoryTocategory", fields: [parent_category_id], references: [category_id], onDelete: Restrict, onUpdate: Restrict, map: "FKs2ride9gvilxy2tcuv7witnxc")
+  category           category?  @relation("categoryTocategory", fields: [parent_category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "FKs2ride9gvilxy2tcuv7witnxc")
   other_category     category[] @relation("categoryTocategory")
   product            product[]
 
@@ -75,15 +59,12 @@ model category {
 }
 
 model color {
-  color_id           Int              @id @default(autoincrement())
-  created_by         String?          @db.VarChar(255)
-  created_date       DateTime?        @db.DateTime(6)
-  last_modified_by   String?          @db.VarChar(255)
-  last_modified_date DateTime?        @db.DateTime(6)
-  image              String?          @db.VarChar(255)
-  name               String?          @db.VarChar(255)
-  product_image      product_image[]
-  product_option     product_option[]
+  color_id       Int              @id @default(autoincrement())
+  created_date   DateTime?        @db.DateTime(6)
+  image          String?          @db.VarChar(255)
+  name           String?          @db.VarChar(255)
+  product_image  product_image[]
+  product_option product_option[]
 }
 
 model order_item {
@@ -91,25 +72,23 @@ model order_item {
   product_option_id Int
   price             Float
   quantity          Int
-  order             order          @relation(fields: [order_id], references: [order_id], onUpdate: Restrict, map: "FKryn1sdluxcjfeu891k75myheu")
-  product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onUpdate: Restrict, map: "FKsoimewh387var4rtx7v1wa2wv")
+  order             order          @relation(fields: [order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction, map: "FKryn1sdluxcjfeu891k75myheu")
+  product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onDelete: NoAction, onUpdate: NoAction, map: "FKsoimewh387var4rtx7v1wa2wv")
 
   @@id([order_id, product_option_id])
   @@index([product_option_id], map: "FKsoimewh387var4rtx7v1wa2wv")
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model payment {
-  payment_id         String    @id @db.VarChar(36)
-  created_by         String?   @db.VarChar(255)
-  created_date       DateTime? @db.DateTime(6)
-  last_modified_by   String?   @db.VarChar(255)
-  last_modified_date DateTime? @db.DateTime(6)
-  amount             Int
-  payment_details    String    @db.VarChar(255)
-  payment_response   String?   @db.VarChar(255)
-  status             Int       @db.TinyInt
-  order_order_id     String?   @db.VarChar(36)
-  order              order?    @relation(fields: [order_order_id], references: [order_id], onDelete: Restrict, onUpdate: Restrict, map: "FKhobhqk8v7ohgfr56r725x80y5")
+  payment_id       String    @id @db.VarChar(36)
+  created_date     DateTime? @db.DateTime(6)
+  amount           Int
+  payment_details  String    @db.VarChar(255)
+  payment_response String?   @db.VarChar(255)
+  status           Int       @db.TinyInt
+  order_order_id   String?   @db.VarChar(36)
+  order            order?    @relation(fields: [order_order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction, map: "FKhobhqk8v7ohgfr56r725x80y5")
 
   @@index([order_order_id], map: "FKhobhqk8v7ohgfr56r725x80y5")
 }
@@ -121,19 +100,10 @@ model permission {
   role_permissions role_permissions[] @ignore
 }
 
-model persistent_logins {
-  username  String   @db.VarChar(64)
-  series    String   @id @db.VarChar(64)
-  token     String   @db.VarChar(64)
-  last_used DateTime @default(now()) @db.Timestamp(0)
-}
-
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model product {
   product_id           Int              @id @default(autoincrement())
-  created_by           String?          @db.VarChar(255)
   created_date         DateTime?        @db.DateTime(6)
-  last_modified_by     String?          @db.VarChar(255)
-  last_modified_date   DateTime?        @db.DateTime(6)
   deleted_date         DateTime?        @db.DateTime(6)
   description          String           @db.Text
   discount             Int
@@ -142,28 +112,22 @@ model product {
   name                 String           @db.VarChar(255)
   price                Int
   slug                 String           @unique(map: "UK_88yb4l9100epddqsrdvxerhq9") @db.VarChar(255)
-  brand_brand_id       Int?
-  category_category_id Int?
   total_sold           Int
-  brand                brand?           @relation(fields: [brand_brand_id], references: [brand_id], onDelete: Restrict, onUpdate: Restrict, map: "FKboqft24mwam9ifa6xlj12cjpc")
-  category             category?        @relation(fields: [category_category_id], references: [category_id], onDelete: Restrict, onUpdate: Restrict, map: "FKle1pobdrc8a2uw97gukfmvan4")
+  category_category_id Int?
+  category             category?        @relation(fields: [category_category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "FKle1pobdrc8a2uw97gukfmvan4")
   product_image        product_image[]
   product_option       product_option[]
 
-  @@index([brand_brand_id], map: "FKboqft24mwam9ifa6xlj12cjpc")
   @@index([category_category_id], map: "FKle1pobdrc8a2uw97gukfmvan4")
 }
 
 model product_image {
   url                String    @id @db.VarChar(500)
-  created_by         String?   @db.VarChar(255)
   created_date       DateTime? @db.DateTime(6)
-  last_modified_by   String?   @db.VarChar(255)
-  last_modified_date DateTime? @db.DateTime(6)
   for_color_color_id Int?
   product_product_id Int?
-  product            product?  @relation(fields: [product_product_id], references: [product_id], onDelete: Restrict, onUpdate: Restrict, map: "FK4emctl4klpqjbh93ho5q8pvik")
-  color              color?    @relation(fields: [for_color_color_id], references: [color_id], onDelete: Restrict, onUpdate: Restrict, map: "FK639aj7pfoet24fjm1fkkh0q8m")
+  product            product?  @relation(fields: [product_product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "FK4emctl4klpqjbh93ho5q8pvik")
+  color              color?    @relation(fields: [for_color_color_id], references: [color_id], onDelete: NoAction, onUpdate: NoAction, map: "FK639aj7pfoet24fjm1fkkh0q8m")
 
   @@index([product_product_id], map: "FK4emctl4klpqjbh93ho5q8pvik")
   @@index([for_color_color_id], map: "FK639aj7pfoet24fjm1fkkh0q8m")
@@ -171,10 +135,7 @@ model product_image {
 
 model product_option {
   product_option_id  Int                  @id @default(autoincrement())
-  created_by         String?              @db.VarChar(255)
   created_date       DateTime?            @db.DateTime(6)
-  last_modified_by   String?              @db.VarChar(255)
-  last_modified_date DateTime?            @db.DateTime(6)
   deleted_date       DateTime?            @db.DateTime(6)
   size               String               @db.VarChar(50)
   stock              Int
@@ -182,8 +143,8 @@ model product_option {
   product_product_id Int?
   cart_item          cart_item[]
   order_item         order_item[]
-  color              color?               @relation(fields: [color_color_id], references: [color_id], onDelete: Restrict, onUpdate: Restrict, map: "FK19qrg9y80nlioamtmiq57lukp")
-  product            product?             @relation(fields: [product_product_id], references: [product_id], onDelete: Restrict, onUpdate: Restrict, map: "FKf135hq0tq3mo9dttbfhcidbac")
+  color              color?               @relation(fields: [color_color_id], references: [color_id], onDelete: NoAction, onUpdate: NoAction, map: "FK19qrg9y80nlioamtmiq57lukp")
+  product            product?             @relation(fields: [product_product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "FKf135hq0tq3mo9dttbfhcidbac")
   rating             rating[]
   stock_receipt_item stock_receipt_item[]
 
@@ -191,59 +152,54 @@ model product_option {
   @@index([product_product_id], map: "FKf135hq0tq3mo9dttbfhcidbac")
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model promotion {
-  promotion_id       Int       @id @default(autoincrement())
-  created_by         String?   @db.VarChar(255)
-  created_date       DateTime? @db.DateTime(6)
-  last_modified_by   String?   @db.VarChar(255)
-  last_modified_date DateTime? @db.DateTime(6)
-  active             Boolean   @db.Bit(1)
-  code               String    @unique(map: "UK_lomfalb6gsh66ox4gy0t2g7qw") @db.VarChar(100)
-  deleted_date       DateTime? @db.DateTime(6)
-  description        String?   @db.VarChar(255)
-  discount           Int
-  end_date           DateTime  @db.DateTime(6)
-  max_value          Int?
-  min_order_amount   Int?
-  name               String    @db.VarChar(100)
-  start_date         DateTime  @db.DateTime(6)
-  stock              Int
-  type               Int       @db.TinyInt
-  order              order[]
+  promotion_id     Int       @id @default(autoincrement())
+  created_date     DateTime? @db.DateTime(6)
+  active           Boolean   @db.Bit(1)
+  code             String    @unique(map: "UK_lomfalb6gsh66ox4gy0t2g7qw") @db.VarChar(100)
+  deleted_date     DateTime? @db.DateTime(6)
+  description      String?   @db.VarChar(255)
+  discount         Int
+  end_date         DateTime  @db.DateTime(6)
+  max_value        Int?
+  min_order_amount Int?
+  name             String    @db.VarChar(100)
+  start_date       DateTime  @db.DateTime(6)
+  stock            Int
+  type             Int       @db.TinyInt
+  order            order[]
 }
 
 model rating {
   id                               Int             @id
+  created_date                     DateTime?       @db.DateTime(6)
   content                          String?         @db.VarChar(255)
   value                            Int
   product_option_product_option_id Int?
   user_user_id                     String?         @db.VarChar(255)
-  created_date                     DateTime?       @db.DateTime(6)
-  product_option                   product_option? @relation(fields: [product_option_product_option_id], references: [product_option_id], onDelete: Restrict, onUpdate: Restrict, map: "FK3q8esamm24cgorp8h5k3ebb4b")
-  user                             user?           @relation(fields: [user_user_id], references: [user_id], onDelete: Restrict, onUpdate: Restrict, map: "FKc4t8k6ukp833gbb9dr9ejvnij")
+  product_option                   product_option? @relation(fields: [product_option_product_option_id], references: [product_option_id], onDelete: NoAction, onUpdate: NoAction, map: "FK3q8esamm24cgorp8h5k3ebb4b")
+  user                             user?           @relation(fields: [user_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FKc4t8k6ukp833gbb9dr9ejvnij")
 
   @@index([product_option_product_option_id], map: "FK3q8esamm24cgorp8h5k3ebb4b")
   @@index([user_user_id], map: "FKc4t8k6ukp833gbb9dr9ejvnij")
 }
 
 model role {
-  normalized_name    String             @id @db.VarChar(50)
-  created_by         String?            @db.VarChar(255)
-  created_date       DateTime?          @db.DateTime(6)
-  last_modified_by   String?            @db.VarChar(255)
-  last_modified_date DateTime?          @db.DateTime(6)
-  description        String?            @db.VarChar(100)
-  display_name       String             @db.VarChar(50)
-  role_permissions   role_permissions[] @ignore
-  user_roles         user_roles[]       @ignore
+  normalized_name  String             @id @db.VarChar(50)
+  created_date     DateTime?          @db.DateTime(6)
+  description      String?            @db.VarChar(100)
+  display_name     String             @db.VarChar(50)
+  role_permissions role_permissions[] @ignore
+  user_roles       user_roles[]       @ignore
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model role_permissions {
   role_id       String     @db.VarChar(50)
   permission_id String     @db.VarChar(50)
-  permission    permission @relation(fields: [permission_id], references: [normalized_name], onUpdate: Restrict, map: "FKh0v7u4w7mttcu81o8wegayr8e")
-  role          role       @relation(fields: [role_id], references: [normalized_name], onUpdate: Restrict, map: "FKlodb7xh4a2xjv39gc3lsop95n")
+  permission    permission @relation(fields: [permission_id], references: [normalized_name], onDelete: NoAction, onUpdate: NoAction, map: "FKh0v7u4w7mttcu81o8wegayr8e")
+  role          role       @relation(fields: [role_id], references: [normalized_name], onDelete: NoAction, onUpdate: NoAction, map: "FKlodb7xh4a2xjv39gc3lsop95n")
 
   @@index([permission_id], map: "FKh0v7u4w7mttcu81o8wegayr8e")
   @@index([role_id], map: "FKlodb7xh4a2xjv39gc3lsop95n")
@@ -257,7 +213,7 @@ model stock_receipt {
   supplier_id          Int
   total                Int
   supplier_supplier_id Int?
-  supplier             supplier?            @relation(fields: [supplier_supplier_id], references: [supplier_id], onDelete: Restrict, onUpdate: Restrict, map: "FK678jx4bl2bkhm462ayepips03")
+  supplier             supplier?            @relation(fields: [supplier_supplier_id], references: [supplier_id], onDelete: NoAction, onUpdate: NoAction, map: "FK678jx4bl2bkhm462ayepips03")
   stock_receipt_item   stock_receipt_item[]
 
   @@index([supplier_supplier_id], map: "FK678jx4bl2bkhm462ayepips03")
@@ -268,8 +224,8 @@ model stock_receipt_item {
   stock_receipt_id  Int
   price             Int
   quantity          Int
-  product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onUpdate: Restrict, map: "FK4kcswjsn2tyx8q33uh4pe0hd6")
-  stock_receipt     stock_receipt  @relation(fields: [stock_receipt_id], references: [stock_receipt_id], onUpdate: Restrict, map: "FKkbjrplw2p70quxcawmoia5efu")
+  product_option    product_option @relation(fields: [product_option_id], references: [product_option_id], onDelete: NoAction, onUpdate: NoAction, map: "FK4kcswjsn2tyx8q33uh4pe0hd6")
+  stock_receipt     stock_receipt  @relation(fields: [stock_receipt_id], references: [stock_receipt_id], onDelete: NoAction, onUpdate: NoAction, map: "FKkbjrplw2p70quxcawmoia5efu")
 
   @@id([product_option_id, stock_receipt_id])
   @@index([stock_receipt_id], map: "FKkbjrplw2p70quxcawmoia5efu")
@@ -278,11 +234,11 @@ model stock_receipt_item {
 model supplier {
   supplier_id   Int             @id
   address       String?         @db.VarChar(255)
+  deleted_date  DateTime?       @db.DateTime(6)
   description   String?         @db.VarChar(255)
   email         String?         @db.VarChar(255)
   name          String?         @db.VarChar(255)
   phone         String?         @db.VarChar(255)
-  deleted_date  DateTime?       @db.DateTime(6)
   stock_receipt stock_receipt[]
 }
 
@@ -309,8 +265,8 @@ model user {
 model user_roles {
   user_id         String @db.VarChar(255)
   normalized_name String @db.VarChar(50)
-  user            user   @relation(fields: [user_id], references: [user_id], onUpdate: Restrict, map: "FK55itppkw3i07do3h7qoclqd4k")
-  role            role   @relation(fields: [normalized_name], references: [normalized_name], onUpdate: Restrict, map: "FKl4wmn6fu283xgevynrmicn4s4")
+  user            user   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FK55itppkw3i07do3h7qoclqd4k")
+  role            role   @relation(fields: [normalized_name], references: [normalized_name], onDelete: NoAction, onUpdate: NoAction, map: "FKl4wmn6fu283xgevynrmicn4s4")
 
   @@index([user_id], map: "FK55itppkw3i07do3h7qoclqd4k")
   @@index([normalized_name], map: "FKl4wmn6fu283xgevynrmicn4s4")

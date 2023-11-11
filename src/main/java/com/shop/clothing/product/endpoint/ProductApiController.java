@@ -38,14 +38,14 @@ public class ProductApiController {
         return ResponseEntity.ok(result.orThrow());
     }
 
-    @Secured("CREATE_PRODUCT")
+    @Secured("PRODUCT_MANAGEMENT")
     @PostMapping("/create")
     public ResponseEntity<Integer> createProduct(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid CreateProductCommand createProductCommand) {
         var result = sender.send(createProductCommand);
         return ResponseEntity.ok(result.orThrow());
     }
 
-    @Secured("UPDATE_PRODUCT")
+    @Secured("PRODUCT_MANAGEMENT")
     @PutMapping("/update")
     public ResponseEntity<Void> updateProduct(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid UpdateProductCommand command) {
         sender.send(command).orThrow();

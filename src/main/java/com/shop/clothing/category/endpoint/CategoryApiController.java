@@ -29,7 +29,7 @@ public class CategoryApiController {
     }
 
     @PostMapping("/create")
-    @PostAuthorize("hasAuthority('MANAGE_CATEGORIES')")
+    @PostAuthorize("hasAuthority('CATEGORY_MANAGEMENT')")
     public ResponseEntity<Integer> createCategory(@Valid @RequestBody CreateCategoryCommand createCategoryRequest) {
         var result = sender.send(createCategoryRequest);
         return ResponseEntity.ok(result.orThrow());
@@ -37,8 +37,8 @@ public class CategoryApiController {
     }
 
     @PutMapping("/update")
-    @PostAuthorize("hasAuthority('MANAGE_CATEGORIES')")
-    @Secured("MANAGE_CATEGORIES")
+    @PostAuthorize("hasAuthority('CATEGORY_MANAGEMENT')")
+    @Secured("CATEGORY_MANAGEMENT")
     public ResponseEntity<Boolean> createCategory(@Valid @RequestBody UpdateCategoryCommand updateCategoryRequest) {
         var result = sender.send(updateCategoryRequest);
         return ResponseEntity.ok(result.orThrow());
@@ -47,7 +47,7 @@ public class CategoryApiController {
 
     @DeleteMapping("/delete/{id}")
     @ResponseBody
-    @PostAuthorize("hasAuthority('MANAGE_CATEGORIES')")
+    @PostAuthorize("hasAuthority('CATEGORY_MANAGEMENT')")
     public void deleteCategory(@PathVariable String id) {
         if (id.isBlank()) throw new IllegalArgumentException("id is null");
         var result = sender.send(new DeleteCategoryCommand(Integer.parseInt(id)));

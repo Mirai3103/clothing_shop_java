@@ -68,7 +68,7 @@ async function createUser() {
     await prisma.user.create({
       data: user,
     });
-    const sql = `INSERT INTO huuhoang_clothing_shop.user_roles VALUES ('${user.user_id}', 'ROLE_CUSTOMER');`;
+    const sql = `INSERT INTO clothing_shop.user_roles VALUES ('${user.user_id}', 'ROLE_CUSTOMER');`;
     await connection.execute(sql);
   }
 })();

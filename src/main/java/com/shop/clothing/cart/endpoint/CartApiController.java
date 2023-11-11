@@ -18,7 +18,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/api/cart")
 @AllArgsConstructor
-@Secured("ROLE_CUSTOMER")
+@Secured("CAN_ORDER")
 public class CartApiController {
     private ISender sender;
 
@@ -28,7 +28,7 @@ public class CartApiController {
     }
 
     @PostMapping("/add-to-cart")
-    public ResponseEntity<Void> addToCart(@Valid  @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody AddToCartCommand addToCartCommand) {
+    public ResponseEntity<Void> addToCart(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody AddToCartCommand addToCartCommand) {
         sender.send(addToCartCommand).orThrow();
         return ResponseEntity.ok().build();
     }
@@ -38,11 +38,13 @@ public class CartApiController {
         sender.send(new ClearCartCommand()).orThrow();
         return ResponseEntity.noContent().build();
     }
+
     @PutMapping("/update-item-quantity")
     public ResponseEntity<Void> updateCartItemQuantity(@Valid @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody UpdateCartItemQuantityCommand updateCartItemQuantityCommand) {
         sender.send(updateCartItemQuantityCommand).orThrow();
         return ResponseEntity.ok().build();
     }
+
     @DeleteMapping("/{productOptionId}")
     public ResponseEntity<Void> clearCart(@PathVariable int productOptionId) {
         sender.send(new RemoveItemFromCartCommand(productOptionId)).orThrow();

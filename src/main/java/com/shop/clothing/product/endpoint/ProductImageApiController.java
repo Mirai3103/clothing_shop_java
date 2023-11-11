@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 public class ProductImageApiController {
     private final ISender sender;
 
-    @Secured("UPDATE_PRODUCT")
+    @Secured("PRODUCT_MANAGEMENT")
     @PostMapping("/create")
     public ResponseEntity<Void> createProductImage(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid CreateProductImageCommand createProductImageCommand) {
         var result = sender.send(createProductImageCommand);
         return ResponseEntity.ok().build();
     }
-    @Secured("UPDATE_PRODUCT")
+    @Secured("PRODUCT_MANAGEMENT")
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteProductImage(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid DeleteProductImageCommand command) {
         var result = sender.send(command);

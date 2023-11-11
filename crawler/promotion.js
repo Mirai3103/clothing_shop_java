@@ -17,7 +17,6 @@ async function genPromotionCode() {
   var newCode = {
     code,
     active: true,
-    created_by: "system",
     created_date: faker.date.past({
       years: 1,
       refDate: new Date(),

@@ -12,7 +12,6 @@ async function insert(item) {
     existCategory = await prisma.category.create({
       data: {
         name: item.category.trim(),
-        created_by: "system",
         created_date: new Date(),
       },
     });
@@ -27,9 +26,9 @@ async function insert(item) {
       display_image: item.displayImage,
       for_gender: 0,
       name: item.title,
+      total_sold: 0,
       slug: toSlug(item.title.trim()),
       category_category_id: existCategory.category_id,
-      created_by: "system",
       created_date: new Date(),
     },
   });
@@ -47,7 +46,6 @@ async function insert(item) {
       existColor = await prisma.color.create({
         data: {
           name: productOption.color.trim(),
-          created_by: "system",
           created_date: new Date(),
         },
       });
@@ -62,7 +60,6 @@ async function insert(item) {
           size: size.trim(),
           stock: Math.floor(Math.random() * 1000) + 50,
           product_product_id: product.product_id,
-          created_by: "system",
           created_date: new Date(),
         },
       });
@@ -77,7 +74,6 @@ async function insert(item) {
           data: {
             url: image,
             for_color_color_id: id,
-            created_by: "system",
             created_date: new Date(),
             product_product_id: productId,
           },

@@ -3,6 +3,7 @@ package com.shop.clothing.controller.shop;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.order.query.getOrderById.GetOrderByIdQuery;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller()
 @RequestMapping("/invoice")
 @AllArgsConstructor
+
 public class InvoiceController {
     private final ISender sender;
     @GetMapping("{id}/view")

@@ -24,7 +24,7 @@ public class StockReceipt extends AuditableEntity {
     @Column(nullable = false)
     private int total = 0;
 
-    @Column(length = 100)
+    @Column(length = 255)
     private String note;
 
     @Column(nullable = false)

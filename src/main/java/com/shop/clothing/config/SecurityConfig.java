@@ -45,7 +45,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authConfig -> {
 //            authConfig.requestMatchers(HttpMethod.GET, "/admin/brand/**").hasAuthority("MANAGE_BRANDS");
-//            authConfig.requestMatchers(HttpMethod.GET, "/admin/category/**").hasxx("MANAGE_CATEGORIES");
+//            authConfig.requestMatchers(HttpMethod.GET, "/admin/category/**").hasxx("CATEGORY_MANAGEMENT");
 //            authConfig.requestMatchers(HttpMethod.GET, "/admin/**").hasAnyRole("ADMIN_DASHBOARD");
             authConfig.anyRequest().permitAll();
 

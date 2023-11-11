@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class OrderAdminController {
     private final ISender _sender;
 
-    @PreAuthorize("hasAnyAuthority('CREATE_ORDER','UPDATE_ORDER','VIEW_ORDERS')")
+    @PreAuthorize("hasAnyAuthority('ORDER_MANAGEMENT')")
     @GetMapping()
     public String getOrders() {
         return "admin/order/index";
     }
 
-    @PreAuthorize("hasAnyAuthority('UPDATE_ORDER')")
+    @PreAuthorize("hasAnyAuthority('ORDER_MANAGEMENT')")
     @GetMapping("/{id}")
     public String getOrderDetail(@PathVariable String id, Model model) {
         var query = new com.shop.clothing.order.query.getOrderById.GetOrderByIdQuery(id);

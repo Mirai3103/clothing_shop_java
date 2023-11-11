@@ -10,6 +10,7 @@ import com.shop.clothing.payment.command.createPayment.CreatePaymentCommand;
 import com.shop.clothing.product.query.getProductOptionsByListId.GetProductOptionsByListIdQuery;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,12 +26,12 @@ import java.util.List;
 @AllArgsConstructor
 public class ShopOrderController {
 
-    private final ICurrentUserService currentUserService;
     private final ISender sender;
     private ObjectMapper objectMapper;
 
 
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('CAN_ORDER') or isAnonymous()")
     public String createOrder(@RequestParam String orderItemsJson, Model model) {
         List<CreateOrderCommand.OrderItem> orderItems = null;
         try {
@@ -55,6 +56,7 @@ public class ShopOrderController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyAuthority('CAN_ORDER') or isAnonymous()")
     public String createOrder(@Valid CreateOrderCommand command, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "order/index";

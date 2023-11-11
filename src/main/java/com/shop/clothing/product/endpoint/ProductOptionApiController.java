@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.*;
 public class ProductOptionApiController {
     private final ISender sender;
 
-    @Secured("CREATE_PRODUCT")
+    @Secured("PRODUCT_MANAGEMENT")
     @PostMapping("/create")
     public ResponseEntity<Integer> createProductOption(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid CreateProductOptionCommand createProductOptionCommand) {
         var result = sender.send(createProductOptionCommand);
         return ResponseEntity.ok(result.orThrow());
     }
-    @Secured("DELETE_PRODUCT")
+    @Secured("PRODUCT_MANAGEMENT")
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductOption(@PathVariable @Parameter(in = ParameterIn.PATH, name = "id") int id) {

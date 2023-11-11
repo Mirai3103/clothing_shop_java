@@ -68,7 +68,7 @@ const createImportInvoice = async () => {
       supplier_supplier_id: supplierId,
       supplier_id: supplierId,
       total: 0,
-      note: faker.lorem.sentences({ max: 3 }),
+      note: faker.lorem.sentences({ max: 2 }),
       created_date: faker.date.past({
         refDate: new Date(),
         years: 2,

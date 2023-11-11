@@ -27,6 +27,11 @@ const prisma = new PrismaClient();
 
       for (let j = 0; j < numOfOrderItem; j++) {
         const productOption = faker.helpers.arrayElement(listProductOption);
+        // check if already exist
+        const exist = orderItems.find((item) => item.product_option_id == productOption.product_option_id);
+        if (exist) {
+          continue;
+        }
         let max = 2;
         if (faker.number.int({ min: 0, max: 15 }) == 0) {
           max = 5;
@@ -46,23 +51,23 @@ const prisma = new PrismaClient();
       }
       const paymentMethod = faker.helpers.arrayElement([0, 1, 2]);
       const status = faker.helpers.arrayElement([0, 1, 2, 3, 4, 5]);
+      const deliveryFee = randomVietNameseMoney({ min: 10000, max: 40000 });
       const order = {
         order_id: id,
         address: user.address,
         customer_name: user.first_name + " " + user.last_name,
-        delivery_fee: randomVietNameseMoney({ min: 10000, max: 40000 }),
-        note: faker.lorem.sentences({ max: 50 }),
+        delivery_fee: deliveryFee,
+        note: faker.lorem.sentences({ max: 2 }),
         payment_method: paymentMethod,
         phone_number: user.phone_number,
         status: status,
-        total_amount: totalAmount,
+        total_amount: totalAmount + deliveryFee,
         user_user_id: user.user_id,
         email: user.email,
         created_date: faker.date.past({
           refDate: new Date(),
           years: 2,
         }),
-        created_by: user.user_id,
       };
       listOrders.push(order);
       listOrderItems.push(...orderItems);
@@ -113,18 +118,18 @@ async function createFakePayment() {
         payment_details: "Thanh toán cho đơn hàng " + order.order_id + ".",
         status: 4,
         order_order_id: order.order_id,
-        created_by: order.user_user_id,
         created_date: refDate,
       };
       listPayment.push(payment);
     }
+    if (order.status == 4) continue;
     const payment = {
       payment_id: randomUUID(),
       amount: order.total_amount,
       payment_details: "Thanh toán cho đơn hàng " + order.order_id + ".",
       status: 1,
+      payment_response: "Thanh toán thành công.",
       order_order_id: order.order_id,
-      created_by: order.user_user_id,
       created_date: faker.date.soon({
         refDate: refDate,
         days: 2,
