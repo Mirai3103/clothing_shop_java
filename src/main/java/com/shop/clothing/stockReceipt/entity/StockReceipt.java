@@ -14,8 +14,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @Table
-@SQLDelete(sql = "UPDATE stock_receipt SET deleted_date = NOW() WHERE stock_receipt_id=?")
-@Where(clause = "deleted_date is null")
+
 public class StockReceipt extends AuditableEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

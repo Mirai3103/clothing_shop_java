@@ -81,15 +81,15 @@ public class ProductController {
         return "admin/product/edit";
     }
 
-    @GetMapping("{id}/options/create")
-    @PreAuthorize("hasAnyAuthority('UPDATE_PRODUCT')")
-    public String createProductOption(Model model, @PathVariable String id) {
-        return "admin/product/option/create";
-    }
-
-    @GetMapping("options/{id}/view")
-    @PreAuthorize("hasAnyAuthority('UPDATE_PRODUCT')")
-    public String viewProductOptions(Model model, @PathVariable String id) {
-        return "admin/product/option/view";
-    }
+//    @GetMapping("{id}/options/create")
+//    @PreAuthorize("hasAnyAuthority('UPDATE_PRODUCT')")
+//    public String createProductOption(Model model, @PathVariable String id) {
+//        return "admin/product/option/create";
+//    }
+//
+//    @GetMapping("options/{id}/view")
+//    @PreAuthorize("hasAnyAuthority('UPDATE_PRODUCT')")
+//    public String viewProductOptions(Model model, @PathVariable String id) {
+//        return "admin/product/option/view";
+//    }
 }

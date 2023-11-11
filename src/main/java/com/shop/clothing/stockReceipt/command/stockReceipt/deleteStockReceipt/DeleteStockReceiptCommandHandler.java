@@ -1,8 +1,9 @@
-package com.shop.clothing.stockReceipt.command.stockReceipt.createStockReceipt;
+package com.shop.clothing.stockReceipt.command.stockReceipt.deleteStockReceipt;
 
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.product.repository.ProductOptionRepository;
+import com.shop.clothing.stockReceipt.command.stockReceipt.createStockReceipt.CreateStockReceiptCommand;
 import com.shop.clothing.stockReceipt.entity.StockReceipt;
 import com.shop.clothing.stockReceipt.entity.StockReceiptItem;
 import com.shop.clothing.stockReceipt.repository.StockReceiptItemRepository;
@@ -14,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @AllArgsConstructor
 @Service
-public class CreateStockReceiptCommandHandler implements IRequestHandler<CreateStockReceiptCommand, Integer> {
+public class DeleteStockReceiptCommandHandler implements IRequestHandler<DeleteStockReceiptCommand, Void> {
     private final StockReceiptRepository stockReceiptRepository;
     private final StockReceiptItemRepository stockReceiptItemRepository;
     private final ProductOptionRepository productOptionRepository;
@@ -22,36 +23,23 @@ public class CreateStockReceiptCommandHandler implements IRequestHandler<CreateS
     @Override
     @Transactional(rollbackFor = {Exception.class, ResponseStatusException.class})
 
-    public HandleResponse<Integer> handle(CreateStockReceiptCommand createStockReceiptCommand) {
-        var existSupplier = stockReceiptRepository.findById(createStockReceiptCommand.getSupplierId());
-        if (existSupplier.isEmpty()) {
-            return HandleResponse.error("Không tìm thấy nhà cung cấp");
+    public HandleResponse<Void> handle(DeleteStockReceiptCommand command) {
+        var exist = stockReceiptRepository.findById(command.stockReceiptId());
+        if (exist.isEmpty()) {
+            return HandleResponse.error("Không tìm thấy phiếu nhập kho với id " + command.stockReceiptId());
         }
-        var stockReceipt = StockReceipt.builder()
-                .note(createStockReceiptCommand.getNote())
-                .supplierId(createStockReceiptCommand.getSupplierId())
-                .build();
-        stockReceiptRepository.save(stockReceipt);
-        for (CreateStockReceiptCommand.CreateItemCommand item : createStockReceiptCommand.getStockReceiptItems()) {
-            var productOption = productOptionRepository.findById(item.productOptionId);
-            if (productOption.isEmpty()) {
-                throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Không tìm thấy sản phẩm với id " + item.productOptionId);
+        var stockReceipt = exist.get();
+        for (StockReceiptItem item : stockReceipt.getStockReceiptItems()) {
+            var productOption = item.getProductOption();
+            productOption.setStock(productOption.getStock() - item.getQuantity());
+            if (productOption.getStock() < 0) {
+                throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Số lượng tồn kho không được nhỏ hơn 0: sản phẩm " + productOption.getProduct().getName());
             }
-
-            if (productOption.get().getProduct().getPrice() < item.price) {
-                throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Giá nhập không được lớn hơn giá bán: sản phẩm " + productOption.get().getProduct().getName());
-            }
-
-            var stockReceiptItem = StockReceiptItem.builder()
-                    .stockReceiptId(stockReceipt.getStockReceiptId())
-                    .quantity(item.quantity)
-                    .productOptionId(item.productOptionId)
-                    .price(item.price)
-                    .build();
-            productOption.get().setStock(productOption.get().getStock() + item.quantity);
-            productOptionRepository.save(productOption.get());
-            stockReceiptItemRepository.save(stockReceiptItem);
+            productOptionRepository.save(productOption);
+            stockReceiptItemRepository.delete(item);
         }
-        return HandleResponse.ok(stockReceipt.getStockReceiptId());
+        stockReceiptRepository.delete(stockReceipt);
+        return HandleResponse.ok();
+
     }
 }

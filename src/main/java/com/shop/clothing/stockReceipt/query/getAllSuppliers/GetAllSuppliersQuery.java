@@ -5,6 +5,7 @@ import com.shop.clothing.common.PaginationRequest;
 import com.shop.clothing.common.dto.Paginated;
 import com.shop.clothing.stockReceipt.dto.StockReceiptBriefDto;
 import com.shop.clothing.stockReceipt.dto.SupplierDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

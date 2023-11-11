@@ -13,7 +13,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Data
 @Builder
-public class Paginated<T>  {
+public class Paginated<T> {
     private Collection<T> data;
     private int page;
     private int pageSize;

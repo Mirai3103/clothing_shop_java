@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Builder
 @AllArgsConstructor
@@ -24,4 +26,6 @@ public class Supplier {
     private String description;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "supplier")
     private java.util.List<StockReceipt> stockReceipts;
+    @Column(name = "deleted_date")
+    private LocalDateTime deletedDate = null;
 }

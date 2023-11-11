@@ -91,10 +91,13 @@ const createImportInvoice = async () => {
           product_id: productOption.productId,
         },
       });
-
+      const max = product.price - 50000 > 50000 ? product.price - 50000 : 60000;
+      const price = faker.number.int({ min: 50000, max });
+      // remove last 3 digits
+      const newPrice = Math.floor(price / 100) * 100;
       const importInvoiceItem = {
-        price: faker.number.int({ min: 50000, max: product.price - 10000 }),
-        quantity: faker.number.int({ min: 5, max: 50 }),
+        price: newPrice,
+        quantity: faker.number.int({ min: 5, max: 20 }),
         product_option_id: productOption.product_option_id,
         stock_receipt_id: newImportInvoice.stock_receipt_id,
       };

@@ -10,24 +10,22 @@ import lombok.Setter;
 import java.sql.Date;
 
 @Setter
+@Getter
+
 public class GetAllStockReceiptsQuery extends PaginationRequest implements IRequest<Paginated<StockReceiptBriefDto>> {
     private Long startDate;
     private Long endDate;
-    @Getter
 
     private Integer supplierId;
-    @Getter
+    private int totalFrom = 0;
 
-    private int totalFrom;
-    @Getter
-
-    private int totalTo;
+    private int totalTo = Integer.MAX_VALUE;
 
     public Date getStartDateObject() {
-        return new Date(startDate);
+        return startDate == null ? null : new Date(startDate);
     }
 
     public Date getEndDateObject() {
-        return new Date(endDate);
+        return endDate == null ? null : new Date(endDate);
     }
 }

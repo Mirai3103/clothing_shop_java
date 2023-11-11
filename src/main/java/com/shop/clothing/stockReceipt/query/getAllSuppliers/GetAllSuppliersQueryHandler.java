@@ -28,7 +28,7 @@ public class GetAllSuppliersQueryHandler implements IRequestHandler<GetAllSuppli
             predicates = criteriaBuilder.and(predicates, criteriaBuilder.like(root.get("name"), "%" + query.getKeyword() + "%"));
         }
         if (query.getSortField() == null || query.getSortField().isEmpty()) {
-            query.setSortField("createdDate");
+            query.setSortField("name");
         }
         if (query.getSortDir() == null || query.getSortDir().isEmpty()) {
             query.setSortDir("desc");
