@@ -624,7 +624,7 @@ class Client {
     }
 
     /**
-     * @return OK
+     * @return Created
      */
     createSupplier(body: CreateSupplierCommand, cancelToken?: CancelToken | undefined): Promise<number> {
         let url_ = this.baseUrl + "/api/supplier";
@@ -664,13 +664,13 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 201) {
             const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            let result201: any = null;
+            let resultData201  = _responseText;
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
     
-            return Promise.resolve<number>(result200);
+            return Promise.resolve<number>(result201);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
@@ -997,6 +997,61 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<number>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    createProductOptionIfNotExist(body: CreateAndGetProductOptionCommand, cancelToken?: CancelToken | undefined): Promise<ProductOptionDetailDto> {
+        let url_ = this.baseUrl + "/api/product-option/createIfNotExist";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateProductOptionIfNotExist(_response);
+        });
+    }
+
+    protected processCreateProductOptionIfNotExist(response: AxiosResponse): Promise<ProductOptionDetailDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = ProductOptionDetailDto.fromJS(resultData200);
+            return Promise.resolve<ProductOptionDetailDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ProductOptionDetailDto>(null as any);
     }
 
     /**
@@ -2764,7 +2819,6 @@ interface IUpdateProductCommand {
 class UpdateCategoryCommand implements IUpdateCategoryCommand {
     id!: number;
     name!: string;
-    slug!: string;
     parentId?: number;
 
     [key: string]: any;
@@ -2786,7 +2840,6 @@ class UpdateCategoryCommand implements IUpdateCategoryCommand {
             }
             this.id = _data["id"];
             this.name = _data["name"];
-            this.slug = _data["slug"];
             this.parentId = _data["parentId"];
         }
     }
@@ -2806,7 +2859,6 @@ class UpdateCategoryCommand implements IUpdateCategoryCommand {
         }
         data["id"] = this.id;
         data["name"] = this.name;
-        data["slug"] = this.slug;
         data["parentId"] = this.parentId;
         return data;
     }
@@ -2815,7 +2867,6 @@ class UpdateCategoryCommand implements IUpdateCategoryCommand {
 interface IUpdateCategoryCommand {
     id: number;
     name: string;
-    slug: string;
     parentId?: number;
 
     [key: string]: any;
@@ -3481,6 +3532,386 @@ interface ICreateProductOptionCommand {
     [key: string]: any;
 }
 
+class CreateAndGetProductOptionCommand implements ICreateAndGetProductOptionCommand {
+    page?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortDir?: string;
+    keyword?: string;
+    colorName!: string;
+    size!: string;
+    stock?: number;
+    productId!: number;
+    sortDirection?: CreateAndGetProductOptionCommandSortDirection;
+
+    [key: string]: any;
+
+    constructor(data?: ICreateAndGetProductOptionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.sortField = _data["sortField"];
+            this.sortDir = _data["sortDir"];
+            this.keyword = _data["keyword"];
+            this.colorName = _data["colorName"];
+            this.size = _data["size"];
+            this.stock = _data["stock"];
+            this.productId = _data["productId"];
+            this.sortDirection = _data["sortDirection"];
+        }
+    }
+
+    static fromJS(data: any): CreateAndGetProductOptionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateAndGetProductOptionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["sortField"] = this.sortField;
+        data["sortDir"] = this.sortDir;
+        data["keyword"] = this.keyword;
+        data["colorName"] = this.colorName;
+        data["size"] = this.size;
+        data["stock"] = this.stock;
+        data["productId"] = this.productId;
+        data["sortDirection"] = this.sortDirection;
+        return data;
+    }
+}
+
+interface ICreateAndGetProductOptionCommand {
+    page?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortDir?: string;
+    keyword?: string;
+    colorName: string;
+    size: string;
+    stock?: number;
+    productId: number;
+    sortDirection?: CreateAndGetProductOptionCommandSortDirection;
+
+    [key: string]: any;
+}
+
+class CategoryBriefDto implements ICategoryBriefDto {
+    createdDate?: Date;
+    categoryId?: number;
+    name?: string;
+    parent?: CategoryBriefDto;
+
+    [key: string]: any;
+
+    constructor(data?: ICategoryBriefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.categoryId = _data["categoryId"];
+            this.name = _data["name"];
+            this.parent = _data["parent"] ? CategoryBriefDto.fromJS(_data["parent"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CategoryBriefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CategoryBriefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["categoryId"] = this.categoryId;
+        data["name"] = this.name;
+        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+interface ICategoryBriefDto {
+    createdDate?: Date;
+    categoryId?: number;
+    name?: string;
+    parent?: CategoryBriefDto;
+
+    [key: string]: any;
+}
+
+class ColorDto implements IColorDto {
+    colorId?: number;
+    name?: string;
+    image?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IColorDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.colorId = _data["colorId"];
+            this.name = _data["name"];
+            this.image = _data["image"];
+        }
+    }
+
+    static fromJS(data: any): ColorDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColorDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["colorId"] = this.colorId;
+        data["name"] = this.name;
+        data["image"] = this.image;
+        return data;
+    }
+}
+
+interface IColorDto {
+    colorId?: number;
+    name?: string;
+    image?: string;
+
+    [key: string]: any;
+}
+
+class ProductBriefDto implements IProductBriefDto {
+    createdDate?: Date;
+    productId?: number;
+    name?: string;
+    forGender?: ProductBriefDtoForGender;
+    slug?: string;
+    price?: number;
+    discount?: number;
+    displayImage?: string;
+    category?: CategoryBriefDto;
+    deletedDate?: Date;
+    finalPrice?: number;
+    forGenderDisplay?: string;
+    vietnamesePrice?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IProductBriefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.productId = _data["productId"];
+            this.name = _data["name"];
+            this.forGender = _data["forGender"];
+            this.slug = _data["slug"];
+            this.price = _data["price"];
+            this.discount = _data["discount"];
+            this.displayImage = _data["displayImage"];
+            this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
+            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
+            this.finalPrice = _data["finalPrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
+        }
+    }
+
+    static fromJS(data: any): ProductBriefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductBriefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["productId"] = this.productId;
+        data["name"] = this.name;
+        data["forGender"] = this.forGender;
+        data["slug"] = this.slug;
+        data["price"] = this.price;
+        data["discount"] = this.discount;
+        data["displayImage"] = this.displayImage;
+        data["category"] = this.category ? this.category.toJSON() : <any>undefined;
+        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
+        data["finalPrice"] = this.finalPrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
+        return data;
+    }
+}
+
+interface IProductBriefDto {
+    createdDate?: Date;
+    productId?: number;
+    name?: string;
+    forGender?: ProductBriefDtoForGender;
+    slug?: string;
+    price?: number;
+    discount?: number;
+    displayImage?: string;
+    category?: CategoryBriefDto;
+    deletedDate?: Date;
+    finalPrice?: number;
+    forGenderDisplay?: string;
+    vietnamesePrice?: string;
+
+    [key: string]: any;
+}
+
+class ProductOptionDetailDto implements IProductOptionDetailDto {
+    createdDate?: Date;
+    productOptionId?: number;
+    size?: string;
+    stock?: number;
+    deletedDate?: Date;
+    color?: ColorDto;
+    product?: ProductBriefDto;
+    quantity?: number;
+    finalPrice?: number;
+    finalPriceDisplay?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IProductOptionDetailDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.productOptionId = _data["productOptionId"];
+            this.size = _data["size"];
+            this.stock = _data["stock"];
+            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
+            this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : <any>undefined;
+            this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : <any>undefined;
+            this.quantity = _data["quantity"];
+            this.finalPrice = _data["finalPrice"];
+            this.finalPriceDisplay = _data["finalPriceDisplay"];
+        }
+    }
+
+    static fromJS(data: any): ProductOptionDetailDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductOptionDetailDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["productOptionId"] = this.productOptionId;
+        data["size"] = this.size;
+        data["stock"] = this.stock;
+        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
+        data["color"] = this.color ? this.color.toJSON() : <any>undefined;
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["quantity"] = this.quantity;
+        data["finalPrice"] = this.finalPrice;
+        data["finalPriceDisplay"] = this.finalPriceDisplay;
+        return data;
+    }
+}
+
+interface IProductOptionDetailDto {
+    createdDate?: Date;
+    productOptionId?: number;
+    size?: string;
+    stock?: number;
+    deletedDate?: Date;
+    color?: ColorDto;
+    product?: ProductBriefDto;
+    quantity?: number;
+    finalPrice?: number;
+    finalPriceDisplay?: string;
+
+    [key: string]: any;
+}
+
 class CreateProductImageCommand implements ICreateProductImageCommand {
     productId?: number;
     colorId?: number;
@@ -3805,9 +4236,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
+    toProvince?: string;
     toDetailAddress?: string;
     toWard?: string;
-    toProvince?: string;
 
     [key: string]: any;
 
@@ -3834,9 +4265,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
+            this.toProvince = _data["toProvince"];
             this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
-            this.toProvince = _data["toProvince"];
         }
     }
 
@@ -3861,9 +4292,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
+        data["toProvince"] = this.toProvince;
         data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
-        data["toProvince"] = this.toProvince;
         return data;
     }
 }
@@ -3877,9 +4308,9 @@ interface IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
+    toProvince?: string;
     toDetailAddress?: string;
     toWard?: string;
-    toProvince?: string;
 
     [key: string]: any;
 }
@@ -4286,8 +4717,8 @@ class UserDto implements IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    customer?: boolean;
     accountEnabled?: boolean;
+    customer?: boolean;
     emailVerified?: boolean;
 
     [key: string]: any;
@@ -4320,8 +4751,8 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
-            this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
+            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
         }
     }
@@ -4352,8 +4783,8 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
+        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
         return data;
     }
@@ -4369,8 +4800,8 @@ interface IUserDto {
     avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
-    customer?: boolean;
     accountEnabled?: boolean;
+    customer?: boolean;
     emailVerified?: boolean;
 
     [key: string]: any;
@@ -4764,122 +5195,6 @@ interface IPromotionDto {
     [key: string]: any;
 }
 
-class CategoryBriefDto implements ICategoryBriefDto {
-    createdDate?: Date;
-    categoryId?: number;
-    name?: string;
-    parent?: CategoryBriefDto;
-
-    [key: string]: any;
-
-    constructor(data?: ICategoryBriefDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.categoryId = _data["categoryId"];
-            this.name = _data["name"];
-            this.parent = _data["parent"] ? CategoryBriefDto.fromJS(_data["parent"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): CategoryBriefDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CategoryBriefDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["categoryId"] = this.categoryId;
-        data["name"] = this.name;
-        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-interface ICategoryBriefDto {
-    createdDate?: Date;
-    categoryId?: number;
-    name?: string;
-    parent?: CategoryBriefDto;
-
-    [key: string]: any;
-}
-
-class ColorDto implements IColorDto {
-    colorId?: number;
-    name?: string;
-    image?: string;
-
-    [key: string]: any;
-
-    constructor(data?: IColorDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.colorId = _data["colorId"];
-            this.name = _data["name"];
-            this.image = _data["image"];
-        }
-    }
-
-    static fromJS(data: any): ColorDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ColorDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["colorId"] = this.colorId;
-        data["name"] = this.name;
-        data["image"] = this.image;
-        return data;
-    }
-}
-
-interface IColorDto {
-    colorId?: number;
-    name?: string;
-    image?: string;
-
-    [key: string]: any;
-}
-
 class ProductDetailDto implements IProductDetailDto {
     createdDate?: Date;
     productId?: number;
@@ -5200,102 +5515,6 @@ interface IPaginatedProductBriefDto {
     totalElements?: number;
     hasNext?: boolean;
     hasPrevious?: boolean;
-
-    [key: string]: any;
-}
-
-class ProductBriefDto implements IProductBriefDto {
-    createdDate?: Date;
-    productId?: number;
-    name?: string;
-    forGender?: ProductBriefDtoForGender;
-    slug?: string;
-    price?: number;
-    discount?: number;
-    displayImage?: string;
-    category?: CategoryBriefDto;
-    deletedDate?: Date;
-    finalPrice?: number;
-    forGenderDisplay?: string;
-    vietnamesePrice?: string;
-
-    [key: string]: any;
-
-    constructor(data?: IProductBriefDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.productId = _data["productId"];
-            this.name = _data["name"];
-            this.forGender = _data["forGender"];
-            this.slug = _data["slug"];
-            this.price = _data["price"];
-            this.discount = _data["discount"];
-            this.displayImage = _data["displayImage"];
-            this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            this.finalPrice = _data["finalPrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
-        }
-    }
-
-    static fromJS(data: any): ProductBriefDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductBriefDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["productId"] = this.productId;
-        data["name"] = this.name;
-        data["forGender"] = this.forGender;
-        data["slug"] = this.slug;
-        data["price"] = this.price;
-        data["discount"] = this.discount;
-        data["displayImage"] = this.displayImage;
-        data["category"] = this.category ? this.category.toJSON() : <any>undefined;
-        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        data["finalPrice"] = this.finalPrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
-        return data;
-    }
-}
-
-interface IProductBriefDto {
-    createdDate?: Date;
-    productId?: number;
-    name?: string;
-    forGender?: ProductBriefDtoForGender;
-    slug?: string;
-    price?: number;
-    discount?: number;
-    displayImage?: string;
-    category?: CategoryBriefDto;
-    deletedDate?: Date;
-    finalPrice?: number;
-    forGenderDisplay?: string;
-    vietnamesePrice?: string;
 
     [key: string]: any;
 }
@@ -5688,90 +5907,6 @@ interface ICartItemDto {
     [key: string]: any;
 }
 
-class ProductOptionDetailDto implements IProductOptionDetailDto {
-    createdDate?: Date;
-    productOptionId?: number;
-    size?: string;
-    stock?: number;
-    deletedDate?: Date;
-    color?: ColorDto;
-    product?: ProductBriefDto;
-    quantity?: number;
-    finalPrice?: number;
-    finalPriceDisplay?: string;
-
-    [key: string]: any;
-
-    constructor(data?: IProductOptionDetailDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.productOptionId = _data["productOptionId"];
-            this.size = _data["size"];
-            this.stock = _data["stock"];
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : <any>undefined;
-            this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : <any>undefined;
-            this.quantity = _data["quantity"];
-            this.finalPrice = _data["finalPrice"];
-            this.finalPriceDisplay = _data["finalPriceDisplay"];
-        }
-    }
-
-    static fromJS(data: any): ProductOptionDetailDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductOptionDetailDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["productOptionId"] = this.productOptionId;
-        data["size"] = this.size;
-        data["stock"] = this.stock;
-        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        data["color"] = this.color ? this.color.toJSON() : <any>undefined;
-        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
-        data["quantity"] = this.quantity;
-        data["finalPrice"] = this.finalPrice;
-        data["finalPriceDisplay"] = this.finalPriceDisplay;
-        return data;
-    }
-}
-
-interface IProductOptionDetailDto {
-    createdDate?: Date;
-    productOptionId?: number;
-    size?: string;
-    stock?: number;
-    deletedDate?: Date;
-    color?: ColorDto;
-    product?: ProductBriefDto;
-    quantity?: number;
-    finalPrice?: number;
-    finalPriceDisplay?: string;
-
-    [key: string]: any;
-}
-
 class DeleteProductImageCommand implements IDeleteProductImageCommand {
     url!: string;
 
@@ -5958,6 +6093,17 @@ enum CreateProductCommandForGender {
     FOR_BOTH = "FOR_BOTH",
 }
 
+enum CreateAndGetProductOptionCommandSortDirection {
+    ASC = "ASC",
+    DESC = "DESC",
+}
+
+enum ProductBriefDtoForGender {
+    FOR_MALE = "FOR_MALE",
+    FOR_FEMALE = "FOR_FEMALE",
+    FOR_BOTH = "FOR_BOTH",
+}
+
 enum CreatePaymentResponsePaymentMethod {
     COD = "COD",
     MOMO_QR = "MOMO_QR",
@@ -5994,12 +6140,6 @@ enum PromotionDtoType {
 }
 
 enum ProductDetailDtoForGender {
-    FOR_MALE = "FOR_MALE",
-    FOR_FEMALE = "FOR_FEMALE",
-    FOR_BOTH = "FOR_BOTH",
-}
-
-enum ProductBriefDtoForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
     FOR_BOTH = "FOR_BOTH",

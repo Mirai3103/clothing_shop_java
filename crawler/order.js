@@ -7,81 +7,81 @@ import { randomUUID } from "crypto";
 config();
 const prisma = new PrismaClient();
 
-(async () => {
-  const listUser = await prisma.user.findMany({
-    where: {
-      is_customer: true,
-    },
-  });
-  const listProductOption = await prisma.product_option.findMany({});
-  const listOrders = [];
-  const listOrderItems = [];
-  for (const user of listUser) {
-    if (faker.number.int({ min: 0, max: 15 }) == 0) continue;
-    const numOfOrder = faker.number.int({ min: 0, max: 10 });
-    for (let i = 0; i < numOfOrder; i++) {
-      const numOfOrderItem = faker.number.int({ min: 1, max: 5 });
-      const orderItems = [];
-      let totalAmount = 0;
-      const id = randomUUID();
+// (async () => {
+//   const listUser = await prisma.user.findMany({
+//     where: {
+//       is_customer: true,
+//     },
+//   });
+//   const listProductOption = await prisma.product_option.findMany({});
+//   const listOrders = [];
+//   const listOrderItems = [];
+//   for (const user of listUser) {
+//     if (faker.number.int({ min: 0, max: 15 }) == 0) continue;
+//     const numOfOrder = faker.number.int({ min: 0, max: 10 });
+//     for (let i = 0; i < numOfOrder; i++) {
+//       const numOfOrderItem = faker.number.int({ min: 1, max: 5 });
+//       const orderItems = [];
+//       let totalAmount = 0;
+//       const id = randomUUID();
 
-      for (let j = 0; j < numOfOrderItem; j++) {
-        const productOption = faker.helpers.arrayElement(listProductOption);
-        // check if already exist
-        const exist = orderItems.find((item) => item.product_option_id == productOption.product_option_id);
-        if (exist) {
-          continue;
-        }
-        let max = 2;
-        if (faker.number.int({ min: 0, max: 15 }) == 0) {
-          max = 5;
-        }
-        const quantity = faker.number.int({ min: 1, max });
-        const product = await findProductById(productOption.product_product_id);
-        const rawPrice = product.price;
-        const price = Math.round(rawPrice * (1 - product.discount / 100));
-        console.log(price);
-        orderItems.push({
-          order_id: id,
-          product_option_id: productOption.product_option_id,
-          price,
-          quantity,
-        });
-        totalAmount += price * quantity;
-      }
-      const paymentMethod = faker.helpers.arrayElement([0, 1, 2]);
-      const status = faker.helpers.arrayElement([0, 1, 2, 3, 4, 5]);
-      const deliveryFee = randomVietNameseMoney({ min: 10000, max: 40000 });
-      const order = {
-        order_id: id,
-        address: user.address,
-        customer_name: user.first_name + " " + user.last_name,
-        delivery_fee: deliveryFee,
-        note: faker.lorem.sentences({ max: 2 }),
-        payment_method: paymentMethod,
-        phone_number: user.phone_number,
-        status: status,
-        total_amount: totalAmount + deliveryFee,
-        user_user_id: user.user_id,
-        email: user.email,
-        created_date: faker.date.past({
-          refDate: new Date(),
-          years: 2,
-        }),
-      };
-      listOrders.push(order);
-      listOrderItems.push(...orderItems);
-    }
-  }
+//       for (let j = 0; j < numOfOrderItem; j++) {
+//         const productOption = faker.helpers.arrayElement(listProductOption);
+//         // check if already exist
+//         const exist = orderItems.find((item) => item.product_option_id == productOption.product_option_id);
+//         if (exist) {
+//           continue;
+//         }
+//         let max = 2;
+//         if (faker.number.int({ min: 0, max: 15 }) == 0) {
+//           max = 5;
+//         }
+//         const quantity = faker.number.int({ min: 1, max });
+//         const product = await findProductById(productOption.product_product_id);
+//         const rawPrice = product.price;
+//         const price = Math.round(rawPrice * (1 - product.discount / 100));
+//         console.log(price);
+//         orderItems.push({
+//           order_id: id,
+//           product_option_id: productOption.product_option_id,
+//           price,
+//           quantity,
+//         });
+//         totalAmount += price * quantity;
+//       }
+//       const paymentMethod = faker.helpers.arrayElement([0, 1, 2]);
+//       const status = faker.helpers.arrayElement([0, 1, 2, 3, 4, 5]);
+//       const deliveryFee = randomVietNameseMoney({ min: 10000, max: 40000 });
+//       const order = {
+//         order_id: id,
+//         address: user.address,
+//         customer_name: user.first_name + " " + user.last_name,
+//         delivery_fee: deliveryFee,
+//         note: faker.lorem.sentences({ max: 2 }),
+//         payment_method: paymentMethod,
+//         phone_number: user.phone_number,
+//         status: status,
+//         total_amount: totalAmount + deliveryFee,
+//         user_user_id: user.user_id,
+//         email: user.email,
+//         created_date: faker.date.past({
+//           refDate: new Date(),
+//           years: 2,
+//         }),
+//       };
+//       listOrders.push(order);
+//       listOrderItems.push(...orderItems);
+//     }
+//   }
 
-  await prisma.order.createMany({
-    data: listOrders,
-  });
-  await prisma.order_item.createMany({
-    data: listOrderItems,
-  });
-  console.log("done");
-})();
+//   await prisma.order.createMany({
+//     data: listOrders,
+//   });
+//   await prisma.order_item.createMany({
+//     data: listOrderItems,
+//   });
+//   console.log("done");
+// })();
 
 async function findProductById(id) {
   const product = await prisma.product.findUnique({
@@ -142,4 +142,4 @@ async function createFakePayment() {
   });
 }
 
-// createFakePayment();
+createFakePayment();

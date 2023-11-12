@@ -42,7 +42,6 @@ const createSupplier = async () => {
   const listSupplier = [];
   for (let i = 0; i < 10; i++) {
     const supplier = {
-      supplier_id: i + 1,
       name: "Nhà cung cấp 00" + i,
       address: await createRandomAddress(),
       phone: faker.phone.number("03########"),

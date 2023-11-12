@@ -20,11 +20,13 @@ public class StockReceiptApiController {
     // delete and create receipt
 
     @PostMapping("/")
+    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     public ResponseEntity<Integer> createStockReceipt(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody CreateStockReceiptCommand command) throws Exception {
         var result = sender.send(command);
         return ResponseEntity.created(new java.net.URI("/api/stock-receipt/" + result.orThrow())).build();
     }
     @DeleteMapping("/{id}")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteStockReceipt( @PathVariable int id)  {
         var result = sender.send(new DeleteStockReceiptCommand(id)).orThrow();
         return ResponseEntity.noContent().build();

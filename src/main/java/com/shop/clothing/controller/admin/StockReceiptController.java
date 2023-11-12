@@ -25,4 +25,16 @@ public class StockReceiptController {
         model.addAttribute("suppliers", listSupplier.getData());
         return "admin/stockReceipt/index";
     }
+    @GetMapping ("/create")
+    public String create(Model model){
+        var query = new GetAllSuppliersQuery();
+        query.setPage(1);
+        query.setPageSize(100);
+        query.setSortField("name");
+        query.setSortDir("asc");
+        var listSupplier = sender.send(query).get().getData();
+        model.addAttribute("suppliers", listSupplier);
+        return "admin/stockReceipt/create";
+    }
+
 }

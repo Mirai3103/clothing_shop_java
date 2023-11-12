@@ -99,6 +99,7 @@
 
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
 
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-search-orm -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

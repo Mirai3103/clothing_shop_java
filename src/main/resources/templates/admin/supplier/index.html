@@ -31,6 +31,7 @@
         return this.data.filter((item) => this.selected.includes(item.supplierId));
     },
     }"
+
             x-init="
              const urlQuery = new URLSearchParams(window.location.search);
              const pageQr = urlQuery.get('page');
@@ -88,6 +89,19 @@
                     });
                 });
                 "
+            @supplier-created.window="data.push($event.detail)"
+            @supplier-updated.window="
+            const el = data.find((item) => item.supplierId === selectedId);
+            if (el) {
+                el.name = $event.detail.name;
+                el.address = $event.detail.address;
+                el.phone = $event.detail.phone;
+                el.email = $event.detail.email;
+                el.description = $event.detail.description;
+            }"
+            @supplier-deleted.window="
+            data = data.filter((item) => item.supplierId != $event.detail);
+            "
     >
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
             <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
@@ -405,20 +419,22 @@
                                     const description = $event.target.description.value;
                                     $event.preventDefault();
                                     isCreating = true;
-                                    window.apiClient.updateSupplier(id, {
+                                    const payload = {
                                       name,
                                       phone,
                                       supplierId: id,
                                       description,
                                       address,
                                       email
-                                    }).then((res) =>{
+                                    }
+                                    window.apiClient.updateSupplier(id,payload).then((res) =>{
+                                    $dispatch('supplier-updated', payload);
                                       $store.toast.add('success', 'Thành công', 'Sửa nhà cung cấp thành công');
                                       toggleUpdateModal();
                                       errors = {};
                                     }).
                                     catch((err) =>{
-                                              errors = err.response.errors;
+                                              errors = err.response.errors||{};
                                       $store.toast.add('error', 'Lỗi', err.response.error);
                                     }).
                                     finally(() =>{
@@ -506,7 +522,7 @@
                                         type="submit"
                                         class="w-full sm:w-auto justify-center text-white inline-flex bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                 >
-                                    Thêm nhà cung cấp
+                                    Sửa nhà cung cấp
                                 </button>
 
                                 <button
@@ -583,18 +599,21 @@
                                     const description = $event.target.description.value;
                                     $event.preventDefault();
                                     isCreating = true;
-                                    window.apiClient.createSupplier( {
+                                    const payload = {
                                       name,
                                       phone,
                                       description,
                                       address,
                                       email
-                                    }).then((res) =>{
+                                    }
+                                    window.apiClient.createSupplier(payload).then((res) =>{
+                                    $dispatch('supplier-created',{...payload, supplierId: res.data});
                                       $store.toast.add('success', 'Thành công', 'Thêm nhà cung cấp thành công');
                                         document.getElementById('cancelCreateButton').click();
                                     }).
                                     catch((err) =>{
-                                        errors = err.response.errors;
+                                    console.log(err);
+                                        errors = err.response.errors||{};
                                       $store.toast.add('error', 'Lỗi', err.response.error);
                                     }).
                                     finally(() =>{
@@ -676,7 +695,7 @@
                                         :disabled="isCreating"
                                         class="w-full sm:w-auto justify-center text-white inline-flex bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                 >
-                                    Thêm nhà cung cấp
+                                   Thêm nhà cung cấp
                                 </button>
 
                                 <button
@@ -763,9 +782,7 @@
                                 $store.toast.add('success', 'Thành công','Xoá nhà cung cấp thành công');
                                     toggleDeleteModal();
 
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 2000);
+                                $dispatch('supplier-deleted', $event.target.supplierId.value);
                         }).catch((error) => {
                                 $store.toast.add('error', 'Lỗi',error.response.error);
                         });

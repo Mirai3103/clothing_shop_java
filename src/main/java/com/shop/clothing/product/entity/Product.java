@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -32,6 +33,8 @@ public class Product extends AuditableEntity {
 
 
     @Column(nullable = false)
+
+
     private String name;
 
     @Column(nullable = false)

@@ -61,6 +61,7 @@ public class ProductController {
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasAnyAuthority('PRODUCT_MANAGEMENT')")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
         var command = new DeleteProductCommand(id);
         sender.send(command);

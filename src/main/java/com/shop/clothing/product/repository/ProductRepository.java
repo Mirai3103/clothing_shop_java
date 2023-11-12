@@ -19,8 +19,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Optional<Product> findBySlug(String slug);
 
-    @Query(value = "delete from Product p where p.product_id = ?1", nativeQuery = true)
     @Modifying
+
+    @Query(value = "delete from Product p where p.product_id = ?1", nativeQuery = true)
     void hardDeleteById(int id);
     @Query(value = "SELECT DISTINCT  p.product  FROM ProductOption p WHERE " +
             " (:keyword IS NULL OR p.product.name LIKE %:keyword%)" +

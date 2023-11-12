@@ -100,6 +100,13 @@ model permission {
   role_permissions role_permissions[] @ignore
 }
 
+model persistent_logins {
+  username  String   @db.VarChar(64)
+  series    String   @id @db.VarChar(64)
+  token     String   @db.VarChar(64)
+  last_used DateTime @db.Timestamp(0)
+}
+
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model product {
   product_id           Int              @id @default(autoincrement())
@@ -209,7 +216,7 @@ model role_permissions {
 model stock_receipt {
   stock_receipt_id     Int                  @id @default(autoincrement())
   created_date         DateTime?            @db.DateTime(6)
-  note                 String?              @db.VarChar(100)
+  note                 String?              @db.VarChar(255)
   supplier_id          Int
   total                Int
   supplier_supplier_id Int?
@@ -232,7 +239,7 @@ model stock_receipt_item {
 }
 
 model supplier {
-  supplier_id   Int             @id
+  supplier_id   Int             @id @default(autoincrement())
   address       String?         @db.VarChar(255)
   deleted_date  DateTime?       @db.DateTime(6)
   description   String?         @db.VarChar(255)

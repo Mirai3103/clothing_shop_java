@@ -2,8 +2,10 @@ package com.shop.clothing.product.endpoint;
 
 
 import com.shop.clothing.common.Cqrs.ISender;
+import com.shop.clothing.product.command.createAndGetProductOption.CreateAndGetProductOptionCommand;
 import com.shop.clothing.product.command.createProductOption.CreateProductOptionCommand;
 
+import com.shop.clothing.product.dto.ProductOptionDetailDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
@@ -25,9 +27,16 @@ public class ProductOptionApiController {
         var result = sender.send(createProductOptionCommand);
         return ResponseEntity.ok(result.orThrow());
     }
+    @Secured("STOCK_RECEIPT_MANAGEMENT")
+    @PostMapping("/createIfNotExist")
+    public ResponseEntity<ProductOptionDetailDto> createProductOptionIfNotExist(@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody @Valid CreateAndGetProductOptionCommand command) {
+        var result = sender.send(command);
+        return ResponseEntity.ok(result.orThrow());
+    }
     @Secured("PRODUCT_MANAGEMENT")
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteProductOption(@PathVariable @Parameter(in = ParameterIn.PATH, name = "id") int id) {
         var result = sender.send(new com.shop.clothing.product.command.deleteProductOption.DeleteProductOptionCommand(id));
         return ResponseEntity.noContent().build();

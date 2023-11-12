@@ -22,12 +22,14 @@ public class SupplierApiController {
     // delete and create receipt
 
     @PostMapping()
+    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     public ResponseEntity<Integer> createSupplier(@Valid @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody CreateSupplierCommand command) throws Exception {
         var result = sender.send(command);
         return ResponseEntity.created(new java.net.URI("/api/supplier/" + result.orThrow())).build();
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteSupplier(@PathVariable int id) {
         sender.send(new DeleteSupplierCommand(id)).orThrow();
         return ResponseEntity.noContent().build();

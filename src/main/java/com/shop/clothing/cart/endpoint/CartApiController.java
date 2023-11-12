@@ -34,6 +34,7 @@ public class CartApiController {
     }
 
     @DeleteMapping("/clear-cart")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> clearCart() {
         sender.send(new ClearCartCommand()).orThrow();
         return ResponseEntity.noContent().build();
@@ -46,6 +47,7 @@ public class CartApiController {
     }
 
     @DeleteMapping("/{productOptionId}")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> clearCart(@PathVariable int productOptionId) {
         sender.send(new RemoveItemFromCartCommand(productOptionId)).orThrow();
         return ResponseEntity.noContent().build();

@@ -1983,6 +1983,9 @@ input:checked + .toggle-bg{
 .mb-6{
   margin-bottom: 1.5rem;
 }
+.me-2{
+  margin-inline-end: 0.5rem;
+}
 .ml-0{
   margin-left: 0px;
 }
@@ -2220,6 +2223,9 @@ input:checked + .toggle-bg{
 .max-h-full{
   max-height: 100%;
 }
+.max-h-64{
+  max-height: 16rem;
+}
 .min-h-\[12rem\]{
   min-height: 12rem;
 }
@@ -2255,6 +2261,9 @@ input:checked + .toggle-bg{
 }
 .w-11{
   width: 2.75rem;
+}
+.w-11\/12{
+  width: 91.666667%;
 }
 .w-12{
   width: 3rem;
@@ -4308,6 +4317,10 @@ a {
 .peer:focus ~ .peer-focus\:ring-primary-300{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(203 213 225 / var(--tw-ring-opacity));
+}
+
+:is([dir="rtl"] .rtl\:text-right){
+  text-align: right;
 }
 
 :is(.dark .dark\:divide-gray-600) > :not([hidden]) ~ :not([hidden]){
