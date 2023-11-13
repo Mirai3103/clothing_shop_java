@@ -62,7 +62,7 @@ public class SecurityConfig {
                     logout.deleteCookies("JSESSIONID");
                     logout.invalidateHttpSession(true);
                 })
-
+//                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }

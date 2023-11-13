@@ -33,4 +33,7 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, In
     @Query(value = "select p from ProductOption p where p.product.name = ?1 and ?1 like concat('%', p.size, '%') and ?1 like concat('%', p.color.name, '%')")
     Page<ProductOption> search(String keyword, Pageable pageable);
 
+    @Query(value = "select distinct po.size from product_option po", nativeQuery = true)
+    List<String> getAllSizes();
+
 }

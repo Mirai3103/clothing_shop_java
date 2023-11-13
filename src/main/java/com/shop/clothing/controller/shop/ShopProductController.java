@@ -36,4 +36,8 @@ public class ShopProductController {
 
         return "productDetail";
     }
+    @GetMapping("/search")
+    public String searchProduct(Model model) {
+        return "search";
+    }
 }

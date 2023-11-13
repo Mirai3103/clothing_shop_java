@@ -1,16 +1,255 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html
-  lang="vi"
-  xmlns:th="http://www.thymeleaf.org"
-  layout:decorate="layout"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        lang="vi"
+        xmlns:th="http://www.thymeleaf.org"
+        layout:decorate="layout"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <title>Cửa hàng bán quần áo</title>
-  </head>
+</head>
 
-  <body>
-    <div layout:fragment="content" class="max-w-screen-xl mx-auto" th:with="clientUtil=${@clientUtil}"></div>
-  </body>
+<body>
+<div layout:fragment="content" class="max-w-screen-xl mx-auto" th:with="clientUtil=${@clientUtil}">
+
+        <div class="index bar">
+            <nav class="flex ml-1 mt-3" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a
+                                href="#"
+                                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                        >
+                            <svg
+                                    class="w-3 h-3 mr-2.5"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                            >
+                                <path
+                                        d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"
+                                />
+                            </svg>
+                            Trang chủ
+                        </a>
+                    </li>
+
+                    <li>
+                        <div class="flex items-center">
+                            <svg
+                                    class="w-3 h-3 text-gray-400 mx-1"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 6 10"
+                            >
+                                <path
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="m1 9 4-4-4-4"
+                                />
+                            </svg>
+                            <a
+                                    class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+
+                            >
+                                Tìm kiếm
+                            </a>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+
+        </div>
+    <div class="body flex w-pt h-pt">
+        <div class="CustomizeProducts  text-gray-500 w-pt20  mt-5">
+
+            <div class=" flex ">
+                <div class="ml-20 pb-5  rounded-2xl border-2 border-gray-200">
+                    <div class="CustomizeProducts-head mt-4 ml-4 ">
+                        <ul class="flex">
+                            <p class="font-bold"> Bộ lọc</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-6 h-6 ml-auto mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M6 13.5V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 9.75V10.5"/>
+                            </svg>
+
+                        </ul>
+                        <hr class=" mr-4 mt-5 border-b-2 border-gray-300">
+                    </div>
+                    <div class="ml-4 mt-4">
+                        <p>
+                        <ul class="flex">
+                            <p lass="font-bold "></p>
+                            <p>:</p>
+                            <p id="myParagraph" class="text-red-500 text-xs mt-px20 ml-1 "></p>
+                        </ul>
+                        </p>
+                        <div>
+                            <ul class="Inputselect flex flex-wrap">
+                                <!-- <div class="ext-center bg-gray-300 ml-2 mt-2 rounded-lg flex">
+                                    <li class=" textinput px-6">T-Shirts</li>
+                                    <svg class="absolute h-6 w-6 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>  -->
+                            </ul>
+                        </div>
+
+                        <hr class=" mr-4 mt-5 border-b-2 border-gray-300">
+                    </div>
+
+                    <div class="CustomizeProducts-typeClothesmt-4 ml-4 mt-4 ">
+                        <div class="CustomizeProducts-typeClothesmt-import">
+                            <!--đưa các loại sản phẩm vào-->
+                        </div>
+                        <hr class=" mr-4 mt-5 border-b-2 border-gray-300">
+                    </div>
+                    <div class="CustomizeProducts-priceChoice ml-4 mt-4">
+                        <ul class="flex">
+                            <p class="font-bold">
+                                Khoảng giá
+                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-5 h-5 ml-auto mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
+                            </svg>
+
+                        </ul>
+                        <div class="">
+                            <div class="mt-4 flex flex-col items-center">
+                                <input type="range" min="60" max="300" value="0" class="slider1 ml-30pt  mt-0 "
+                                       id="mySlider1">
+                                <input type="range" min="0" max="300" value="0" class="slider m-0" id="mySlider">
+                                <!-- <input type="range" min="101" max="300" value="0" class="slider1 ml-9  mt-0 " id="mySlider1"> -->
+                            </div>
+                        </div>
+                        <div class="flex font-bold">
+                            <p class="kq"> $0 </p>
+                            <p class="kq1 ml-auto mr-5"> $60 </p>
+                        </div>
+
+                        <hr class=" mr-4 mt-5 border-b-2 border-gray-300">
+                    </div>
+                    <div class="CustomizeProducts-chooseColor mt-4">
+                        <ul class=" ml-4 flex">
+                            <p class="font-bold"> Màu sắc</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-5 h-5 ml-auto mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
+                            </svg>
+                        </ul>
+                        <ul class="listcoler flex flex-wrap">
+                            <!-- đưa mau -->
+                        </ul>
+                        <hr class="ml-4 mr-4 mt-5 border-b-2 border-gray-300">
+                    </div>
+                    <div class="CustomizeProducts-ChoiceSize ">
+                        <ul class="flex ml-4 mt-4">
+                            <p class="font-bold">
+                            Kích cỡ
+                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-5 h-5 ml-auto mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
+                            </svg>
+
+                        </ul>
+                        <div class="w-60">
+                            <ul class="size flex flex-wrap">
+                                <!-- đưa size và từ js -->
+                            </ul>
+
+                        </div>
+                        <hr class=" ml-4 mr-4 mt-5 border-b-2 border-gray-300">
+                    </div>
+                    <!-- <div class="CustomizeProducts-dressStyle-4 ml-4 " >
+                        <ul class="flex mt-4">
+                            <p class="font-bold">Dress style</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-auto mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                            </svg>
+
+                        </ul>
+                        <div class="endfilter">
+                         đưa style vao tu js
+                        </div>
+                    </div> -->
+                    <div class="CustomizeProducts-applyfilter mt-4 ml-4" onclick="applyfilter()">
+                        <div class=" w-45">
+                            <p class="bg-black text-white px-5 py-3 rounded-full text-center">
+                                Áp dụng lọc
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="listproduct ml-4pt ml-auto mt-5 mr-50 w-60pt">
+            <div class="listproduct-head  flex ">
+                <p class=" text-3xl font-bold"> Casual</p>
+                <ul class="flex text-gray-500 mt-2 ml-auto">
+                    <li>Showing 1-10 or 100 products</li>
+                    <liv class="ml-3">Sort by:</liv>
+                    <li class="ml-3 font-bold"> Most Popular</li>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="w-5 h-5 mt-1 ml-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                    </svg>
+                </ul>
+            </div>
+            <div class="listproduct-list flex flex-wrap">
+                <!-- đẩy sản phẩm -->
+            </div>
+            <div class="pageTransitionBar">
+                <hr class=" ml-4  mt-8 border-b-1 border-gray-300">
+                <div class="flex mt-5">
+                    <div class=" border-2 ml-4 border-gray-400 px-1 rounded-lg">
+                        <ul class="flex py-1 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+                            </svg>
+                            <li>Previous</li>
+
+                        </ul>
+                    </div>
+                    <div class="number-page ml-auto ">
+                        <ul class="number-page-list flex">
+                            <!-- in ra danh sach trang san pham -->
+                        </ul>
+
+                    </div>
+
+                    <div class="ml-auto mr-2 border-2 border-gray-400 px-2 rounded-lg ">
+                        <ul class="flex py-1 ">
+                            <li>Next</li>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                            </svg>
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+    <div class="mt-6"></div>
+    <script src="/js/search.js"></script>
+
+</div>
+</body>
 </html>
