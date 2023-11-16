@@ -27,9 +27,6 @@ public class StockReceipt extends AuditableEntity {
     @Column(length = 255)
     private String note;
 
-    @Column(nullable = false)
-    private int supplierId;
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Supplier supplier;
 

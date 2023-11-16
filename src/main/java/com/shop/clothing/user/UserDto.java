@@ -12,13 +12,8 @@ import java.util.Date;
 @Setter
 @Getter
 @NoArgsConstructor
-public class UserDto {
+public class UserDto extends UserBriefDto{
 
-    private String userId;
-
-    private String firstName;
-
-    private String lastName;
 
     private String email;
 
@@ -26,7 +21,6 @@ public class UserDto {
 
     private String address;
 
-    private String avatarUrl;
 
     private boolean isEmailVerified = false;
 

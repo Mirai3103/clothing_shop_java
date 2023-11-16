@@ -23,6 +23,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query(value = "delete from Product p where p.product_id = ?1", nativeQuery = true)
     void hardDeleteById(int id);
+
     @Query(value = "SELECT DISTINCT  p.product  FROM ProductOption p WHERE " +
             " (:keyword IS NULL OR p.product.name LIKE %:keyword%)" +
             "AND  (:categoryIds IS NULL   or p.product.category.categoryId IN :categoryIds)" +
@@ -48,5 +49,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                     int[] colorIds, String[] sizes,
                                     Pageable pageable);
 
-
+    @Modifying
+    @Query("update Product p set p.deletedDate = null where p.productId = ?1")
+    void recoveryByProductId(int productId);
 }

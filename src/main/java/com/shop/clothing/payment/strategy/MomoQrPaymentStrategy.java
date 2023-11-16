@@ -1,5 +1,6 @@
 package com.shop.clothing.payment.strategy;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shop.clothing.common.BusinessLogicException;
 import com.shop.clothing.order.repository.OrderRepository;
 import com.shop.clothing.payment.dto.CreatePaymentResponse;
@@ -10,7 +11,10 @@ import com.shop.clothing.payment.momo.MomoCreatePaymentResponse;
 import com.shop.clothing.payment.momo.MomoService;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -22,8 +26,9 @@ public class MomoQrPaymentStrategy implements PaymentStrategy {
     private final com.shop.clothing.payment.repository.PaymentRepository paymentRepository;
 
     @Override
+    @Transactional
     public CreatePaymentResponse createPayment(String orderId) throws Exception {
-        var order = orderRepository.findById(orderId).orElseThrow(() -> new BusinessLogicException("Đon hàng không tồn tại"));
+        var order = orderRepository.findById(orderId).orElseThrow(() -> new ResponseStatusException( HttpStatus.BAD_REQUEST,"Đơn hàng không tồn tại"));
 
         var lastPayment = paymentRepository.findFirstByOrderIdSortedByCreatedDateDesc(orderId).orElse(null);
         var paymentId = UUID.randomUUID().toString();
@@ -31,13 +36,14 @@ public class MomoQrPaymentStrategy implements PaymentStrategy {
             paymentId = lastPayment.getPaymentId();
         }
         var response = momoService.createQRCodePayment(paymentId, order.getTotalAmount(), "Thanh toán đơn hàng " + orderId);
-
+        var ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(response);
         if (lastPayment == null || lastPayment.getStatus() != PaymentStatus.PENDING) {
             var payment = Payment.builder().paymentId(paymentId)
                     .amount(order.getTotalAmount())
                     .paymentDetails("Thanh toán bằng quét mã QR")
                     .order(order)
-                    .paymentResponse(JSONObject.valueToString(response))
+                    .paymentResponse(json)
                     .build();
             paymentRepository.save(payment);
         }

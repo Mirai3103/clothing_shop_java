@@ -24,20 +24,11 @@ public class AdvanceSearchAllProductsQueryHandler implements IRequestHandler<Adv
 
     @Override
     @Transactional(readOnly = true)
-//    @Cacheable(value = "searchProduct", key = "#query.toString()")
     public HandleResponse<Paginated<ProductBriefDto>> handle(AdvanceSearchAllProductsQuery query) throws Exception {
         if (query.getSizes() != null)
             query.setSizes(Arrays.stream(query.getSizes()).map(String::toUpperCase).toArray(String[]::new));
         var productPage = productRepository.searchAllProducts(query.getKeyword(), query.getCategoryIds(), query.getForGenders(), query.getMinPrice(), query.getMaxPrice(), query.getColorIds(), query.getSizes(), query.getPageable("createdDate"));
-        Paginated<ProductBriefDto> paginated = Paginated.<ProductBriefDto>builder()
-                .totalElements(productPage.getTotalElements())
-                .data(productPage.getContent().stream().map(product -> modelMapper.map(product, ProductBriefDto.class)).toList())
-                .totalPages(productPage.getTotalPages())
-                .page(productPage.getNumber() + 1)
-                .pageSize(query.getPageSize())
-                .hasNext(productPage.hasNext())
-                .hasPrevious(productPage.hasPrevious())
-                .build();
+        Paginated<ProductBriefDto> paginated = Paginated.of(productPage.map(product -> modelMapper.map(product, ProductBriefDto.class)));
         return HandleResponse.ok(paginated);
     }
 }

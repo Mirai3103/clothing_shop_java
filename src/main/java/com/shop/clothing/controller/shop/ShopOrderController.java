@@ -2,6 +2,7 @@ package com.shop.clothing.controller.shop;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shop.clothing.cart.command.removeItems.RemoveItemsInCartCommand;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.config.ICurrentUserService;
 import com.shop.clothing.order.command.createOrder.CreateOrderCommand;
@@ -63,6 +64,11 @@ public class ShopOrderController {
         }
         var response = sender.send(command);
         if (response.isOk()) {
+            var listProductOptionIds = command.getOrderItems().stream().map(CreateOrderCommand.OrderItem::getProductOptionId).toList();
+            var removeItems = new RemoveItemsInCartCommand();
+            removeItems.setProductOptionIds(listProductOptionIds);
+            sender.send(removeItems);
+            System.out.println("order id: " + response.get());
             var createPaymentCommand = new CreatePaymentCommand();
             createPaymentCommand.setOrderId(response.get());
             var paymentResponse = sender.send(createPaymentCommand);

@@ -1,6 +1,7 @@
 package com.shop.clothing.order.entity;
 
 import com.shop.clothing.payment.entity.enums.PaymentMethod;
+import com.shop.clothing.rating.Rating;
 import com.shop.clothing.user.entity.User;
 import com.shop.clothing.common.AuditableEntity;
 import com.shop.clothing.promotion.Promotion;
@@ -66,5 +67,8 @@ public class Order extends AuditableEntity {
 
     @Column(name = "completed_date")
     private java.time.LocalDateTime completedDate;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private java.util.List<Rating> ratings;
 
 }

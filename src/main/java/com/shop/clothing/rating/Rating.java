@@ -2,6 +2,8 @@ package com.shop.clothing.rating;
 
 
 import com.shop.clothing.common.AuditableEntity;
+import com.shop.clothing.order.entity.Order;
+import com.shop.clothing.order.entity.OrderItem;
 import com.shop.clothing.product.entity.Product;
 import com.shop.clothing.product.entity.ProductOption;
 import com.shop.clothing.user.entity.User;
@@ -20,6 +22,7 @@ import org.hibernate.annotations.Where;
 
 public class Rating extends AuditableEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String content;
     private int value;
@@ -27,4 +30,6 @@ public class Rating extends AuditableEntity {
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     private ProductOption productOption;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Order order;
 }

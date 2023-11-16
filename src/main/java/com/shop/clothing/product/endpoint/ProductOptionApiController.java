@@ -5,6 +5,8 @@ import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.product.command.createAndGetProductOption.CreateAndGetProductOptionCommand;
 import com.shop.clothing.product.command.createProductOption.CreateProductOptionCommand;
 
+import com.shop.clothing.product.command.recoveryProduct.RecoveryProductCommand;
+import com.shop.clothing.product.command.recoveryProductOption.RecoveryProductOptionCommand;
 import com.shop.clothing.product.dto.ProductOptionDetailDto;
 import com.shop.clothing.product.query.getAllSizes.GetAllSizesQuery;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,5 +53,10 @@ public class ProductOptionApiController {
     public ResponseEntity<Collection<String>> getAllSizes() {
         var sizes = sender.send(new GetAllSizesQuery());
         return ResponseEntity.ok(sizes.orThrow());
+    }
+    @PatchMapping("/recovery/{productOptionId}")
+    public ResponseEntity<Void> recoveryProductOption(@PathVariable int productOptionId) {
+        sender.send(new RecoveryProductOptionCommand(productOptionId)).orThrow();
+        return ResponseEntity.ok().build();
     }
 }

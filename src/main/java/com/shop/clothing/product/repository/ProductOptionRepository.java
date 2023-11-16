@@ -36,4 +36,15 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, In
     @Query(value = "select distinct po.size from product_option po", nativeQuery = true)
     List<String> getAllSizes();
 
+    @Modifying
+    @Query(value = "update ProductOption po set po.deletedDate = now() where po.product.productId = ?1")
+    void deleteAllByProductId(int productId);
+
+    @Modifying
+    @Query("update ProductOption po set po.deletedDate = null where po.productOptionId = ?1")
+    void recoveryByProductOptionId(int productOptionId);
+
+    @Modifying
+    @Query("update ProductOption po set po.deletedDate = null where po.product.productId = ?1")
+    void recoveryByProductId(int productOptionId);
 }

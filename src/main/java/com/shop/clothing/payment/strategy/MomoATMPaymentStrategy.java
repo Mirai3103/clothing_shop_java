@@ -1,5 +1,6 @@
 package com.shop.clothing.payment.strategy;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shop.clothing.common.BusinessLogicException;
 import com.shop.clothing.order.repository.OrderRepository;
 import com.shop.clothing.payment.dto.CreatePaymentResponse;
@@ -34,13 +35,14 @@ public class MomoATMPaymentStrategy implements PaymentStrategy {
         }
         var response = momoService.createATMPayment(paymentId, order.getTotalAmount(), "Thanh toán đơn hàng " + orderId);
 
-
+        var ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(response);
         if (lastPayment == null || lastPayment.getStatus() != PaymentStatus.PENDING) {
             var payment = Payment.builder().paymentId(paymentId)
                     .amount(order.getTotalAmount())
                     .paymentDetails("Thanh toán bằng ATM")
                     .order(order)
-                    .paymentResponse(JSONObject.valueToString(response))
+                    .paymentResponse(JSONObject.valueToString(json))
                     .build();
             paymentRepository.save(payment);
         }

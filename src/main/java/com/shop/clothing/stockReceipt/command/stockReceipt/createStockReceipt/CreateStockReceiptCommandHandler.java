@@ -5,8 +5,10 @@ import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.product.repository.ProductOptionRepository;
 import com.shop.clothing.stockReceipt.entity.StockReceipt;
 import com.shop.clothing.stockReceipt.entity.StockReceiptItem;
+import com.shop.clothing.stockReceipt.entity.Supplier;
 import com.shop.clothing.stockReceipt.repository.StockReceiptItemRepository;
 import com.shop.clothing.stockReceipt.repository.StockReceiptRepository;
+import com.shop.clothing.stockReceipt.repository.SupplierRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,19 +20,20 @@ public class CreateStockReceiptCommandHandler implements IRequestHandler<CreateS
     private final StockReceiptRepository stockReceiptRepository;
     private final StockReceiptItemRepository stockReceiptItemRepository;
     private final ProductOptionRepository productOptionRepository;
+    private final SupplierRepository supplierRepository;
 
     @Override
     @Transactional(rollbackFor = {Exception.class, ResponseStatusException.class})
 
     public HandleResponse<Integer> handle(CreateStockReceiptCommand createStockReceiptCommand) {
-        var existSupplier = stockReceiptRepository.findById(createStockReceiptCommand.getSupplierId());
+        var existSupplier = supplierRepository.findById(createStockReceiptCommand.getSupplierId());
         if (existSupplier.isEmpty()) {
             return HandleResponse.error("Không tìm thấy nhà cung cấp");
         }
         var stockReceipt = StockReceipt.builder()
                 .note(createStockReceiptCommand.getNote())
                 .total(0)
-                .supplierId(createStockReceiptCommand.getSupplierId())
+                .supplier(existSupplier.get())
                 .build();
         stockReceiptRepository.save(stockReceipt);
         int total = 0;

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StockReceiptItemRepository extends JpaRepository<StockReceiptItem, StockReceiptItem.StockReceiptItemKey> {
+    boolean existsByProductOptionId(int productOptionId);
 }

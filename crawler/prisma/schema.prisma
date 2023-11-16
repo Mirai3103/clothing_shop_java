@@ -28,6 +28,7 @@ model order {
   user                   user?        @relation(fields: [user_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FKktqkl7kou3pykq8fnm4rr9jmy")
   order_item             order_item[]
   payment                payment[]
+  rating                 rating?
 
   @@index([promotion_promotion_id], map: "FKkgpbw4fb1s5r7v0tlathrxp7s")
   @@index([user_user_id], map: "FKktqkl7kou3pykq8fnm4rr9jmy")
@@ -85,9 +86,10 @@ model payment {
   created_date     DateTime? @db.DateTime(6)
   amount           Int
   payment_details  String    @db.VarChar(255)
-  payment_response String?   @db.VarChar(255)
+  payment_response String?   @db.VarChar(1000)
   status           Int       @db.TinyInt
   order_order_id   String?   @db.VarChar(36)
+  completed_date   DateTime? @db.DateTime(6)
   order            order?    @relation(fields: [order_order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction, map: "FKhobhqk8v7ohgfr56r725x80y5")
 
   @@index([order_order_id], map: "FKhobhqk8v7ohgfr56r725x80y5")
@@ -179,14 +181,16 @@ model promotion {
 }
 
 model rating {
-  id                               Int             @id
+  id                               Int             @id @default(autoincrement())
   created_date                     DateTime?       @db.DateTime(6)
   content                          String?         @db.VarChar(255)
   value                            Int
   product_option_product_option_id Int?
   user_user_id                     String?         @db.VarChar(255)
+  order_order_id                   String?         @unique(map: "UK_sqkvbw0hvx5ykinmxn38fl9fv") @db.VarChar(36)
   product_option                   product_option? @relation(fields: [product_option_product_option_id], references: [product_option_id], onDelete: NoAction, onUpdate: NoAction, map: "FK3q8esamm24cgorp8h5k3ebb4b")
   user                             user?           @relation(fields: [user_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FKc4t8k6ukp833gbb9dr9ejvnij")
+  order                            order?          @relation(fields: [order_order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction, map: "FKtnd684vk2p4ix87w9tixxltyr")
 
   @@index([product_option_product_option_id], map: "FK3q8esamm24cgorp8h5k3ebb4b")
   @@index([user_user_id], map: "FKc4t8k6ukp833gbb9dr9ejvnij")

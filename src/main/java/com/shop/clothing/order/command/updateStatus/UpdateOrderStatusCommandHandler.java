@@ -2,6 +2,7 @@ package com.shop.clothing.order.command.updateStatus;
 
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
+import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.order.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,9 @@ public class UpdateOrderStatusCommandHandler implements IRequestHandler<UpdateOr
     public HandleResponse<Void> handle(UpdateOrderStatusCommand updateOrderStatusCommand) throws Exception {
         var order = orderRepository.findById(updateOrderStatusCommand.orderId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy đơn hàng"));
         order.setStatus(updateOrderStatusCommand.status());
+        if(order.getStatus()== OrderStatus.DELIVERED || order.getStatus()== OrderStatus.CANCELLED){
+            order.setCompletedDate(java.time.LocalDateTime.now());
+        }
         orderRepository.save(order);
         return HandleResponse.ok();
     }

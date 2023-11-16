@@ -18,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.Formatter;
 import java.util.UUID;
 
@@ -165,6 +166,9 @@ public class MomoService {
                 payment.setStatus(PaymentStatus.FAILED);
             default:
                 payment.setStatus(PaymentStatus.FAILED);
+        }
+        if(payment.getStatus()==PaymentStatus.PAID){
+            payment.setCompletedDate(LocalDateTime.now());
         }
         paymentRepository.save(payment);
         return payment;

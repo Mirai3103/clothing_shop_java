@@ -26,6 +26,7 @@ public class GetOrderByIdQueryHandler implements IRequestHandler<GetOrderByIdQue
 
 
     @Override
+    @Transactional(readOnly = true)
     public HandleResponse<OrderDetailDto> handle(GetOrderByIdQuery getOrderByIdQuery) throws Exception {
         var order = _orderRepository.findById(getOrderByIdQuery.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
         var orderDto = _mapper.map(order, OrderDetailDto.class);

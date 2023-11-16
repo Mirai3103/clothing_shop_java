@@ -64,7 +64,7 @@ class Client {
         return Promise.resolve(null);
     }
     /**
-     * @return OK
+     * @return No Content
      */
     deleteSupplier(id, cancelToken) {
         let url_ = this.baseUrl + "/api/supplier/{id}";
@@ -99,7 +99,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve(null);
         }
@@ -718,7 +718,7 @@ class Client {
         return Promise.resolve(null);
     }
     /**
-     * @return OK
+     * @return Created
      */
     createStockReceipt(body, cancelToken) {
         let url_ = this.baseUrl + "/api/stock-receipt/";
@@ -755,12 +755,12 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 201) {
             const _responseText = response.data;
-            let result200 = null;
-            let resultData200 = _responseText;
-            result200 = resultData200 !== undefined ? resultData200 : null;
-            return Promise.resolve(result200);
+            let result201 = null;
+            let resultData201 = _responseText;
+            result201 = resultData201 !== undefined ? resultData201 : null;
+            return Promise.resolve(result201);
         }
         else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
@@ -1438,6 +1438,98 @@ class Client {
     /**
      * @return OK
      */
+    recoveryProduct(productId, cancelToken) {
+        let url_ = this.baseUrl + "/api/product/recovery/{productId}";
+        if (productId === undefined || productId === null)
+            throw new Error("The parameter 'productId' must be defined.");
+        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "PATCH",
+            url: url_,
+            headers: {},
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processRecoveryProduct(_response);
+        });
+    }
+    processRecoveryProduct(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    recoveryProductOption(productOptionId, cancelToken) {
+        let url_ = this.baseUrl + "/api/product-option/recovery/{productOptionId}";
+        if (productOptionId === undefined || productOptionId === null)
+            throw new Error("The parameter 'productOptionId' must be defined.");
+        url_ = url_.replace("{productOptionId}", encodeURIComponent("" + productOptionId));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "PATCH",
+            url: url_,
+            headers: {},
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processRecoveryProductOption(_response);
+        });
+    }
+    processRecoveryProductOption(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
     updatePaymentStatus(body, cancelToken) {
         let url_ = this.baseUrl + "/api/payment/update-status";
         url_ = url_.replace(/[?&]$/, "");
@@ -1522,6 +1614,57 @@ class Client {
         if (status === 200) {
             const _responseText = response.data;
             return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    getAllRatingOfProduct(productId, cancelToken) {
+        let url_ = this.baseUrl + "/api/rating/product/{productId}";
+        if (productId === undefined || productId === null)
+            throw new Error("The parameter 'productId' must be defined.");
+        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllRatingOfProduct(_response);
+        });
+    }
+    processGetAllRatingOfProduct(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = PaginatedRatingDto.fromJS(resultData200);
+            return Promise.resolve(result200);
         }
         else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
@@ -1840,6 +1983,61 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @return OK
+     */
+    getAllSizes(cancelToken) {
+        let url_ = this.baseUrl + "/api/product-option/sizes";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllSizes(_response);
+        });
+    }
+    processGetAllSizes(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(item);
+            }
+            else {
+                result200 = null;
+            }
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @param paymentStatus (optional)
      * @param startDate (optional)
      * @param endDate (optional)
@@ -1934,6 +2132,61 @@ class Client {
             let result200 = null;
             let resultData200 = _responseText;
             result200 = PaginatedOrderBriefDto.fromJS(resultData200);
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    getAllColors(cancelToken) {
+        let url_ = this.baseUrl + "/api/color";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllColors(_response);
+        });
+    }
+    processGetAllColors(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(ColorDto.fromJS(item));
+            }
+            else {
+                result200 = null;
+            }
             return Promise.resolve(result200);
         }
         else if (status !== 200 && status !== 204) {
@@ -2131,7 +2384,7 @@ class Client {
         return Promise.resolve(null);
     }
     /**
-     * @return OK
+     * @return No Content
      */
     deleteStockReceipt(id, cancelToken) {
         let url_ = this.baseUrl + "/api/stock-receipt/{id}";
@@ -2166,7 +2419,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve(null);
         }
@@ -2177,7 +2430,7 @@ class Client {
         return Promise.resolve(null);
     }
     /**
-     * @return OK
+     * @return No Content
      */
     deleteProductOption(id, cancelToken) {
         let url_ = this.baseUrl + "/api/product-option/{id}";
@@ -2212,7 +2465,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve(null);
         }
@@ -2316,7 +2569,7 @@ class Client {
         return Promise.resolve(null);
     }
     /**
-     * @return OK
+     * @return No Content
      */
     clearCart(productOptionId, cancelToken) {
         let url_ = this.baseUrl + "/api/cart/{productOptionId}";
@@ -2351,7 +2604,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve(null);
         }
@@ -2427,7 +2680,7 @@ class ClearCartClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
     }
     /**
-     * @return OK
+     * @return No Content
      */
     1(cancelToken) {
         let url_ = this.baseUrl + "/api/cart/clear-cart";
@@ -2459,7 +2712,7 @@ class ClearCartClient {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve(null);
         }
@@ -3051,16 +3304,10 @@ class CreateAndGetProductOptionCommand {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.sortField = _data["sortField"];
-            this.sortDir = _data["sortDir"];
-            this.keyword = _data["keyword"];
             this.colorName = _data["colorName"];
             this.size = _data["size"];
             this.stock = _data["stock"];
             this.productId = _data["productId"];
-            this.sortDirection = _data["sortDirection"];
         }
     }
     static fromJS(data) {
@@ -3075,16 +3322,10 @@ class CreateAndGetProductOptionCommand {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["sortField"] = this.sortField;
-        data["sortDir"] = this.sortDir;
-        data["keyword"] = this.keyword;
         data["colorName"] = this.colorName;
         data["size"] = this.size;
         data["stock"] = this.stock;
         data["productId"] = this.productId;
-        data["sortDirection"] = this.sortDirection;
         return data;
     }
 }
@@ -3191,9 +3432,9 @@ class ProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
     static fromJS(data) {
@@ -3218,9 +3459,9 @@ class ProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -3513,8 +3754,8 @@ class GetDeliveryOptionQuery {
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
             this.toProvince = _data["toProvince"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
         }
     }
     static fromJS(data) {
@@ -3538,8 +3779,8 @@ class GetDeliveryOptionQuery {
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
         data["toProvince"] = this.toProvince;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
         return data;
     }
 }
@@ -3827,10 +4068,10 @@ class UserDto {
             this.userId = _data["userId"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
+            this.avatarUrl = _data["avatarUrl"];
             this.email = _data["email"];
             this.phoneNumber = _data["phoneNumber"];
             this.address = _data["address"];
-            this.avatarUrl = _data["avatarUrl"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : undefined;
             if (Array.isArray(_data["permissions"])) {
                 this.permissions = [];
@@ -3838,8 +4079,8 @@ class UserDto {
                     this.permissions.push(item);
             }
             this.accountEnabled = _data["accountEnabled"];
-            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
+            this.customer = _data["customer"];
         }
     }
     static fromJS(data) {
@@ -3857,10 +4098,10 @@ class UserDto {
         data["userId"] = this.userId;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
+        data["avatarUrl"] = this.avatarUrl;
         data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
         data["address"] = this.address;
-        data["avatarUrl"] = this.avatarUrl;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : undefined;
         if (Array.isArray(this.permissions)) {
             data["permissions"] = [];
@@ -3868,8 +4109,8 @@ class UserDto {
                 data["permissions"].push(item);
         }
         data["accountEnabled"] = this.accountEnabled;
-        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
+        data["customer"] = this.customer;
         return data;
     }
 }
@@ -4069,6 +4310,186 @@ class StockReceiptBriefDto {
         return data;
     }
 }
+class PaginatedRatingDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [];
+                for (let item of _data["data"])
+                    this.data.push(RatingDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedRatingDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+class ProductOptionDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : undefined;
+            this.productOptionId = _data["productOptionId"];
+            this.size = _data["size"];
+            this.stock = _data["stock"];
+            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
+            this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : undefined;
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductOptionDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : undefined;
+        data["productOptionId"] = this.productOptionId;
+        data["size"] = this.size;
+        data["stock"] = this.stock;
+        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
+        data["color"] = this.color ? this.color.toJSON() : undefined;
+        return data;
+    }
+}
+class RatingDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.content = _data["content"];
+            this.value = _data["value"];
+            this.user = _data["user"] ? UserBriefDto.fromJS(_data["user"]) : undefined;
+            this.productOption = _data["productOption"] ? ProductOptionDto.fromJS(_data["productOption"]) : undefined;
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new RatingDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["content"] = this.content;
+        data["value"] = this.value;
+        data["user"] = this.user ? this.user.toJSON() : undefined;
+        data["productOption"] = this.productOption ? this.productOption.toJSON() : undefined;
+        return data;
+    }
+}
+class UserBriefDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.userId = _data["userId"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.avatarUrl = _data["avatarUrl"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserBriefDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["userId"] = this.userId;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["avatarUrl"] = this.avatarUrl;
+        return data;
+    }
+}
 class PromotionDto {
     constructor(data) {
         if (data) {
@@ -4161,9 +4582,9 @@ class ProductDetailDto {
                     this.images.push(ProductImageDto.fromJS(item));
             }
             this.description = _data["description"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
     static fromJS(data) {
@@ -4199,9 +4620,9 @@ class ProductDetailDto {
                 data["images"].push(item.toJSON());
         }
         data["description"] = this.description;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -4238,50 +4659,6 @@ class ProductImageDto {
         }
         data["url"] = this.url;
         data["forColor"] = this.forColor ? this.forColor.toJSON() : undefined;
-        return data;
-    }
-}
-class ProductOptionDto {
-    constructor(data) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    this[property] = data[property];
-            }
-        }
-    }
-    init(_data) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : undefined;
-            this.productOptionId = _data["productOptionId"];
-            this.size = _data["size"];
-            this.stock = _data["stock"];
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
-            this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : undefined;
-        }
-    }
-    static fromJS(data) {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductOptionDto();
-        result.init(data);
-        return result;
-    }
-    toJSON(data) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : undefined;
-        data["productOptionId"] = this.productOptionId;
-        data["size"] = this.size;
-        data["stock"] = this.stock;
-        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
-        data["color"] = this.color ? this.color.toJSON() : undefined;
         return data;
     }
 }
@@ -4735,11 +5112,6 @@ var CreateProductCommandForGender;
     CreateProductCommandForGender["FOR_FEMALE"] = "FOR_FEMALE";
     CreateProductCommandForGender["FOR_BOTH"] = "FOR_BOTH";
 })(CreateProductCommandForGender || (CreateProductCommandForGender = {}));
-var CreateAndGetProductOptionCommandSortDirection;
-(function (CreateAndGetProductOptionCommandSortDirection) {
-    CreateAndGetProductOptionCommandSortDirection["ASC"] = "ASC";
-    CreateAndGetProductOptionCommandSortDirection["DESC"] = "DESC";
-})(CreateAndGetProductOptionCommandSortDirection || (CreateAndGetProductOptionCommandSortDirection = {}));
 var ProductBriefDtoForGender;
 (function (ProductBriefDtoForGender) {
     ProductBriefDtoForGender["FOR_MALE"] = "FOR_MALE";

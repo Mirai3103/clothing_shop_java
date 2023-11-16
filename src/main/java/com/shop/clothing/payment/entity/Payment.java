@@ -7,6 +7,8 @@ import com.shop.clothing.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Builder
 @AllArgsConstructor
@@ -24,11 +26,13 @@ public class Payment extends AuditableEntity {
     private PaymentStatus status = PaymentStatus.PENDING;
     @Column(nullable = false)
     private String paymentDetails;
-    @Column()
+    @Column(length = 1000)
     private String paymentResponse;
     private int amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
+
+    private LocalDateTime completedDate;
 
 }

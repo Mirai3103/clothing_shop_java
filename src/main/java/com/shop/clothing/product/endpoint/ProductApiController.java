@@ -3,6 +3,7 @@ package com.shop.clothing.product.endpoint;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.common.dto.Paginated;
 import com.shop.clothing.product.command.createProduct.CreateProductCommand;
+import com.shop.clothing.product.command.recoveryProduct.RecoveryProductCommand;
 import com.shop.clothing.product.command.updateProduct.UpdateProductCommand;
 import com.shop.clothing.product.dto.ProductBriefDto;
 import com.shop.clothing.product.dto.ProductDetailDto;
@@ -56,5 +57,11 @@ public class ProductApiController {
     public ResponseEntity<ProductDetailDto> getProductById(@PathVariable int productId) {
         var result = sender.send(new GetProductByIdQuery(productId));
         return ResponseEntity.ok(result.orThrow());
+    }
+
+    @PatchMapping("/recovery/{productId}")
+    public ResponseEntity<Void> recoveryProduct(@PathVariable int productId) {
+        sender.send(new RecoveryProductCommand(productId)).orThrow();
+        return ResponseEntity.ok().build();
     }
 }

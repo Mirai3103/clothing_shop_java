@@ -79,7 +79,7 @@ class Client {
     }
 
     /**
-     * @return OK
+     * @return No Content
      */
     deleteSupplier(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/supplier/{id}";
@@ -117,7 +117,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -781,7 +781,7 @@ class Client {
     }
 
     /**
-     * @return OK
+     * @return Created
      */
     createStockReceipt(body: CreateStockReceiptCommand, cancelToken?: CancelToken | undefined): Promise<number> {
         let url_ = this.baseUrl + "/api/stock-receipt/";
@@ -821,13 +821,13 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 201) {
             const _responseText = response.data;
-            let result200: any = null;
-            let resultData200  = _responseText;
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            let result201: any = null;
+            let resultData201  = _responseText;
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
     
-            return Promise.resolve<number>(result200);
+            return Promise.resolve<number>(result201);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
@@ -1563,6 +1563,106 @@ class Client {
     /**
      * @return OK
      */
+    recoveryProduct(productId: number, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/product/recovery/{productId}";
+        if (productId === undefined || productId === null)
+            throw new Error("The parameter 'productId' must be defined.");
+        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "PATCH",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRecoveryProduct(_response);
+        });
+    }
+
+    protected processRecoveryProduct(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    recoveryProductOption(productOptionId: number, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/product-option/recovery/{productOptionId}";
+        if (productOptionId === undefined || productOptionId === null)
+            throw new Error("The parameter 'productOptionId' must be defined.");
+        url_ = url_.replace("{productOptionId}", encodeURIComponent("" + productOptionId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "PATCH",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRecoveryProductOption(_response);
+        });
+    }
+
+    protected processRecoveryProductOption(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     updatePaymentStatus(body: UpdatePaymentStatusCommand, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/payment/update-status";
         url_ = url_.replace(/[?&]$/, "");
@@ -1660,6 +1760,60 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getAllRatingOfProduct(productId: number, cancelToken?: CancelToken | undefined): Promise<PaginatedRatingDto> {
+        let url_ = this.baseUrl + "/api/rating/product/{productId}";
+        if (productId === undefined || productId === null)
+            throw new Error("The parameter 'productId' must be defined.");
+        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllRatingOfProduct(_response);
+        });
+    }
+
+    protected processGetAllRatingOfProduct(response: AxiosResponse): Promise<PaginatedRatingDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PaginatedRatingDto.fromJS(resultData200);
+            return Promise.resolve<PaginatedRatingDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PaginatedRatingDto>(null as any);
     }
 
     /**
@@ -1985,6 +2139,64 @@ class Client {
     }
 
     /**
+     * @return OK
+     */
+    getAllSizes( cancelToken?: CancelToken | undefined): Promise<string[]> {
+        let url_ = this.baseUrl + "/api/product-option/sizes";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllSizes(_response);
+        });
+    }
+
+    protected processGetAllSizes(response: AxiosResponse): Promise<string[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(item);
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<string[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string[]>(null as any);
+    }
+
+    /**
      * @param paymentStatus (optional) 
      * @param startDate (optional) 
      * @param endDate (optional) 
@@ -2088,6 +2300,64 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<PaginatedOrderBriefDto>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getAllColors( cancelToken?: CancelToken | undefined): Promise<ColorDto[]> {
+        let url_ = this.baseUrl + "/api/color";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllColors(_response);
+        });
+    }
+
+    protected processGetAllColors(response: AxiosResponse): Promise<ColorDto[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ColorDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<ColorDto[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ColorDto[]>(null as any);
     }
 
     /**
@@ -2286,7 +2556,7 @@ class Client {
     }
 
     /**
-     * @return OK
+     * @return No Content
      */
     deleteStockReceipt(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/stock-receipt/{id}";
@@ -2324,7 +2594,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -2336,7 +2606,7 @@ class Client {
     }
 
     /**
-     * @return OK
+     * @return No Content
      */
     deleteProductOption(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/product-option/{id}";
@@ -2374,7 +2644,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -2487,7 +2757,7 @@ class Client {
     }
 
     /**
-     * @return OK
+     * @return No Content
      */
     clearCart(productOptionId: number, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/cart/{productOptionId}";
@@ -2525,7 +2795,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -2621,7 +2891,7 @@ class ClearCartClient {
     }
 
     /**
-     * @return OK
+     * @return No Content
      */
     1( cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/cart/clear-cart";
@@ -2656,7 +2926,7 @@ class ClearCartClient {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -3533,16 +3803,10 @@ interface ICreateProductOptionCommand {
 }
 
 class CreateAndGetProductOptionCommand implements ICreateAndGetProductOptionCommand {
-    page?: number;
-    pageSize?: number;
-    sortField?: string;
-    sortDir?: string;
-    keyword?: string;
     colorName!: string;
     size!: string;
     stock?: number;
     productId!: number;
-    sortDirection?: CreateAndGetProductOptionCommandSortDirection;
 
     [key: string]: any;
 
@@ -3561,16 +3825,10 @@ class CreateAndGetProductOptionCommand implements ICreateAndGetProductOptionComm
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.sortField = _data["sortField"];
-            this.sortDir = _data["sortDir"];
-            this.keyword = _data["keyword"];
             this.colorName = _data["colorName"];
             this.size = _data["size"];
             this.stock = _data["stock"];
             this.productId = _data["productId"];
-            this.sortDirection = _data["sortDirection"];
         }
     }
 
@@ -3587,31 +3845,19 @@ class CreateAndGetProductOptionCommand implements ICreateAndGetProductOptionComm
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["sortField"] = this.sortField;
-        data["sortDir"] = this.sortDir;
-        data["keyword"] = this.keyword;
         data["colorName"] = this.colorName;
         data["size"] = this.size;
         data["stock"] = this.stock;
         data["productId"] = this.productId;
-        data["sortDirection"] = this.sortDirection;
         return data;
     }
 }
 
 interface ICreateAndGetProductOptionCommand {
-    page?: number;
-    pageSize?: number;
-    sortField?: string;
-    sortDir?: string;
-    keyword?: string;
     colorName: string;
     size: string;
     stock?: number;
     productId: number;
-    sortDirection?: CreateAndGetProductOptionCommandSortDirection;
 
     [key: string]: any;
 }
@@ -3743,9 +3989,9 @@ class ProductBriefDto implements IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
+    vietnamesePrice?: string;
     finalPrice?: number;
     forGenderDisplay?: string;
-    vietnamesePrice?: string;
 
     [key: string]: any;
 
@@ -3774,9 +4020,9 @@ class ProductBriefDto implements IProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
 
@@ -3803,9 +4049,9 @@ class ProductBriefDto implements IProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -3821,9 +4067,9 @@ interface IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
+    vietnamesePrice?: string;
     finalPrice?: number;
     forGenderDisplay?: string;
-    vietnamesePrice?: string;
 
     [key: string]: any;
 }
@@ -4237,8 +4483,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     weightInGram?: number;
     toDistrict?: string;
     toProvince?: string;
-    toDetailAddress?: string;
     toWard?: string;
+    toDetailAddress?: string;
 
     [key: string]: any;
 
@@ -4266,8 +4512,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
             this.toProvince = _data["toProvince"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
         }
     }
 
@@ -4293,8 +4539,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
         data["toProvince"] = this.toProvince;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
         return data;
     }
 }
@@ -4309,8 +4555,8 @@ interface IGetDeliveryOptionQuery {
     weightInGram?: number;
     toDistrict?: string;
     toProvince?: string;
-    toDetailAddress?: string;
     toWard?: string;
+    toDetailAddress?: string;
 
     [key: string]: any;
 }
@@ -4711,15 +4957,15 @@ class UserDto implements IUserDto {
     userId?: string;
     firstName?: string;
     lastName?: string;
+    avatarUrl?: string;
     email?: string;
     phoneNumber?: string;
     address?: string;
-    avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
     accountEnabled?: boolean;
-    customer?: boolean;
     emailVerified?: boolean;
+    customer?: boolean;
 
     [key: string]: any;
 
@@ -4741,10 +4987,10 @@ class UserDto implements IUserDto {
             this.userId = _data["userId"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
+            this.avatarUrl = _data["avatarUrl"];
             this.email = _data["email"];
             this.phoneNumber = _data["phoneNumber"];
             this.address = _data["address"];
-            this.avatarUrl = _data["avatarUrl"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             if (Array.isArray(_data["permissions"])) {
                 this.permissions = [] as any;
@@ -4752,8 +4998,8 @@ class UserDto implements IUserDto {
                     this.permissions!.push(item);
             }
             this.accountEnabled = _data["accountEnabled"];
-            this.customer = _data["customer"];
             this.emailVerified = _data["emailVerified"];
+            this.customer = _data["customer"];
         }
     }
 
@@ -4773,10 +5019,10 @@ class UserDto implements IUserDto {
         data["userId"] = this.userId;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
+        data["avatarUrl"] = this.avatarUrl;
         data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
         data["address"] = this.address;
-        data["avatarUrl"] = this.avatarUrl;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         if (Array.isArray(this.permissions)) {
             data["permissions"] = [];
@@ -4784,8 +5030,8 @@ class UserDto implements IUserDto {
                 data["permissions"].push(item);
         }
         data["accountEnabled"] = this.accountEnabled;
-        data["customer"] = this.customer;
         data["emailVerified"] = this.emailVerified;
+        data["customer"] = this.customer;
         return data;
     }
 }
@@ -4794,15 +5040,15 @@ interface IUserDto {
     userId?: string;
     firstName?: string;
     lastName?: string;
+    avatarUrl?: string;
     email?: string;
     phoneNumber?: string;
     address?: string;
-    avatarUrl?: string;
     createdAt?: Date;
     permissions?: string[];
     accountEnabled?: boolean;
-    customer?: boolean;
     emailVerified?: boolean;
+    customer?: boolean;
 
     [key: string]: any;
 }
@@ -5103,6 +5349,278 @@ interface IStockReceiptBriefDto {
     [key: string]: any;
 }
 
+class PaginatedRatingDto implements IPaginatedRatingDto {
+    data?: RatingDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+
+    constructor(data?: IPaginatedRatingDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(RatingDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedRatingDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedRatingDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+
+interface IPaginatedRatingDto {
+    data?: RatingDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+}
+
+class ProductOptionDto implements IProductOptionDto {
+    createdDate?: Date;
+    productOptionId?: number;
+    size?: string;
+    stock?: number;
+    deletedDate?: Date;
+    color?: ColorDto;
+
+    [key: string]: any;
+
+    constructor(data?: IProductOptionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.productOptionId = _data["productOptionId"];
+            this.size = _data["size"];
+            this.stock = _data["stock"];
+            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
+            this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ProductOptionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductOptionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["productOptionId"] = this.productOptionId;
+        data["size"] = this.size;
+        data["stock"] = this.stock;
+        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
+        data["color"] = this.color ? this.color.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+interface IProductOptionDto {
+    createdDate?: Date;
+    productOptionId?: number;
+    size?: string;
+    stock?: number;
+    deletedDate?: Date;
+    color?: ColorDto;
+
+    [key: string]: any;
+}
+
+class RatingDto implements IRatingDto {
+    id?: number;
+    content?: string;
+    value?: number;
+    user?: UserBriefDto;
+    productOption?: ProductOptionDto;
+
+    [key: string]: any;
+
+    constructor(data?: IRatingDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.content = _data["content"];
+            this.value = _data["value"];
+            this.user = _data["user"] ? UserBriefDto.fromJS(_data["user"]) : <any>undefined;
+            this.productOption = _data["productOption"] ? ProductOptionDto.fromJS(_data["productOption"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): RatingDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RatingDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["content"] = this.content;
+        data["value"] = this.value;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["productOption"] = this.productOption ? this.productOption.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+interface IRatingDto {
+    id?: number;
+    content?: string;
+    value?: number;
+    user?: UserBriefDto;
+    productOption?: ProductOptionDto;
+
+    [key: string]: any;
+}
+
+class UserBriefDto implements IUserBriefDto {
+    userId?: string;
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IUserBriefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.userId = _data["userId"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.avatarUrl = _data["avatarUrl"];
+        }
+    }
+
+    static fromJS(data: any): UserBriefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserBriefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["userId"] = this.userId;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["avatarUrl"] = this.avatarUrl;
+        return data;
+    }
+}
+
+interface IUserBriefDto {
+    userId?: string;
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string;
+
+    [key: string]: any;
+}
+
 class PromotionDto implements IPromotionDto {
     promotionId?: number;
     code?: string;
@@ -5209,9 +5727,9 @@ class ProductDetailDto implements IProductDetailDto {
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
+    vietnamesePrice?: string;
     finalPrice?: number;
     forGenderDisplay?: string;
-    vietnamesePrice?: string;
 
     [key: string]: any;
 
@@ -5251,9 +5769,9 @@ class ProductDetailDto implements IProductDetailDto {
                     this.images!.push(ProductImageDto.fromJS(item));
             }
             this.description = _data["description"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
 
@@ -5291,9 +5809,9 @@ class ProductDetailDto implements IProductDetailDto {
                 data["images"].push(item.toJSON());
         }
         data["description"] = this.description;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -5312,9 +5830,9 @@ interface IProductDetailDto {
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
+    vietnamesePrice?: string;
     finalPrice?: number;
     forGenderDisplay?: string;
-    vietnamesePrice?: string;
 
     [key: string]: any;
 }
@@ -5367,74 +5885,6 @@ class ProductImageDto implements IProductImageDto {
 interface IProductImageDto {
     url?: string;
     forColor?: ColorDto;
-
-    [key: string]: any;
-}
-
-class ProductOptionDto implements IProductOptionDto {
-    createdDate?: Date;
-    productOptionId?: number;
-    size?: string;
-    stock?: number;
-    deletedDate?: Date;
-    color?: ColorDto;
-
-    [key: string]: any;
-
-    constructor(data?: IProductOptionDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
-            this.productOptionId = _data["productOptionId"];
-            this.size = _data["size"];
-            this.stock = _data["stock"];
-            this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
-            this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): ProductOptionDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductOptionDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
-        data["productOptionId"] = this.productOptionId;
-        data["size"] = this.size;
-        data["stock"] = this.stock;
-        data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
-        data["color"] = this.color ? this.color.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-interface IProductOptionDto {
-    createdDate?: Date;
-    productOptionId?: number;
-    size?: string;
-    stock?: number;
-    deletedDate?: Date;
-    color?: ColorDto;
 
     [key: string]: any;
 }
@@ -6091,11 +6541,6 @@ enum CreateProductCommandForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
     FOR_BOTH = "FOR_BOTH",
-}
-
-enum CreateAndGetProductOptionCommandSortDirection {
-    ASC = "ASC",
-    DESC = "DESC",
 }
 
 enum ProductBriefDtoForGender {

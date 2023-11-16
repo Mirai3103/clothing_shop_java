@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CreateAndGetProductOptionCommand extends PaginationRequest implements IRequest<ProductOptionDetailDto> {
+public class CreateAndGetProductOptionCommand implements IRequest<ProductOptionDetailDto> {
     @NotNull(message = "Màu không được để trống")
     @NotEmpty(message = "Màu không được để trống")
     private String colorName;

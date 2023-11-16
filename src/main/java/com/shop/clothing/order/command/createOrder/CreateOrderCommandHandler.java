@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,8 +59,10 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
 
         Map<Integer, Integer> productOptionIdToQuantity = createOrderCommand.getOrderItems().stream().collect(
                 java.util.stream.Collectors.toMap(CreateOrderCommand.OrderItem::getProductOptionId, CreateOrderCommand.OrderItem::getQuantity));
+        Map<Integer, Integer> productOptionIdToFinalPrice = new HashMap<>();
         var totalPrice = productOptionsThatWillBuy.stream().mapToInt(productOption -> {
                     var quantity = productOptionIdToQuantity.get(productOption.getProductOptionId());
+                    productOptionIdToFinalPrice.put(productOption.getProductOptionId(), productOption.getProduct().getFinalPrice());
                     return productOption.getProduct().getFinalPrice() * quantity;
                 }
         ).sum();
@@ -112,6 +115,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
                     .orderId(newOrder.getOrderId())
                     .productOptionId(productOptionId)
                     .quantity(quantity)
+                    .price(productOptionIdToFinalPrice.get(productOptionId))
                     .build();
 
             orderItemRepository.save(orderItem);
