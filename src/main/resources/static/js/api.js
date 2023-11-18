@@ -1622,6 +1622,136 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param startDateTime (optional)
+     * @param endDateTime (optional)
+     * @return OK
+     */
+    getSoldReport(startDateTime, endDateTime, cancelToken) {
+        let url_ = this.baseUrl + "/api/report/sold?";
+        if (startDateTime === null)
+            throw new Error("The parameter 'startDateTime' cannot be null.");
+        else if (startDateTime !== undefined)
+            url_ += "startDateTime=" + encodeURIComponent("" + startDateTime) + "&";
+        if (endDateTime === null)
+            throw new Error("The parameter 'endDateTime' cannot be null.");
+        else if (endDateTime !== undefined)
+            url_ += "endDateTime=" + encodeURIComponent("" + endDateTime) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetSoldReport(_response);
+        });
+    }
+    processGetSoldReport(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(SoldReportDto.fromJS(item));
+            }
+            else {
+                result200 = null;
+            }
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @param startDateTime (optional)
+     * @param endDateTime (optional)
+     * @return OK
+     */
+    getImportReport(startDateTime, endDateTime, cancelToken) {
+        let url_ = this.baseUrl + "/api/report/import?";
+        if (startDateTime === null)
+            throw new Error("The parameter 'startDateTime' cannot be null.");
+        else if (startDateTime !== undefined)
+            url_ += "startDateTime=" + encodeURIComponent("" + startDateTime) + "&";
+        if (endDateTime === null)
+            throw new Error("The parameter 'endDateTime' cannot be null.");
+        else if (endDateTime !== undefined)
+            url_ += "endDateTime=" + encodeURIComponent("" + endDateTime) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetImportReport(_response);
+        });
+    }
+    processGetImportReport(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(ImportProductReportDto.fromJS(item));
+            }
+            else {
+                result200 = null;
+            }
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @return OK
      */
     getAllRatingOfProduct(productId, cancelToken) {
@@ -3432,8 +3562,8 @@ class ProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
         }
     }
@@ -3459,8 +3589,8 @@ class ProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
         return data;
     }
@@ -4078,8 +4208,8 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
-            this.accountEnabled = _data["accountEnabled"];
             this.emailVerified = _data["emailVerified"];
+            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
         }
     }
@@ -4108,8 +4238,8 @@ class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["accountEnabled"] = this.accountEnabled;
         data["emailVerified"] = this.emailVerified;
+        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
         return data;
     }
@@ -4307,6 +4437,82 @@ class StockReceiptBriefDto {
         data["note"] = this.note;
         data["supplierId"] = this.supplierId;
         data["supplier"] = this.supplier ? this.supplier.toJSON() : undefined;
+        return data;
+    }
+}
+class SoldReportDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : undefined;
+            this.totalOrder = _data["totalOrder"];
+            this.totalRevenue = _data["totalRevenue"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new SoldReportDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["date"] = this.date ? this.date.toISOString() : undefined;
+        data["totalOrder"] = this.totalOrder;
+        data["totalRevenue"] = this.totalRevenue;
+        return data;
+    }
+}
+class ImportProductReportDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : undefined;
+            this.totalImport = _data["totalImport"];
+            this.totalCost = _data["totalCost"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ImportProductReportDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["date"] = this.date ? this.date.toISOString() : undefined;
+        data["totalImport"] = this.totalImport;
+        data["totalCost"] = this.totalCost;
         return data;
     }
 }
@@ -4582,8 +4788,8 @@ class ProductDetailDto {
                     this.images.push(ProductImageDto.fromJS(item));
             }
             this.description = _data["description"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
         }
     }
@@ -4620,8 +4826,8 @@ class ProductDetailDto {
                 data["images"].push(item.toJSON());
         }
         data["description"] = this.description;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
         return data;
     }
