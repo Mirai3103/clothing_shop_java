@@ -1,6 +1,7 @@
 package com.shop.clothing.report.query.getSoldReport;
 
 import com.shop.clothing.common.Cqrs.IRequest;
+import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.report.dto.SoldReportDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.util.List;
 public class GetSoldReportQuery implements IRequest<List<SoldReportDto>> {
     private Long startDateTime;
     private Long endDateTime;
+
 
     public Date getStartDate() {
         return startDateTime == null ? null : new Date(startDateTime);

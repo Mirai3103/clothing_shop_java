@@ -1,4 +1,4 @@
-package com.shop.clothing.rating.command.CreateRating;
+package com.shop.clothing.rating.command.createRating;
 
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;

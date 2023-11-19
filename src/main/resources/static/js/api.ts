@@ -1899,13 +1899,40 @@ class Client {
     }
 
     /**
+     * @param productId (optional) 
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param sortField (optional) 
+     * @param sortDir (optional) 
+     * @param keyword (optional) 
      * @return OK
      */
-    getAllRatingOfProduct(productId: number, cancelToken?: CancelToken | undefined): Promise<PaginatedRatingDto> {
-        let url_ = this.baseUrl + "/api/rating/product/{productId}";
-        if (productId === undefined || productId === null)
-            throw new Error("The parameter 'productId' must be defined.");
-        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+    getAllRatingOfProduct(productId: number | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedRatingDto> {
+        let url_ = this.baseUrl + "/api/rating?";
+        if (productId === null)
+            throw new Error("The parameter 'productId' cannot be null.");
+        else if (productId !== undefined)
+            url_ += "productId=" + encodeURIComponent("" + productId) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -4126,8 +4153,8 @@ class ProductBriefDto implements IProductBriefDto {
     category?: CategoryBriefDto;
     deletedDate?: Date;
     finalPrice?: number;
-    vietnamesePrice?: string;
     forGenderDisplay?: string;
+    vietnamesePrice?: string;
 
     [key: string]: any;
 
@@ -4157,8 +4184,8 @@ class ProductBriefDto implements IProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
 
@@ -4186,8 +4213,8 @@ class ProductBriefDto implements IProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -4204,8 +4231,8 @@ interface IProductBriefDto {
     category?: CategoryBriefDto;
     deletedDate?: Date;
     finalPrice?: number;
-    vietnamesePrice?: string;
     forGenderDisplay?: string;
+    vietnamesePrice?: string;
 
     [key: string]: any;
 }
@@ -4617,8 +4644,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     heightInCm?: number;
     lengthInCm?: number;
     weightInGram?: number;
-    toDistrict?: string;
     toProvince?: string;
+    toDistrict?: string;
     toWard?: string;
     toDetailAddress?: string;
 
@@ -4646,8 +4673,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.heightInCm = _data["heightInCm"];
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
-            this.toDistrict = _data["toDistrict"];
             this.toProvince = _data["toProvince"];
+            this.toDistrict = _data["toDistrict"];
             this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
         }
@@ -4673,8 +4700,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["heightInCm"] = this.heightInCm;
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
-        data["toDistrict"] = this.toDistrict;
         data["toProvince"] = this.toProvince;
+        data["toDistrict"] = this.toDistrict;
         data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
         return data;
@@ -4689,8 +4716,8 @@ interface IGetDeliveryOptionQuery {
     heightInCm?: number;
     lengthInCm?: number;
     weightInGram?: number;
-    toDistrict?: string;
     toProvince?: string;
+    toDistrict?: string;
     toWard?: string;
     toDetailAddress?: string;
 
@@ -5489,6 +5516,7 @@ class SoldReportDto implements ISoldReportDto {
     date?: Date;
     totalOrder?: number;
     totalRevenue?: number;
+    totalQuantitySold?: number;
 
     [key: string]: any;
 
@@ -5510,6 +5538,7 @@ class SoldReportDto implements ISoldReportDto {
             this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
             this.totalOrder = _data["totalOrder"];
             this.totalRevenue = _data["totalRevenue"];
+            this.totalQuantitySold = _data["totalQuantitySold"];
         }
     }
 
@@ -5529,6 +5558,7 @@ class SoldReportDto implements ISoldReportDto {
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["totalOrder"] = this.totalOrder;
         data["totalRevenue"] = this.totalRevenue;
+        data["totalQuantitySold"] = this.totalQuantitySold;
         return data;
     }
 }
@@ -5537,6 +5567,7 @@ interface ISoldReportDto {
     date?: Date;
     totalOrder?: number;
     totalRevenue?: number;
+    totalQuantitySold?: number;
 
     [key: string]: any;
 }
@@ -5545,6 +5576,7 @@ class ImportProductReportDto implements IImportProductReportDto {
     date?: Date;
     totalImport?: number;
     totalCost?: number;
+    totalQuantityImport?: number;
 
     [key: string]: any;
 
@@ -5566,6 +5598,7 @@ class ImportProductReportDto implements IImportProductReportDto {
             this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
             this.totalImport = _data["totalImport"];
             this.totalCost = _data["totalCost"];
+            this.totalQuantityImport = _data["totalQuantityImport"];
         }
     }
 
@@ -5585,6 +5618,7 @@ class ImportProductReportDto implements IImportProductReportDto {
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["totalImport"] = this.totalImport;
         data["totalCost"] = this.totalCost;
+        data["totalQuantityImport"] = this.totalQuantityImport;
         return data;
     }
 }
@@ -5593,6 +5627,7 @@ interface IImportProductReportDto {
     date?: Date;
     totalImport?: number;
     totalCost?: number;
+    totalQuantityImport?: number;
 
     [key: string]: any;
 }
@@ -5746,6 +5781,7 @@ interface IProductOptionDto {
 }
 
 class RatingDto implements IRatingDto {
+    createdDate?: Date;
     id?: number;
     content?: string;
     value?: number;
@@ -5769,6 +5805,7 @@ class RatingDto implements IRatingDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
             this.id = _data["id"];
             this.content = _data["content"];
             this.value = _data["value"];
@@ -5790,6 +5827,7 @@ class RatingDto implements IRatingDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
         data["id"] = this.id;
         data["content"] = this.content;
         data["value"] = this.value;
@@ -5800,6 +5838,7 @@ class RatingDto implements IRatingDto {
 }
 
 interface IRatingDto {
+    createdDate?: Date;
     id?: number;
     content?: string;
     value?: number;
@@ -5976,8 +6015,8 @@ class ProductDetailDto implements IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
-    vietnamesePrice?: string;
     forGenderDisplay?: string;
+    vietnamesePrice?: string;
 
     [key: string]: any;
 
@@ -6018,8 +6057,8 @@ class ProductDetailDto implements IProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
 
@@ -6058,8 +6097,8 @@ class ProductDetailDto implements IProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -6079,8 +6118,8 @@ interface IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
-    vietnamesePrice?: string;
     forGenderDisplay?: string;
+    vietnamesePrice?: string;
 
     [key: string]: any;
 }

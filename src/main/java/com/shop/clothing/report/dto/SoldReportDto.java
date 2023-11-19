@@ -17,5 +17,6 @@ public class SoldReportDto {
     private Date date;
     private int totalOrder;
     private int totalRevenue;
+    private int totalQuantitySold;
 
 }

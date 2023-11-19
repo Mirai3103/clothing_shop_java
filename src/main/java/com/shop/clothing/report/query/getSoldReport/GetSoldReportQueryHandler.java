@@ -31,6 +31,7 @@ public class GetSoldReportQueryHandler implements IRequestHandler<GetSoldReportQ
             soldReportDto.setDate(tuple.get("date", Date.class));
             soldReportDto.setTotalOrder(Math.toIntExact(tuple.get("totalOrder", Long.class)));
             soldReportDto.setTotalRevenue(Math.toIntExact(tuple.get("totalRevenue", Long.class)));
+            soldReportDto.setTotalQuantitySold(Math.toIntExact(tuple.get("totalQuantitySold", Long.class)));
             return soldReportDto;
         }).toList();
         return HandleResponse.ok(soldReportDtoList);

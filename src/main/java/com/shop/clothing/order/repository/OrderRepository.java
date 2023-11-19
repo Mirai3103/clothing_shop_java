@@ -12,17 +12,13 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findAllByUserUserId(String userId);
-    //    SELECT
-//    DATE(o.completed_date) AS date,
-//    COUNT(o.order_id) AS totalOrder,
-//    SUM(o.total_amount) AS totalRevenue
-//    FROM _order o
-//    WHERE o.completed_date is not null
-//    AND o.completed_date >= '2019-01-01'
-//    AND o.completed_date <= '2019-12-31'
-//    GROUP BY DATE(o.completed_date)
-//    ORDER BY DATE(o.completed_date) ASC;
-    @Query(value = "SELECT DATE(o.completed_date) AS date, CAST(COUNT(o.order_id) as UNSIGNED) AS totalOrder, CAST(SUM(o.total_amount) as UNSIGNED )AS totalRevenue FROM _order o WHERE o.completed_date is not null AND o.completed_date >= ?1 AND o.completed_date <= ?2 GROUP BY DATE(o.completed_date) ORDER BY DATE(o.completed_date) ASC", nativeQuery = true)
+
+    @Query(value = "SELECT DATE(o.completed_date) AS date, CAST(COUNT(DISTINCT(o.order_id)) as UNSIGNED) AS totalOrder, CAST(SUM(o.total_amount) as UNSIGNED )AS totalRevenue , CAST(SUM(oi.quantity) as UNSIGNED) AS totalQuantitySold FROM _order o " +
+            "JOIN order_item oi ON o.order_id = oi.order_id " +
+            "WHERE o.completed_date is not null" +
+            " AND  (?1 is null or o.completed_date >= ?1) " +
+            "AND (?2 is null or o.completed_date <= ?2) " +
+            "GROUP BY DATE(o.completed_date) ORDER BY DATE(o.completed_date) DESC ", nativeQuery = true)
     // hibernate query
     List<Tuple> getSoldReport(Date startDate, Date endDate);
 

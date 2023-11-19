@@ -1752,13 +1752,40 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param productId (optional)
+     * @param page (optional)
+     * @param pageSize (optional)
+     * @param sortField (optional)
+     * @param sortDir (optional)
+     * @param keyword (optional)
      * @return OK
      */
-    getAllRatingOfProduct(productId, cancelToken) {
-        let url_ = this.baseUrl + "/api/rating/product/{productId}";
-        if (productId === undefined || productId === null)
-            throw new Error("The parameter 'productId' must be defined.");
-        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+    getAllRatingOfProduct(productId, page, pageSize, sortField, sortDir, keyword, cancelToken) {
+        let url_ = this.baseUrl + "/api/rating?";
+        if (productId === null)
+            throw new Error("The parameter 'productId' cannot be null.");
+        else if (productId !== undefined)
+            url_ += "productId=" + encodeURIComponent("" + productId) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "GET",
@@ -3563,8 +3590,8 @@ class ProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
     static fromJS(data) {
@@ -3590,8 +3617,8 @@ class ProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }
@@ -3882,8 +3909,8 @@ class GetDeliveryOptionQuery {
             this.heightInCm = _data["heightInCm"];
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
-            this.toDistrict = _data["toDistrict"];
             this.toProvince = _data["toProvince"];
+            this.toDistrict = _data["toDistrict"];
             this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
         }
@@ -3907,8 +3934,8 @@ class GetDeliveryOptionQuery {
         data["heightInCm"] = this.heightInCm;
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
-        data["toDistrict"] = this.toDistrict;
         data["toProvince"] = this.toProvince;
+        data["toDistrict"] = this.toDistrict;
         data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
         return data;
@@ -4458,6 +4485,7 @@ class SoldReportDto {
             this.date = _data["date"] ? new Date(_data["date"].toString()) : undefined;
             this.totalOrder = _data["totalOrder"];
             this.totalRevenue = _data["totalRevenue"];
+            this.totalQuantitySold = _data["totalQuantitySold"];
         }
     }
     static fromJS(data) {
@@ -4475,6 +4503,7 @@ class SoldReportDto {
         data["date"] = this.date ? this.date.toISOString() : undefined;
         data["totalOrder"] = this.totalOrder;
         data["totalRevenue"] = this.totalRevenue;
+        data["totalQuantitySold"] = this.totalQuantitySold;
         return data;
     }
 }
@@ -4496,6 +4525,7 @@ class ImportProductReportDto {
             this.date = _data["date"] ? new Date(_data["date"].toString()) : undefined;
             this.totalImport = _data["totalImport"];
             this.totalCost = _data["totalCost"];
+            this.totalQuantityImport = _data["totalQuantityImport"];
         }
     }
     static fromJS(data) {
@@ -4513,6 +4543,7 @@ class ImportProductReportDto {
         data["date"] = this.date ? this.date.toISOString() : undefined;
         data["totalImport"] = this.totalImport;
         data["totalCost"] = this.totalCost;
+        data["totalQuantityImport"] = this.totalQuantityImport;
         return data;
     }
 }
@@ -4629,6 +4660,7 @@ class RatingDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : undefined;
             this.id = _data["id"];
             this.content = _data["content"];
             this.value = _data["value"];
@@ -4648,6 +4680,7 @@ class RatingDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : undefined;
         data["id"] = this.id;
         data["content"] = this.content;
         data["value"] = this.value;
@@ -4789,8 +4822,8 @@ class ProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
         }
     }
     static fromJS(data) {
@@ -4827,8 +4860,8 @@ class ProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         return data;
     }
 }

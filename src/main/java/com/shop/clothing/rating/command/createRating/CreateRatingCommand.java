@@ -1,8 +1,6 @@
-package com.shop.clothing.rating.command.CreateRating;
+package com.shop.clothing.rating.command.createRating;
 
 import com.shop.clothing.common.Cqrs.IRequest;
-import com.shop.clothing.product.dto.ProductOptionDto;
-import com.shop.clothing.user.UserBriefDto;
 import lombok.Getter;
 import lombok.Setter;
 

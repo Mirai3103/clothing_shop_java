@@ -23,7 +23,8 @@
     hasPreviousPage: true,
     loading : false,
     currentSortField: 'createdDate',
-    currentSortDir: 'DESC',
+    currentSortDir: 'desc',
+    keyword: '',
     }"
         x-init="
                         const urlQuery = new URLSearchParams(window.location.search);
@@ -33,7 +34,7 @@
                         perPage = Number(perPageQr) || 10;
 
                         function fetch() {
-                            window.apiClient.getProducts(undefined, undefined, undefined, undefined, true, page, perPage, currentSortField, currentSortDir, undefined).then((res) => {
+                            window.apiClient.getProducts(undefined, undefined, undefined, undefined, true, page, perPage, currentSortField, currentSortDir, keyword).then((res) => {
                                 total = res.totalPages;
                                 totalElement = res.totalElements;
                                 hasNextPage = res.hasNext;
@@ -89,6 +90,17 @@
                             });
                             fetch();
                         });
+                        $watch('keyword', (value) => {
+                            const currentQuery = new URLSearchParams(window.location.search);
+                            currentQuery.set('keyword', value);
+                            window.history.replaceState(null, null, '?' + currentQuery.toString());
+                            window.scroll({
+                                top: 0,
+                                left: 0,
+                                behavior: 'smooth'
+                            });
+                            fetch();
+                        });
                      "
       >
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
@@ -132,6 +144,7 @@
                       type="text"
                       id="simple-search"
                       placeholder="Search for products"
+                      @input.debounce.1000ms="keyword = $event.target.value"
                       required=""
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
                     />

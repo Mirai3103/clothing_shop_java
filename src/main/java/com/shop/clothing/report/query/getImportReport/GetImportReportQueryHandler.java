@@ -32,6 +32,7 @@ public class GetImportReportQueryHandler implements IRequestHandler<GetImportRep
             reportDto.setDate(tuple.get("date", Date.class));
             reportDto.setTotalImport(Math.toIntExact(tuple.get("totalOrder", Long.class)));
             reportDto.setTotalCost(Math.toIntExact(tuple.get("totalRevenue", Long.class)));
+            reportDto.setTotalQuantityImport(Math.toIntExact(tuple.get("totalQuantityImport", Long.class)));
             return reportDto;
         }).toList();
         return HandleResponse.ok(importReportDtoList);
