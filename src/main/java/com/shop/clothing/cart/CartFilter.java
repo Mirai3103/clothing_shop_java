@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-//@Component
+@Component
 @AllArgsConstructor
 public class CartFilter implements Filter {
     private final ISender _sender;
@@ -26,10 +26,6 @@ public class CartFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpSession session = httpRequest.getSession();
-        if (session.getAttribute("totalCartItems") != null) {
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
 

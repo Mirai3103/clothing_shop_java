@@ -1622,6 +1622,57 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @return OK
+     */
+    cancelOrder(orderId, cancelToken) {
+        let url_ = this.baseUrl + "/api/order/cancel/{orderId}";
+        if (orderId === undefined || orderId === null)
+            throw new Error("The parameter 'orderId' must be defined.");
+        url_ = url_.replace("{orderId}", encodeURIComponent("" + orderId));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processCancelOrder(_response);
+        });
+    }
+    processCancelOrder(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : null;
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @param startDateTime (optional)
      * @param endDateTime (optional)
      * @return OK
@@ -2728,11 +2779,54 @@ class Client {
     /**
      * @return No Content
      */
-    clearCart(productOptionId, cancelToken) {
+    removeItemFromCart(productOptionId, cancelToken) {
         let url_ = this.baseUrl + "/api/cart/{productOptionId}";
         if (productOptionId === undefined || productOptionId === null)
             throw new Error("The parameter 'productOptionId' must be defined.");
         url_ = url_.replace("{productOptionId}", encodeURIComponent("" + productOptionId));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "DELETE",
+            url: url_,
+            headers: {},
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processRemoveItemFromCart(_response);
+        });
+    }
+    processRemoveItemFromCart(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return No Content
+     */
+    clearCart(cancelToken) {
+        let url_ = this.baseUrl + "/api/cart/clear-cart";
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "DELETE",
@@ -2822,56 +2916,6 @@ class CreateCategoryClient {
             let resultData200 = _responseText;
             result200 = resultData200 !== undefined ? resultData200 : null;
             return Promise.resolve(result200);
-        }
-        else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve(null);
-    }
-}
-class ClearCartClient {
-    constructor(baseUrl, instance) {
-        this.jsonParseReviver = undefined;
-        this.instance = instance ? instance : axios.create();
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
-    }
-    /**
-     * @return No Content
-     */
-    1(cancelToken) {
-        let url_ = this.baseUrl + "/api/cart/clear-cart";
-        url_ = url_.replace(/[?&]$/, "");
-        let options_ = {
-            method: "DELETE",
-            url: url_,
-            headers: {},
-            cancelToken
-        };
-        return this.instance.request(options_).catch((_error) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            }
-            else {
-                throw _error;
-            }
-        }).then((_response) => {
-            return this.process1(_response);
-        });
-    }
-    process1(response) {
-        const status = response.status;
-        let _headers = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 204) {
-            const _responseText = response.data;
-            return Promise.resolve(null);
         }
         else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
@@ -3909,10 +3953,10 @@ class GetDeliveryOptionQuery {
             this.heightInCm = _data["heightInCm"];
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
-            this.toProvince = _data["toProvince"];
             this.toDistrict = _data["toDistrict"];
-            this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
+            this.toProvince = _data["toProvince"];
+            this.toWard = _data["toWard"];
         }
     }
     static fromJS(data) {
@@ -3934,10 +3978,10 @@ class GetDeliveryOptionQuery {
         data["heightInCm"] = this.heightInCm;
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
-        data["toProvince"] = this.toProvince;
         data["toDistrict"] = this.toDistrict;
-        data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
+        data["toProvince"] = this.toProvince;
+        data["toWard"] = this.toWard;
         return data;
     }
 }
@@ -5328,6 +5372,7 @@ var PaymentStatus;
     PaymentStatus["CANCELLED"] = "CANCELLED";
     PaymentStatus["REFUNDED"] = "REFUNDED";
     PaymentStatus["FAILED"] = "FAILED";
+    PaymentStatus["WAITING_FOR_REFUND"] = "WAITING_FOR_REFUND";
 })(PaymentStatus || (PaymentStatus = {}));
 var OrderStatus;
 (function (OrderStatus) {
@@ -5376,6 +5421,7 @@ var UpdatePaymentStatusCommandStatus;
     UpdatePaymentStatusCommandStatus["CANCELLED"] = "CANCELLED";
     UpdatePaymentStatusCommandStatus["REFUNDED"] = "REFUNDED";
     UpdatePaymentStatusCommandStatus["FAILED"] = "FAILED";
+    UpdatePaymentStatusCommandStatus["WAITING_FOR_REFUND"] = "WAITING_FOR_REFUND";
 })(UpdatePaymentStatusCommandStatus || (UpdatePaymentStatusCommandStatus = {}));
 var UpdateOrderStatusCommandStatus;
 (function (UpdateOrderStatusCommandStatus) {
@@ -5421,6 +5467,7 @@ var PaymentDtoStatus;
     PaymentDtoStatus["CANCELLED"] = "CANCELLED";
     PaymentDtoStatus["REFUNDED"] = "REFUNDED";
     PaymentDtoStatus["FAILED"] = "FAILED";
+    PaymentDtoStatus["WAITING_FOR_REFUND"] = "WAITING_FOR_REFUND";
 })(PaymentDtoStatus || (PaymentDtoStatus = {}));
 class ApiException extends Error {
     constructor(message, status, response, headers, result) {

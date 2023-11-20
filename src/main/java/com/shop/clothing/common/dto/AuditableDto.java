@@ -14,6 +14,9 @@ import org.springframework.data.annotation.LastModifiedBy;
 public class AuditableDto {
     //    private String createdBy;
     private java.time.LocalDateTime createdDate;
+    public String getCreatedDateDisplay() {
+        return createdDate.format(java.time.format.DateTimeFormatter.ofPattern("hh:mm dd/MM/yyyy"));
+    }
 //    private String lastModifiedBy;
 //    private java.time.LocalDateTime lastModifiedDate;
 }

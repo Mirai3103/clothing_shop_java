@@ -2,6 +2,7 @@ package com.shop.clothing.order.endpoint;
 
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.common.dto.Paginated;
+import com.shop.clothing.order.command.cancelOrder.CancelOrderCommand;
 import com.shop.clothing.order.command.createOrder.CreateOrderCommand;
 import com.shop.clothing.order.command.updateStatus.UpdateOrderStatusCommand;
 import com.shop.clothing.order.dto.OrderBriefDto;
@@ -40,5 +41,12 @@ public class OrderApiController {
         return ResponseEntity.ok(result.orThrow());
     }
 
+    @PatchMapping("/cancel/{orderId}")
+    @PreAuthorize("hasAuthority('CAN_ORDER')")
+    public ResponseEntity<Boolean> cancelOrder(@PathVariable String orderId) {
+        var cancelOrderCommand = new CancelOrderCommand(orderId);
+        var result = sender.send(cancelOrderCommand);
+        return ResponseEntity.ok(result.orThrow());
+    }
 
 }

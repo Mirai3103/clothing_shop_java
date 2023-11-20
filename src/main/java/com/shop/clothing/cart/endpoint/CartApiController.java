@@ -48,7 +48,7 @@ public class CartApiController {
 
     @DeleteMapping("/{productOptionId}")
     @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> clearCart(@PathVariable int productOptionId) {
+    public ResponseEntity<Void> removeItemFromCart(@PathVariable int productOptionId) {
         sender.send(new RemoveItemFromCartCommand(productOptionId)).orThrow();
         return ResponseEntity.noContent().build();
     }

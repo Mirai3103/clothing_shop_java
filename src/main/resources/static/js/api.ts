@@ -1763,6 +1763,61 @@ class Client {
     }
 
     /**
+     * @return OK
+     */
+    cancelOrder(orderId: string, cancelToken?: CancelToken | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/order/cancel/{orderId}";
+        if (orderId === undefined || orderId === null)
+            throw new Error("The parameter 'orderId' must be defined.");
+        url_ = url_.replace("{orderId}", encodeURIComponent("" + orderId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCancelOrder(_response);
+        });
+    }
+
+    protected processCancelOrder(response: AxiosResponse): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return Promise.resolve<boolean>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
      * @param startDateTime (optional) 
      * @param endDateTime (optional) 
      * @return OK
@@ -2922,11 +2977,58 @@ class Client {
     /**
      * @return No Content
      */
-    clearCart(productOptionId: number, cancelToken?: CancelToken | undefined): Promise<void> {
+    removeItemFromCart(productOptionId: number, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/cart/{productOptionId}";
         if (productOptionId === undefined || productOptionId === null)
             throw new Error("The parameter 'productOptionId' must be defined.");
         url_ = url_.replace("{productOptionId}", encodeURIComponent("" + productOptionId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRemoveItemFromCart(_response);
+        });
+    }
+
+    protected processRemoveItemFromCart(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return No Content
+     */
+    clearCart( cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/cart/clear-cart";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: AxiosRequestConfig = {
@@ -3037,67 +3139,6 @@ class CreateCategoryClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<number>(null as any);
-    }
-}
-
-class ClearCartClient {
-    private instance: AxiosInstance;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(baseUrl?: string, instance?: AxiosInstance) {
-
-        this.instance = instance ? instance : axios.create();
-
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "http://localhost:8000";
-
-    }
-
-    /**
-     * @return No Content
-     */
-    1( cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/cart/clear-cart";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "DELETE",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.process1(_response);
-        });
-    }
-
-    protected process1(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 204) {
-            const _responseText = response.data;
-            return Promise.resolve<void>(null as any);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<void>(null as any);
     }
 }
 
@@ -4644,10 +4685,10 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     heightInCm?: number;
     lengthInCm?: number;
     weightInGram?: number;
-    toProvince?: string;
     toDistrict?: string;
-    toWard?: string;
     toDetailAddress?: string;
+    toProvince?: string;
+    toWard?: string;
 
     [key: string]: any;
 
@@ -4673,10 +4714,10 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.heightInCm = _data["heightInCm"];
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
-            this.toProvince = _data["toProvince"];
             this.toDistrict = _data["toDistrict"];
-            this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
+            this.toProvince = _data["toProvince"];
+            this.toWard = _data["toWard"];
         }
     }
 
@@ -4700,10 +4741,10 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["heightInCm"] = this.heightInCm;
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
-        data["toProvince"] = this.toProvince;
         data["toDistrict"] = this.toDistrict;
-        data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
+        data["toProvince"] = this.toProvince;
+        data["toWard"] = this.toWard;
         return data;
     }
 }
@@ -4716,10 +4757,10 @@ interface IGetDeliveryOptionQuery {
     heightInCm?: number;
     lengthInCm?: number;
     weightInGram?: number;
-    toProvince?: string;
     toDistrict?: string;
-    toWard?: string;
     toDetailAddress?: string;
+    toProvince?: string;
+    toWard?: string;
 
     [key: string]: any;
 }
@@ -6806,6 +6847,7 @@ enum PaymentStatus {
     CANCELLED = "CANCELLED",
     REFUNDED = "REFUNDED",
     FAILED = "FAILED",
+    WAITING_FOR_REFUND = "WAITING_FOR_REFUND",
 }
 
 enum OrderStatus {
@@ -6854,6 +6896,7 @@ enum UpdatePaymentStatusCommandStatus {
     CANCELLED = "CANCELLED",
     REFUNDED = "REFUNDED",
     FAILED = "FAILED",
+    WAITING_FOR_REFUND = "WAITING_FOR_REFUND",
 }
 
 enum UpdateOrderStatusCommandStatus {
@@ -6899,6 +6942,7 @@ enum PaymentDtoStatus {
     CANCELLED = "CANCELLED",
     REFUNDED = "REFUNDED",
     FAILED = "FAILED",
+    WAITING_FOR_REFUND = "WAITING_FOR_REFUND",
 }
 
 interface FileParameter {

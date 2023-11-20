@@ -113,6 +113,7 @@ public class ClientUtil {
             case REFUNDED -> "Đã hoàn tiền";
             case PENDING -> "Đang chờ xử lý";
             case FAILED -> "Thanh toán thất bại";
+            case WAITING_FOR_REFUND -> "Đang chờ hoàn tiền";
         };
     }
 

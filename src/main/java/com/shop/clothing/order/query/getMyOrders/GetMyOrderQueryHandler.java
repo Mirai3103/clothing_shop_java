@@ -30,6 +30,7 @@ public class GetMyOrderQueryHandler implements IRequestHandler<GetMyOrderQuery, 
         var orders = _orderRepository.findAllByUserUserId(_currentUserService.getCurrentUserId().orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cần đăng nhập để thực hiện chức năng này")
         ));
+         orders.sort((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()));
         var orderDtos = orders.stream().map(order -> {
             var orderDto = _mapper.map(order, OrderDto.class);
             var payment = _paymentRepository.findFirstByOrderIdSortedByCreatedDateDesc(order.getOrderId());

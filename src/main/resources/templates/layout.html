@@ -45,8 +45,9 @@
 
           <div class="flex ml-auto items-center lg:order-2">
             <a
-              sec:authorize="isAuthenticated()"
+              sec:authorize="hasAuthority('CAN_ORDER')"
               th:href="@{/user/my-cart}"
+
               class="relative bg-gray-50 mr-4 rounded-full p-2 hover:bg-gray-100"
             >
               <svg
@@ -68,9 +69,11 @@
                 <path d="M6 5l14 1l-1 7h-13" />
               </svg>
               <span
+                      th:text="${session.totalCartItems}"
+
                 class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900"
               >
-                10
+
               </span>
             </a>
             <div sec:authorize="isAuthenticated()">
