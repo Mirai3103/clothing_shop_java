@@ -110,6 +110,182 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param productId (optional)
+     * @param page (optional)
+     * @param pageSize (optional)
+     * @param sortField (optional)
+     * @param sortDir (optional)
+     * @param keyword (optional)
+     * @return OK
+     */
+    getAllRatingOfProduct(productId, page, pageSize, sortField, sortDir, keyword, cancelToken) {
+        let url_ = this.baseUrl + "/api/rating?";
+        if (productId === null)
+            throw new Error("The parameter 'productId' cannot be null.");
+        else if (productId !== undefined)
+            url_ += "productId=" + encodeURIComponent("" + productId) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllRatingOfProduct(_response);
+        });
+    }
+    processGetAllRatingOfProduct(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = PaginatedRatingDto.fromJS(resultData200);
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    updateRating(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/rating";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processUpdateRating(_response);
+        });
+    }
+    processUpdateRating(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    createRating(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/rating";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processCreateRating(_response);
+        });
+    }
+    processCreateRating(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : null;
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @return OK
      */
     updateProduct(body, cancelToken) {
@@ -1624,16 +1800,16 @@ class Client {
     /**
      * @return OK
      */
-    cancelOrder(orderId, cancelToken) {
-        let url_ = this.baseUrl + "/api/order/cancel/{orderId}";
-        if (orderId === undefined || orderId === null)
-            throw new Error("The parameter 'orderId' must be defined.");
-        url_ = url_.replace("{orderId}", encodeURIComponent("" + orderId));
+    cancelOrder(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/order/cancel";
         url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
         let options_ = {
+            data: content_,
             method: "PATCH",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "*/*"
             },
             cancelToken
@@ -1803,40 +1979,24 @@ class Client {
         return Promise.resolve(null);
     }
     /**
-     * @param productId (optional)
-     * @param page (optional)
-     * @param pageSize (optional)
-     * @param sortField (optional)
-     * @param sortDir (optional)
-     * @param keyword (optional)
+     * @param productOptionId (optional)
+     * @param userId (optional)
      * @return OK
      */
-    getAllRatingOfProduct(productId, page, pageSize, sortField, sortDir, keyword, cancelToken) {
-        let url_ = this.baseUrl + "/api/rating?";
-        if (productId === null)
-            throw new Error("The parameter 'productId' cannot be null.");
-        else if (productId !== undefined)
-            url_ += "productId=" + encodeURIComponent("" + productId) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortField === null)
-            throw new Error("The parameter 'sortField' cannot be null.");
-        else if (sortField !== undefined)
-            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
-        if (sortDir === null)
-            throw new Error("The parameter 'sortDir' cannot be null.");
-        else if (sortDir !== undefined)
-            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
-        if (keyword === null)
-            throw new Error("The parameter 'keyword' cannot be null.");
-        else if (keyword !== undefined)
-            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+    getMyRatingOfProduct(orderId, productOptionId, userId, cancelToken) {
+        let url_ = this.baseUrl + "/api/rating/my-rating?";
+        if (orderId === undefined || orderId === null)
+            throw new Error("The parameter 'orderId' must be defined and cannot be null.");
+        else
+            url_ += "orderId=" + encodeURIComponent("" + orderId) + "&";
+        if (productOptionId === null)
+            throw new Error("The parameter 'productOptionId' cannot be null.");
+        else if (productOptionId !== undefined)
+            url_ += "productOptionId=" + encodeURIComponent("" + productOptionId) + "&";
+        if (userId === null)
+            throw new Error("The parameter 'userId' cannot be null.");
+        else if (userId !== undefined)
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
         url_ = url_.replace(/[?&]$/, "");
         let options_ = {
             method: "GET",
@@ -1854,10 +2014,10 @@ class Client {
                 throw _error;
             }
         }).then((_response) => {
-            return this.processGetAllRatingOfProduct(_response);
+            return this.processGetMyRatingOfProduct(_response);
         });
     }
-    processGetAllRatingOfProduct(response) {
+    processGetMyRatingOfProduct(response) {
         const status = response.status;
         let _headers = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1871,7 +2031,7 @@ class Client {
             const _responseText = response.data;
             let result200 = null;
             let resultData200 = _responseText;
-            result200 = PaginatedRatingDto.fromJS(resultData200);
+            result200 = RatingDto.fromJS(resultData200);
             return Promise.resolve(result200);
         }
         else if (status !== 200 && status !== 204) {
@@ -3014,6 +3174,44 @@ class UpdateSupplierCommand {
         return data;
     }
 }
+class UpdateRatingCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.content = _data["content"];
+            this.value = _data["value"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateRatingCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["content"] = this.content;
+        data["value"] = this.value;
+        return data;
+    }
+}
 class UpdateProductCommand {
     constructor(data) {
         if (data) {
@@ -3450,6 +3648,46 @@ class UpdateShopInfoCommand {
         return data;
     }
 }
+class CreateRatingCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.content = _data["content"];
+            this.value = _data["value"];
+            this.productOptionId = _data["productOptionId"];
+            this.orderId = _data["orderId"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateRatingCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["content"] = this.content;
+        data["value"] = this.value;
+        data["productOptionId"] = this.productOptionId;
+        data["orderId"] = this.orderId;
+        return data;
+    }
+}
 class CreateProductCommand {
     constructor(data) {
         if (data) {
@@ -3682,8 +3920,8 @@ class ProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
             this.finalPrice = _data["finalPrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -3710,8 +3948,8 @@ class ProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
         data["finalPrice"] = this.finalPrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -4006,8 +4244,8 @@ class GetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
+            this.toWard = _data["toWard"];
             this.toProvince = _data["toProvince"];
         }
     }
@@ -4031,8 +4269,8 @@ class GetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
+        data["toWard"] = this.toWard;
         data["toProvince"] = this.toProvince;
         return data;
     }
@@ -4303,6 +4541,42 @@ class UpdateOrderStatusCommand {
         return data;
     }
 }
+class CancelOrderCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.orderId = _data["orderId"];
+            this.reason = _data["reason"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new CancelOrderCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["orderId"] = this.orderId;
+        data["reason"] = this.reason;
+        return data;
+    }
+}
 class UserDto {
     constructor(data) {
         if (data) {
@@ -4332,8 +4606,8 @@ class UserDto {
                     this.permissions.push(item);
             }
             this.emailVerified = _data["emailVerified"];
-            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
+            this.accountEnabled = _data["accountEnabled"];
         }
     }
     static fromJS(data) {
@@ -4362,8 +4636,8 @@ class UserDto {
                 data["permissions"].push(item);
         }
         data["emailVerified"] = this.emailVerified;
-        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        data["accountEnabled"] = this.accountEnabled;
         return data;
     }
 }
@@ -4924,8 +5198,8 @@ class ProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -4963,8 +5237,8 @@ class ProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }

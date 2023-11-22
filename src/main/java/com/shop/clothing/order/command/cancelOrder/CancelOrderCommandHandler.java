@@ -21,7 +21,7 @@ public class CancelOrderCommandHandler implements IRequestHandler<CancelOrderCom
     @Override
     @Transactional
     public HandleResponse<Boolean> handle(CancelOrderCommand cancelOrderCommand) throws Exception {
-        var order = _orderRepository.findById(cancelOrderCommand.orderId());
+        var order = _orderRepository.findById(cancelOrderCommand.getOrderId());
         if (order.isEmpty()) {
             return HandleResponse.error("Không tìm thấy đơn hàng");
         }
@@ -45,6 +45,7 @@ public class CancelOrderCommandHandler implements IRequestHandler<CancelOrderCom
         }
 
         order.get().setStatus(OrderStatus.CANCELLED);
+        order.get().setCancelReason(cancelOrderCommand.getReason());
         _orderRepository.save(order.get());
         return HandleResponse.ok(true);
     }

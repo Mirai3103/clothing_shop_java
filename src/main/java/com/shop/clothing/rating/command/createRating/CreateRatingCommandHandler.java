@@ -11,6 +11,7 @@ import com.shop.clothing.user.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @AllArgsConstructor
@@ -22,7 +23,8 @@ public class CreateRatingCommandHandler implements IRequestHandler<CreateRatingC
     private final ProductOptionRepository productOptionRepository;
 
     @Override
-    public HandleResponse<Integer> handle(CreateRatingCommand createRatingCommand) throws Exception {
+    @Transactional
+    public HandleResponse<Integer> handle(CreateRatingCommand createRatingCommand) {
         var user = currentUserService.getCurrentUser();
         if (user.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Bạn chưa đăng nhập");

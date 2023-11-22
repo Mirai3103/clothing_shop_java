@@ -41,11 +41,10 @@ public class OrderApiController {
         return ResponseEntity.ok(result.orThrow());
     }
 
-    @PatchMapping("/cancel/{orderId}")
+    @PatchMapping("/cancel")
     @PreAuthorize("hasAuthority('CAN_ORDER')")
-    public ResponseEntity<Boolean> cancelOrder(@PathVariable String orderId) {
-        var cancelOrderCommand = new CancelOrderCommand(orderId);
-        var result = sender.send(cancelOrderCommand);
+    public ResponseEntity<Boolean> cancelOrder(@RequestBody CancelOrderCommand command) {
+        var result = sender.send(command);
         return ResponseEntity.ok(result.orThrow());
     }
 

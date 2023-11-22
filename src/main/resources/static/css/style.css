@@ -1950,6 +1950,9 @@ input:checked + .toggle-bg{
 .-mr-1{
   margin-right: -0.25rem;
 }
+.-ms-1{
+  margin-inline-start: -0.25rem;
+}
 .-mt-2{
   margin-top: -0.5rem;
 }
@@ -1991,6 +1994,9 @@ input:checked + .toggle-bg{
 }
 .mb-6{
   margin-bottom: 1.5rem;
+}
+.me-1{
+  margin-inline-end: 0.25rem;
 }
 .me-2{
   margin-inline-end: 0.5rem;
@@ -3492,6 +3498,9 @@ input:checked + .toggle-bg{
 .text-right{
   text-align: right;
 }
+.text-start{
+  text-align: start;
+}
 .font-body{
   font-family: Nunito, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 }
@@ -4742,6 +4751,10 @@ a {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(28 100 242 / var(--tw-ring-opacity));
 }
+:is(.dark .dark\:focus\:ring-blue-800:focus){
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(30 66 159 / var(--tw-ring-opacity));
+}
 :is(.dark .dark\:focus\:ring-gray-600:focus){
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(75 85 99 / var(--tw-ring-opacity));
@@ -4793,6 +4806,9 @@ a {
   color: rgb(63 131 248 / var(--tw-text-opacity));
 }
 @media (min-width: 640px){
+  .sm\:col-span-1{
+    grid-column: span 1 / span 1;
+  }
   .sm\:col-span-2{
     grid-column: span 2 / span 2;
   }
