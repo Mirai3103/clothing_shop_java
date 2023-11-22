@@ -27,7 +27,7 @@ public class AdvanceSearchAllProductsQueryHandler implements IRequestHandler<Adv
     public HandleResponse<Paginated<ProductBriefDto>> handle(AdvanceSearchAllProductsQuery query) throws Exception {
         if (query.getSizes() != null)
             query.setSizes(Arrays.stream(query.getSizes()).map(String::toUpperCase).toArray(String[]::new));
-        var productPage = productRepository.searchAllProducts(query.getKeyword(), query.getCategoryIds(), query.getForGenders(), query.getMinPrice(), query.getMaxPrice(), query.getColorIds(), query.getSizes(), query.getPageable("createdDate"));
+        var productPage = productRepository.searchAllProducts(query.getKeyword(), query.getCategoryIds(), query.getForGenders(), query.getMinPrice(), query.getMaxPrice(), query.getColorIds(), query.getSizes(), query.getPageable("product.createdDate"));
         Paginated<ProductBriefDto> paginated = Paginated.of(productPage.map(product -> modelMapper.map(product, ProductBriefDto.class)));
         return HandleResponse.ok(paginated);
     }

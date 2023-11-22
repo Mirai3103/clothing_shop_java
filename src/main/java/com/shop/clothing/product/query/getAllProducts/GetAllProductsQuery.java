@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GetAllProductsQuery  extends PaginationRequest  implements IRequest<Paginated<ProductBriefDto>> {
-    private int categoryId;
+    private Integer categoryId;
     private Product.ProductGender forGender;
     @Builder.Default
     private int minPrice = 0;

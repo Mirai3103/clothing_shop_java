@@ -29,6 +29,11 @@ public class CreateInvoicePdfQueryHandler implements IRequestHandler<CreateInvoi
     private final ClientUtil _clientUtil;
     @Override
     public HandleResponse<String> handle(CreateInvoicePdfQuery createInvoicePdfQuery) throws Exception {
+        // CHECK IF ALREADY EXIST FILE
+        File file = new File(createInvoicePdfQuery.orderId() + ".pdf");
+        if (file.exists()) {
+            return HandleResponse.ok(createInvoicePdfQuery.orderId() + ".pdf");
+        }
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML");
@@ -36,8 +41,7 @@ public class CreateInvoicePdfQueryHandler implements IRequestHandler<CreateInvoi
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
         var order = _sender.send(new GetOrderByIdQuery(createInvoicePdfQuery.orderId()));
-        Set<String> selectors = new HashSet<>();
-        selectors.add("invoice");
+
 
         Context context = new Context();
         context.setVariable("order", order.orThrow());

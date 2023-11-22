@@ -1561,7 +1561,7 @@ class Client {
     }
 
     /**
-     * @return OK
+     * @return No Content
      */
     recoveryProduct(productId: number, cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/product/recovery/{productId}";
@@ -1599,7 +1599,7 @@ class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 204) {
             const _responseText = response.data;
             return Promise.resolve<void>(null as any);
 
@@ -2803,6 +2803,56 @@ class Client {
     }
 
     protected processDeleteStockReceipt(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return No Content
+     */
+    deleteProduct(productId: number, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/product/delete/{productId}";
+        if (productId === undefined || productId === null)
+            throw new Error("The parameter 'productId' must be defined.");
+        url_ = url_.replace("{productId}", encodeURIComponent("" + productId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDeleteProduct(_response);
+        });
+    }
+
+    protected processDeleteProduct(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -4071,6 +4121,7 @@ class CategoryBriefDto implements ICategoryBriefDto {
     categoryId?: number;
     name?: string;
     parent?: CategoryBriefDto;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 
@@ -4093,6 +4144,7 @@ class CategoryBriefDto implements ICategoryBriefDto {
             this.categoryId = _data["categoryId"];
             this.name = _data["name"];
             this.parent = _data["parent"] ? CategoryBriefDto.fromJS(_data["parent"]) : <any>undefined;
+            this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
 
@@ -4113,6 +4165,7 @@ class CategoryBriefDto implements ICategoryBriefDto {
         data["categoryId"] = this.categoryId;
         data["name"] = this.name;
         data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
+        data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
 }
@@ -4122,6 +4175,7 @@ interface ICategoryBriefDto {
     categoryId?: number;
     name?: string;
     parent?: CategoryBriefDto;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 }
@@ -4196,6 +4250,7 @@ class ProductBriefDto implements IProductBriefDto {
     finalPrice?: number;
     forGenderDisplay?: string;
     vietnamesePrice?: string;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 
@@ -4227,6 +4282,7 @@ class ProductBriefDto implements IProductBriefDto {
             this.finalPrice = _data["finalPrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
 
@@ -4256,6 +4312,7 @@ class ProductBriefDto implements IProductBriefDto {
         data["finalPrice"] = this.finalPrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
 }
@@ -4274,6 +4331,7 @@ interface IProductBriefDto {
     finalPrice?: number;
     forGenderDisplay?: string;
     vietnamesePrice?: string;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 }
@@ -4289,6 +4347,7 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
     quantity?: number;
     finalPrice?: number;
     finalPriceDisplay?: string;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 
@@ -4317,6 +4376,7 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
             this.quantity = _data["quantity"];
             this.finalPrice = _data["finalPrice"];
             this.finalPriceDisplay = _data["finalPriceDisplay"];
+            this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
 
@@ -4343,6 +4403,7 @@ class ProductOptionDetailDto implements IProductOptionDetailDto {
         data["quantity"] = this.quantity;
         data["finalPrice"] = this.finalPrice;
         data["finalPriceDisplay"] = this.finalPriceDisplay;
+        data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
 }
@@ -4358,6 +4419,7 @@ interface IProductOptionDetailDto {
     quantity?: number;
     finalPrice?: number;
     finalPriceDisplay?: string;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 }
@@ -4686,9 +4748,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
+    toWard?: string;
     toDetailAddress?: string;
     toProvince?: string;
-    toWard?: string;
 
     [key: string]: any;
 
@@ -4715,9 +4777,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
+            this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
             this.toProvince = _data["toProvince"];
-            this.toWard = _data["toWard"];
         }
     }
 
@@ -4742,9 +4804,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
+        data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
         data["toProvince"] = this.toProvince;
-        data["toWard"] = this.toWard;
         return data;
     }
 }
@@ -4758,9 +4820,9 @@ interface IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
+    toWard?: string;
     toDetailAddress?: string;
     toProvince?: string;
-    toWard?: string;
 
     [key: string]: any;
 }
@@ -5492,6 +5554,7 @@ class StockReceiptBriefDto implements IStockReceiptBriefDto {
     note?: string;
     supplierId?: number;
     supplier?: SupplierDto;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 
@@ -5516,6 +5579,7 @@ class StockReceiptBriefDto implements IStockReceiptBriefDto {
             this.note = _data["note"];
             this.supplierId = _data["supplierId"];
             this.supplier = _data["supplier"] ? SupplierDto.fromJS(_data["supplier"]) : <any>undefined;
+            this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
 
@@ -5538,6 +5602,7 @@ class StockReceiptBriefDto implements IStockReceiptBriefDto {
         data["note"] = this.note;
         data["supplierId"] = this.supplierId;
         data["supplier"] = this.supplier ? this.supplier.toJSON() : <any>undefined;
+        data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
 }
@@ -5549,6 +5614,7 @@ interface IStockReceiptBriefDto {
     note?: string;
     supplierId?: number;
     supplier?: SupplierDto;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 }
@@ -5760,6 +5826,7 @@ class ProductOptionDto implements IProductOptionDto {
     stock?: number;
     deletedDate?: Date;
     color?: ColorDto;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 
@@ -5784,6 +5851,7 @@ class ProductOptionDto implements IProductOptionDto {
             this.stock = _data["stock"];
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
             this.color = _data["color"] ? ColorDto.fromJS(_data["color"]) : <any>undefined;
+            this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
 
@@ -5806,6 +5874,7 @@ class ProductOptionDto implements IProductOptionDto {
         data["stock"] = this.stock;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
         data["color"] = this.color ? this.color.toJSON() : <any>undefined;
+        data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
 }
@@ -5817,6 +5886,7 @@ interface IProductOptionDto {
     stock?: number;
     deletedDate?: Date;
     color?: ColorDto;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 }
@@ -5828,6 +5898,7 @@ class RatingDto implements IRatingDto {
     value?: number;
     user?: UserBriefDto;
     productOption?: ProductOptionDto;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 
@@ -5852,6 +5923,7 @@ class RatingDto implements IRatingDto {
             this.value = _data["value"];
             this.user = _data["user"] ? UserBriefDto.fromJS(_data["user"]) : <any>undefined;
             this.productOption = _data["productOption"] ? ProductOptionDto.fromJS(_data["productOption"]) : <any>undefined;
+            this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
 
@@ -5874,6 +5946,7 @@ class RatingDto implements IRatingDto {
         data["value"] = this.value;
         data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         data["productOption"] = this.productOption ? this.productOption.toJSON() : <any>undefined;
+        data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
 }
@@ -5885,6 +5958,7 @@ interface IRatingDto {
     value?: number;
     user?: UserBriefDto;
     productOption?: ProductOptionDto;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 }
@@ -6058,6 +6132,7 @@ class ProductDetailDto implements IProductDetailDto {
     finalPrice?: number;
     forGenderDisplay?: string;
     vietnamesePrice?: string;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 
@@ -6100,6 +6175,7 @@ class ProductDetailDto implements IProductDetailDto {
             this.finalPrice = _data["finalPrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
 
@@ -6140,6 +6216,7 @@ class ProductDetailDto implements IProductDetailDto {
         data["finalPrice"] = this.finalPrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
 }
@@ -6161,6 +6238,7 @@ interface IProductDetailDto {
     finalPrice?: number;
     forGenderDisplay?: string;
     vietnamesePrice?: string;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 }
@@ -6313,6 +6391,7 @@ class OrderBriefDto implements IOrderBriefDto {
     latestPayment?: PaymentDto;
     promotion?: PromotionDto;
     completedDate?: Date;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 
@@ -6346,6 +6425,7 @@ class OrderBriefDto implements IOrderBriefDto {
             this.latestPayment = _data["latestPayment"] ? PaymentDto.fromJS(_data["latestPayment"]) : <any>undefined;
             this.promotion = _data["promotion"] ? PromotionDto.fromJS(_data["promotion"]) : <any>undefined;
             this.completedDate = _data["completedDate"] ? new Date(_data["completedDate"].toString()) : <any>undefined;
+            this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
 
@@ -6377,6 +6457,7 @@ class OrderBriefDto implements IOrderBriefDto {
         data["latestPayment"] = this.latestPayment ? this.latestPayment.toJSON() : <any>undefined;
         data["promotion"] = this.promotion ? this.promotion.toJSON() : <any>undefined;
         data["completedDate"] = this.completedDate ? this.completedDate.toISOString() : <any>undefined;
+        data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
 }
@@ -6397,6 +6478,7 @@ interface IOrderBriefDto {
     latestPayment?: PaymentDto;
     promotion?: PromotionDto;
     completedDate?: Date;
+    createdDateDisplay?: string;
 
     [key: string]: any;
 }

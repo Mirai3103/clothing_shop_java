@@ -24,7 +24,6 @@ public class DeleteProductCommandHandler implements IRequestHandler<DeleteProduc
         }
 
         productRepository.delete(product.get());
-        productOptionRepository.deleteAllByProductId(deleteProductCommand.id());
         return HandleResponse.ok();
     }
 }

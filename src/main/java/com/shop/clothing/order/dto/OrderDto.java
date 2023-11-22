@@ -9,6 +9,9 @@ import com.shop.clothing.user.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Setter
 @Getter
 public class OrderDto extends AuditableDto {
@@ -28,6 +31,10 @@ public class OrderDto extends AuditableDto {
     private PaymentDto latestPayment;
     private PromotionDto promotion;
     private UserDto user;
+    private LocalDateTime completedDate;
+    public String getCompletedDateDisplay() {
+        return completedDate != null ? completedDate.format(DateTimeFormatter.ofPattern(" HH:mm dd/MM/yyyy")) : "";
+    }
 
     private java.util.List<OrderItemDto> orderItems;
     public int getTotalPrice() {

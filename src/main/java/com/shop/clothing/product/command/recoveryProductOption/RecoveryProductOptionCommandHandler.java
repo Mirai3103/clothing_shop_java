@@ -16,7 +16,7 @@ public class RecoveryProductOptionCommandHandler implements IRequestHandler<Reco
     @Override
     public HandleResponse<Void> handle(RecoveryProductOptionCommand command) {
 
-        productOptionRepository.recoveryByProductId(command.productOptionId());
+        productOptionRepository.recoveryByProductOptionId(command.productOptionId());
         return HandleResponse.ok();
     }
 }

@@ -1,6 +1,7 @@
 package com.shop.clothing.controller.shop;
 
 import com.shop.clothing.common.Cqrs.ISender;
+import com.shop.clothing.product.query.advanceSearchProduct.AdvanceSearchAllProductsQuery;
 import com.shop.clothing.product.query.getAllProducts.GetAllProductsQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,13 +27,13 @@ public class Home {
 
     @GetMapping("/home")
     public String home(Model model) {
-        var newProductQuery = new GetAllProductsQuery();
-        newProductQuery.setSortField("id");
+        var newProductQuery = new AdvanceSearchAllProductsQuery();
+        newProductQuery.setSortField("product.createdDate");
         newProductQuery.setSortDir("desc");
         newProductQuery.setPage(1);
         newProductQuery.setPageSize(10);
-        var hotProductQuery = new GetAllProductsQuery();
-        hotProductQuery.setSortField("name");
+        var hotProductQuery = new AdvanceSearchAllProductsQuery();
+        hotProductQuery.setSortField("product.name");
         hotProductQuery.setSortDir("desc");
         hotProductQuery.setPage(1);
         hotProductQuery.setPageSize(10);

@@ -46,6 +46,7 @@ public class ProductOptionApiController {
     @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteProductOption(@PathVariable @Parameter(in = ParameterIn.PATH, name = "id") int id) {
         var result = sender.send(new com.shop.clothing.product.command.deleteProductOption.DeleteProductOptionCommand(id));
+        result.orThrow();
         return ResponseEntity.noContent().build();
     }
 

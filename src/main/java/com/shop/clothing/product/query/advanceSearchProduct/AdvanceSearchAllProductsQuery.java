@@ -19,9 +19,9 @@ public class AdvanceSearchAllProductsQuery extends PaginationRequest implements 
     private int[] categoryIds;
     private Product.ProductGender[] forGenders;
     @Builder.Default
-    private int minPrice = 0;
+    private Integer minPrice = 0;
     @Builder.Default
-    private int maxPrice = Integer.MAX_VALUE;
+    private Integer maxPrice = Integer.MAX_VALUE;
     private int[] colorIds;
     private String[] sizes;
 

@@ -3,6 +3,7 @@ package com.shop.clothing.product.endpoint;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.common.dto.Paginated;
 import com.shop.clothing.product.command.createProduct.CreateProductCommand;
+import com.shop.clothing.product.command.deleteProduct.DeleteProductCommand;
 import com.shop.clothing.product.command.recoveryProduct.RecoveryProductCommand;
 import com.shop.clothing.product.command.updateProduct.UpdateProductCommand;
 import com.shop.clothing.product.dto.ProductBriefDto;
@@ -26,6 +27,7 @@ public class ProductApiController {
     private final ISender sender;
 
     @GetMapping("/")
+    @Secured("ADMIN_DASHBOARD")
     public ResponseEntity<Paginated<ProductBriefDto>> getProducts(@Valid @ParameterObject GetAllProductsQuery getAllProductsQuery) {
 
         var result = sender.send(getAllProductsQuery);
@@ -60,8 +62,17 @@ public class ProductApiController {
     }
 
     @PatchMapping("/recovery/{productId}")
+    @Secured("PRODUCT_MANAGEMENT")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> recoveryProduct(@PathVariable int productId) {
         sender.send(new RecoveryProductCommand(productId)).orThrow();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
+    }
+    @DeleteMapping("/delete/{productId}")
+    @Secured("PRODUCT_MANAGEMENT")
+    @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteProduct(@PathVariable int productId) {
+        sender.send(new DeleteProductCommand(productId)).orThrow();
+        return ResponseEntity.noContent().build();
     }
 }

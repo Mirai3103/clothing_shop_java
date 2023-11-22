@@ -1,6 +1,7 @@
 package com.shop.clothing.product.repository;
 
 import com.shop.clothing.product.entity.Product;
+import lombok.Builder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -50,6 +51,24 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                     Pageable pageable);
 
     @Modifying
-    @Query("update Product p set p.deletedDate = null where p.productId = ?1")
+    @Query(value = "update Product p set p.deleted_date = null where p.product_id = ?1", nativeQuery = true)
     void recoveryByProductId(int productId);
+
+    @Query(nativeQuery = true, value = "select * from product p " +
+            " WHERE (:categoryId is null OR p.category_category_id = :categoryId)" +
+            "         AND (:minPrice IS NULL OR p.price >= :minPrice)" +
+            "         AND (:maxPrice IS NULL OR p.price <= :maxPrice)" +
+            "AND (:forGender is null or p.for_gender = :forGender)" +
+            "AND (:keyword is null or p.name LIKE  CONCAT('%', :keyword ,'%'))",
+            countQuery =
+            "select count(*) from product p " +
+            " WHERE (:categoryId is null OR p.category_category_id = :categoryId)" +
+            "         AND (:minPrice IS NULL OR p.price >= :minPrice)" +
+            "         AND (:maxPrice IS NULL OR p.price <= :maxPrice)" +
+                    "AND (:forGender is null or p.for_gender = :forGender)" +
+                    "AND (:keyword is null or p.name LIKE  CONCAT('%', :keyword ,'%'))"
+
+    )
+    Page<Product> simpleSearch(String keyword, Integer categoryId, Product.ProductGender forGender, Integer minPrice, Integer maxPrice, Pageable pageable);
+
 }

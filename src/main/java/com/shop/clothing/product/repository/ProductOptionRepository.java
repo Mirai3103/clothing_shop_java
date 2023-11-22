@@ -41,10 +41,15 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, In
     void deleteAllByProductId(int productId);
 
     @Modifying
-    @Query("update ProductOption po set po.deletedDate = null where po.productOptionId = ?1")
+    @Query(value = "update product_option po set po.deleted_date = null where po.product_option_id = ?1", nativeQuery = true)
     void recoveryByProductOptionId(int productOptionId);
 
     @Modifying
-    @Query("update ProductOption po set po.deletedDate = null where po.product.productId = ?1")
+    @Query(value = "update product_option po set po.deleted_date = null where po.product_product_id = ?1", nativeQuery = true)
     void recoveryByProductId(int productOptionId);
+
+
+
+    @Query(value = "select * from product_option po where po.product_product_id = ?1 and po.deleted_date is not null", nativeQuery = true)
+    List<ProductOption> getDeletedProductOptionsByProductId(int productId);
 }

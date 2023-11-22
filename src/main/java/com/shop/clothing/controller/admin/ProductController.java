@@ -5,6 +5,7 @@ import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.product.command.deleteProduct.DeleteProductCommand;
 import com.shop.clothing.product.query.getAllColors.GetAllColorQuery;
 import com.shop.clothing.product.query.getAllProducts.GetAllProductsQuery;
+import com.shop.clothing.product.query.getDeletedProductOptionsByProductId.GetDeletedProductOptionsByProductId;
 import com.shop.clothing.product.query.getProductById.GetProductByIdQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,6 @@ public class ProductController {
     @GetMapping()
     @PreAuthorize("hasAnyAuthority('PRODUCT_MANAGEMENT')")
     public String getProducts(Model model, GetAllProductsQuery getAllProductsQuery) {
-        getAllProductsQuery.setIncludeDeleted(true);
         var allProducts = sender.send(getAllProductsQuery).get();
         model.addAttribute("products", allProducts);
         return "admin/product/index";
@@ -47,6 +47,8 @@ public class ProductController {
 
         var query = new GetProductByIdQuery(id);
         var product = sender.send(query).get();
+        var deletedProductOptions = sender.send(new GetDeletedProductOptionsByProductId(id)).get();
+        product.getProductOptions().addAll(deletedProductOptions);
         var colors = sender.send(new GetAllColorQuery()).get();
         product.getProductOptions().sort((a, b) -> {
             if (a.getColor().getName().equals(b.getColor().getName())) {

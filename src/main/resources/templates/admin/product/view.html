@@ -437,17 +437,43 @@
                 <td class="px-6 py-4">
                   <button
                     type="button"
+                    th:unless="${op.deletedDate}"
                     th:attr="value=${op.productOptionId}"
                     x-on:click="
                           const id = $event.target.value;
-                          console.log(id);
-window.confirm('Bạn có chắc chắn muốn xóa kiểu dáng này không?') &&await window.apiClient.deleteProductOption( id, null)&&$store.toast.add('success', 'Thành công', 'Xóa kiểu dáng thành công!')&&setTimeout(()=>{
+window.confirm('Bạn có chắc chắn muốn xóa kiểu dáng này không?') && window.apiClient.deleteProductOption( id, null).then(r=>{
+                                    $store.toast.add('success', 'Thành công', 'Xóa kiểu dáng thành công!');
+                                    setTimeout(()=>{
                                         window.location.reload();
                                     },1000);
+                                }).catch(e=>{
+                                 $store.toast.add('error', 'Thất bại', e.response.error);
+                                 console.log(e);
+                                })
 "
                     class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                   >
                     Xoá/ẩn
+                  </button>
+                  <button
+                          th:if="${op.deletedDate}"
+                          type="button"
+                          th:attr="value=${op.productOptionId}"
+                          x-on:click="
+                          const id = $event.target.value;
+window.confirm('Bạn có chắc chắn muốn khôi phục kiểu dáng này không?') && window.apiClient.recoveryProductOption( id, null).then(r=>{
+                                    $store.toast.add('success', 'Thành công', 'Khôi phục kiểu dáng thành công!');
+                                    setTimeout(()=>{
+                                        window.location.reload();
+                                    },1000);
+                                }).catch(e=>{
+                                 $store.toast.add('error', 'Thất bại', e.response.error);
+                                 console.log(e);
+                                })
+"
+                          class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                  >
+                    Khôi phục
                   </button>
                 </td>
               </tr>

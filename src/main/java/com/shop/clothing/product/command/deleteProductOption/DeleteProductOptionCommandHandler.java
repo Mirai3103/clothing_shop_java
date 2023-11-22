@@ -39,9 +39,10 @@ public class DeleteProductOptionCommandHandler implements IRequestHandler<Delete
 
         } else {
             System.out.println("hard delete");
-            cartRepository.deleteAllByProductOptionIdIn(List.of(deleteProductOptionCommand.id()));
+
             productOptionRepository.hardDeleteById(deleteProductOptionCommand.id());
         }
+        cartRepository.deleteAllByProductOptionIdIn(List.of(deleteProductOptionCommand.id()));
         return HandleResponse.ok();
     }
 }

@@ -18,7 +18,6 @@ public class RecoveryProductCommandHandler implements IRequestHandler<RecoveryPr
     @Transactional
     public HandleResponse<Void> handle(RecoveryProductCommand recoveryProductCommand) {
         productRepository.recoveryByProductId(recoveryProductCommand.product());
-        productOptionRepository.recoveryByProductId(recoveryProductCommand.product());
         return HandleResponse.ok();
     }
 }

@@ -22,9 +22,33 @@
     hasNextPage: true,
     hasPreviousPage: true,
     loading : false,
-    currentSortField: 'createdDate',
+    currentSortField: 'created_date',
     currentSortDir: 'desc',
     keyword: '',
+    setDeleted: function (id, isDeleted) {
+    console.log(id);
+     const index = this.data.findIndex((item) => item.productId === id);
+            if (index === -1) {
+                return;
+            }
+            if(isDeleted){
+                window.apiClient.deleteProduct(id).then((res) => {
+                    this.data[index].deletedDate = new Date();
+                    this.data =[...this.data];
+                    $store.toast.add('success', 'Xóa sản phẩm thành công');
+                }).catch((err) => {
+                    $store.toast.add('error', 'Xóa sản phẩm thất bại');
+                });
+                return;
+                }
+            window.apiClient.recoveryProduct(id).then((res) => {
+                this.data[index].deletedDate = null;
+                this.data =[...this.data];
+                $store.toast.add('success', 'Khôi phục sản phẩm thành công');
+            }).catch((err) => {
+                $store.toast.add('error', 'Khôi phục sản phẩm thất bại');
+            });
+    }
     }"
         x-init="
                         const urlQuery = new URLSearchParams(window.location.search);
@@ -102,8 +126,11 @@
                             fetch();
                         });
                      "
+
       >
-        <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
+        <div class="mx-auto max-w-screen-2xl px-4 lg:px-12"
+
+        >
           <div class="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
             <div
               class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4"
@@ -933,12 +960,12 @@
                       <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
                         <input
                           id="default-checkbox"
-                          disabled
                           type="checkbox"
                           value=""
                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           readonly
                           :checked="p.deletedDate != null"
+                          @change="console.log('call');setDeleted(p.productId, $event.target.checked);console.log('called')"
                         />
                       </td>
                     </tr>

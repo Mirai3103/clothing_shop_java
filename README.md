@@ -60,8 +60,6 @@ npm run watch:css
 | -------------------------- | --- |
 | Lọc sản phẩm (Trang admin) |     |
 | Tìm kiếm sản phẩm          |     |
-| Huỷ đơn hàng               |     |
-| Xử lý ẩn hiện sản phẩm     |     |
 | Báo cáo theo sản phẩm      |     |
 | Báo cáo theo danh mục      |     |
 | Quản lý đánh giá           |     |
