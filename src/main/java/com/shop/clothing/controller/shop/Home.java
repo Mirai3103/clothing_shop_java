@@ -31,12 +31,12 @@ public class Home {
         newProductQuery.setSortField("product.createdDate");
         newProductQuery.setSortDir("desc");
         newProductQuery.setPage(1);
-        newProductQuery.setPageSize(10);
+        newProductQuery.setPageSize(6);
         var hotProductQuery = new AdvanceSearchAllProductsQuery();
-        hotProductQuery.setSortField("product.name");
+        hotProductQuery.setSortField("product.totalSold");
         hotProductQuery.setSortDir("desc");
         hotProductQuery.setPage(1);
-        hotProductQuery.setPageSize(10);
+        hotProductQuery.setPageSize(6);
         var newProducts = sender.send(newProductQuery).get();
         var hotProducts = sender.send(hotProductQuery).get();
         model.addAttribute("newProducts", newProducts.getData());

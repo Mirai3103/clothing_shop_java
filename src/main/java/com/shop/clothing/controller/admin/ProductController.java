@@ -25,6 +25,12 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('PRODUCT_MANAGEMENT')")
     public String getProducts(Model model, GetAllProductsQuery getAllProductsQuery) {
         var allProducts = sender.send(getAllProductsQuery).get();
+        var query = new GetAllCategoriesQueries();
+        query.setPageSize(1000);
+        query.setSortDir("asc");
+        query.setSortField("name");
+        var categories = sender.send(query).get();
+        model.addAttribute("categories", categories.getData());
         model.addAttribute("products", allProducts);
         return "admin/product/index";
     }
@@ -33,7 +39,7 @@ public class ProductController {
     @PreAuthorize("hasAnyAuthority('PRODUCT_MANAGEMENT')")
     public String createProduct(Model model) {
         var query = new GetAllCategoriesQueries();
-        query.setPageSize(200);
+        query.setPageSize(1000);
         query.setSortDir("asc");
         query.setSortField("name");
         var categories = sender.send(query).get();

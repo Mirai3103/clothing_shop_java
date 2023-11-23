@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <link rel="stylesheet" href="/css/style.css" />
     <script>
-      const client = new Client();
+      const client = new  Client(window.location.origin);
       window.apiClient = client;
       const VND = new Intl.NumberFormat("vi-VN", {
         style: "currency",

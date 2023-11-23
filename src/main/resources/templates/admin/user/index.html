@@ -25,22 +25,21 @@
     loading : false,
     selectedId: null,
     selectedItem: {},
-    keySearch: '',
     getSelectedItems() {
-        return this.data.filter((item) => this.selected.includes(item.categoryId));
+        return this.data.filter((item) => this.selected.includes(item.userId));
     },
     }"
         x-init="
-             const urlQuery = new URLSearchParams(window.location.search);
+        const urlQuery = new URLSearchParams(window.location.search);
              const pageQr = urlQuery.get('page');
                 const perPageQr = urlQuery.get('perPage');
-            const keywordQr = urlQuery.get('keyword');
+
                 page =Number(pageQr) || 1;
                 perPage = Number(perPageQr) || 10;
-                 function fetchData(p =1,pp=10,keyword =''){
+                 function fetchData(p =1,pp=10){
             loading = true;
 
-            axios.get('/api/category?page=' + p + '&perPage=' + pp+'&keyword='+keyword).then((response) => {
+            axios.get('/api/user?page=' + p + '&perPage=' + pp).then((response) => {
                 data = [...response.data.data]
                 total = response.data.totalPages;
                 totalElement = response.data.totalElements;
@@ -48,22 +47,14 @@
                 hasPreviousPage = response.data.hasPrevious;
                 loading = false;
                 selected = [];
+                console.log(data);
 
             });
         }
         fetchData(page, perPage);
                 $watch('page', (value) => {
                     fetchData(value, perPage);
-                    window.history.replaceState(null, null, '?page=' + value + '&perPage=' + perPage+'&keyword='+keySearch);
-                    window.scroll({
-                        top: 0,
-                        left: 0,
-                        behavior: 'smooth'
-                    });
-                });
-                $watch('keySearch', (value) => {
-                    fetchData(page, perPage, value);
-                    window.history.replaceState(null, null, '?page=' + page + '&perPage=' + perPage+'&keyword='+value);
+                    window.history.replaceState(null, null, '?page=' + value + '&perPage=' + perPage);
                     window.scroll({
                         top: 0,
                         left: 0,
@@ -114,7 +105,6 @@
                       id="simple-search"
                       placeholder="Tìm danh mục"
                       required=""
-                      @input.debounce.1000ms="keySearch = $event.target.value"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
                     />
                   </div>

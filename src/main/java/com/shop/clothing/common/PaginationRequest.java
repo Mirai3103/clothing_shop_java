@@ -16,6 +16,7 @@ public class PaginationRequest {
     protected int pageSize = 10;
     protected String sortField="";
     protected String sortDir="asc";
+    @Builder.Default
     protected String keyword = "";
 
     public Sort.Direction getSortDirection() {

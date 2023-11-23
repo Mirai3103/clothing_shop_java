@@ -27,7 +27,9 @@ public class CartFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpSession session = httpRequest.getSession();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")) {
+        if (auth != null && auth.getPrincipal() != null && !auth.getPrincipal().equals("anonymousUser")
+
+        ) {
 
             var cartItems = _sender.send(new GetMyCartQuery());
 

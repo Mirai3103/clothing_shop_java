@@ -19,7 +19,7 @@ public class GetAllCategoriesQueriesHandler implements IRequestHandler<GetAllCat
     @Override
     @Transactional
     public HandleResponse<Paginated<CategoryBriefDto>> handle(GetAllCategoriesQueries getAllCategoriesQueries) {
-        var categories = categoryRepository.findAll(
+        var categories = categoryRepository.findAllByNameContainingIgnoreCase(getAllCategoriesQueries.getKeyword(),
                 getAllCategoriesQueries.getPageable("categoryId"));
         return HandleResponse.ok(Paginated.of(categories.map(category -> modelMapper.map(category, CategoryBriefDto.class))));
     }

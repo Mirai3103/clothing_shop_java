@@ -8,8 +8,5 @@ import lombok.*;
 
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class GetAllCategoriesQueries extends PaginationRequest implements IRequest<Paginated<CategoryBriefDto>> {
-    private String eyword = "";
 }

@@ -2007,6 +2007,82 @@ class Client {
     }
 
     /**
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param sortField (optional) 
+     * @param sortDir (optional) 
+     * @param keyword (optional) 
+     * @return OK
+     */
+    getUsers(page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedUserBriefDto> {
+        let url_ = this.baseUrl + "/api/user?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetUsers(_response);
+        });
+    }
+
+    protected processGetUsers(response: AxiosResponse): Promise<PaginatedUserBriefDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PaginatedUserBriefDto.fromJS(resultData200);
+            return Promise.resolve<PaginatedUserBriefDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PaginatedUserBriefDto>(null as any);
+    }
+
+    /**
      * @param startDateTime (optional) 
      * @param endDateTime (optional) 
      * @return OK
@@ -2752,7 +2828,6 @@ class Client {
     }
 
     /**
-     * @param eyword (optional) 
      * @param page (optional) 
      * @param pageSize (optional) 
      * @param sortField (optional) 
@@ -2760,12 +2835,8 @@ class Client {
      * @param keyword (optional) 
      * @return OK
      */
-    getCategories(eyword: string | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedCategoryBriefDto> {
+    getCategories(page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedCategoryBriefDto> {
         let url_ = this.baseUrl + "/api/category?";
-        if (eyword === null)
-            throw new Error("The parameter 'eyword' cannot be null.");
-        else if (eyword !== undefined)
-            url_ += "eyword=" + encodeURIComponent("" + eyword) + "&";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -5036,9 +5107,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     heightInCm?: number;
     lengthInCm?: number;
     weightInGram?: number;
+    toDistrict?: string;
     toWard?: string;
     toDetailAddress?: string;
-    toDistrict?: string;
     toProvince?: string;
 
     [key: string]: any;
@@ -5065,9 +5136,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.heightInCm = _data["heightInCm"];
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
+            this.toDistrict = _data["toDistrict"];
             this.toWard = _data["toWard"];
             this.toDetailAddress = _data["toDetailAddress"];
-            this.toDistrict = _data["toDistrict"];
             this.toProvince = _data["toProvince"];
         }
     }
@@ -5092,9 +5163,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["heightInCm"] = this.heightInCm;
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
+        data["toDistrict"] = this.toDistrict;
         data["toWard"] = this.toWard;
         data["toDetailAddress"] = this.toDetailAddress;
-        data["toDistrict"] = this.toDistrict;
         data["toProvince"] = this.toProvince;
         return data;
     }
@@ -5108,9 +5179,9 @@ interface IGetDeliveryOptionQuery {
     heightInCm?: number;
     lengthInCm?: number;
     weightInGram?: number;
+    toDistrict?: string;
     toWard?: string;
     toDetailAddress?: string;
-    toDistrict?: string;
     toProvince?: string;
 
     [key: string]: any;
@@ -5560,6 +5631,146 @@ interface ICancelOrderCommand {
     [key: string]: any;
 }
 
+class PaginatedUserBriefDto implements IPaginatedUserBriefDto {
+    data?: UserBriefDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+
+    constructor(data?: IPaginatedUserBriefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(UserBriefDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedUserBriefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedUserBriefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+
+interface IPaginatedUserBriefDto {
+    data?: UserBriefDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+}
+
+class UserBriefDto implements IUserBriefDto {
+    userId?: string;
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IUserBriefDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.userId = _data["userId"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.avatarUrl = _data["avatarUrl"];
+        }
+    }
+
+    static fromJS(data: any): UserBriefDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserBriefDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["userId"] = this.userId;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["avatarUrl"] = this.avatarUrl;
+        return data;
+    }
+}
+
+interface IUserBriefDto {
+    userId?: string;
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string;
+
+    [key: string]: any;
+}
+
 class UserDto implements IUserDto {
     userId?: string;
     firstName?: string;
@@ -5570,8 +5781,8 @@ class UserDto implements IUserDto {
     address?: string;
     createdAt?: Date;
     permissions?: string[];
-    accountEnabled?: boolean;
     customer?: boolean;
+    accountEnabled?: boolean;
     emailVerified?: boolean;
 
     [key: string]: any;
@@ -5604,8 +5815,8 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
-            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
+            this.accountEnabled = _data["accountEnabled"];
             this.emailVerified = _data["emailVerified"];
         }
     }
@@ -5636,8 +5847,8 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        data["accountEnabled"] = this.accountEnabled;
         data["emailVerified"] = this.emailVerified;
         return data;
     }
@@ -5653,8 +5864,8 @@ interface IUserDto {
     address?: string;
     createdAt?: Date;
     permissions?: string[];
-    accountEnabled?: boolean;
     customer?: boolean;
+    accountEnabled?: boolean;
     emailVerified?: boolean;
 
     [key: string]: any;
@@ -6300,66 +6511,6 @@ interface IRatingDto {
     user?: UserBriefDto;
     productOption?: ProductOptionDto;
     createdDateDisplay?: string;
-
-    [key: string]: any;
-}
-
-class UserBriefDto implements IUserBriefDto {
-    userId?: string;
-    firstName?: string;
-    lastName?: string;
-    avatarUrl?: string;
-
-    [key: string]: any;
-
-    constructor(data?: IUserBriefDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.userId = _data["userId"];
-            this.firstName = _data["firstName"];
-            this.lastName = _data["lastName"];
-            this.avatarUrl = _data["avatarUrl"];
-        }
-    }
-
-    static fromJS(data: any): UserBriefDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserBriefDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["userId"] = this.userId;
-        data["firstName"] = this.firstName;
-        data["lastName"] = this.lastName;
-        data["avatarUrl"] = this.avatarUrl;
-        return data;
-    }
-}
-
-interface IUserBriefDto {
-    userId?: string;
-    firstName?: string;
-    lastName?: string;
-    avatarUrl?: string;
 
     [key: string]: any;
 }

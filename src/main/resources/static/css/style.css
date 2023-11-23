@@ -2283,6 +2283,9 @@ input:checked + .toggle-bg{
 .min-h-\[24rem\]{
   min-height: 24rem;
 }
+.min-h-\[500px\]{
+  min-height: 500px;
+}
 .min-h-\[60vh\]{
   min-height: 60vh;
 }
@@ -4150,10 +4153,6 @@ a {
   content: var(--tw-content);
   position: absolute;
 }
-.after\:left-\[2px\]::after{
-  content: var(--tw-content);
-  left: 2px;
-}
 .after\:start-\[2px\]::after{
   content: var(--tw-content);
   inset-inline-start: 2px;
@@ -4162,17 +4161,9 @@ a {
   content: var(--tw-content);
   top: 2px;
 }
-.after\:h-4::after{
-  content: var(--tw-content);
-  height: 1rem;
-}
 .after\:h-5::after{
   content: var(--tw-content);
   height: 1.25rem;
-}
-.after\:w-4::after{
-  content: var(--tw-content);
-  width: 1rem;
 }
 .after\:w-5::after{
   content: var(--tw-content);

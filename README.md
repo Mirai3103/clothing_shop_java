@@ -58,7 +58,6 @@ npm run watch:css
 
 | Chức năng                  |     |
 | -------------------------- | --- |
-| Lọc sản phẩm (Trang admin) |     |
 | Tìm kiếm sản phẩm          |     |
 | Báo cáo theo sản phẩm      |     |
 | Báo cáo theo danh mục      |     |

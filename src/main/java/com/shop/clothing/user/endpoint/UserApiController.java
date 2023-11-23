@@ -1,14 +1,18 @@
 package com.shop.clothing.user.endpoint;
 
 import com.shop.clothing.common.Cqrs.ISender;
+import com.shop.clothing.common.dto.Paginated;
+import com.shop.clothing.user.UserBriefDto;
 import com.shop.clothing.user.UserDto;
 import com.shop.clothing.user.command.updateAvatar.UpdateAvatarCommand;
 import com.shop.clothing.user.command.updatePassword.UpdatePasswordCommand;
 import com.shop.clothing.user.command.updateProfile.UpdateProfileCommand;
+import com.shop.clothing.user.query.getAllUsers.GetAllUsersQuery;
 import com.shop.clothing.user.query.getMyProfile.GetMyProfileQuery;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class UserApiController {
     private final ISender sender;
-
+    @GetMapping()
+    public ResponseEntity<Paginated<UserBriefDto>> getUsers(@Valid @ParameterObject GetAllUsersQuery paginationRequest) {
+        return ResponseEntity.ok(sender.send(paginationRequest).orThrow());
+    }
     @GetMapping("/my-profile")
     public ResponseEntity<UserDto> getMyProfile() {
         var query = new GetMyProfileQuery();
