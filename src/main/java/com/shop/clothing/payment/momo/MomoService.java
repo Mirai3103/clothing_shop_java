@@ -141,31 +141,9 @@ public class MomoService {
         payment.setPaymentResponse(message);
         var signature = momoCallbackParam.getSignature();// toDo: check signature
         switch (momoCallbackParam.getResultCode()) {
-            case 0:
-                payment.setStatus(PaymentStatus.PAID);
-                break;
-            case 8000:
-                payment.setStatus(PaymentStatus.PENDING);
-            case 7000:
-                payment.setStatus(PaymentStatus.PENDING);
-            case 1000:
-                payment.setStatus(PaymentStatus.PENDING);
-            case 4300:
-                payment.setStatus(PaymentStatus.FAILED);
-            case 1001:
-                payment.setStatus(PaymentStatus.FAILED);
-            case 1003:
-                payment.setStatus(PaymentStatus.CANCELLED);
-            case 1004:
-                payment.setStatus(PaymentStatus.FAILED);
-            case 1006:
-                payment.setStatus(PaymentStatus.CANCELLED);
-            case 4010:
-                payment.setStatus(PaymentStatus.FAILED);
-            case 4011:
-                payment.setStatus(PaymentStatus.FAILED);
-            default:
-                payment.setStatus(PaymentStatus.FAILED);
+            case 0 -> payment.setStatus(PaymentStatus.PAID);
+            case 8000, 7000, 1000 -> payment.setStatus(PaymentStatus.PENDING);
+            default -> payment.setStatus(PaymentStatus.FAILED);
         }
         if(payment.getStatus()==PaymentStatus.PAID){
             payment.setCompletedDate(LocalDateTime.now());

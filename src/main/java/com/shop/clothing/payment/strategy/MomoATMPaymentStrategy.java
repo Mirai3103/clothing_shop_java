@@ -30,7 +30,7 @@ public class MomoATMPaymentStrategy implements PaymentStrategy {
         var order = orderRepository.findById(orderId).orElseThrow(() -> new BusinessLogicException("Đơn hàng không tồn tại"));
         var paymentId = UUID.randomUUID().toString();
         var lastPayment = paymentRepository.findFirstByOrderIdSortedByCreatedDateDesc(orderId).orElse(null);
-        if(lastPayment != null &&( lastPayment.getStatus() == PaymentStatus.FAILED||  lastPayment.getStatus() == PaymentStatus.CANCELLED)){
+        if(lastPayment != null && lastPayment.getStatus() != PaymentStatus.FAILED&&  lastPayment.getStatus() != PaymentStatus.CANCELLED){
             paymentId = lastPayment.getPaymentId();
         }
         var response = momoService.createATMPayment(paymentId, order.getTotalAmount(), "Thanh toán đơn hàng " + orderId);

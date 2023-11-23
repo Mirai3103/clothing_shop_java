@@ -3920,8 +3920,8 @@ class ProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -3948,8 +3948,8 @@ class ProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -4243,9 +4243,9 @@ class GetDeliveryOptionQuery {
             this.heightInCm = _data["heightInCm"];
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
-            this.toDistrict = _data["toDistrict"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
+            this.toDistrict = _data["toDistrict"];
             this.toProvince = _data["toProvince"];
         }
     }
@@ -4268,9 +4268,9 @@ class GetDeliveryOptionQuery {
         data["heightInCm"] = this.heightInCm;
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
-        data["toDistrict"] = this.toDistrict;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
+        data["toDistrict"] = this.toDistrict;
         data["toProvince"] = this.toProvince;
         return data;
     }
@@ -4605,9 +4605,9 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
-            this.emailVerified = _data["emailVerified"];
-            this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
+            this.customer = _data["customer"];
+            this.emailVerified = _data["emailVerified"];
         }
     }
     static fromJS(data) {
@@ -4635,9 +4635,9 @@ class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
-        data["emailVerified"] = this.emailVerified;
-        data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
+        data["customer"] = this.customer;
+        data["emailVerified"] = this.emailVerified;
         return data;
     }
 }
@@ -5198,8 +5198,8 @@ class ProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -5237,8 +5237,8 @@ class ProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }

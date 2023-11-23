@@ -43,7 +43,7 @@
         $store.toast.add('success', 'Thành công', 'Đánh giá của bạn đã được lưu');
     } catch (err) {
     console.log({err});
-      $store.toast.add('error', 'Thất bại',err.response.message);
+      $store.toast.add('error', 'Thất bại',err.response.error);
       errors = err.response.errors;
       }}
     }"
@@ -246,16 +246,37 @@
                                 >
                                     Tải hóa đơn
                                 </a>
-                                <button
-                                        th:if="${order.getStatus().name().equalsIgnoreCase('PROCESSING')} or ${order.getStatus().name().equalsIgnoreCase('PENDING')}"
-                                        type="button"
-                                        data-modal-target="cancel-order-modal" data-modal-toggle="cancel-order-modal"
-                                        class="bg-white px-4 py-1 rounded-md font-extrabold border-2"
-                                        th:attr="data-order-id=${order.orderId}"
-                                        @click="selectedOrderId =$el.getAttribute('data-order-id')"
-                                >
-                                    Huỷ đơn hàng
-                                </button>
+                                <div>
+                                    <button
+                                            th:if="${order.getStatus().name().equalsIgnoreCase('PROCESSING')} or ${order.getStatus().name().equalsIgnoreCase('PENDING')}"
+                                            type="button"
+                                            data-modal-target="cancel-order-modal" data-modal-toggle="cancel-order-modal"
+                                            class="bg-white px-4 py-1 rounded-md font-extrabold border-2"
+                                            th:attr="data-order-id=${order.orderId}"
+                                            @click="selectedOrderId =$el.getAttribute('data-order-id')"
+                                    >
+                                        Huỷ đơn hàng
+                                    </button>
+                                    <button
+                                            th:if="${order.getLatestPayment().getStatus().name().equalsIgnoreCase('FAILED')} "
+                                            type="button"
+
+                                            class="bg-green-500 text-white hover:bg-green-700 px-4 py-1 rounded-md font-extrabold border-2"
+                                            th:attr="data-order-id=${order.orderId}"
+                                            @click="
+                                                const orderId =$el.getAttribute('data-order-id')
+                                                 window.apiClient.createPayment({
+                                                 orderId: orderId,
+                                                 }).then((res) => {
+                                                  window.location.href = res.redirectUrl;
+                                                 }).catch((err) => {
+                                                  $store.toast.add('error', 'Thất bại', err.response.error);
+                                                 });
+                                            "
+                                    >
+                                        Thanh toán lại
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <!-- order details -->

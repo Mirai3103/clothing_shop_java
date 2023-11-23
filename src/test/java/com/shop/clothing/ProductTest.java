@@ -1,6 +1,8 @@
 package com.shop.clothing;
 
 import com.shop.clothing.common.Cqrs.ISender;
+import com.shop.clothing.order.entity.enums.OrderStatus;
+import com.shop.clothing.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ProductTest {
     @Autowired
     private ISender sender;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Test
     public void testGetAllProducts() {
@@ -31,6 +36,14 @@ public class ProductTest {
             var result = sender.send(query).get();
             assertTrue(result.getData().stream().allMatch(product -> product.getPrice() < 200000));
 
+        });
+    }
+    @Test
+    @Transactional
+    public void updateProductTotalSold() {
+        assertDoesNotThrow(() -> {
+            productRepository.updateTotalSold(new OrderStatus[]{OrderStatus.DELIVERED, OrderStatus.SHIPPING});
+            productRepository.updateTotalToZeroWhereSoldIsNull();
         });
     }
 }

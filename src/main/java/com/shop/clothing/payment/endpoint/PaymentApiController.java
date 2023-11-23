@@ -19,13 +19,14 @@ public class PaymentApiController {
     private final ISender sender;
 
     @PostMapping("/create")
-    @Secured("ROLE_USER")
+    @Secured("CAN_ORDER")
     public ResponseEntity<CreatePaymentResponse> createPayment(@Valid @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody CreatePaymentCommand command) {
         return ResponseEntity.ok(sender.send(command).orThrow());
     }
 
     @PatchMapping("/update-status")
-    @Secured("ROLE_USER")
+    @Secured("ORDER_MANAGEMENT")
+
     public ResponseEntity<Void> updatePaymentStatus(@Valid @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody UpdatePaymentStatusCommand command) {
         sender.send(command).orThrow();
         return ResponseEntity.ok().build();

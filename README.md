@@ -63,7 +63,6 @@ npm run watch:css
 | Báo cáo theo sản phẩm      |     |
 | Báo cáo theo danh mục      |     |
 | Quản lý đánh giá           |     |
-| Thanh toán lại đơn hàng    |     |
 | Trang dashboard            |     |
 | Quản lý người dùng         |     |
 | Quản lý vai trò            |     |

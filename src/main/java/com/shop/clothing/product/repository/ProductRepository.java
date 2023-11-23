@@ -1,7 +1,7 @@
 package com.shop.clothing.product.repository;
 
+import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.product.entity.Product;
-import lombok.Builder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -70,5 +70,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     )
     Page<Product> simpleSearch(String keyword, Integer categoryId, Product.ProductGender forGender, Integer minPrice, Integer maxPrice, Pageable pageable);
-
+    @Modifying
+    @Query("UPDATE Product p SET p.totalSold =  (" +
+            "SELECT SUM(oi.quantity) FROM OrderItem oi " +
+            "JOIN Order o on oi.orderId = o.orderId " +
+            "WHERE oi.productOption.product.productId = p.productId AND o.status IN :statuses" +
+            ")")
+    void updateTotalSold(OrderStatus[] statuses);
+    @Modifying
+    @Query("UPDATE Product p SET p.totalSold = 0 WHERE p.totalSold IS NULL")
+    void updateTotalToZeroWhereSoldIsNull();
 }

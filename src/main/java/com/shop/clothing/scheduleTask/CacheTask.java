@@ -5,8 +5,9 @@ import com.shop.clothing.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 @AllArgsConstructor
 public class CacheTask {
 
