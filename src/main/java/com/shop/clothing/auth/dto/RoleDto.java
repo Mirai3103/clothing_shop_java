@@ -1,7 +1,6 @@
 package com.shop.clothing.auth.dto;
 
-import com.shop.clothing.auth.entity.Permission;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.Setter;
 

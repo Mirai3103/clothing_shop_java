@@ -63,6 +63,4 @@ npm run watch:css
 | Báo cáo theo danh mục      |     |
 | Quản lý đánh giá           |     |
 | Trang dashboard            |     |
-| Quản lý người dùng         |     |
-| Quản lý vai trò            |     |
 | Xác thực quyền             |     |

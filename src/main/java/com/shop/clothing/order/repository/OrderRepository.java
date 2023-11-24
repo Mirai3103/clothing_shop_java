@@ -1,12 +1,16 @@
 package com.shop.clothing.order.repository;
 
 import com.shop.clothing.order.entity.Order;
+import com.shop.clothing.payment.entity.enums.PaymentMethod;
 import jakarta.persistence.Tuple;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -21,5 +25,7 @@ public interface OrderRepository extends JpaRepository<Order, String> {
             "GROUP BY DATE(o.completed_date) ORDER BY DATE(o.completed_date) DESC ", nativeQuery = true)
     // hibernate query
     List<Tuple> getSoldReport(Date startDate, Date endDate);
+
+    List<Order> getOrderByPaymentMethodInAndCreatedDateBeforeAndCompletedDateIsNull(Collection<PaymentMethod> paymentMethod, LocalDateTime createdDate);
 
 }

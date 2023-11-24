@@ -148,7 +148,7 @@
               id="updateForm"
               class="col-span-6 xl:col-span-4 p-4 border border-gray-200 rounded-lg shadow-sm sm:p-6"
               x-on:submit="
-                                $event.preventDefault();
+                            $event.preventDefault();
                             if (!imageFile && !productImage) {
                                 $store.toast.add('error', 'Thất bại', 'Vui lòng chọn ảnh');
                                 return;
@@ -157,7 +157,7 @@
                             const payload = {};
                             payload.name = $event.target.name.value.trim()
                             payload.forGender = $event.target.forGender.value;
-                            payload.price = $event.target.price.value;
+                            payload.price = parseInt($event.target.price.value);
                             payload.categoryId = $event.target.category.value;
                             payload.discount = $event.target.discount.value;
                             payload.description = getDescriptionMarkdown();
@@ -179,14 +179,24 @@
                                     return;
                                 }
                             }
-
-
-
                             payload.displayImage = imageLink;
-                            console.log(payload);
-
+                            window.apiClient.updateProduct({
+                            ...payload,
+                            productId: $event.target.productId.value
+                            }).then(res => {
+                                $store.toast.add('success', 'Thành công', 'Sản phẩm đã được cập nhật');
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }).catch(err => {
+                              errors = err.response.errors
+                                $store.toast.add('error', 'Thất bại', err.response.error);
+                            }).finally(() => {
+                                isCreating = false;
+                            })
 "
             >
+              <input type="hidden" name="productId" th:value="${product.productId}" />
               <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div class="sm:col-span-2">
                   <label for="name" class="block mb-2 text-sm font-medium text-gray-900"> Tên sản phẩm </label>

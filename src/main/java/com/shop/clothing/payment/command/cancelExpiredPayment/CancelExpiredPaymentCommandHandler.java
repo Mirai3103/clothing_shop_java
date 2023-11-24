@@ -21,7 +21,7 @@ public class CancelExpiredPaymentCommandHandler implements IRequestHandler<Cance
                 com.shop.clothing.payment.entity.enums.PaymentStatus.PENDING,
                 java.time.LocalDateTime.now().minusMinutes(15)
         );
-        System.out.println(" Có " + listExpiredPayment.size() + " đơn hàng hết hạn thanh toán");
+        System.out.println("Có " + listExpiredPayment.size() + " đơn hàng hết hạn thanh toán");
         listExpiredPayment.forEach(payment -> {
             payment.setStatus(com.shop.clothing.payment.entity.enums.PaymentStatus.CANCELLED);
             paymentRepository.save(payment);
