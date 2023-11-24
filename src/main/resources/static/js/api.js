@@ -110,6 +110,155 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @return OK
+     */
+    getAllRoles(cancelToken) {
+        let url_ = this.baseUrl + "/api/role";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllRoles(_response);
+        });
+    }
+    processGetAllRoles(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(RoleDto.fromJS(item));
+            }
+            else {
+                result200 = null;
+            }
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    updateRole(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/role";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processUpdateRole(_response);
+        });
+    }
+    processUpdateRole(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    createRole(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/role";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processCreateRole(_response);
+        });
+    }
+    processCreateRole(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @param productId (optional)
      * @param page (optional)
      * @param pageSize (optional)
@@ -1612,6 +1761,100 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @return OK
+     */
+    removePermissionFromRole(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/role/remove-permission";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processRemovePermissionFromRole(_response);
+        });
+    }
+    processRemovePermissionFromRole(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    assignPermission(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/role/assign-permission";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processAssignPermission(_response);
+        });
+    }
+    processAssignPermission(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @return No Content
      */
     recoveryProduct(productId, cancelToken) {
@@ -2479,6 +2722,61 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @return OK
+     */
+    getAllPermissions(cancelToken) {
+        let url_ = this.baseUrl + "/api/permission";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllPermissions(_response);
+        });
+    }
+    processGetAllPermissions(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(PermissionDto.fromJS(item));
+            }
+            else {
+                result200 = null;
+            }
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @param paymentStatus (optional)
      * @param startDate (optional)
      * @param endDate (optional)
@@ -2846,6 +3144,52 @@ class Client {
         });
     }
     processDeleteStockReceipt(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return No Content
+     */
+    deleteRole(roleName, cancelToken) {
+        let url_ = this.baseUrl + "/api/role/{roleName}";
+        if (roleName === undefined || roleName === null)
+            throw new Error("The parameter 'roleName' must be defined.");
+        url_ = url_.replace("{roleName}", encodeURIComponent("" + roleName));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "DELETE",
+            url: url_,
+            headers: {},
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processDeleteRole(_response);
+        });
+    }
+    processDeleteRole(response) {
         const status = response.status;
         let _headers = {};
         if (response.headers && typeof response.headers === "object") {
@@ -3238,6 +3582,44 @@ class UpdateSupplierCommand {
         data["address"] = this.address;
         data["phone"] = this.phone;
         data["email"] = this.email;
+        data["description"] = this.description;
+        return data;
+    }
+}
+class UpdateRoleCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateRoleCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
         data["description"] = this.description;
         return data;
     }
@@ -3716,6 +4098,44 @@ class UpdateShopInfoCommand {
         return data;
     }
 }
+class CreateRoleCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateRoleCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        return data;
+    }
+}
 class CreateRatingCommand {
     constructor(data) {
         if (data) {
@@ -3988,8 +4408,8 @@ class ProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
             this.finalPrice = _data["finalPrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -4016,8 +4436,8 @@ class ProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
         data["finalPrice"] = this.finalPrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -4312,9 +4732,9 @@ class GetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toWard = _data["toWard"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toProvince = _data["toProvince"];
+            this.toDetailAddress = _data["toDetailAddress"];
+            this.toWard = _data["toWard"];
         }
     }
     static fromJS(data) {
@@ -4337,9 +4757,9 @@ class GetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toWard"] = this.toWard;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toProvince"] = this.toProvince;
+        data["toDetailAddress"] = this.toDetailAddress;
+        data["toWard"] = this.toWard;
         return data;
     }
 }
@@ -4534,6 +4954,78 @@ class AddToCartCommand {
         }
         data["productOptionId"] = this.productOptionId;
         data["quantity"] = this.quantity;
+        return data;
+    }
+}
+class RemovePermissionFromRoleCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.roleName = _data["roleName"];
+            this.permissionName = _data["permissionName"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new RemovePermissionFromRoleCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["roleName"] = this.roleName;
+        data["permissionName"] = this.permissionName;
+        return data;
+    }
+}
+class AddPermissionToRoleCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.roleName = _data["roleName"];
+            this.permissionName = _data["permissionName"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddPermissionToRoleCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["roleName"] = this.roleName;
+        data["permissionName"] = this.permissionName;
         return data;
     }
 }
@@ -4767,9 +5259,9 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
+            this.emailVerified = _data["emailVerified"];
             this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
-            this.emailVerified = _data["emailVerified"];
         }
     }
     static fromJS(data) {
@@ -4797,9 +5289,9 @@ class UserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
+        data["emailVerified"] = this.emailVerified;
         data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
-        data["emailVerified"] = this.emailVerified;
         return data;
     }
 }
@@ -4998,6 +5490,92 @@ class StockReceiptBriefDto {
         data["supplierId"] = this.supplierId;
         data["supplier"] = this.supplier ? this.supplier.toJSON() : undefined;
         data["createdDateDisplay"] = this.createdDateDisplay;
+        return data;
+    }
+}
+class PermissionDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new PermissionDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        return data;
+    }
+}
+class RoleDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [];
+                for (let item of _data["permissions"])
+                    this.permissions.push(PermissionDto.fromJS(item));
+            }
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new RoleDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item.toJSON());
+        }
         return data;
     }
 }
@@ -5320,8 +5898,8 @@ class ProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -5359,8 +5937,8 @@ class ProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }

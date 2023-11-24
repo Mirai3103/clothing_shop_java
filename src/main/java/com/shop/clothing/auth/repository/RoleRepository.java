@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<Role, String> {
     @Query("SELECT r FROM Role r WHERE r.normalizedName = ?1")
     Optional<Role> findByName(String name);
+
 }

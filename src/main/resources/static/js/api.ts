@@ -129,6 +129,166 @@ class Client {
     }
 
     /**
+     * @return OK
+     */
+    getAllRoles( cancelToken?: CancelToken | undefined): Promise<RoleDto[]> {
+        let url_ = this.baseUrl + "/api/role";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllRoles(_response);
+        });
+    }
+
+    protected processGetAllRoles(response: AxiosResponse): Promise<RoleDto[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(RoleDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<RoleDto[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<RoleDto[]>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    updateRole(body: UpdateRoleCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/role";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdateRole(_response);
+        });
+    }
+
+    protected processUpdateRole(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    createRole(body: CreateRoleCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/role";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreateRole(_response);
+        });
+    }
+
+    protected processCreateRole(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
      * @param productId (optional) 
      * @param page (optional) 
      * @param pageSize (optional) 
@@ -1749,6 +1909,108 @@ class Client {
     }
 
     /**
+     * @return OK
+     */
+    removePermissionFromRole(body: RemovePermissionFromRoleCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/role/remove-permission";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRemovePermissionFromRole(_response);
+        });
+    }
+
+    protected processRemovePermissionFromRole(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    assignPermission(body: AddPermissionToRoleCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/role/assign-permission";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PATCH",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAssignPermission(_response);
+        });
+    }
+
+    protected processAssignPermission(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
      * @return No Content
      */
     recoveryProduct(productId: number, cancelToken?: CancelToken | undefined): Promise<void> {
@@ -2664,6 +2926,64 @@ class Client {
     }
 
     /**
+     * @return OK
+     */
+    getAllPermissions( cancelToken?: CancelToken | undefined): Promise<PermissionDto[]> {
+        let url_ = this.baseUrl + "/api/permission";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllPermissions(_response);
+        });
+    }
+
+    protected processGetAllPermissions(response: AxiosResponse): Promise<PermissionDto[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(PermissionDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<PermissionDto[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PermissionDto[]>(null as any);
+    }
+
+    /**
      * @param paymentStatus (optional) 
      * @param startDate (optional) 
      * @param endDate (optional) 
@@ -3047,6 +3367,56 @@ class Client {
     }
 
     protected processDeleteStockReceipt(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return No Content
+     */
+    deleteRole(roleName: string, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/role/{roleName}";
+        if (roleName === undefined || roleName === null)
+            throw new Error("The parameter 'roleName' must be defined.");
+        url_ = url_.replace("{roleName}", encodeURIComponent("" + roleName));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDeleteRole(_response);
+        });
+    }
+
+    protected processDeleteRole(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -3500,6 +3870,62 @@ interface IUpdateSupplierCommand {
     phone?: string;
     email?: string;
     description?: string;
+
+    [key: string]: any;
+}
+
+class UpdateRoleCommand implements IUpdateRoleCommand {
+    normalizedName!: string;
+    displayName!: string;
+    description!: string;
+
+    [key: string]: any;
+
+    constructor(data?: IUpdateRoleCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): UpdateRoleCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateRoleCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+interface IUpdateRoleCommand {
+    normalizedName: string;
+    displayName: string;
+    description: string;
 
     [key: string]: any;
 }
@@ -4224,6 +4650,62 @@ interface IUpdateShopInfoCommand {
     [key: string]: any;
 }
 
+class CreateRoleCommand implements ICreateRoleCommand {
+    normalizedName?: string;
+    displayName!: string;
+    description!: string;
+
+    [key: string]: any;
+
+    constructor(data?: ICreateRoleCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): CreateRoleCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateRoleCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+interface ICreateRoleCommand {
+    normalizedName?: string;
+    displayName: string;
+    description: string;
+
+    [key: string]: any;
+}
+
 class CreateRatingCommand implements ICreateRatingCommand {
     content?: string;
     value?: number;
@@ -4608,8 +5090,8 @@ class ProductBriefDto implements IProductBriefDto {
     category?: CategoryBriefDto;
     deletedDate?: Date;
     finalPrice?: number;
-    forGenderDisplay?: string;
     vietnamesePrice?: string;
+    forGenderDisplay?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -4640,8 +5122,8 @@ class ProductBriefDto implements IProductBriefDto {
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
             this.finalPrice = _data["finalPrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -4670,8 +5152,8 @@ class ProductBriefDto implements IProductBriefDto {
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
         data["finalPrice"] = this.finalPrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -4689,8 +5171,8 @@ interface IProductBriefDto {
     category?: CategoryBriefDto;
     deletedDate?: Date;
     finalPrice?: number;
-    forGenderDisplay?: string;
     vietnamesePrice?: string;
+    forGenderDisplay?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -5108,9 +5590,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
-    toWard?: string;
-    toDetailAddress?: string;
     toProvince?: string;
+    toDetailAddress?: string;
+    toWard?: string;
 
     [key: string]: any;
 
@@ -5137,9 +5619,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toWard = _data["toWard"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toProvince = _data["toProvince"];
+            this.toDetailAddress = _data["toDetailAddress"];
+            this.toWard = _data["toWard"];
         }
     }
 
@@ -5164,9 +5646,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toWard"] = this.toWard;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toProvince"] = this.toProvince;
+        data["toDetailAddress"] = this.toDetailAddress;
+        data["toWard"] = this.toWard;
         return data;
     }
 }
@@ -5180,9 +5662,9 @@ interface IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
-    toWard?: string;
-    toDetailAddress?: string;
     toProvince?: string;
+    toDetailAddress?: string;
+    toWard?: string;
 
     [key: string]: any;
 }
@@ -5471,6 +5953,110 @@ class AddToCartCommand implements IAddToCartCommand {
 interface IAddToCartCommand {
     productOptionId?: number;
     quantity?: number;
+
+    [key: string]: any;
+}
+
+class RemovePermissionFromRoleCommand implements IRemovePermissionFromRoleCommand {
+    roleName!: string;
+    permissionName!: string;
+
+    [key: string]: any;
+
+    constructor(data?: IRemovePermissionFromRoleCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.roleName = _data["roleName"];
+            this.permissionName = _data["permissionName"];
+        }
+    }
+
+    static fromJS(data: any): RemovePermissionFromRoleCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new RemovePermissionFromRoleCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["roleName"] = this.roleName;
+        data["permissionName"] = this.permissionName;
+        return data;
+    }
+}
+
+interface IRemovePermissionFromRoleCommand {
+    roleName: string;
+    permissionName: string;
+
+    [key: string]: any;
+}
+
+class AddPermissionToRoleCommand implements IAddPermissionToRoleCommand {
+    roleName!: string;
+    permissionName!: string;
+
+    [key: string]: any;
+
+    constructor(data?: IAddPermissionToRoleCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.roleName = _data["roleName"];
+            this.permissionName = _data["permissionName"];
+        }
+    }
+
+    static fromJS(data: any): AddPermissionToRoleCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddPermissionToRoleCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["roleName"] = this.roleName;
+        data["permissionName"] = this.permissionName;
+        return data;
+    }
+}
+
+interface IAddPermissionToRoleCommand {
+    roleName: string;
+    permissionName: string;
 
     [key: string]: any;
 }
@@ -5781,9 +6367,9 @@ class UserDto implements IUserDto {
     address?: string;
     createdAt?: Date;
     permissions?: string[];
+    emailVerified?: boolean;
     customer?: boolean;
     accountEnabled?: boolean;
-    emailVerified?: boolean;
 
     [key: string]: any;
 
@@ -5815,9 +6401,9 @@ class UserDto implements IUserDto {
                 for (let item of _data["permissions"])
                     this.permissions!.push(item);
             }
+            this.emailVerified = _data["emailVerified"];
             this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
-            this.emailVerified = _data["emailVerified"];
         }
     }
 
@@ -5847,9 +6433,9 @@ class UserDto implements IUserDto {
             for (let item of this.permissions)
                 data["permissions"].push(item);
         }
+        data["emailVerified"] = this.emailVerified;
         data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
-        data["emailVerified"] = this.emailVerified;
         return data;
     }
 }
@@ -5864,9 +6450,9 @@ interface IUserDto {
     address?: string;
     createdAt?: Date;
     permissions?: string[];
+    emailVerified?: boolean;
     customer?: boolean;
     accountEnabled?: boolean;
-    emailVerified?: boolean;
 
     [key: string]: any;
 }
@@ -6167,6 +6753,130 @@ interface IStockReceiptBriefDto {
     supplierId?: number;
     supplier?: SupplierDto;
     createdDateDisplay?: string;
+
+    [key: string]: any;
+}
+
+class PermissionDto implements IPermissionDto {
+    normalizedName?: string;
+    displayName?: string;
+    description?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IPermissionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): PermissionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PermissionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+interface IPermissionDto {
+    normalizedName?: string;
+    displayName?: string;
+    description?: string;
+
+    [key: string]: any;
+}
+
+class RoleDto implements IRoleDto {
+    normalizedName?: string;
+    displayName?: string;
+    description?: string;
+    permissions?: PermissionDto[];
+
+    [key: string]: any;
+
+    constructor(data?: IRoleDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [] as any;
+                for (let item of _data["permissions"])
+                    this.permissions!.push(PermissionDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): RoleDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RoleDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+interface IRoleDto {
+    normalizedName?: string;
+    displayName?: string;
+    description?: string;
+    permissions?: PermissionDto[];
 
     [key: string]: any;
 }
@@ -6622,8 +7332,8 @@ class ProductDetailDto implements IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
-    forGenderDisplay?: string;
     vietnamesePrice?: string;
+    forGenderDisplay?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -6665,8 +7375,8 @@ class ProductDetailDto implements IProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
-            this.forGenderDisplay = _data["forGenderDisplay"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -6706,8 +7416,8 @@ class ProductDetailDto implements IProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
-        data["forGenderDisplay"] = this.forGenderDisplay;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -6728,8 +7438,8 @@ interface IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
-    forGenderDisplay?: string;
     vietnamesePrice?: string;
+    forGenderDisplay?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
