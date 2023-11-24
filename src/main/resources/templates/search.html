@@ -11,65 +11,153 @@
 </head>
 
 <body>
-<div layout:fragment="content" class="max-w-screen-xl mx-auto" th:with="clientUtil=${@clientUtil}">
+<div layout:fragment="content" class="max-w-screen-xl mx-auto" th:with="clientUtil=${@clientUtil}"
 
-        <div class="index bar">
-            <nav class="flex ml-1 mt-3" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                    <li class="inline-flex items-center">
-                        <a
-                                href="#"
-                                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+     x-data="
+    {
+    query:{
+    categoryIds: [],
+    forGenders: [],
+    minPrice: 0,
+    maxPrice: undefined,
+    colorIds: [],
+    sizes: [],
+     page: 1,
+     pageSize: 20,
+     sortField: 'createdDate',
+     sortDir: 'desc',
+     keyword: undefined,
+
+    },
+     data: [],
+        total: 0,
+        totalElement: 0,
+        hasNextPage: true,
+        hasPreviousPage: true,
+        loading: false,
+    }
+"
+>
+    <script th:inline="javascript">
+        const categories = /*[[${categories}]]*/ [];
+        const colors = /*[[${colors}]]*/ [];
+        const sizes = /*[[${sizes}]]*/ [];
+    </script>
+
+    <div class="index bar">
+        <nav class="flex ml-1 mt-3" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a
+                            href="#"
+                            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                    >
+                        <svg
+                                class="w-3 h-3 mr-2.5"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
                         >
-                            <svg
-                                    class="w-3 h-3 mr-2.5"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                            >
-                                <path
-                                        d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"
-                                />
-                            </svg>
-                            Trang chủ
+                            <path
+                                    d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"
+                            />
+                        </svg>
+                        Trang chủ
+                    </a>
+                </li>
+
+                <li>
+                    <div class="flex items-center">
+                        <svg
+                                class="w-3 h-3 text-gray-400 mx-1"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 6 10"
+                        >
+                            <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="m1 9 4-4-4-4"
+                            />
+                        </svg>
+                        <a
+                                class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+
+                        >
+                            Tìm kiếm
                         </a>
-                    </li>
+                    </div>
+                </li>
+            </ol>
+        </nav>
 
-                    <li>
-                        <div class="flex items-center">
-                            <svg
-                                    class="w-3 h-3 text-gray-400 mx-1"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 6 10"
-                            >
-                                <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="m1 9 4-4-4-4"
-                                />
-                            </svg>
-                            <a
-                                    class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+    </div>
+    <div class="body flex w-pt h-pt"
+    x-data="{
+        selectedCategoryIds: [],
+        selectedColorIds: [],
+        selectedSize:[],
+        priceMin: '',
+        priceMax: '',
+        keywordInput: '',
+        getSelectedCategories() {
+            return categories.filter(category => this.selectedCategoryIds.includes(category.categoryId));
+        },
+        getSelectedColors() {
+            return colors.filter(color => this.selectedColorIds.includes(color.colorId));
+        },
+        getSelectedSizes() {
+            return this.selectedSize;
+        },
 
-                            >
-                                Tìm kiếm
-                            </a>
-                        </div>
-                    </li>
-                </ol>
-            </nav>
-
-        </div>
-    <div class="body flex w-pt h-pt">
+        toggleSelectedCategory(categoryId) {
+            if (this.selectedCategoryIds.includes(categoryId)) {
+                this.selectedCategoryIds = this.selectedCategoryIds.filter(id => id !== categoryId);
+            } else {
+                this.selectedCategoryIds.push(categoryId);
+            }
+        },
+        toggleSelectedColor(colorId) {
+            if (this.selectedColorIds.includes(colorId)) {
+                this.selectedColorIds = this.selectedColorIds.filter(id => id !== colorId);
+            } else {
+                this.selectedColorIds.push(colorId);
+            }
+        },
+        toggleSelectedSize(size) {
+            if (this.selectedSize.includes(size)) {
+                this.selectedSize = this.selectedSize.filter(s => s !== size);
+            } else {
+                this.selectedSize.push(size);
+            }
+        },
+        applyfilter() {
+            this.query.page = 1;
+            this.query.pageSize = 20;
+            this.query.keyword = this.keywordInput;
+            this.query.categoryIds = this.selectedCategoryIds;
+            this.query.colorIds = this.selectedColorIds;
+            this.query.sizes = this.selectedSize;
+            this.query.minPrice = this.priceMin;
+            this.query.maxPrice = this.priceMax;
+            this.query.forGenders =[];
+            document.querySelectorAll('.genderCheckBox').forEach(checkbox => {
+                if (checkbox.checked) {
+                    this.query.forGenders.push(checkbox.value);
+                }
+            });
+            //toDo: fetch data
+        },
+    }"
+    >
         <div class="CustomizeProducts  text-gray-500 w-pt20  mt-5">
 
             <div class=" flex ">
-                <div class="ml-20 pb-5  rounded-2xl border-2 border-gray-200">
+                <div class="ml-20 pb-5 w-full grow rounded-2xl border-2 border-gray-200">
                     <div class="CustomizeProducts-head mt-4 ml-4 ">
                         <ul class="flex">
                             <p class="font-bold"> Bộ lọc</p>
@@ -78,113 +166,257 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M6 13.5V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 9.75V10.5"/>
                             </svg>
-
                         </ul>
-                        <hr class=" mr-4 mt-5 border-b-2 border-gray-300">
                     </div>
-                    <div class="ml-4 mt-4">
-                        <p>
-                        <ul class="flex">
-                            <p lass="font-bold "></p>
-                            <p>:</p>
-                            <p id="myParagraph" class="text-red-500 text-xs mt-px20 ml-1 "></p>
+                    <div class="ml-4 py-4 border-b">
+
+                        <ul class="flex flex-wrap gap-2">
+                            <template x-for="category in getSelectedCategories()" :key="category.categoryId">
+                                <li
+                                        x-text="category.name"
+                                        @click="toggleSelectedCategory(category.categoryId)"
+                                        class="bg-gray-100 text-gray-800 cursor-pointer text-xs font-medium  px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                                </li>
+                            </template>
+                            <template x-for="color in getSelectedColors()" :key="color.colorId">
+                                <li
+                                        x-text="color.name"
+                                        @click="toggleSelectedColor(color.colorId)"
+                                        class="bg-gray-100 text-gray-800 cursor-pointer text-xs font-medium  px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                                </li>
+                            </template>
+                            <template x-for="size in getSelectedSizes()" :key="size">
+                                <li
+                                        x-text="size"
+                                        @click="toggleSelectedSize(size)"
+                                        class="bg-gray-100 text-gray-800 cursor-pointer text-xs font-medium  px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                                </li>
+                            </template>
                         </ul>
-                        </p>
+
                         <div>
                             <ul class="Inputselect flex flex-wrap">
-                                <!-- <div class="ext-center bg-gray-300 ml-2 mt-2 rounded-lg flex">
-                                    <li class=" textinput px-6">T-Shirts</li>
-                                    <svg class="absolute h-6 w-6 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>  -->
+
                             </ul>
                         </div>
 
-                        <hr class=" mr-4 mt-5 border-b-2 border-gray-300">
-                    </div>
 
-                    <div class="CustomizeProducts-typeClothesmt-4 ml-4 mt-4 ">
-                        <div class="CustomizeProducts-typeClothesmt-import">
-                            <!--đưa các loại sản phẩm vào-->
-                        </div>
-                        <hr class=" mr-4 mt-5 border-b-2 border-gray-300">
                     </div>
-                    <div class="CustomizeProducts-priceChoice ml-4 mt-4">
-                        <ul class="flex">
-                            <p class="font-bold">
-                                Khoảng giá
-                            </p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-5 h-5 ml-auto mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
-                            </svg>
-
-                        </ul>
-                        <div class="">
-                            <div class="mt-4 flex flex-col items-center">
-                                <input type="range" min="60" max="300" value="0" class="slider1 ml-30pt  mt-0 "
-                                       id="mySlider1">
-                                <input type="range" min="0" max="300" value="0" class="slider m-0" id="mySlider">
-                                <!-- <input type="range" min="101" max="300" value="0" class="slider1 ml-9  mt-0 " id="mySlider1"> -->
+                    <div id="accordion-flush" data-accordion="collapse" data-active-classes="bg-white text-gray-900"
+                         class="px-2" data-inactive-classes="text-gray-500 dark:text-gray-400">
+                        <h2 id="accordion-flush-heading-5">
+                            <button type="button"
+                                    class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                                    data-accordion-target="#accordion-flush-body-5" aria-expanded="true"
+                                    aria-controls="accordion-flush-body-5">
+                                <span>
+                                 Từ khóa
+                                </span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="CustomizeProducts-chooseColor mt-4  hidden" id="accordion-flush-body-5"
+                             aria-labelledby="accordion-flush-heading-5">
+                            <div class="relative z-0 w-full mb-5 group">
+                                <input
+                                        x-model="keywordInput"
+                                        type="text" name="keyword" id="keyword" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                                <label for="keyword" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                    Nhập từ khóa
+                                </label>
                             </div>
                         </div>
-                        <div class="flex font-bold">
-                            <p class="kq"> $0 </p>
-                            <p class="kq1 ml-auto mr-5"> $60 </p>
+                        <h2 id="accordion-flush-heading-2">
+                            <button type="button"
+                                    class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                                    data-accordion-target="#accordion-flush-body-2" aria-expanded="true"
+                                    aria-controls="accordion-flush-body-2">
+                                <span>Khoảng giá</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="CustomizeProducts-priceChoice py-4 mt-4  hidden" id="accordion-flush-body-2"
+                             aria-labelledby="accordion-flush-heading-2">
+                            <div class="flex items-center py-4 px-2 space-x-3 font-light border-b border-gray-200">
+                                <div class="relative z-0 w-full mb-6 group">
+                                    <input
+                                            type="number"
+                                            name="amount-start"
+                                            id="amount-start"
+                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            placeholder=" "
+                                            x-model="priceMin"
+                                            required
+                                    />
+                                    <label
+                                            for="amount-start"
+                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                    >Từ
+                                    </label>
+                                </div>
+                                <div class="relative z-0 w-full mb-6 group">
+                                    <input
+                                            type="number"
+                                            name="amount-end"
+                                            id="amount-end"
+                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            placeholder=" "
+                                            x-model="priceMax"
+                                            required
+                                    />
+                                    <label
+                                            for="amount-end"
+                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                    >Đến</label
+                                    >
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <h2 id="accordion-flush-heading-6">
+                            <button type="button"
+                                    class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                                    data-accordion-target="#accordion-flush-body-6" aria-expanded="true"
+                                    aria-controls="accordion-flush-body-6">
+                                <span>
+                                 Giới tính
+                                </span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="CustomizeProducts-chooseColor mt-4  hidden" id="accordion-flush-body-6"
+                             aria-labelledby="accordion-flush-heading-6">
+                            <div class="flex items-center mb-2">
+                                <input checked id="male-checkbox" type="checkbox"
+                                       :value="ForGenders.FOR_MALE"
+                                       class="w-4 h-4 genderCheckBox text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="male-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    Cho nam
+                                </label>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <input checked id="female-checkbox" type="checkbox" :value="ForGenders.FOR_FEMALE" class="w-4 h-4 genderCheckBox text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="female-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    Cho nữ
+                                </label>
+                            </div>
+                            <div class="flex items-center">
+                                <input checked id="both-checkbox" type="checkbox" :value="ForGenders.FOR_BOTH" class="w-4 h-4 genderCheckBox text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="both-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    Cho cả nam và nữ
+                                </label>
+                            </div>
+                        </div>
+                        <h2 id="accordion-flush-heading-1">
+                            <button type="button"
+                                    class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                                    data-accordion-target="#accordion-flush-body-1" aria-expanded="true"
+                                    aria-controls="accordion-flush-body-1">
+                                <span>Danh mục sản phẩm</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="CustomizeProducts-typeClothes relative mt-4 ml-4  hidden" id="accordion-flush-body-1"
+                             aria-labelledby="accordion-flush-heading-1">
+                            <button id="dropDownSelectCategoryBtn" data-dropdown-toggle="dropDownSelectCategory" data-dropdown-trigger="hover" class="text-white bg-primary-700 w-[80%] mx-auto  hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center " type="button">
+                                Chọn danh mục
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                            </svg>
+                            </button>
+                            <div id="dropDownSelectCategory" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg border shadow-2xl max-h-72  overflow-y-auto w-[80%]">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropDownSelectCategoryBtn">
+                                    <template x-for="category in categories" :key="category.categoryId">
+                                        <li>
+                                            <button
+                                                    x-text="category.name"
+                                                    @click="toggleSelectedCategory(category.categoryId)"
+                                                    class="block w-full  px-4 py-2 hover:bg-gray-100  text-start ">
+
+                                            </button>
+                                        </li>
+                                    </template>
+
+                                </ul>
+                            </div>
                         </div>
 
-                        <hr class=" mr-4 mt-5 border-b-2 border-gray-300">
-                    </div>
-                    <div class="CustomizeProducts-chooseColor mt-4">
-                        <ul class=" ml-4 flex">
-                            <p class="font-bold"> Màu sắc</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-5 h-5 ml-auto mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
-                            </svg>
-                        </ul>
-                        <ul class="listcoler flex flex-wrap">
-                            <!-- đưa mau -->
-                        </ul>
-                        <hr class="ml-4 mr-4 mt-5 border-b-2 border-gray-300">
-                    </div>
-                    <div class="CustomizeProducts-ChoiceSize ">
-                        <ul class="flex ml-4 mt-4">
-                            <p class="font-bold">
-                            Kích cỡ
-                            </p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-5 h-5 ml-auto mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/>
-                            </svg>
-
-                        </ul>
-                        <div class="w-60">
-                            <ul class="size flex flex-wrap">
-                                <!-- đưa size và từ js -->
+                        <h2 id="accordion-flush-heading-3">
+                            <button type="button"
+                                    class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                                    data-accordion-target="#accordion-flush-body-3" aria-expanded="true"
+                                    aria-controls="accordion-flush-body-3">
+                                <span> Màu sắc</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="CustomizeProducts-chooseColor mt-4  hidden" id="accordion-flush-body-3"
+                             aria-labelledby="accordion-flush-heading-3">
+                            <ul class="listcoler flex flex-wrap">
+                                <template x-for="color in colors" :key="color.colorId">
+                                    <li
+                                            x-bind:value="color.colorId"
+                                            x-text="color.name"
+                                            @click="toggleSelectedColor(color.colorId)"
+                                            class="bg-gray-600 rounded-full text-white flex items-center px-3 py-1 ml-2 mt-2 hover:bg-black">
+                                    </li>
+                                </template>
                             </ul>
-
                         </div>
-                        <hr class=" ml-4 mr-4 mt-5 border-b-2 border-gray-300">
+                        <h2 id="accordion-flush-heading-4">
+                            <button type="button"
+                                    class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                                    data-accordion-target="#accordion-flush-body-4" aria-expanded="true"
+                                    aria-controls="accordion-flush-body-4">
+                                <span>  Kích cỡ</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div class="CustomizeProducts-chooseColor mt-4  hidden" id="accordion-flush-body-4"
+                             aria-labelledby="accordion-flush-heading-4">
+                            <ul class="size flex flex-wrap">
+                                <template x-for="size in sizes" :key="size">
+                                    <li
+                                            x-bind:value="size"
+                                            x-text="size"
+                                            @click="toggleSelectedSize(size)"
+                                            class="bg-gray-600 rounded-full text-white flex items-center px-3 py-1 ml-2 mt-2 hover:bg-black">
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
                     </div>
-                    <!-- <div class="CustomizeProducts-dressStyle-4 ml-4 " >
-                        <ul class="flex mt-4">
-                            <p class="font-bold">Dress style</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-auto mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-                            </svg>
 
-                        </ul>
-                        <div class="endfilter">
-                         đưa style vao tu js
-                        </div>
-                    </div> -->
                     <div class="CustomizeProducts-applyfilter mt-4 ml-4" onclick="applyfilter()">
-                        <div class=" w-45">
-                            <p class="bg-black text-white px-5 py-3 rounded-full text-center">
+                        <div class="mx-auto w-45">
+                            <button class="bg-primary-700 hover:bg-primary-800 text-white px-5 py-3 rounded-full text-center">
                                 Áp dụng lọc
-                            </p>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -192,64 +424,97 @@
 
         </div>
         <div class="listproduct ml-4pt ml-auto mt-5 mr-50 w-60pt">
-            <div class="listproduct-head  flex ">
-                <p class=" text-3xl font-bold"> Casual</p>
-                <ul class="flex text-gray-500 mt-2 ml-auto">
-                    <li>Showing 1-10 or 100 products</li>
-                    <liv class="ml-3">Sort by:</liv>
-                    <li class="ml-3 font-bold"> Most Popular</li>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                         stroke="currentColor" class="w-5 h-5 mt-1 ml-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
-                    </svg>
-                </ul>
-            </div>
-            <div class="listproduct-list flex flex-wrap">
-                <!-- đẩy sản phẩm -->
-            </div>
-            <div class="pageTransitionBar">
-                <hr class=" ml-4  mt-8 border-b-1 border-gray-300">
-                <div class="flex mt-5">
-                    <div class=" border-2 ml-4 border-gray-400 px-1 rounded-lg">
-                        <ul class="flex py-1 ">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
-                            </svg>
-                            <li>Previous</li>
+            <div class="listproduct-head justify-between flex items-center">
+                <div class="flex flex-col gap-y-1">
+                    <p class=" text-3xl font-bold">
+                        Kết quả tìm kiếm
+                    </p>
+                    <span class=" ml-2 text-sm font-normal text-gray-500">
+                Hiển thị
+                <span class="font-semibold text-gray-900">
+                  <span x-text="(query.page-1)*query.pageSize+1"></span>
+                  -
+                  <span x-text="(query.page-1)*query.pageSize+1+data.length-1"></span>
+                </span>
 
-                        </ul>
+                trên
+                <span class="font-semibold text-gray-900" x-text="totalElement"></span>
+                kết quả</span>
+
+                </div>
+
+                <div class="flex items-center gap-x-4 text-gray-500 mt-2">
+                      <div class="flex gap-x-2 grow">
+                          <label for="sortBy" class="ml-3">Sắp xếp theo:</label>
+                          <select id="sortBy"
+                                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                              <option selected value="createdDate-desc">
+                                  Mới nhất
+                              </option>
+                              <option value="createdDate-asc">
+                                  Cũ nhất
+                              </option>
+                              <option value="price-asc">
+                                  Giá tăng dần
+                              </option>
+                              <option value="price-desc">
+                                  Giá giảm dần
+                              </option>
+                              <option value="totalSold-asc">
+                                  Bán chạy nhất
+                              </option>
+                          </select>
+                      </div>
                     </div>
-                    <div class="number-page ml-auto ">
-                        <ul class="number-page-list flex">
-                            <!-- in ra danh sach trang san pham -->
-                        </ul>
+                </div>
+                <div class="listproduct-list flex flex-wrap">
+                    <!-- đẩy sản phẩm -->
+                </div>
+                <div class="pageTransitionBar">
+                    <hr class=" ml-4  mt-8 border-b-1 border-gray-300">
+                    <div class="flex mt-5">
+                        <div class=" border-2 ml-4 border-gray-400 px-1 rounded-lg">
+                            <ul class="flex py-1 ">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5"
+                                     stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+                                </svg>
+                                <li>Previous</li>
 
+                            </ul>
+                        </div>
+                        <div class="number-page ml-auto ">
+                            <ul class="number-page-list flex">
+                                <!-- in ra danh sach trang san pham -->
+                            </ul>
+
+                        </div>
+
+                        <div class="ml-auto mr-2 border-2 border-gray-400 px-2 rounded-lg ">
+                            <ul class="flex py-1 ">
+                                <li>Next</li>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5"
+                                     stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                                </svg>
+
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="ml-auto mr-2 border-2 border-gray-400 px-2 rounded-lg ">
-                        <ul class="flex py-1 ">
-                            <li>Next</li>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-                            </svg>
-
-                        </ul>
-                    </div>
                 </div>
 
             </div>
 
-        </div>
 
+        </div>
+      <div class="mt-6"></div>
+        <!--    <script src="/js/search.js"></script>-->
 
     </div>
-    <div class="mt-6"></div>
-    <script src="/js/search.js"></script>
-
-</div>
 </body>
 </html>

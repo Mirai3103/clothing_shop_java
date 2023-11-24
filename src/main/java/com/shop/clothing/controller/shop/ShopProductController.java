@@ -1,7 +1,10 @@
 package com.shop.clothing.controller.shop;
 
+import com.shop.clothing.category.query.getAllCategories.GetAllCategoriesQueries;
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.product.dto.ProductDetailDto;
+import com.shop.clothing.product.query.getAllColors.GetAllColorQuery;
+import com.shop.clothing.product.query.getAllSizes.GetAllSizesQuery;
 import com.shop.clothing.product.query.getProductById.GetProductByIdQuery;
 import com.shop.clothing.product.query.getProductBySlug.GetProductBySlugQuery;
 import lombok.AllArgsConstructor;
@@ -38,6 +41,17 @@ public class ShopProductController {
     }
     @GetMapping("/search")
     public String searchProduct(Model model) {
+        var getAllCategoriesQueries = new GetAllCategoriesQueries();
+        getAllCategoriesQueries.setPageSize(1000);
+        getAllCategoriesQueries.setSortDir("asc");
+        getAllCategoriesQueries.setSortField("name");
+        var categories = sender.send(getAllCategoriesQueries).get();
+        model.addAttribute("categories", categories.getData());
+        var allColors = sender.send(new GetAllColorQuery()).get();
+        model.addAttribute("colors", allColors);
+        var allSizes = sender.send(new GetAllSizesQuery()).get();
+        model.addAttribute("sizes", allSizes);
+
         return "search";
     }
 }

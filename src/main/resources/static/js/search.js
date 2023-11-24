@@ -140,16 +140,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     for (var i = 0; i < 3; i++) {
         const htmlCode =
-            '<li class="h-9 w-9 ml-1 hover:bg-gray-300 rounded-lg text-center py-1 t text-gray-400">' + i + "</li>";
+            '<li class="h-9 w-9 ml-1 hover:bg-gray-600 rounded-lg text-center py-1 t text-gray-400">' + i + "</li>";
         var helloElement = document.createRange().createContextualFragment(htmlCode);
         fatherElement.appendChild(helloElement);
     }
-    const htmlCode = '<li class="h-9 w-9 ml-1 hover:bg-gray-300 rounded-lg text-center py-1 t text-gray-400">...</li>';
+    const htmlCode = '<li class="h-9 w-9 ml-1 hover:bg-gray-600 rounded-lg text-center py-1 t text-gray-400">...</li>';
     var helloElement = document.createRange().createContextualFragment(htmlCode);
     fatherElement.appendChild(helloElement);
     for (var i = 7; i < 10; i++) {
         const htmlCode =
-            '<li class="h-9 w-9 ml-1 hover:bg-gray-300 rounded-lg text-center py-1 t text-gray-400">' + i + "</li>";
+            '<li class="h-9 w-9 ml-1 hover:bg-gray-600 rounded-lg text-center py-1 t text-gray-400">' + i + "</li>";
         var helloElement = document.createRange().createContextualFragment(htmlCode);
         fatherElement.appendChild(helloElement);
     }
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const htmlCode =
             "<li onclick=\"importTypeColer('" +
             listcolor[i].l +
-            '\')+applyfilter()" class="bg-gray-300 rounded-full text-white flex items-center px-3 py-1 ml-4 mt-2 hover:bg-black">' +
+            '\')+applyfilter()" class="bg-gray-600 rounded-full text-white flex items-center px-3 py-1 ml-2 mt-2 hover:bg-black">' +
             listcolor[i].l +
             "</li>";
 
@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const htmlCode =
             "<li onclick=\"importSize('" +
             listsize[i].l +
-            '\')+applyfilter()" class="bg-gray-300 rounded-full text-white flex items-center px-3 py-1 ml-4 mt-2 hover:bg-black">' +
+            '\')+applyfilter()" class="bg-gray-600 rounded-full text-white flex items-center px-3 py-1 ml-2 mt-2 hover:bg-black">' +
             listsize[i].l +
             "</li>";
         var helloElement = document.createRange().createContextualFragment(htmlCode);
@@ -335,7 +335,7 @@ function inputselect(value) {
     var fatherElement = document.querySelector(".Inputselect.flex.flex-wrap");
 
     const htmlCode =
-        ' <div onclick="deleteObject.call(this)+applyfilter()" class="ext-center bg-gray-300 ml-2 mt-2 rounded-lg flex">' +
+        ' <div onclick="deleteObject.call(this)+applyfilter()" class="ext-center bg-gray-600 ml-2 mt-2 rounded-lg flex">' +
         '<li class="textinput px-6">' +
         value +
         "</li>" +
