@@ -80,6 +80,8 @@ public class Product extends AuditableEntity {
     private java.util.List<ProductImage> images;
 
     private int totalSold = 0;
+    @Column(nullable = false,columnDefinition = "float default 0.0")
+    private float averageRating = 0.0f;
 
     public int getFinalPrice() {
         return (int) (price - price * discount / 100.0);

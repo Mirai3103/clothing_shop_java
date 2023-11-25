@@ -14,7 +14,10 @@
         display: none;
       }
     </style>
-
+    <script type="module">
+      import queryString from "https://cdn.jsdelivr.net/npm/query-string@8.1.0/+esm";
+      window.queryString = queryString;
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/util.js"></script>
     <script src="/js/api.js"></script>
@@ -29,6 +32,7 @@
    const client = new Client(window.location.origin);
       window.apiClient = client;
     </script>
+
   </head>
   <body class="relative" x-data="{}" th:with="categoryTree=${@clientUtil.getCategoryTree()}">
     <header>

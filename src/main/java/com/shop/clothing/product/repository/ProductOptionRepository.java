@@ -48,7 +48,7 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, In
     @Query(value = "update product_option po set po.deleted_date = null where po.product_product_id = ?1", nativeQuery = true)
     void recoveryByProductId(int productOptionId);
 
-
+    List<ProductOption> findByProductProductId(int productId);
 
     @Query(value = "select * from product_option po where po.product_product_id = ?1 and po.deleted_date is not null", nativeQuery = true)
     List<ProductOption> getDeletedProductOptionsByProductId(int productId);

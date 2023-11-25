@@ -27,6 +27,12 @@ public class ProductBriefDto extends AuditableDto {
     private String displayImage;
     private CategoryBriefDto category;
     private LocalDateTime deletedDate;
+    private int totalSold;
+    private float averageRating;
+
+    public float getAverageRatingDisplay() {
+        return (float) (Math.round(averageRating * 100.0) / 100.0);
+    }
 
     public String getVietnamesePrice() {
         return String.format("%,dđ", (int) price);
