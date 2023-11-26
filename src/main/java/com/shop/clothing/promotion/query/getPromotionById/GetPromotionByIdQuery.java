@@ -1,4 +1,4 @@
-package com.shop.clothing.promotion.Query.checkPromotion;
+package com.shop.clothing.promotion.query.getPromotionById;
 
 import com.shop.clothing.common.Cqrs.IRequest;
 import com.shop.clothing.promotion.PromotionDto;
@@ -11,7 +11,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CheckPromotionQuery implements IRequest<PromotionDto> {
-    private String code;
-    private int orderValue;
+public class GetPromotionByIdQuery implements IRequest<PromotionDto> {
+    private int promotionId;
 }

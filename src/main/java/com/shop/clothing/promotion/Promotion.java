@@ -18,8 +18,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table
-@SQLDelete(sql = "UPDATE promotion SET deleted_date = NOW() WHERE promotion_id=?")
-@Where(clause = "deleted_date is null")
+
 public class Promotion extends AuditableEntity {
 
     @Id
@@ -64,9 +63,7 @@ public class Promotion extends AuditableEntity {
     private java.util.List<Order> orders;
 
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "deleted_date")
-    private LocalDateTime deletedDate = null;
+
     public int getFinalDiscount(int totalPrice) {
         if (type == PromotionType.PERCENTAGE) {
             int reduce = totalPrice * discount / 100;

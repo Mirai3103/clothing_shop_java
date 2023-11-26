@@ -477,6 +477,199 @@ class Client {
     }
 
     /**
+     * @param fromDateTimestamp (optional) 
+     * @param toDateTimestamp (optional) 
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param sortField (optional) 
+     * @param sortDir (optional) 
+     * @param keyword (optional) 
+     * @return OK
+     */
+    getAllPromotions(fromDateTimestamp: number | undefined, toDateTimestamp: number | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedPromotionDto> {
+        let url_ = this.baseUrl + "/api/promotion?";
+        if (fromDateTimestamp === null)
+            throw new Error("The parameter 'fromDateTimestamp' cannot be null.");
+        else if (fromDateTimestamp !== undefined)
+            url_ += "fromDateTimestamp=" + encodeURIComponent("" + fromDateTimestamp) + "&";
+        if (toDateTimestamp === null)
+            throw new Error("The parameter 'toDateTimestamp' cannot be null.");
+        else if (toDateTimestamp !== undefined)
+            url_ += "toDateTimestamp=" + encodeURIComponent("" + toDateTimestamp) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllPromotions(_response);
+        });
+    }
+
+    protected processGetAllPromotions(response: AxiosResponse): Promise<PaginatedPromotionDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PaginatedPromotionDto.fromJS(resultData200);
+            return Promise.resolve<PaginatedPromotionDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PaginatedPromotionDto>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    updatePromotion(body: UpdatePromotionCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/promotion";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUpdatePromotion(_response);
+        });
+    }
+
+    protected processUpdatePromotion(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    createPromotion(body: CreatePromotionCommand, cancelToken?: CancelToken | undefined): Promise<number> {
+        let url_ = this.baseUrl + "/api/promotion";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: AxiosRequestConfig = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCreatePromotion(_response);
+        });
+    }
+
+    protected processCreatePromotion(response: AxiosResponse): Promise<number> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return Promise.resolve<number>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<number>(null as any);
+    }
+
+    /**
      * @return OK
      */
     updateProduct(body: UpdateProductCommand, cancelToken?: CancelToken | undefined): Promise<void> {
@@ -2011,6 +2204,56 @@ class Client {
     }
 
     /**
+     * @return OK
+     */
+    toggleDisablePromotion(promotionId: number, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/promotion/{promotionId}/toggleDisable";
+        if (promotionId === undefined || promotionId === null)
+            throw new Error("The parameter 'promotionId' must be defined.");
+        url_ = url_.replace("{promotionId}", encodeURIComponent("" + promotionId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "PATCH",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processToggleDisablePromotion(_response);
+        });
+    }
+
+    protected processToggleDisablePromotion(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
      * @return No Content
      */
     recoveryProduct(productId: number, cancelToken?: CancelToken | undefined): Promise<void> {
@@ -2984,6 +3227,87 @@ class Client {
     }
 
     /**
+     * @param statuses (optional) 
+     * @param page (optional) 
+     * @param pageSize (optional) 
+     * @param sortField (optional) 
+     * @param sortDir (optional) 
+     * @param keyword (optional) 
+     * @return OK
+     */
+    getAllPayment(statuses: Statuses[] | undefined, page: number | undefined, pageSize: number | undefined, sortField: string | undefined, sortDir: string | undefined, keyword: string | undefined, cancelToken?: CancelToken | undefined): Promise<PaginatedPaymentDto> {
+        let url_ = this.baseUrl + "/api/payment?";
+        if (statuses === null)
+            throw new Error("The parameter 'statuses' cannot be null.");
+        else if (statuses !== undefined)
+            statuses && statuses.forEach(item => { url_ += "statuses=" + encodeURIComponent("" + item) + "&"; });
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetAllPayment(_response);
+        });
+    }
+
+    protected processGetAllPayment(response: AxiosResponse): Promise<PaginatedPaymentDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = PaginatedPaymentDto.fromJS(resultData200);
+            return Promise.resolve<PaginatedPaymentDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<PaginatedPaymentDto>(null as any);
+    }
+
+    /**
      * @param paymentStatus (optional) 
      * @param startDate (optional) 
      * @param endDate (optional) 
@@ -3417,6 +3741,56 @@ class Client {
     }
 
     protected processDeleteRole(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return No Content
+     */
+    tryDeletePromotion(promotionId: number, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/promotion/{promotionId}";
+        if (promotionId === undefined || promotionId === null)
+            throw new Error("The parameter 'promotionId' must be defined.");
+        url_ = url_.replace("{promotionId}", encodeURIComponent("" + promotionId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processTryDeletePromotion(_response);
+        });
+    }
+
+    protected processTryDeletePromotion(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -3982,6 +4356,98 @@ interface IUpdateRatingCommand {
     id?: number;
     content?: string;
     value?: number;
+
+    [key: string]: any;
+}
+
+class UpdatePromotionCommand implements IUpdatePromotionCommand {
+    promotionId?: number;
+    code!: string;
+    name!: string;
+    description?: string;
+    discount?: number;
+    type!: UpdatePromotionCommandType;
+    minOrderAmount?: number;
+    maxValue?: number;
+    startDate!: Date;
+    endDate!: Date;
+    active?: boolean;
+    stock?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IUpdatePromotionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.promotionId = _data["promotionId"];
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discount = _data["discount"];
+            this.type = _data["type"];
+            this.minOrderAmount = _data["minOrderAmount"];
+            this.maxValue = _data["maxValue"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.active = _data["active"];
+            this.stock = _data["stock"];
+        }
+    }
+
+    static fromJS(data: any): UpdatePromotionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePromotionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["promotionId"] = this.promotionId;
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discount"] = this.discount;
+        data["type"] = this.type;
+        data["minOrderAmount"] = this.minOrderAmount;
+        data["maxValue"] = this.maxValue;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["active"] = this.active;
+        data["stock"] = this.stock;
+        return data;
+    }
+}
+
+interface IUpdatePromotionCommand {
+    promotionId?: number;
+    code: string;
+    name: string;
+    description?: string;
+    discount?: number;
+    type: UpdatePromotionCommandType;
+    minOrderAmount?: number;
+    maxValue?: number;
+    startDate: Date;
+    endDate: Date;
+    active?: boolean;
+    stock?: number;
 
     [key: string]: any;
 }
@@ -4766,6 +5232,94 @@ interface ICreateRatingCommand {
     [key: string]: any;
 }
 
+class CreatePromotionCommand implements ICreatePromotionCommand {
+    code!: string;
+    name!: string;
+    description?: string;
+    discount?: number;
+    type!: CreatePromotionCommandType;
+    minOrderAmount?: number;
+    maxValue?: number;
+    startDate!: Date;
+    endDate!: Date;
+    active?: boolean;
+    stock?: number;
+
+    [key: string]: any;
+
+    constructor(data?: ICreatePromotionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discount = _data["discount"];
+            this.type = _data["type"];
+            this.minOrderAmount = _data["minOrderAmount"];
+            this.maxValue = _data["maxValue"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.active = _data["active"];
+            this.stock = _data["stock"];
+        }
+    }
+
+    static fromJS(data: any): CreatePromotionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreatePromotionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discount"] = this.discount;
+        data["type"] = this.type;
+        data["minOrderAmount"] = this.minOrderAmount;
+        data["maxValue"] = this.maxValue;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["active"] = this.active;
+        data["stock"] = this.stock;
+        return data;
+    }
+}
+
+interface ICreatePromotionCommand {
+    code: string;
+    name: string;
+    description?: string;
+    discount?: number;
+    type: CreatePromotionCommandType;
+    minOrderAmount?: number;
+    maxValue?: number;
+    startDate: Date;
+    endDate: Date;
+    active?: boolean;
+    stock?: number;
+
+    [key: string]: any;
+}
+
 class CreateProductCommand implements ICreateProductCommand {
     name!: string;
     forGender?: CreateProductCommandForGender;
@@ -5089,8 +5643,11 @@ class ProductBriefDto implements IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
+    totalSold?: number;
+    averageRating?: number;
     finalPrice?: number;
     vietnamesePrice?: string;
+    averageRatingDisplay?: number;
     forGenderDisplay?: string;
     createdDateDisplay?: string;
 
@@ -5121,8 +5678,11 @@ class ProductBriefDto implements IProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
+            this.totalSold = _data["totalSold"];
+            this.averageRating = _data["averageRating"];
             this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.averageRatingDisplay = _data["averageRatingDisplay"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
@@ -5151,8 +5711,11 @@ class ProductBriefDto implements IProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
+        data["totalSold"] = this.totalSold;
+        data["averageRating"] = this.averageRating;
         data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["averageRatingDisplay"] = this.averageRatingDisplay;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
@@ -5170,8 +5733,11 @@ interface IProductBriefDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
+    totalSold?: number;
+    averageRating?: number;
     finalPrice?: number;
     vietnamesePrice?: string;
+    averageRatingDisplay?: number;
     forGenderDisplay?: string;
     createdDateDisplay?: string;
 
@@ -5590,9 +6156,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
-    toProvince?: string;
-    toDetailAddress?: string;
     toWard?: string;
+    toDetailAddress?: string;
+    toProvince?: string;
 
     [key: string]: any;
 
@@ -5619,9 +6185,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toProvince = _data["toProvince"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
+            this.toProvince = _data["toProvince"];
         }
     }
 
@@ -5646,9 +6212,9 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toProvince"] = this.toProvince;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
+        data["toProvince"] = this.toProvince;
         return data;
     }
 }
@@ -5662,9 +6228,9 @@ interface IGetDeliveryOptionQuery {
     lengthInCm?: number;
     weightInGram?: number;
     toDistrict?: string;
-    toProvince?: string;
-    toDetailAddress?: string;
     toWard?: string;
+    toDetailAddress?: string;
+    toProvince?: string;
 
     [key: string]: any;
 }
@@ -6368,8 +6934,8 @@ class UserDto implements IUserDto {
     createdAt?: Date;
     permissions?: string[];
     emailVerified?: boolean;
-    customer?: boolean;
     accountEnabled?: boolean;
+    customer?: boolean;
 
     [key: string]: any;
 
@@ -6402,8 +6968,8 @@ class UserDto implements IUserDto {
                     this.permissions!.push(item);
             }
             this.emailVerified = _data["emailVerified"];
-            this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
+            this.customer = _data["customer"];
         }
     }
 
@@ -6434,8 +7000,8 @@ class UserDto implements IUserDto {
                 data["permissions"].push(item);
         }
         data["emailVerified"] = this.emailVerified;
-        data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
+        data["customer"] = this.customer;
         return data;
     }
 }
@@ -6451,8 +7017,8 @@ interface IUserDto {
     createdAt?: Date;
     permissions?: string[];
     emailVerified?: boolean;
-    customer?: boolean;
     accountEnabled?: boolean;
+    customer?: boolean;
 
     [key: string]: any;
 }
@@ -7225,6 +7791,86 @@ interface IRatingDto {
     [key: string]: any;
 }
 
+class PaginatedPromotionDto implements IPaginatedPromotionDto {
+    data?: PromotionDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+
+    constructor(data?: IPaginatedPromotionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(PromotionDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedPromotionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedPromotionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+
+interface IPaginatedPromotionDto {
+    data?: PromotionDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+}
+
 class PromotionDto implements IPromotionDto {
     promotionId?: number;
     code?: string;
@@ -7328,11 +7974,14 @@ class ProductDetailDto implements IProductDetailDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
+    totalSold?: number;
+    averageRating?: number;
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
     vietnamesePrice?: string;
+    averageRatingDisplay?: number;
     forGenderDisplay?: string;
     createdDateDisplay?: string;
 
@@ -7363,6 +8012,8 @@ class ProductDetailDto implements IProductDetailDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : <any>undefined;
+            this.totalSold = _data["totalSold"];
+            this.averageRating = _data["averageRating"];
             if (Array.isArray(_data["productOptions"])) {
                 this.productOptions = [] as any;
                 for (let item of _data["productOptions"])
@@ -7376,6 +8027,7 @@ class ProductDetailDto implements IProductDetailDto {
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.averageRatingDisplay = _data["averageRatingDisplay"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
@@ -7404,6 +8056,8 @@ class ProductDetailDto implements IProductDetailDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : <any>undefined;
+        data["totalSold"] = this.totalSold;
+        data["averageRating"] = this.averageRating;
         if (Array.isArray(this.productOptions)) {
             data["productOptions"] = [];
             for (let item of this.productOptions)
@@ -7417,6 +8071,7 @@ class ProductDetailDto implements IProductDetailDto {
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["averageRatingDisplay"] = this.averageRatingDisplay;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
@@ -7434,11 +8089,14 @@ interface IProductDetailDto {
     displayImage?: string;
     category?: CategoryBriefDto;
     deletedDate?: Date;
+    totalSold?: number;
+    averageRating?: number;
     productOptions?: ProductOptionDto[];
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
     vietnamesePrice?: string;
+    averageRatingDisplay?: number;
     forGenderDisplay?: string;
     createdDateDisplay?: string;
 
@@ -7573,6 +8231,150 @@ interface IPaginatedProductBriefDto {
     totalElements?: number;
     hasNext?: boolean;
     hasPrevious?: boolean;
+
+    [key: string]: any;
+}
+
+class PaginatedPaymentDto implements IPaginatedPaymentDto {
+    data?: PaymentDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+
+    constructor(data?: IPaginatedPaymentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(PaymentDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+
+    static fromJS(data: any): PaginatedPaymentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedPaymentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+
+interface IPaginatedPaymentDto {
+    data?: PaymentDto[];
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    totalElements?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
+
+    [key: string]: any;
+}
+
+class PaymentDto implements IPaymentDto {
+    paymentId?: string;
+    status?: PaymentDtoStatus;
+    paymentDetails?: string;
+    paymentResponse?: string;
+    amount?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IPaymentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.paymentId = _data["paymentId"];
+            this.status = _data["status"];
+            this.paymentDetails = _data["paymentDetails"];
+            this.paymentResponse = _data["paymentResponse"];
+            this.amount = _data["amount"];
+        }
+    }
+
+    static fromJS(data: any): PaymentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaymentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["paymentId"] = this.paymentId;
+        data["status"] = this.status;
+        data["paymentDetails"] = this.paymentDetails;
+        data["paymentResponse"] = this.paymentResponse;
+        data["amount"] = this.amount;
+        return data;
+    }
+}
+
+interface IPaymentDto {
+    paymentId?: string;
+    status?: PaymentDtoStatus;
+    paymentDetails?: string;
+    paymentResponse?: string;
+    amount?: number;
 
     [key: string]: any;
 }
@@ -7761,70 +8563,6 @@ interface IPaginatedOrderBriefDto {
     totalElements?: number;
     hasNext?: boolean;
     hasPrevious?: boolean;
-
-    [key: string]: any;
-}
-
-class PaymentDto implements IPaymentDto {
-    paymentId?: string;
-    status?: PaymentDtoStatus;
-    paymentDetails?: string;
-    paymentResponse?: string;
-    amount?: number;
-
-    [key: string]: any;
-
-    constructor(data?: IPaymentDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.paymentId = _data["paymentId"];
-            this.status = _data["status"];
-            this.paymentDetails = _data["paymentDetails"];
-            this.paymentResponse = _data["paymentResponse"];
-            this.amount = _data["amount"];
-        }
-    }
-
-    static fromJS(data: any): PaymentDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaymentDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["paymentId"] = this.paymentId;
-        data["status"] = this.status;
-        data["paymentDetails"] = this.paymentDetails;
-        data["paymentResponse"] = this.paymentResponse;
-        data["amount"] = this.amount;
-        return data;
-    }
-}
-
-interface IPaymentDto {
-    paymentId?: string;
-    status?: PaymentDtoStatus;
-    paymentDetails?: string;
-    paymentResponse?: string;
-    amount?: number;
 
     [key: string]: any;
 }
@@ -8125,6 +8863,15 @@ enum ForGender {
     FOR_BOTH = "FOR_BOTH",
 }
 
+enum Statuses {
+    PENDING = "PENDING",
+    PAID = "PAID",
+    CANCELLED = "CANCELLED",
+    REFUNDED = "REFUNDED",
+    FAILED = "FAILED",
+    WAITING_FOR_REFUND = "WAITING_FOR_REFUND",
+}
+
 enum PaymentStatus {
     PENDING = "PENDING",
     PAID = "PAID",
@@ -8144,10 +8891,20 @@ enum OrderStatus {
     REFUNDED = "REFUNDED",
 }
 
+enum UpdatePromotionCommandType {
+    PERCENTAGE = "PERCENTAGE",
+    FIXED_AMOUNT = "FIXED_AMOUNT",
+}
+
 enum UpdateProductCommandForGender {
     FOR_MALE = "FOR_MALE",
     FOR_FEMALE = "FOR_FEMALE",
     FOR_BOTH = "FOR_BOTH",
+}
+
+enum CreatePromotionCommandType {
+    PERCENTAGE = "PERCENTAGE",
+    FIXED_AMOUNT = "FIXED_AMOUNT",
 }
 
 enum CreateProductCommandForGender {
@@ -8204,6 +8961,15 @@ enum ProductDetailDtoForGender {
     FOR_BOTH = "FOR_BOTH",
 }
 
+enum PaymentDtoStatus {
+    PENDING = "PENDING",
+    PAID = "PAID",
+    CANCELLED = "CANCELLED",
+    REFUNDED = "REFUNDED",
+    FAILED = "FAILED",
+    WAITING_FOR_REFUND = "WAITING_FOR_REFUND",
+}
+
 enum OrderBriefDtoPaymentMethod {
     COD = "COD",
     MOMO_QR = "MOMO_QR",
@@ -8218,15 +8984,6 @@ enum OrderBriefDtoStatus {
     CANCELLED = "CANCELLED",
     RETURNED = "RETURNED",
     REFUNDED = "REFUNDED",
-}
-
-enum PaymentDtoStatus {
-    PENDING = "PENDING",
-    PAID = "PAID",
-    CANCELLED = "CANCELLED",
-    REFUNDED = "REFUNDED",
-    FAILED = "FAILED",
-    WAITING_FOR_REFUND = "WAITING_FOR_REFUND",
 }
 
 interface FileParameter {

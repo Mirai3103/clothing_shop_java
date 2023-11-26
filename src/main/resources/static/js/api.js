@@ -435,6 +435,187 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param fromDateTimestamp (optional)
+     * @param toDateTimestamp (optional)
+     * @param page (optional)
+     * @param pageSize (optional)
+     * @param sortField (optional)
+     * @param sortDir (optional)
+     * @param keyword (optional)
+     * @return OK
+     */
+    getAllPromotions(fromDateTimestamp, toDateTimestamp, page, pageSize, sortField, sortDir, keyword, cancelToken) {
+        let url_ = this.baseUrl + "/api/promotion?";
+        if (fromDateTimestamp === null)
+            throw new Error("The parameter 'fromDateTimestamp' cannot be null.");
+        else if (fromDateTimestamp !== undefined)
+            url_ += "fromDateTimestamp=" + encodeURIComponent("" + fromDateTimestamp) + "&";
+        if (toDateTimestamp === null)
+            throw new Error("The parameter 'toDateTimestamp' cannot be null.");
+        else if (toDateTimestamp !== undefined)
+            url_ += "toDateTimestamp=" + encodeURIComponent("" + toDateTimestamp) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllPromotions(_response);
+        });
+    }
+    processGetAllPromotions(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = PaginatedPromotionDto.fromJS(resultData200);
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    updatePromotion(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/promotion";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processUpdatePromotion(_response);
+        });
+    }
+    processUpdatePromotion(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    createPromotion(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/promotion";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processCreatePromotion(_response);
+        });
+    }
+    processCreatePromotion(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : null;
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @return OK
      */
     updateProduct(body, cancelToken) {
@@ -1855,6 +2036,52 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @return OK
+     */
+    toggleDisablePromotion(promotionId, cancelToken) {
+        let url_ = this.baseUrl + "/api/promotion/{promotionId}/toggleDisable";
+        if (promotionId === undefined || promotionId === null)
+            throw new Error("The parameter 'promotionId' must be defined.");
+        url_ = url_.replace("{promotionId}", encodeURIComponent("" + promotionId));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "PATCH",
+            url: url_,
+            headers: {},
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processToggleDisablePromotion(_response);
+        });
+    }
+    processToggleDisablePromotion(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @return No Content
      */
     recoveryProduct(productId, cancelToken) {
@@ -2777,6 +3004,84 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param statuses (optional)
+     * @param page (optional)
+     * @param pageSize (optional)
+     * @param sortField (optional)
+     * @param sortDir (optional)
+     * @param keyword (optional)
+     * @return OK
+     */
+    getAllPayment(statuses, page, pageSize, sortField, sortDir, keyword, cancelToken) {
+        let url_ = this.baseUrl + "/api/payment?";
+        if (statuses === null)
+            throw new Error("The parameter 'statuses' cannot be null.");
+        else if (statuses !== undefined)
+            statuses && statuses.forEach(item => { url_ += "statuses=" + encodeURIComponent("" + item) + "&"; });
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (sortField === null)
+            throw new Error("The parameter 'sortField' cannot be null.");
+        else if (sortField !== undefined)
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortDir === null)
+            throw new Error("The parameter 'sortDir' cannot be null.");
+        else if (sortDir !== undefined)
+            url_ += "sortDir=" + encodeURIComponent("" + sortDir) + "&";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "keyword=" + encodeURIComponent("" + keyword) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetAllPayment(_response);
+        });
+    }
+    processGetAllPayment(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = PaginatedPaymentDto.fromJS(resultData200);
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @param paymentStatus (optional)
      * @param startDate (optional)
      * @param endDate (optional)
@@ -3190,6 +3495,52 @@ class Client {
         });
     }
     processDeleteRole(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return No Content
+     */
+    tryDeletePromotion(promotionId, cancelToken) {
+        let url_ = this.baseUrl + "/api/promotion/{promotionId}";
+        if (promotionId === undefined || promotionId === null)
+            throw new Error("The parameter 'promotionId' must be defined.");
+        url_ = url_.replace("{promotionId}", encodeURIComponent("" + promotionId));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "DELETE",
+            url: url_,
+            headers: {},
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processTryDeletePromotion(_response);
+        });
+    }
+    processTryDeletePromotion(response) {
         const status = response.status;
         let _headers = {};
         if (response.headers && typeof response.headers === "object") {
@@ -3659,6 +4010,62 @@ class UpdateRatingCommand {
         data["id"] = this.id;
         data["content"] = this.content;
         data["value"] = this.value;
+        return data;
+    }
+}
+class UpdatePromotionCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.promotionId = _data["promotionId"];
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discount = _data["discount"];
+            this.type = _data["type"];
+            this.minOrderAmount = _data["minOrderAmount"];
+            this.maxValue = _data["maxValue"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : undefined;
+            this.active = _data["active"];
+            this.stock = _data["stock"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdatePromotionCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["promotionId"] = this.promotionId;
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discount"] = this.discount;
+        data["type"] = this.type;
+        data["minOrderAmount"] = this.minOrderAmount;
+        data["maxValue"] = this.maxValue;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : undefined;
+        data["active"] = this.active;
+        data["stock"] = this.stock;
         return data;
     }
 }
@@ -4176,6 +4583,60 @@ class CreateRatingCommand {
         return data;
     }
 }
+class CreatePromotionCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.discount = _data["discount"];
+            this.type = _data["type"];
+            this.minOrderAmount = _data["minOrderAmount"];
+            this.maxValue = _data["maxValue"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : undefined;
+            this.active = _data["active"];
+            this.stock = _data["stock"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreatePromotionCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["discount"] = this.discount;
+        data["type"] = this.type;
+        data["minOrderAmount"] = this.minOrderAmount;
+        data["maxValue"] = this.maxValue;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : undefined;
+        data["active"] = this.active;
+        data["stock"] = this.stock;
+        return data;
+    }
+}
 class CreateProductCommand {
     constructor(data) {
         if (data) {
@@ -4407,8 +4868,11 @@ class ProductBriefDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
+            this.totalSold = _data["totalSold"];
+            this.averageRating = _data["averageRating"];
             this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.averageRatingDisplay = _data["averageRatingDisplay"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
@@ -4435,8 +4899,11 @@ class ProductBriefDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
+        data["totalSold"] = this.totalSold;
+        data["averageRating"] = this.averageRating;
         data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["averageRatingDisplay"] = this.averageRatingDisplay;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
@@ -4732,9 +5199,9 @@ class GetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toProvince = _data["toProvince"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
+            this.toProvince = _data["toProvince"];
         }
     }
     static fromJS(data) {
@@ -4757,9 +5224,9 @@ class GetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toProvince"] = this.toProvince;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
+        data["toProvince"] = this.toProvince;
         return data;
     }
 }
@@ -5260,8 +5727,8 @@ class UserDto {
                     this.permissions.push(item);
             }
             this.emailVerified = _data["emailVerified"];
-            this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
+            this.customer = _data["customer"];
         }
     }
     static fromJS(data) {
@@ -5290,8 +5757,8 @@ class UserDto {
                 data["permissions"].push(item);
         }
         data["emailVerified"] = this.emailVerified;
-        data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
+        data["customer"] = this.customer;
         return data;
     }
 }
@@ -5805,6 +6272,60 @@ class RatingDto {
         return data;
     }
 }
+class PaginatedPromotionDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [];
+                for (let item of _data["data"])
+                    this.data.push(PromotionDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedPromotionDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
 class PromotionDto {
     constructor(data) {
         if (data) {
@@ -5886,6 +6407,8 @@ class ProductDetailDto {
             this.displayImage = _data["displayImage"];
             this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
             this.deletedDate = _data["deletedDate"] ? new Date(_data["deletedDate"].toString()) : undefined;
+            this.totalSold = _data["totalSold"];
+            this.averageRating = _data["averageRating"];
             if (Array.isArray(_data["productOptions"])) {
                 this.productOptions = [];
                 for (let item of _data["productOptions"])
@@ -5899,6 +6422,7 @@ class ProductDetailDto {
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
             this.vietnamesePrice = _data["vietnamesePrice"];
+            this.averageRatingDisplay = _data["averageRatingDisplay"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
@@ -5925,6 +6449,8 @@ class ProductDetailDto {
         data["displayImage"] = this.displayImage;
         data["category"] = this.category ? this.category.toJSON() : undefined;
         data["deletedDate"] = this.deletedDate ? this.deletedDate.toISOString() : undefined;
+        data["totalSold"] = this.totalSold;
+        data["averageRating"] = this.averageRating;
         if (Array.isArray(this.productOptions)) {
             data["productOptions"] = [];
             for (let item of this.productOptions)
@@ -5938,6 +6464,7 @@ class ProductDetailDto {
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
         data["vietnamesePrice"] = this.vietnamesePrice;
+        data["averageRatingDisplay"] = this.averageRatingDisplay;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
@@ -6030,6 +6557,102 @@ class PaginatedProductBriefDto {
         data["totalElements"] = this.totalElements;
         data["hasNext"] = this.hasNext;
         data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+class PaginatedPaymentDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [];
+                for (let item of _data["data"])
+                    this.data.push(PaymentDto.fromJS(item));
+            }
+            this.page = _data["page"];
+            this.pageSize = _data["pageSize"];
+            this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
+            this.hasNext = _data["hasNext"];
+            this.hasPrevious = _data["hasPrevious"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginatedPaymentDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["page"] = this.page;
+        data["pageSize"] = this.pageSize;
+        data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
+        data["hasNext"] = this.hasNext;
+        data["hasPrevious"] = this.hasPrevious;
+        return data;
+    }
+}
+class PaymentDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.paymentId = _data["paymentId"];
+            this.status = _data["status"];
+            this.paymentDetails = _data["paymentDetails"];
+            this.paymentResponse = _data["paymentResponse"];
+            this.amount = _data["amount"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaymentDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["paymentId"] = this.paymentId;
+        data["status"] = this.status;
+        data["paymentDetails"] = this.paymentDetails;
+        data["paymentResponse"] = this.paymentResponse;
+        data["amount"] = this.amount;
         return data;
     }
 }
@@ -6148,48 +6771,6 @@ class PaginatedOrderBriefDto {
         data["totalElements"] = this.totalElements;
         data["hasNext"] = this.hasNext;
         data["hasPrevious"] = this.hasPrevious;
-        return data;
-    }
-}
-class PaymentDto {
-    constructor(data) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    this[property] = data[property];
-            }
-        }
-    }
-    init(_data) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.paymentId = _data["paymentId"];
-            this.status = _data["status"];
-            this.paymentDetails = _data["paymentDetails"];
-            this.paymentResponse = _data["paymentResponse"];
-            this.amount = _data["amount"];
-        }
-    }
-    static fromJS(data) {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaymentDto();
-        result.init(data);
-        return result;
-    }
-    toJSON(data) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["paymentId"] = this.paymentId;
-        data["status"] = this.status;
-        data["paymentDetails"] = this.paymentDetails;
-        data["paymentResponse"] = this.paymentResponse;
-        data["amount"] = this.amount;
         return data;
     }
 }
@@ -6401,6 +6982,15 @@ var ForGender;
     ForGender["FOR_FEMALE"] = "FOR_FEMALE";
     ForGender["FOR_BOTH"] = "FOR_BOTH";
 })(ForGender || (ForGender = {}));
+var Statuses;
+(function (Statuses) {
+    Statuses["PENDING"] = "PENDING";
+    Statuses["PAID"] = "PAID";
+    Statuses["CANCELLED"] = "CANCELLED";
+    Statuses["REFUNDED"] = "REFUNDED";
+    Statuses["FAILED"] = "FAILED";
+    Statuses["WAITING_FOR_REFUND"] = "WAITING_FOR_REFUND";
+})(Statuses || (Statuses = {}));
 var PaymentStatus;
 (function (PaymentStatus) {
     PaymentStatus["PENDING"] = "PENDING";
@@ -6420,12 +7010,22 @@ var OrderStatus;
     OrderStatus["RETURNED"] = "RETURNED";
     OrderStatus["REFUNDED"] = "REFUNDED";
 })(OrderStatus || (OrderStatus = {}));
+var UpdatePromotionCommandType;
+(function (UpdatePromotionCommandType) {
+    UpdatePromotionCommandType["PERCENTAGE"] = "PERCENTAGE";
+    UpdatePromotionCommandType["FIXED_AMOUNT"] = "FIXED_AMOUNT";
+})(UpdatePromotionCommandType || (UpdatePromotionCommandType = {}));
 var UpdateProductCommandForGender;
 (function (UpdateProductCommandForGender) {
     UpdateProductCommandForGender["FOR_MALE"] = "FOR_MALE";
     UpdateProductCommandForGender["FOR_FEMALE"] = "FOR_FEMALE";
     UpdateProductCommandForGender["FOR_BOTH"] = "FOR_BOTH";
 })(UpdateProductCommandForGender || (UpdateProductCommandForGender = {}));
+var CreatePromotionCommandType;
+(function (CreatePromotionCommandType) {
+    CreatePromotionCommandType["PERCENTAGE"] = "PERCENTAGE";
+    CreatePromotionCommandType["FIXED_AMOUNT"] = "FIXED_AMOUNT";
+})(CreatePromotionCommandType || (CreatePromotionCommandType = {}));
 var CreateProductCommandForGender;
 (function (CreateProductCommandForGender) {
     CreateProductCommandForGender["FOR_MALE"] = "FOR_MALE";
@@ -6480,6 +7080,15 @@ var ProductDetailDtoForGender;
     ProductDetailDtoForGender["FOR_FEMALE"] = "FOR_FEMALE";
     ProductDetailDtoForGender["FOR_BOTH"] = "FOR_BOTH";
 })(ProductDetailDtoForGender || (ProductDetailDtoForGender = {}));
+var PaymentDtoStatus;
+(function (PaymentDtoStatus) {
+    PaymentDtoStatus["PENDING"] = "PENDING";
+    PaymentDtoStatus["PAID"] = "PAID";
+    PaymentDtoStatus["CANCELLED"] = "CANCELLED";
+    PaymentDtoStatus["REFUNDED"] = "REFUNDED";
+    PaymentDtoStatus["FAILED"] = "FAILED";
+    PaymentDtoStatus["WAITING_FOR_REFUND"] = "WAITING_FOR_REFUND";
+})(PaymentDtoStatus || (PaymentDtoStatus = {}));
 var OrderBriefDtoPaymentMethod;
 (function (OrderBriefDtoPaymentMethod) {
     OrderBriefDtoPaymentMethod["COD"] = "COD";
@@ -6496,15 +7105,6 @@ var OrderBriefDtoStatus;
     OrderBriefDtoStatus["RETURNED"] = "RETURNED";
     OrderBriefDtoStatus["REFUNDED"] = "REFUNDED";
 })(OrderBriefDtoStatus || (OrderBriefDtoStatus = {}));
-var PaymentDtoStatus;
-(function (PaymentDtoStatus) {
-    PaymentDtoStatus["PENDING"] = "PENDING";
-    PaymentDtoStatus["PAID"] = "PAID";
-    PaymentDtoStatus["CANCELLED"] = "CANCELLED";
-    PaymentDtoStatus["REFUNDED"] = "REFUNDED";
-    PaymentDtoStatus["FAILED"] = "FAILED";
-    PaymentDtoStatus["WAITING_FOR_REFUND"] = "WAITING_FOR_REFUND";
-})(PaymentDtoStatus || (PaymentDtoStatus = {}));
 class ApiException extends Error {
     constructor(message, status, response, headers, result) {
         super();

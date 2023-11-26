@@ -39,12 +39,12 @@
           </th:block>
         </div>
         <div class="flex justify-center my-3">
-          <button
-            type="button"
+          <a
+                  th:href="@{/product/search?sortField=product.totalSold&sortDir=desc}"
             class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg px-5 py-2.5 mr-2 mb-2"
           >
             Xem thêm
-          </button>
+          </a>
         </div>
       </div>
       <div class="my-12 mt-6 pt-6 border-t border-primary-200 flex flex-col gap-y-2">
@@ -55,12 +55,13 @@
           </th:block>
         </div>
         <div class="flex justify-center my-3">
-          <button
-            type="button"
-            class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg px-5 py-2.5 mr-2 mb-2"
+          <a
+                  th:href="@{/product/search?sortField=product.createdDate&sortDir=desc}"
+
+                  class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg px-5 py-2.5 mr-2 mb-2"
           >
             Xem thêm
-          </button>
+          </a>
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@
                     <div
                             th:if="${param.error}"
                             class="p-4 mb-1 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                        <span class="font-medium" th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+                        <span class="font-medium" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
                            Tên đăng nhập hoặc mật khẩu không đúng
 
                         </span>

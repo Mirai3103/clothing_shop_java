@@ -82,7 +82,18 @@
         $watch('query', (query) => {
                 const queryStr= queryString.stringify(query);
         window.history.pushState(null, null, window.location.pathname + '?' + queryStr);
+         window.scroll({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
         }, {deep: true});
+        $watch('query.page', (page) => {
+                fetchData();
+        });
+        $watch('query.pageSize', (pageSize) => {
+                fetchData();
+        });
 
 "
 >
@@ -145,7 +156,7 @@
 
     </div>
     <div class="body flex w-pt h-pt"
-    x-data="{
+         x-data="{
         selectedCategoryIds: [],
         selectedColorIds: [],
         selectedSize:[],
@@ -184,8 +195,6 @@
             }
         },
         applyfilter() {
-            this.query.page = 1;
-            this.query.pageSize = 20;
             this.query.keyword = this.keywordInput.trim() || undefined;
             this.query.categoryIds = this.selectedCategoryIds;
             this.query.colorIds = this.selectedColorIds;
@@ -257,7 +266,7 @@
             query.page = Number(queryParams.page)|| 1;
         }
         if (queryParams.pageSize) {
-            query.pageSize = Number(queryParams.pageSize) || 20;
+            query.pageSize = Number(queryParams.pageSize) || 18;
         }
         if (queryParams.sortField) {
             query.sortField = queryParams.sortField;
@@ -340,8 +349,11 @@
                             <div class="relative z-0 w-full mb-5 group">
                                 <input
                                         x-model="keywordInput"
-                                        type="text" name="keyword" id="keyword" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                                <label for="keyword" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                        type="text" name="keyword" id="keyword"
+                                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                        placeholder=" " required/>
+                                <label for="keyword"
+                                       class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                     Nhập từ khóa
                                 </label>
                             </div>
@@ -419,19 +431,24 @@
                                 <input checked id="male-checkbox" type="checkbox"
                                        :value="ForGenders.FOR_MALE"
                                        class="w-4 h-4 genderCheckBox text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="male-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                <label for="male-checkbox"
+                                       class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                     Cho nam
                                 </label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input checked id="female-checkbox" type="checkbox" :value="ForGenders.FOR_FEMALE" class="w-4 h-4 genderCheckBox text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="female-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                <input checked id="female-checkbox" type="checkbox" :value="ForGenders.FOR_FEMALE"
+                                       class="w-4 h-4 genderCheckBox text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="female-checkbox"
+                                       class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                     Cho nữ
                                 </label>
                             </div>
                             <div class="flex items-center">
-                                <input checked id="both-checkbox" type="checkbox" :value="ForGenders.FOR_BOTH" class="w-4 h-4 genderCheckBox text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="both-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                <input checked id="both-checkbox" type="checkbox" :value="ForGenders.FOR_BOTH"
+                                       class="w-4 h-4 genderCheckBox text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label for="both-checkbox"
+                                       class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                     Cho cả nam và nữ
                                 </label>
                             </div>
@@ -449,16 +466,24 @@
                                 </svg>
                             </button>
                         </h2>
-                        <div class="CustomizeProducts-typeClothes relative mt-4 ml-4  hidden" id="accordion-flush-body-1"
+                        <div class="CustomizeProducts-typeClothes relative mt-4 ml-4  hidden"
+                             id="accordion-flush-body-1"
                              aria-labelledby="accordion-flush-heading-1">
-                            <button id="dropDownSelectCategoryBtn" data-dropdown-toggle="dropDownSelectCategory" data-dropdown-trigger="hover" class="text-white bg-primary-700 w-[80%] mx-auto  hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center " type="button">
+                            <button id="dropDownSelectCategoryBtn" data-dropdown-toggle="dropDownSelectCategory"
+                                    data-dropdown-trigger="hover"
+                                    class="text-white bg-primary-700 w-[80%] mx-auto  hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center "
+                                    type="button">
                                 Chọn danh mục
-                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
                             </button>
-                            <div id="dropDownSelectCategory" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg border shadow-2xl max-h-72  overflow-y-auto w-[80%]">
-                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropDownSelectCategoryBtn">
+                            <div id="dropDownSelectCategory"
+                                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg border shadow-2xl max-h-72  overflow-y-auto w-[80%]">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                    aria-labelledby="dropDownSelectCategoryBtn">
                                     <template x-for="category in categories" :key="category.categoryId">
                                         <li>
                                             <button
@@ -528,7 +553,7 @@
                         </div>
                     </div>
 
-                    <div class="CustomizeProducts-applyfilter mt-4 ml-4" >
+                    <div class="CustomizeProducts-applyfilter mt-4 ml-4">
                         <div class="mx-auto w-45">
                             <button
                                     @click="applyfilter()"
@@ -562,11 +587,11 @@
                 </div>
 
                 <div class="flex items-center gap-x-4 text-gray-500 mt-2">
-                      <div class="flex gap-x-2 grow">
-                          <label for="sortBy" class="ml-3">Sắp xếp theo:</label>
-                          <select id="sortBy"
+                    <div class="flex gap-x-2 grow">
+                        <label for="sortBy" class="ml-3">Sắp xếp theo:</label>
+                        <select id="sortBy"
 
-                                  x-on:change="
+                                x-on:change="
                                         const value = $event.target.value;
                                         const sortField = value.split('-')[0];
                                         const sortDir = value.split('-')[1];
@@ -574,144 +599,227 @@
                                         query.sortDir = sortDir;
                                         fetchData();
                                   "
-                                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                              <option selected value="product.createdDate-desc">
-                                  Mới nhất
-                              </option>
-                              <option value="product.createdDate-asc">
-                                  Cũ nhất
-                              </option>
-                              <option value="product.price-asc">
-                                  Giá thấp đến cao
-                              </option>
-                              <option value="product.price-desc">
-                                  Giá cao đến thấp
-                              </option>
-                              <option value="product.totalSold-desc">
-                                  Bán chạy nhất
-                              </option>
-                          </select>
-                      </div>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                            <option value="product.discount-desc">
+                               Giảm giá sốc
+                            </option>
+                            <option selected value="product.createdDate-desc">
+                                Mới nhất
+                            </option>
+                            <option value="product.createdDate-asc">
+                                Cũ nhất
+                            </option>
+                            <option value="product.price-asc">
+                                Giá thấp đến cao
+                            </option>
+                            <option value="product.price-desc">
+                                Giá cao đến thấp
+                            </option>
+                            <option value="product.totalSold-desc">
+                                Bán chạy nhất
+                            </option>
+                        </select>
                     </div>
                 </div>
-                <div class="listproduct-list gap-5  mt-6 grid grid-cols-3">
-                    <div x-show="loading" class="w-full col-span-4 h-36 flex justify-center items-center">
-                        <div role="status">
-                            <svg aria-hidden="true" class="inline w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+            </div>
+            <div class="listproduct-list gap-5  mt-6 grid grid-cols-3">
+                <div x-show="loading" class="w-full col-span-4 h-36 flex justify-center items-center">
+                    <div role="status">
+                        <svg aria-hidden="true"
+                             class="inline w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300"
+                             viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                  fill="currentColor"/>
+                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                  fill="currentFill"/>
+                        </svg>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div x-show="!loading && data.length ===0"
+                     class="w-full col-span-4 h-36 flex justify-center items-center">
+                    <p class="text-gray-500 ">Không có sản phẩm nào</p>
+                </div>
+                <template x-for="product in data" :key="product.productId">
+                    <a
+                            class="flex flex-col  gap-y-1 relative shadow rounded-md hover:shadow-md hover:border border-gray-100"
+                            :href="'/product/'+product.slug"
+                    >
+                        <div class="flex items-center p-2 bg-transparent bg-white rounded-md  absolute top-0 left-0 z-10">
+                            <svg
+                                    class="w-4 h-4 text-yellow-300 mr-1"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor"
+                                    viewBox="0 0 22 20"
+                            >
+                                <path
+                                        d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+                                />
                             </svg>
-                            <span class="sr-only">Loading...</span>
+                            <p class="ml-1 text-sm font-bold text-gray-900 dark:text-white"
+                               x-text="parseFloat(product.averageRating).toFixed(1)"
+                            >
+                            </p>
+
                         </div>
-                    </div>
-                    <div x-show="!loading && data.length ===0" class="w-full col-span-4 h-36 flex justify-center items-center">
-                        <p class="text-gray-500 ">Không có sản phẩm nào</p>
-                    </div>
-                    <template x-for="product in data" :key="product.productId">
-                        <a
-                                class="flex flex-col  gap-y-1 relative shadow rounded-md hover:shadow-md hover:border border-gray-100"
-                                :href="'/product/'+product.slug"
-                        >
-                            <div class="flex items-center p-2 bg-transparent bg-white rounded-md  absolute top-0 left-0 z-10">
-                                <svg
-                                        class="w-4 h-4 text-yellow-300 mr-1"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor"
-                                        viewBox="0 0 22 20"
-                                >
-                                    <path
-                                            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                                    />
-                                </svg>
-                                <p class="ml-1 text-sm font-bold text-gray-900 dark:text-white"
-                                x-text="parseFloat(product.averageRating).toFixed(1)"
-                                >
-                                </p>
+                        <img
+                                class="w-full relative aspect-[3/4] rounded-md cursor-pointer"
+                                :src="product.displayImage"
+                                :alt="product.name"
+                        />
+                        <div class="flex flex-col gap-y-1 p-4">
+                            <div class="font-semibold text-lg"
+                                 x-text="product.name"
+                            >
 
                             </div>
-                            <img
-                                    class="w-full relative aspect-[3/4] rounded-md cursor-pointer"
-                                    :src="product.displayImage"
-                                    :alt="product.name"
-                            />
-                            <div class="flex flex-col gap-y-1 p-4">
-                                <div class="font-semibold text-lg"
-                                        x-text="product.name"
-                                >
+                            <div class="flex justify-between items-center">
+                                <div class="flex gap-1 items-center">
+                                    <div
+                                            class="font-bold"
+                                            x-text="VND.format(product.price)"
+                                            x-bind:class="product.discount > 0 ? ' line-through text-gray-500 text-sm' : ''"
+                                    ></div>
 
-                                </div>
-                                <div class="flex justify-between items-center" >
-                                    <div class="flex gap-1 items-center">
-                                        <div
-                                                class="font-bold"
-                                                x-text="VND.format(product.price)"
-                                                x-bind:class="product.discount > 0 ? ' line-through text-gray-500 text-sm' : ''"
-                                        ></div>
+                                    <div
+                                            class="font-bold"
+                                            x-text="VND.format(product.price*(1-product.discount*1.0/100))"
 
-                                        <div
-                                                class="font-bold"
-                                                x-text="VND.format(product.price*(1-product.discount*1.0/100))"
-
-                                                x-show="product.discount > 0"
-                                        ></div>
-                                    </div>
-                                    <span
-                                            class="bg-red-100 text-red-800 mr-2 px-2.5 py-0.5 rounded font-bold"
-                                            x-text="'-'+product.discount+'%'"
                                             x-show="product.discount > 0"
-                                    ></span>
+                                    ></div>
                                 </div>
+                                <span
+                                        class="bg-red-100 text-red-800 mr-2 px-2.5 py-0.5 rounded font-bold"
+                                        x-text="'-'+product.discount+'%'"
+                                        x-show="product.discount > 0"
+                                ></span>
                             </div>
-                        </a>
-
-                    </template>
-                </div>
-                <div class="pageTransitionBar">
-                    <hr class=" ml-4  mt-8 border-b-1 border-gray-300">
-                    <div class="flex mt-5">
-                        <div class=" border-2 ml-4 border-gray-400 px-1 rounded-lg">
-                            <ul class="flex py-1 ">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5"
-                                     stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
-                                </svg>
-                                <li>Previous</li>
-
-                            </ul>
                         </div>
-                        <div class="number-page ml-auto ">
-                            <ul class="number-page-list flex">
-                                <!-- in ra danh sach trang san pham -->
-                            </ul>
+                    </a>
 
-                        </div>
+                </template>
+            </div>
+            <div class="pageTransitionBar">
+                <hr class=" ml-4  mt-8 border-b-1 border-gray-300">
+                <div class="flex mt-5">
+                    <button type="button"
+                            class="border ml-4 border-gray-400 px-1 flex py-1 rounded-lg hover:bg-gray-100"
+                            :disabled="!hasPreviousPage"
+                            @click="query.page = query.page - 1;"
+                            :class="hasPreviousPage ? ' text-gray-900' : ' cursor-not-allowed text-gray-400'"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+                        </svg>
+                        <span>
+                                    Trang trước
+                                </span>
 
-                        <div class="ml-auto mr-2 border-2 border-gray-400 px-2 rounded-lg ">
-                            <ul class="flex py-1 ">
-                                <li>Next</li>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5"
-                                     stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-                                </svg>
+                    </button>
+                    <div class="number-page ml-auto ">
+                        <ul class="inline-flex -space-x-px text-sm">
+                            <template x-if="total <=5">
+                                <template x-for="i in Array.from({length: total}, (_, i) => i + 1)" :key="i">
+                                    <li>
+                                        <button
+                                                @click="query.page = i; "
+                                                :class="query.page === i ? 'text-blue-600  bg-blue-50' : 'text-gray-500 bg-white'"
+                                                class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                            <span x-text="i"></span>
+                                        </button>
+                                    </li>
+                                </template>
+                            </template>
+                            <li x-show="total > 5 ">
+                                <button
+                                        @click="query.page = 1; "
+                                        :class="query.page === 1 ? 'text-blue-600  bg-blue-50' : 'text-gray-500 bg-white'"
+                                        class="flex items-center justify-center px-3 h-8 leading-tight  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    1
+                                </button>
 
-                            </ul>
-                        </div>
+                            </li>
+
+
+
+                            <template x-if="total > 5 && query.page !== total && query.page !== 1">
+                                <li>
+                                    <ul class="inline-flex -space-x-px text-sm">
+                                        <li>
+                                            <button
+                                                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                                ...
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button
+                                                    class="flex text-blue-600  bg-blue-50 items-center justify-center px-3 h-8 leading-tight  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                                <span x-text="query.page"></span>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button
+                                                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                                ...
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </template>
+
+                            <template x-if="total > 5 && (query.page === total || query.page === 1)">
+                                <li>
+                                    <button
+                                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                        ...
+                                    </button>
+                                </li>
+                            </template>
+
+
+
+
+
+                            <li x-show="total > 5">
+                                <button
+                                        @click="query.page = total; "
+                                        :class="query.page === total ? 'text-blue-600  bg-blue-50' : 'text-gray-500 bg-white'"
+                                        class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <span x-text="total"></span>
+                                </button>
+                            </li>
+
+
+                        </ul>
+
                     </div>
 
+                    <button class="ml-auto mr-2 border-2 border-gray-400 px-2 flex py-1 rounded-lg hover:bg-gray-100"
+                            :disabled="!hasNextPage"
+                            @click="query.page = query.page + 1; "
+                            :class="hasNextPage ? ' text-gray-900' : ' cursor-not-allowed text-gray-400'"
+                    >
+                        <span>Trang tiếp</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+                        </svg>
+                    </button>
                 </div>
 
             </div>
 
-
         </div>
-      <div class="mt-6"></div>
-        <!--    <script src="/js/search.js"></script>-->
+
 
     </div>
+    <div class="mt-6"></div>
+    <!--    <script src="/js/search.js"></script>-->
+
+</div>
 </body>
 </html>

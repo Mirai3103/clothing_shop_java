@@ -20,19 +20,12 @@ public class Payment extends AuditableEntity {
     @Id
     @Column(updatable = false, nullable = false, name = "payment_id", length = 36)
     private String paymentId;
-
     @Column(nullable = false)
     @Builder.Default
     private PaymentStatus status = PaymentStatus.PENDING;
-    @Column(nullable = false)
-    private String paymentDetails;
-    @Column(length = 1000)
-    private String paymentResponse;
     private int amount;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
-
     private LocalDateTime completedDate;
 
 }

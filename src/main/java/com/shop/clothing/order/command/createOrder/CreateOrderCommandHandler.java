@@ -53,7 +53,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
 
         var productOptionsThatWillBuy = productOptionRepository.findAllByProductOptionIdIn(createOrderCommand.getOrderItems().stream().map(CreateOrderCommand.OrderItem::getProductOptionId).toList());
         Promotion promotion = null;
-        if (createOrderCommand.getPromotionCode().isBlank()) {
+        if (!createOrderCommand.getPromotionCode().isBlank()) {
             promotion = promotionRepository.findByCodeIgnoreCase(createOrderCommand.getPromotionCode()).orElse(null);
         }
 
@@ -86,15 +86,15 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
         }
         fee = chooseShipService.get().getTotalFree();
         var createDeliveryOrder = CreateShipOrderRequest.builder()
-                .orderAmount((int) totalPrice)
+                .orderAmount(totalPrice)
                 .orderID(orderId)
-                .cod(createOrderCommand.getPaymentMethod() == PaymentMethod.COD ? (int) totalPrice + fee : 0)
+                .cod(createOrderCommand.getPaymentMethod() == PaymentMethod.COD ? totalPrice + fee : 0)
                 .rateServiceId(createOrderCommand.getShipServiceId())
                 .toName(createOrderCommand.getCustomerName())
                 .toAddress(createOrderCommand.getAddress())
                 .toPhone(createOrderCommand.getPhoneNumber())
                 .build();
-//        var deliveryOrder = deliveryService.createOrder(createDeliveryOrder);
+        var deliveryOrder = deliveryService.createOrder(createDeliveryOrder);
 
         var newOrder = Order.builder().orderId(orderId)
                 .address(createOrderCommand.getAddress())

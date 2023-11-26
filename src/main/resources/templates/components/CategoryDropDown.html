@@ -3,9 +3,9 @@
     <a
 
             th:id="${'dropdownButton' + category.categoryId}"
-            th:data-dropdown-toggle="${'dropDown' + category.categoryId}"
+            th:attr="data-dropdown-toggle=${#lists.isEmpty(category.children) ? null : 'dropDown' + category.categoryId}"
             data-dropdown-trigger="hover"
-            th:href="@{/category/{categoryId}(categoryId=${category.categoryId})}"
+            th:href="@{/product/search?categoryIds={categoryId}(categoryId=${category.categoryId})}"
            data-dropdown-placement="right-start"
             type="button"
             class="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">

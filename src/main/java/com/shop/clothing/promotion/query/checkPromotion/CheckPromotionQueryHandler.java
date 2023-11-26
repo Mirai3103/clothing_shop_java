@@ -1,4 +1,4 @@
-package com.shop.clothing.promotion.Query.checkPromotion;
+package com.shop.clothing.promotion.query.checkPromotion;
 
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
