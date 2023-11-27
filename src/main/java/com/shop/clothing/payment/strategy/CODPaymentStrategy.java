@@ -25,7 +25,6 @@ public class CODPaymentStrategy implements PaymentStrategy {
         var order = orderRepository.findById(orderId).orElseThrow(() -> new BusinessLogicException("Đon hàng không tồn tại"));
 
         var payment = Payment.builder().paymentId(UUID.randomUUID().toString())
-                .paymentDetails("Thanh toán khi nhận hàng")
                 .amount(order.getTotalAmount())
                 .order(order)
                 .build();

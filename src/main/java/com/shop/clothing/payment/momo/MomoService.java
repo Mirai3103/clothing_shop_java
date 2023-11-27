@@ -1,5 +1,6 @@
 package com.shop.clothing.payment.momo;
 
+import com.shop.clothing.config.AppProperties;
 import com.shop.clothing.config.RestExceptionHandler;
 import com.shop.clothing.payment.entity.Payment;
 import com.shop.clothing.payment.entity.enums.PaymentStatus;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -27,6 +29,7 @@ import java.util.UUID;
 @Service
 public class MomoService {
     private final MomoConfig momoConfig;
+    private final AppProperties appProperties;
     private final Logger logger = LoggerFactory.getLogger(MomoService.class);
     private final com.shop.clothing.payment.repository.PaymentRepository paymentRepository;
 
@@ -44,16 +47,16 @@ public class MomoService {
         String partnerCode = momoConfig.getPartnerCode();
         String accessKey = momoConfig.getAccessKey();
         String secretKey = momoConfig.getSecretKey();
-        var extraData = "haha";
+        var extraData = "Thanh toán đơn hàng";
         var orderId = UUID.randomUUID().toString();
         String sb = "accessKey=" + accessKey +
                 "&amount=" + amount +
                 "&extraData=" + extraData +
-                "&ipnUrl=" + momoConfig.getIpnUrl() +
+                "&ipnUrl=" + appProperties.getHost() + momoConfig.getIpnUrl() +
                 "&orderId=" + orderId +
                 "&orderInfo=" + orderInfo +
                 "&partnerCode=" + partnerCode +
-                "&redirectUrl=" + momoConfig.getCallbackUrl() +
+                "&redirectUrl=" + appProperties.getHost() + momoConfig.getCallbackUrl() +
                 "&requestId=" + paymentId +
                 "&requestType=" + requestType.toString();
         var signature = signHmacSHA256(sb, secretKey);
@@ -66,8 +69,8 @@ public class MomoService {
         body.put("amount", amount);
         body.put("orderId", orderId);
         body.put("orderInfo", orderInfo);
-        body.put("redirectUrl", momoConfig.getCallbackUrl());
-        body.put("ipnUrl", momoConfig.getIpnUrl());
+        body.put("redirectUrl", appProperties.getHost() + momoConfig.getCallbackUrl());
+        body.put("ipnUrl", appProperties.getHost() + momoConfig.getIpnUrl());
         body.put("lang", "vi");
         body.put("extraData", extraData);
         body.put("requestType", requestType.toString());
@@ -83,7 +86,6 @@ public class MomoService {
                 requestParams,
                 MomoCreatePaymentResponse.class
         );
-        logger.info(response.getBody().toString());
         return response.getBody();
     }
 
@@ -126,26 +128,73 @@ public class MomoService {
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add("Content-Type", "application/json");
         HttpEntity<String> requestParams = new HttpEntity<>(body.toString(), requestHeaders);
-        ResponseEntity<JSONObject> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 url,
                 org.springframework.http.HttpMethod.POST,
                 requestParams,
-                JSONObject.class
+                String.class
         );
-        return response.getBody();
+        return new JSONObject(response.getBody());
     }
 
     public Payment handleCallback(MomoCallbackParam momoCallbackParam) {
         var payment = paymentRepository.findById(momoCallbackParam.getRequestId()).orElseThrow();
-            var message = momoCallbackParam.getMessage();
-        payment.setPaymentResponse(message);
-        var signature = momoCallbackParam.getSignature();// toDo: check signature
-        switch (momoCallbackParam.getResultCode()) {
+        if (payment.getCompletedDate() != null) {
+            return payment;
+        }
+//        var signature = momoCallbackParam.getSignature();// toDo: check signature
+        //Chữ ký để kiểm tra tính đúng đắn của dữ liệu khi truyền tải trên mạng. Sử dụng thuật toán Hmac_SHA256 với data theo định dạng được sort từ a-z :
+        //accessKey=$accessKey&amount=$amount&extraData=$extraData
+        //&message=$message&orderId=$orderId&orderInfo=$orderInfo
+        //&orderType=$orderType&partnerCode=$partnerCode
+        //&payType=$payType&requestId=$requestId&responseTime=$responseTime
+        //&resultCode=$resultCode&transId=$transId
+//        var accessKey = momoConfig.getAccessKey();
+//        var amount = momoCallbackParam.getAmount();
+//        var extraData = momoCallbackParam.getExtraData();
+//        var message = momoCallbackParam.getMessage();
+//        var orderId = momoCallbackParam.getOrderId();
+//        var orderInfo = momoCallbackParam.getOrderInfo();
+//        var orderType = momoCallbackParam.getOrderType();
+//        var partnerCode = momoCallbackParam.getPartnerCode();
+//        var payType = momoCallbackParam.getPayType();
+//        var requestId = momoCallbackParam.getRequestId();
+//        var responseTime = momoCallbackParam.getResponseTime();
+//        var resultCode = momoCallbackParam.getResultCode();
+//        var transId = momoCallbackParam.getTransId();
+//        var sb = "accessKey=" + accessKey +
+//                "&amount=" + amount +
+//                "&extraData=" + extraData +
+//                "&message=" + message +
+//                "&orderId=" + orderId +
+//                "&orderInfo=" + orderInfo +
+//                "&orderType=" + orderType +
+//                "&partnerCode=" + partnerCode +
+//                "&payType=" + payType +
+//                "&requestId=" + requestId +
+//                "&responseTime=" + responseTime +
+//                "&resultCode=" + resultCode +
+//                "&transId=" + transId;
+//        try {
+//            var signature2 = signHmacSHA256(sb, momoConfig.getSecretKey());
+//            if (!signature.equals(signature2)) {
+//                throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Giao dịch không hợp lệ");
+//            }
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Giao dịch không hợp lệ");
+//        }
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = this.checkPaymentStatus(momoCallbackParam.getRequestId(), momoCallbackParam.getOrderId());
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Giao dịch không hợp lệ");
+        }
+        switch (jsonObject.getInt("resultCode")) {
             case 0 -> payment.setStatus(PaymentStatus.PAID);
             case 8000, 7000, 1000 -> payment.setStatus(PaymentStatus.PENDING);
             default -> payment.setStatus(PaymentStatus.FAILED);
         }
-        if(payment.getStatus()==PaymentStatus.PAID){
+        if (payment.getStatus() == PaymentStatus.PAID) {
             payment.setCompletedDate(LocalDateTime.now());
         }
         paymentRepository.save(payment);

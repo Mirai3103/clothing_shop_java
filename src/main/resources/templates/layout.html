@@ -34,7 +34,10 @@
     </script>
 
   </head>
-  <body class="relative" x-data="{}" th:with="categoryTree=${@clientUtil.getCategoryTree()}">
+  <body
+
+          @toast.window="$store.toast.add($event.detail.type, $event.detail.title, $event.detail.description)"
+          class="relative" x-data="{}" th:with="categoryTree=${@clientUtil.getCategoryTree()}">
     <header>
       <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
         <div class="flex flex-wrap gap-x-2 items-center mx-auto max-w-screen-xl">
@@ -278,7 +281,7 @@
                 </div>
                 <input
                   enterkeyhint="search"
-                  name="key"
+                  name="keyword"
                   type="search"
                   id="default-search"
                   class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

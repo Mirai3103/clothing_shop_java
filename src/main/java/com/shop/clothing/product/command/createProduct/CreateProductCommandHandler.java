@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Random;
+
 @Service
 @AllArgsConstructor
 public class CreateProductCommandHandler implements IRequestHandler<CreateProductCommand, Integer> {
@@ -24,6 +26,15 @@ public class CreateProductCommandHandler implements IRequestHandler<CreateProduc
         if (existCategory.isEmpty()) {
             return HandleResponse.error("Danh mục sản phẩm không tồn tại");
         }
+
+        var slug = slugUtil.slugify(createProductCommand.getName());
+        var existSlug = productRepository.findBySlug(slug);
+        String finalSlug = slug;
+        while (existSlug.isPresent()) {
+            finalSlug = slug + "-" + new Random().nextInt(1000);
+            existSlug = productRepository.findBySlug(finalSlug);
+        }
+
         var product = Product.builder()
                 .category(existCategory.get())
                 .name(createProductCommand.getName())
@@ -32,7 +43,7 @@ public class CreateProductCommandHandler implements IRequestHandler<CreateProduc
                 .discount(createProductCommand.getDiscount())
                 .forGender(createProductCommand.getForGender())
                 .price(createProductCommand.getPrice())
-                .slug(slugUtil.slugify(createProductCommand.getName()))
+                .slug(finalSlug)
                 .build();
         productRepository.save(product);
         return HandleResponse.ok(product.getProductId());

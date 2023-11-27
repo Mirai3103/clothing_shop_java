@@ -72,6 +72,7 @@ document.addEventListener('alpine:init', () => {
         selectedWard: '',
         detailAddress: '',
         getfullAddress() {
+            console.log(this)
             return toFullAddress(this);
         },
         isValidAddress() {

@@ -75,18 +75,18 @@
                   window.apiClient.deleteProduct(id).then((res) => {
                       this.data[index].deletedDate = new Date();
                       this.data =[...this.data];
-                      $store.toast.add('success', 'Xóa sản phẩm thành công');
+                      $store.toast.add('success', 'ẩn sản phẩm thành công');
                   }).catch((err) => {
-                      $store.toast.add('error', 'Xóa sản phẩm thất bại');
+                      $store.toast.add('error', 'ẩn sản phẩm thất bại');
                   });
                   return;
                   }
               window.apiClient.recoveryProduct(id).then((res) => {
                   this.data[index].deletedDate = null;
                   this.data =[...this.data];
-                  $store.toast.add('success', 'Khôi phục sản phẩm thành công');
+                  $store.toast.add('success', 'Hiện sản phẩm thành công');
               }).catch((err) => {
-                  $store.toast.add('error', 'Khôi phục sản phẩm thất bại');
+                  $store.toast.add('error', 'Hiện phục sản phẩm thất bại');
               });
         }
         }"

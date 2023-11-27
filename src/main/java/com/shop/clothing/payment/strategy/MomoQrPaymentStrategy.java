@@ -41,9 +41,7 @@ public class MomoQrPaymentStrategy implements PaymentStrategy {
         if (lastPayment == null || lastPayment.getStatus() != PaymentStatus.PENDING) {
             var payment = Payment.builder().paymentId(paymentId)
                     .amount(order.getTotalAmount())
-                    .paymentDetails("Thanh toán bằng quét mã QR")
                     .order(order)
-                    .paymentResponse(json)
                     .build();
             paymentRepository.save(payment);
         }
