@@ -1,6 +1,6 @@
 package com.shop.clothing.user.command.updateAvatar;
 
-import com.shop.clothing.auth.repository.UserRepository;
+import com.shop.clothing.auth.repository.IUserRepository;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.common.Cqrs.ISender;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UpdateAvatarCommandHandler implements IRequestHandler<UpdateAvatarCommand,String> {
     private final ISender sender;
-    private final UserRepository userRepository;
+    private final IUserRepository IUserRepository;
     private final ICurrentUserService currentUserService;
     @Override
     @Transactional
@@ -23,7 +23,7 @@ public class UpdateAvatarCommandHandler implements IRequestHandler<UpdateAvatarC
         if (currentUserId.isEmpty()) {
             return HandleResponse.error("Bạn chưa đăng nhập");
         }
-        var user = userRepository.findById(currentUserId.get());
+        var user = IUserRepository.findById(currentUserId.get());
         if (user.isEmpty()) {
             return HandleResponse.error("Không tìm thấy người dùng");
         }
@@ -32,7 +32,7 @@ public class UpdateAvatarCommandHandler implements IRequestHandler<UpdateAvatarC
             return uploadResult;
         }
         user.get().setAvatarUrl(uploadResult.get());
-        userRepository.save(user.get());
+        IUserRepository.save(user.get());
        return uploadResult;
     }
 }

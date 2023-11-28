@@ -16,6 +16,99 @@ class Client {
     /**
      * @return OK
      */
+    toggleLockAccount(userId, cancelToken) {
+        let url_ = this.baseUrl + "/api/user/{userId}/toggle-lock-account";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "PUT",
+            url: url_,
+            headers: {},
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processToggleLockAccount(_response);
+        });
+    }
+    processToggleLockAccount(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
+    toggleRole(body, cancelToken) {
+        let url_ = this.baseUrl + "/api/user/toggle-role";
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        let options_ = {
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processToggleRole(_response);
+        });
+    }
+    processToggleRole(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return OK
+     */
     updateSupplier(id, body, cancelToken) {
         let url_ = this.baseUrl + "/api/supplier/{id}";
         if (id === undefined || id === null)
@@ -2319,6 +2412,7 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param accountType (optional)
      * @param page (optional)
      * @param pageSize (optional)
      * @param sortField (optional)
@@ -2326,8 +2420,12 @@ class Client {
      * @param keyword (optional)
      * @return OK
      */
-    getUsers(page, pageSize, sortField, sortDir, keyword, cancelToken) {
+    getUsers(accountType, page, pageSize, sortField, sortDir, keyword, cancelToken) {
         let url_ = this.baseUrl + "/api/user?";
+        if (accountType === null)
+            throw new Error("The parameter 'accountType' cannot be null.");
+        else if (accountType !== undefined)
+            url_ += "accountType=" + encodeURIComponent("" + accountType) + "&";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -2382,7 +2480,7 @@ class Client {
             const _responseText = response.data;
             let result200 = null;
             let resultData200 = _responseText;
-            result200 = PaginatedUserBriefDto.fromJS(resultData200);
+            result200 = PaginatedUserDto.fromJS(resultData200);
             return Promise.resolve(result200);
         }
         else if (status !== 200 && status !== 204) {
@@ -3893,6 +3991,42 @@ class CreateCategoryClient {
         return Promise.resolve(null);
     }
 }
+class ToggleRoleToAccountCommand {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.userId = _data["userId"];
+            this.roleId = _data["roleId"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ToggleRoleToAccountCommand();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["userId"] = this.userId;
+        data["roleId"] = this.roleId;
+        return data;
+    }
+}
 class UpdateSupplierCommand {
     constructor(data) {
         if (data) {
@@ -5199,9 +5333,9 @@ class GetDeliveryOptionQuery {
             this.lengthInCm = _data["lengthInCm"];
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
-            this.toWard = _data["toWard"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toProvince = _data["toProvince"];
+            this.toDetailAddress = _data["toDetailAddress"];
+            this.toWard = _data["toWard"];
         }
     }
     static fromJS(data) {
@@ -5224,9 +5358,9 @@ class GetDeliveryOptionQuery {
         data["lengthInCm"] = this.lengthInCm;
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
-        data["toWard"] = this.toWard;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toProvince"] = this.toProvince;
+        data["toDetailAddress"] = this.toDetailAddress;
+        data["toWard"] = this.toWard;
         return data;
     }
 }
@@ -5604,7 +5738,7 @@ class CancelOrderCommand {
         return data;
     }
 }
-class PaginatedUserBriefDto {
+class PaginatedUserDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -5622,7 +5756,7 @@ class PaginatedUserBriefDto {
             if (Array.isArray(_data["data"])) {
                 this.data = [];
                 for (let item of _data["data"])
-                    this.data.push(UserBriefDto.fromJS(item));
+                    this.data.push(UserDto.fromJS(item));
             }
             this.page = _data["page"];
             this.pageSize = _data["pageSize"];
@@ -5634,7 +5768,7 @@ class PaginatedUserBriefDto {
     }
     static fromJS(data) {
         data = typeof data === 'object' ? data : {};
-        let result = new PaginatedUserBriefDto();
+        let result = new PaginatedUserDto();
         result.init(data);
         return result;
     }
@@ -5658,7 +5792,7 @@ class PaginatedUserBriefDto {
         return data;
     }
 }
-class UserBriefDto {
+class PermissionDto {
     constructor(data) {
         if (data) {
             for (var property in data) {
@@ -5673,15 +5807,14 @@ class UserBriefDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.userId = _data["userId"];
-            this.firstName = _data["firstName"];
-            this.lastName = _data["lastName"];
-            this.avatarUrl = _data["avatarUrl"];
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
         }
     }
     static fromJS(data) {
         data = typeof data === 'object' ? data : {};
-        let result = new UserBriefDto();
+        let result = new PermissionDto();
         result.init(data);
         return result;
     }
@@ -5691,10 +5824,57 @@ class UserBriefDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["userId"] = this.userId;
-        data["firstName"] = this.firstName;
-        data["lastName"] = this.lastName;
-        data["avatarUrl"] = this.avatarUrl;
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        return data;
+    }
+}
+class RoleDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.normalizedName = _data["normalizedName"];
+            this.displayName = _data["displayName"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [];
+                for (let item of _data["permissions"])
+                    this.permissions.push(PermissionDto.fromJS(item));
+            }
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new RoleDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["normalizedName"] = this.normalizedName;
+        data["displayName"] = this.displayName;
+        data["description"] = this.description;
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item.toJSON());
+        }
         return data;
     }
 }
@@ -5726,6 +5906,11 @@ class UserDto {
                 for (let item of _data["permissions"])
                     this.permissions.push(item);
             }
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [];
+                for (let item of _data["roles"])
+                    this.roles.push(RoleDto.fromJS(item));
+            }
             this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
@@ -5755,6 +5940,11 @@ class UserDto {
             data["permissions"] = [];
             for (let item of this.permissions)
                 data["permissions"].push(item);
+        }
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
         }
         data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
@@ -5957,92 +6147,6 @@ class StockReceiptBriefDto {
         data["supplierId"] = this.supplierId;
         data["supplier"] = this.supplier ? this.supplier.toJSON() : undefined;
         data["createdDateDisplay"] = this.createdDateDisplay;
-        return data;
-    }
-}
-class PermissionDto {
-    constructor(data) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    this[property] = data[property];
-            }
-        }
-    }
-    init(_data) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.normalizedName = _data["normalizedName"];
-            this.displayName = _data["displayName"];
-            this.description = _data["description"];
-        }
-    }
-    static fromJS(data) {
-        data = typeof data === 'object' ? data : {};
-        let result = new PermissionDto();
-        result.init(data);
-        return result;
-    }
-    toJSON(data) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["normalizedName"] = this.normalizedName;
-        data["displayName"] = this.displayName;
-        data["description"] = this.description;
-        return data;
-    }
-}
-class RoleDto {
-    constructor(data) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    this[property] = data[property];
-            }
-        }
-    }
-    init(_data) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.normalizedName = _data["normalizedName"];
-            this.displayName = _data["displayName"];
-            this.description = _data["description"];
-            if (Array.isArray(_data["permissions"])) {
-                this.permissions = [];
-                for (let item of _data["permissions"])
-                    this.permissions.push(PermissionDto.fromJS(item));
-            }
-        }
-    }
-    static fromJS(data) {
-        data = typeof data === 'object' ? data : {};
-        let result = new RoleDto();
-        result.init(data);
-        return result;
-    }
-    toJSON(data) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["normalizedName"] = this.normalizedName;
-        data["displayName"] = this.displayName;
-        data["description"] = this.description;
-        if (Array.isArray(this.permissions)) {
-            data["permissions"] = [];
-            for (let item of this.permissions)
-                data["permissions"].push(item.toJSON());
-        }
         return data;
     }
 }
@@ -6269,6 +6373,46 @@ class RatingDto {
         data["user"] = this.user ? this.user.toJSON() : undefined;
         data["productOption"] = this.productOption ? this.productOption.toJSON() : undefined;
         data["createdDateDisplay"] = this.createdDateDisplay;
+        return data;
+    }
+}
+class UserBriefDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.userId = _data["userId"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.avatarUrl = _data["avatarUrl"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserBriefDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["userId"] = this.userId;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["avatarUrl"] = this.avatarUrl;
         return data;
     }
 }

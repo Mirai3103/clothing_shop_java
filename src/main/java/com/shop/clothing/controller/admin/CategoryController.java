@@ -20,7 +20,7 @@ public class CategoryController {
     private final ISender sender;
 
     @GetMapping()
-//    @PreAuthorize("hasAnyAuthority('CREATE_CATEGORY','UPDATE_CATEGORY','DELETE_CATEGORY')")
+    @Secured("CATEGORY_MANAGEMENT")
     public String getCategories(Model model, CreateCategoryCommand createCategoryCommand) {
         var page = new GetAllCategoriesQueries();
         page.setPageSize(100);

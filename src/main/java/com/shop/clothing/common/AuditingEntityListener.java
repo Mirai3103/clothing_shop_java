@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.aspectj.ConfigurableObject;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,7 @@ public class AuditingEntityListener implements ConfigurableObject {
 
     private String getCurrentUserId() {
         var authen = SecurityContextHolder.getContext().getAuthentication();
-        if (authen == null) {
+        if (authen instanceof AnonymousAuthenticationToken) {
             return "system";
         }
         var domainAuthen = (User) authen.getPrincipal();
@@ -32,7 +33,6 @@ public class AuditingEntityListener implements ConfigurableObject {
     @PrePersist
     public void touchForCreate(AuditableEntity target) {
 
-        var currentUserId = getCurrentUserId();
 //        target.setCreatedBy(currentUserId);
         target.setCreatedDate(java.time.LocalDateTime.now());
     }

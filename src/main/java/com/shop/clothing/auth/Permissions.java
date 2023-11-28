@@ -14,6 +14,7 @@ public enum Permissions {
     ROLE_MANAGEMENT("ROLE_MANAGEMENT"),
     CAN_ORDER("CAN_ORDER"),
     ADMIN_DASHBOARD("ADMIN_DASHBOARD"),
+    SHOP_INFO_MANAGEMENT("SHOP_INFO_MANAGEMENT"),
     ;
 
     private final String text;

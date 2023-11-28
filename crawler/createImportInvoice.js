@@ -65,7 +65,6 @@ const createImportInvoice = async () => {
   for (const supplierId of listSupplierIds) {
     let newImportInvoice = {
       supplier_supplier_id: supplierId,
-      supplier_id: supplierId,
       total: 0,
       note: faker.lorem.sentences({ max: 2 }),
       created_date: faker.date.past({

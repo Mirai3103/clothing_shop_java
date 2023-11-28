@@ -40,9 +40,7 @@ public class MomoATMPaymentStrategy implements PaymentStrategy {
         if (lastPayment == null || lastPayment.getStatus() != PaymentStatus.PENDING) {
             var payment = Payment.builder().paymentId(paymentId)
                     .amount(order.getTotalAmount())
-                    .paymentDetails("Thanh toán bằng ATM")
                     .order(order)
-                    .paymentResponse(JSONObject.valueToString(json))
                     .build();
             paymentRepository.save(payment);
         }

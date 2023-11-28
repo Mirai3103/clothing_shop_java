@@ -1,6 +1,6 @@
 package com.shop.clothing.user.command.updateProfile;
 
-import com.shop.clothing.auth.repository.UserRepository;
+import com.shop.clothing.auth.repository.IUserRepository;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.config.ICurrentUserService;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 @Service
 public class UpdateProfileCommandHandler implements IRequestHandler<UpdateProfileCommand, Void> {
-    private final UserRepository userRepository;
+    private final IUserRepository IUserRepository;
     private final ICurrentUserService currentUserService;
 
     @Override
@@ -21,7 +21,7 @@ public class UpdateProfileCommandHandler implements IRequestHandler<UpdateProfil
         if (userId.isEmpty()) {
             return HandleResponse.error("Bạn chưa đăng nhập");
         }
-        var user = userRepository.findById(userId.get());
+        var user = IUserRepository.findById(userId.get());
         if (user.isEmpty()) {
             return HandleResponse.error("Không tìm thấy người dùng");
         }
@@ -31,7 +31,7 @@ public class UpdateProfileCommandHandler implements IRequestHandler<UpdateProfil
         userEntity.setEmail(updateProfileCommand.getEmail());
         userEntity.setAddress(updateProfileCommand.getAddress());
         userEntity.setPhoneNumber(updateProfileCommand.getPhoneNumber());
-        userRepository.save(userEntity);
+        IUserRepository.save(userEntity);
         return HandleResponse.ok();
 
 

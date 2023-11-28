@@ -2,6 +2,7 @@ package com.shop.clothing.controller.admin;
 
 import com.shop.clothing.common.Cqrs.ISender;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @AllArgsConstructor
 @RequestMapping("/admin/report")
+@Secured("REPORT_MANAGEMENT")
+
 public class ReportController {
     private  final ISender sender;
 

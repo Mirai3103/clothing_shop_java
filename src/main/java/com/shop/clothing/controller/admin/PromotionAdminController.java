@@ -4,6 +4,8 @@ import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.promotion.query.checkPromotion.CheckPromotionQuery;
 import com.shop.clothing.promotion.query.getPromotionById.GetPromotionByIdQuery;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/promotion")
 @AllArgsConstructor
 @Controller
+@Secured("PRODUCT_MANAGEMENT")
+
 public class PromotionAdminController {
     private final ISender sender;
 

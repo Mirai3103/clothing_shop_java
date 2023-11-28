@@ -7,6 +7,7 @@ import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.config.ICurrentUserService;
 import com.shop.clothing.order.command.createOrder.CreateOrderCommand;
 import com.shop.clothing.order.entity.Order;
+import com.shop.clothing.order.query.getOrderById.GetOrderByIdQuery;
 import com.shop.clothing.payment.command.createPayment.CreatePaymentCommand;
 import com.shop.clothing.product.query.getProductOptionsByListId.GetProductOptionsByListIdQuery;
 import jakarta.validation.Valid;
@@ -15,9 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -57,8 +56,14 @@ public class ShopOrderController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('CAN_ORDER') or isAnonymous()")
-    public String createOrder(@Valid CreateOrderCommand command, BindingResult bindingResult, Model model) {
+    @PreAuthorize("isAnonymous()  or  hasAnyAuthority('CAN_ORDER')")
+    public String createOrder(@Valid @ModelAttribute("command") CreateOrderCommand command, BindingResult bindingResult, Model model) {
+
+        var productOption = sender.send(new GetProductOptionsByListIdQuery(command.getOrderItems().stream().map(CreateOrderCommand.OrderItem::getProductOptionId).toList())).get();
+        OrderModel orderModel = new OrderModel();
+        orderModel.setOrderItems(productOption, command.getOrderItems());
+        model.addAttribute("orderModel", orderModel);
+        model.addAttribute("command", command);
         if (bindingResult.hasErrors()) {
             return "order/index";
         }
@@ -82,6 +87,14 @@ public class ShopOrderController {
             return "order/success";
         }
         return "order/index";
+    }
+
+    @GetMapping("/{orderId}")
+    @PreAuthorize("hasAnyAuthority('CAN_ORDER') or isAnonymous()")
+    public String getOrder(Model model, @PathVariable String orderId) {
+        var order = sender.send(new GetOrderByIdQuery(orderId)).orThrow();
+        model.addAttribute("order", order);
+        return "order/detail";
     }
 }
 

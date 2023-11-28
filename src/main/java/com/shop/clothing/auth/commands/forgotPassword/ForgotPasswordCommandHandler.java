@@ -1,7 +1,7 @@
 package com.shop.clothing.auth.commands.forgotPassword;
 
 import com.shop.clothing.auth.JWT.JwtService;
-import com.shop.clothing.auth.repository.UserRepository;
+import com.shop.clothing.auth.repository.IUserRepository;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.config.AppProperties;
@@ -18,13 +18,13 @@ import java.util.concurrent.CompletableFuture;
 @AllArgsConstructor
 public class ForgotPasswordCommandHandler implements IRequestHandler<ForgotPasswordCommand, Void> {
     private final JwtService jwtService;
-    private final UserRepository userRepository;
+    private final IUserRepository IUserRepository;
     private final MailService mailService;
     private final AppProperties appProperties;
 
     @Override
     public HandleResponse<Void> handle(ForgotPasswordCommand forgotPasswordCommand){
-        var user = userRepository.findByEmail(forgotPasswordCommand.email());
+        var user = IUserRepository.findByEmail(forgotPasswordCommand.email());
         if (user.isEmpty()) {
             return HandleResponse.error("Email không tồn tại");
         }

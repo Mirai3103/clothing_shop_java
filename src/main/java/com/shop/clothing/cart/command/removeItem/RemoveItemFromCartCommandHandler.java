@@ -1,10 +1,8 @@
 package com.shop.clothing.cart.command.removeItem;
 
-import com.shop.clothing.auth.repository.UserRepository;
 import com.shop.clothing.cart.CartRepository;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
-import com.shop.clothing.config.CurrentUserService;
 import com.shop.clothing.config.ICurrentUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

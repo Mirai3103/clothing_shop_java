@@ -1,7 +1,7 @@
 package com.shop.clothing.user.command.updatePassword;
 
 
-import com.shop.clothing.auth.repository.UserRepository;
+import com.shop.clothing.auth.repository.IUserRepository;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.config.ICurrentUserService;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UpdatePasswordCommandHandler implements IRequestHandler<UpdatePasswordCommand, Void> {
     private final PasswordEncoder passwordEncoder;
     private final ICurrentUserService currentUserService;
-    private final UserRepository userRepository;
+    private final IUserRepository IUserRepository;
 
     @Override
     @Transactional
@@ -24,7 +24,7 @@ public class UpdatePasswordCommandHandler implements IRequestHandler<UpdatePassw
         if (userId.isEmpty()) {
             return HandleResponse.error("Bạn chưa đăng nhập");
         }
-        var user = userRepository.findById(userId.get());
+        var user = IUserRepository.findById(userId.get());
         if (user.isEmpty()) {
             return HandleResponse.error("Không tìm thấy người dùng");
         }
@@ -33,7 +33,7 @@ public class UpdatePasswordCommandHandler implements IRequestHandler<UpdatePassw
             return HandleResponse.error("Mật khẩu cũ không đúng");
         }
         userEntity.setPasswordHash(passwordEncoder.encode(updatePasswordCommand.getNewPassword()));
-        userRepository.save(userEntity);
+        IUserRepository.save(userEntity);
         return HandleResponse.ok();
     }
 }

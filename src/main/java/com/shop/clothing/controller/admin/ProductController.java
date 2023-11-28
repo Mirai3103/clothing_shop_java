@@ -9,6 +9,7 @@ import com.shop.clothing.product.query.getDeletedProductOptionsByProductId.GetDe
 import com.shop.clothing.product.query.getProductById.GetProductByIdQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Controller
 @RequestMapping("/admin/product")
-
+@Secured("PRODUCT_MANAGEMENT")
 public class ProductController {
     private final ISender sender;
 
     @GetMapping()
-    @PreAuthorize("hasAnyAuthority('PRODUCT_MANAGEMENT')")
     public String getProducts(Model model, GetAllProductsQuery getAllProductsQuery) {
         var allProducts = sender.send(getAllProductsQuery).get();
         var query = new GetAllCategoriesQueries();
@@ -36,7 +36,6 @@ public class ProductController {
     }
 
     @GetMapping("/create")
-    @PreAuthorize("hasAnyAuthority('PRODUCT_MANAGEMENT')")
     public String createProduct(Model model) {
         var query = new GetAllCategoriesQueries();
         query.setPageSize(1000);

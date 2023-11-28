@@ -1,7 +1,7 @@
 package com.shop.clothing.auth;
 
 import com.shop.clothing.user.entity.User;
-import com.shop.clothing.auth.repository.UserRepository;
+import com.shop.clothing.auth.repository.IUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,20 +15,20 @@ import org.springframework.stereotype.Service;
 @Service("userDetailsService")
 @Transactional
 public class UserDetailServiceImpl implements UserDetailsService, UserDetailsPasswordService {
-    private UserRepository userRepository;
+    private IUserRepository IUserRepository;
     private PasswordEncoder passwordEncoder;
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        var useByEmail = userRepository.findByEmail(username);
+        var useByEmail = IUserRepository.findByEmail(username);
         if (useByEmail.isPresent()) {
             return useByEmail.get();
         }
-        var userByPhoneNumber = userRepository.findByPhoneNumber(username);
+        var userByPhoneNumber = IUserRepository.findByPhoneNumber(username);
         if (userByPhoneNumber.isPresent()) {
             return userByPhoneNumber.get();
         }
-        var userById = userRepository.findById(username);
+        var userById = IUserRepository.findById(username);
         if (userById.isPresent()) {
             return userById.get();
         }
@@ -38,12 +38,12 @@ public class UserDetailServiceImpl implements UserDetailsService, UserDetailsPas
 
     @Override
     public UserDetails updatePassword(UserDetails user, String newPassword) {
-        var userEntity = userRepository.findByEmail(user.getUsername());
+        var userEntity = IUserRepository.findByEmail(user.getUsername());
         if (userEntity.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
         userEntity.get().setPasswordHash(passwordEncoder.encode(newPassword));
-        userRepository.save(userEntity.get());
+        IUserRepository.save(userEntity.get());
         return userEntity.get();
     }
 }

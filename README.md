@@ -58,9 +58,7 @@ npm run watch:css
 
 | Chức năng                  |     |
 | -------------------------- | --- |
-| Tìm kiếm sản phẩm          |     |
 | Báo cáo theo sản phẩm      |     |
-| Báo cáo theo danh mục      |     |
 | Quản lý đánh giá           |     |
 | Trang dashboard            |     |
 | Xác thực quyền             |     |

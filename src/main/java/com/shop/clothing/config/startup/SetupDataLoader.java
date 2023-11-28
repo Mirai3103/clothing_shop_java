@@ -3,10 +3,9 @@ package com.shop.clothing.config.startup;
 import com.shop.clothing.auth.Permissions;
 import com.shop.clothing.auth.entity.Permission;
 import com.shop.clothing.auth.entity.Role;
-import com.shop.clothing.user.entity.User;
 import com.shop.clothing.auth.repository.PermissionRepository;
 import com.shop.clothing.auth.repository.RoleRepository;
-import com.shop.clothing.auth.repository.UserRepository;
+import com.shop.clothing.auth.repository.IUserRepository;
 import com.shop.clothing.auth.commands.permission.createPermission.CreatePermissionCommand;
 import com.shop.clothing.common.Cqrs.ISender;
 import jakarta.transaction.Transactional;
@@ -24,7 +23,7 @@ public class SetupDataLoader implements
 
     boolean alreadySetup = false;
 
-    private final UserRepository userRepository;
+    private final IUserRepository IUserRepository;
 
 
     private final ISender sender;
@@ -32,13 +31,13 @@ public class SetupDataLoader implements
 
     private final PasswordEncoder passwordEncoder;
     private final SeedCategory seedCategory;
-    private final UserRepository userRepo;
+    private final IUserRepository userRepo;
     private final PermissionRepository permissionRepository;
     private final RoleRepository roleRepository;
 
 
-    public SetupDataLoader(UserRepository userRepository, ISender roleService, PasswordEncoder passwordEncoder, SeedCategory seedCategory, UserRepository userRepo, PermissionRepository permissionRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
+    public SetupDataLoader(IUserRepository IUserRepository, ISender roleService, PasswordEncoder passwordEncoder, SeedCategory seedCategory, IUserRepository userRepo, PermissionRepository permissionRepository, RoleRepository roleRepository) {
+        this.IUserRepository = IUserRepository;
         this.sender = roleService;
         this.passwordEncoder = passwordEncoder;
         this.seedCategory = seedCategory;
@@ -129,7 +128,8 @@ public class SetupDataLoader implements
         createPermissionIfNotFound(Permissions.REPORT_MANAGEMENT.toString(), "Quản lý báo cáo", "Quyền quản lý báo cáo.");
         createPermissionIfNotFound(Permissions.ROLE_MANAGEMENT.toString(), "Quản lý vai trò", "Quyền quản lý vai trò.");
         createPermissionIfNotFound(Permissions.CAN_ORDER.toString(), "Đặt hàng", "Quyền đặt hàng.");
-        createPermissionIfNotFound(Permissions.ADMIN_DASHBOARD.toString(), "Đặt hàng", "Quyền đặt hàng.");
+        createPermissionIfNotFound(Permissions.ADMIN_DASHBOARD.toString(), "Trang quản trị", "Quyền truy cập trang quản trị.");
+        createPermissionIfNotFound(Permissions.SHOP_INFO_MANAGEMENT.toString(), "Thông tin cửa hàng", "Quyền quản lý thông tin cửa hàng.");
 
     }
 }

@@ -63,12 +63,16 @@ async function createUser() {
   });
   // create 1000 users
   await prisma.$connect();
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 10; i++) {
     const user = await createUser();
     await prisma.user.create({
       data: user,
     });
-    const sql = `INSERT INTO clothing_shop.user_roles VALUES ('${user.user_id}', 'ROLE_CUSTOMER');`;
+    const sql = `INSERT INTO user_roles(user_id, normalized_name) VALUES ('${user.user_id}', 'ROLE_CUSTOMER')`;
     await connection.execute(sql);
   }
-})();
+  await prisma.$disconnect();
+  await connection.end();
+})().then(() => {
+  console.log("done");
+});

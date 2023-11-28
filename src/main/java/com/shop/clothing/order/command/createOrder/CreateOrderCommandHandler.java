@@ -94,7 +94,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
                 .toAddress(createOrderCommand.getAddress())
                 .toPhone(createOrderCommand.getPhoneNumber())
                 .build();
-        var deliveryOrder = deliveryService.createOrder(createDeliveryOrder);
+//        var deliveryOrder = deliveryService.createOrder(createDeliveryOrder);
 
         var newOrder = Order.builder().orderId(orderId)
                 .address(createOrderCommand.getAddress())
@@ -131,7 +131,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
             try {
                 mailService.sendEmail(newOrder.getEmail(), "Đặt hàng thành công", "<h1>Đặt hàng thành công</h1> <p>Mã đơn hàng của bạn là: " + newOrder.getOrderId() + "</p>");
             } catch (MessagingException e) {
-                throw new RuntimeException(e);
+                System.err.println("Cannot send email");
             }
         });
         return HandleResponse.ok(newOrder.getOrderId());

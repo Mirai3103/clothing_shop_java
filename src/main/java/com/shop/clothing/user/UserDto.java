@@ -1,5 +1,6 @@
 package com.shop.clothing.user;
 
+import com.shop.clothing.auth.dto.RoleDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Date;
 @Setter
 @Getter
 @NoArgsConstructor
-public class UserDto extends UserBriefDto{
+public class UserDto extends UserBriefDto {
 
 
     private String email;
@@ -28,6 +29,7 @@ public class UserDto extends UserBriefDto{
     private boolean isCustomer = true;
     private Date createdAt = new Date();
     private Collection<String> permissions;
+    private Collection<RoleDto> roles;
 
     public String toJsonObject() {
         return "{" +

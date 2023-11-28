@@ -17,7 +17,15 @@ async function insert(item) {
     });
     console.log("inserted category: ", existCategory.category_id);
   }
-
+  const existProductSlug = await prisma.product.findFirst({
+    where: {
+      slug: toSlug(item.title.trim()),
+    },
+  });
+  if (existProductSlug) {
+    console.log("product already exist: ", existProductSlug.product_id);
+    return;
+  }
   const product = await prisma.product.create({
     data: {
       description: item.features + "\n\n" + item.description,

@@ -20,9 +20,14 @@ public class GetAllCategoriesGroupByParentQueryHandler implements IRequestHandle
     @Override
     @Transactional(readOnly = true)
     public HandleResponse<List<CategoryDetailDto>> handle(GetAllCategoriesGroupByParentQuery getAllCategoriesGroupByParentQuery) throws Exception {
-        var categories = categoryRepository.findAllByParentCategoryIdIsNull();
+        var categories = categoryRepository.findAllByParentCategoryIdIsNull().stream().toList();
         var categoryDetailDtos = categories.stream().map(category -> {
-            category.getChildren().forEach(child -> child.setParent(null));
+            category.getChildren().forEach(child -> {
+                child.setParent(null);
+                child.getChildren().forEach(grandChild -> {
+                    grandChild.setParent(null);
+                });
+            });
             var dto = modelMapper.map(category, CategoryDetailDto.class);
             dto.setParent(null);
             return dto;

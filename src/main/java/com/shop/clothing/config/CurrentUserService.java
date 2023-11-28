@@ -3,6 +3,7 @@ package com.shop.clothing.config;
 import com.shop.clothing.user.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,22 +16,23 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CurrentUserService implements ICurrentUserService {
     private final UserDetailsService userDetailsService;
+
     @Override
     public Optional<String> getCurrentUserId() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
+        if (authentication instanceof AnonymousAuthenticationToken) {
             return Optional.empty();
         }
-        return Optional.ofNullable( ((User)authentication.getPrincipal()).getUserId());
+        return Optional.ofNullable(((User) authentication.getPrincipal()).getUserId());
     }
 
 
     public Optional<UserDetails> getCurrentUser() {
-        System.out.println("getCurrentUser");
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
+
+        if (authentication instanceof AnonymousAuthenticationToken) {
             return Optional.empty();
         }
-        return Optional.ofNullable(userDetailsService.loadUserByUsername(authentication.getName()));
+        return Optional.ofNullable((UserDetails) authentication.getPrincipal());
     }
 }

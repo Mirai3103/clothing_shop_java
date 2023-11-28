@@ -4,10 +4,12 @@ import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.product.query.advanceSearchProduct.AdvanceSearchAllProductsQuery;
 import com.shop.clothing.product.query.getAllProducts.GetAllProductsQuery;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequestMapping("/")
 @Controller
@@ -22,7 +24,7 @@ public class Home {
 
     @GetMapping("/test")
     public String test() {
-        return "index";
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "User not found");
     }
 
     @GetMapping("/home")

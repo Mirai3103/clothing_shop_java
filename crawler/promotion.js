@@ -17,15 +17,10 @@ async function genPromotionCode() {
   var newCode = {
     code,
     active: true,
-    created_date: faker.date.past({
-      years: 1,
-      refDate: new Date(),
-    }),
     type: faker.number.int({
       min: 0,
       max: 1,
     }),
-    deleted_date: null,
     discount: 0,
     min_order_amount: faker.number.int({
       min: 0,
@@ -62,7 +57,9 @@ async function genPromotionCode() {
     });
     newCode.max_value = null;
   }
-  newCode.description = faker.commerce.productDescription();
+  newCode.description = `Giảm ${newCode.discount}đ cho đơn hàng từ ${newCode.min_order_amount}đ, ${
+    newCode.type == 0 ? "tối đa " + newCode.max_value + "đ" : ""
+  }`;
   newCode.name = `Mã giảm ${newCode.type == 0 ? newCode.discount + "%" : newCode.discount + "đ"}`;
 
   const existCode = await prisma.promotion.findFirst({

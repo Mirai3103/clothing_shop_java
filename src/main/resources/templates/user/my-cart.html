@@ -42,10 +42,10 @@
                     try {
                         const result = await window.apiClient.removeItemFromCart(id);
                         this.cartItems = this.cartItems.filter((item) => item.productOptionId !== id);
-                        $store.toast.add('success', 'Thành công', 'Xóa sản phẩm khỏi giỏ hàng thành công');
+                        Alpine.store('toast').add('success', 'Thành công', 'Xóa sản phẩm khỏi giỏ hàng thành công');
 
                     } catch (e) {
-                        $store.toast.add('error', 'Thất bại', error.response.data.message);
+                        Alpine.store('toast').add('error', 'Thất bại', e.response.error);
                     }
                 },
                 onChangeQuantity: async function (id, quantity) {
@@ -59,14 +59,14 @@
                         );
 
                         this.cartItems = this.cartItems.map((item) => {
-                            if (item.productOptionId == id) {
+                            if (item.productOptionId === id) {
                                 item.quantity = quantity;
                             }
                             return item;
                         });
                     } catch (e) {
                         console.log(e);
-                        $store.toast.add('error', 'Thất bại', error.response.data.message);
+                        Alpine.store('toast').add('error', 'Thất bại', e.response.error);
                     }
                     this.isUpdating = false;
                 },

@@ -4,7 +4,7 @@ import com.shop.clothing.user.entity.User;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.auth.repository.RoleRepository;
-import com.shop.clothing.auth.repository.UserRepository;
+import com.shop.clothing.auth.repository.IUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,13 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class RegisterCommandHandler  implements IRequestHandler<RegisterCommand, User>{
-    private final UserRepository userRepository;
+    private final IUserRepository IUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     @Override
     @Transactional
     public HandleResponse<User> handle(RegisterCommand registerCommand) {
-        var existedUser = userRepository.findByEmail(registerCommand.getEmail());
+        var existedUser = IUserRepository.findByEmail(registerCommand.getEmail());
         if (existedUser.isPresent()) {
             return HandleResponse.error("Email đã tồn tại");
         }
@@ -36,7 +36,7 @@ public class RegisterCommandHandler  implements IRequestHandler<RegisterCommand,
                 .roles(List.of(roleRepository.findByName("ROLE_CUSTOMER").orElseThrow()))
                 .build();
 
-        userRepository.save(user);
+        IUserRepository.save(user);
         return HandleResponse.ok(user);
     }
 }
