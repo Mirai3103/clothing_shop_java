@@ -19,4 +19,9 @@ public class ReportController {
     public String getRevenueReport(){
         return "admin/report/revenue";
     }
+
+    @GetMapping("/product")
+    public String getProductReport(){
+        return "admin/report/product";
+    }
 }

@@ -43,7 +43,7 @@ public class OrderItem {
     @Column(updatable = false, nullable = false,name = "product_option_id")
     private int productOptionId;
     private int quantity;
-    private double price;
+    private int price;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_option_id", insertable = false, updatable = false)

@@ -1,5 +1,6 @@
 package com.shop.clothing.report.dto;
 
+import com.shop.clothing.product.dto.ProductBriefDto;
 import com.shop.clothing.product.dto.ProductOptionDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class ProductReportDto {
-    private Date date;
-    private ProductOptionDetailDto productOption;
+    private ProductBriefDto product;
     private int totalSold;
+    private int totalRevenue;
 }

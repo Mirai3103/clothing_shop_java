@@ -2,6 +2,7 @@ package com.shop.clothing.product.repository;
 
 import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.product.entity.Product;
+import jakarta.persistence.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -85,4 +88,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Modifying
     @Query("UPDATE Product p SET p.totalSold = 0 WHERE p.totalSold IS NULL")
     void updateTotalToZeroWhereSoldIsNull();
+
+    @Query(value = "SELECT p.name AS name, p.product_id AS productId, p.display_image AS displayImage, CAST(SUM(oi.quantity) AS int) AS total_sold, CAST(SUM(oi.quantity * oi.price) AS int) AS total_revenue FROM product p JOIN product_option po ON po.product_product_id = p.product_id JOIN order_item oi ON oi.product_option_id = po.product_option_id JOIN `_order` o ON o.order_id = oi.order_id WHERE o.completed_date IS NOT NULL AND o.completed_date >= ?1 AND o.completed_date <= ?2 GROUP BY p.product_id", nativeQuery = true)
+    List<Tuple> getSoldReport(LocalDate startDate, LocalDate endDate);
 }
