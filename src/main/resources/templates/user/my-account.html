@@ -275,7 +275,11 @@
           </div>
         </div>
 
-        <div class="col-span-2">
+        <div class="col-span-2"
+        x-data="{
+            errors: {}
+        }"
+        >
           <div
             class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 sm:p-6"
             x-data="addressPicker"
@@ -325,7 +329,9 @@
                             window.apiClient.updateMyProfile(payload).then(res => {
                                $store.toast.add('success', 'Thành công','Cập nhật thông tin thành công');
                             }).catch(err => {
-                                console.log(err);
+                                errors ={...err.response.errors};
+                                $store.toast.add('error', 'Lỗi',err.response.error);
+
                             } );
                          "
             >
@@ -341,6 +347,7 @@
                     th:value="${user.firstName}"
                     required
                   />
+                  <p class="mt-2 text-sm text-red-600 dark:text-red-500" x-text="errors.firstName"></p>
                 </div>
                 <div class="col-span-6 sm:col-span-3">
                   <label for="lastname" class="block mb-2 text-sm font-medium text-gray-900"> Tên </label>
@@ -353,6 +360,7 @@
                     th:value="${user.lastName}"
                     required
                   />
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500" x-text="errors.lastName"></p>
                 </div>
                 <div th:replace="~{components/AddressPicker::addressPicker()} "></div>
                 <div class="col-span-6 sm:col-span-3">
@@ -366,6 +374,7 @@
                     required
                     th:value="${user.phoneNumber}"
                   />
+                   <p class="mt-2 text-sm text-red-600 dark:text-red-500" x-text="errors.phoneNumber"></p>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
@@ -379,6 +388,7 @@
                     required
                     th:value="${user.email}"
                   />
+                     <p class="mt-2 text-sm text-red-600 dark:text-red-500" x-text="errors.email"></p>
                 </div>
 
                 <div class="col-span-6 sm:col-full">

@@ -116,14 +116,10 @@
                 return;
             }
             commandForm.paymentMethod.value = checkedPayment.value;
-            commandForm.customerName.value = this.isUseMyAddress? myFullName:document.getElementById('name').value;
-            commandForm.phoneNumber.value =  this.isUseMyAddress? myPhoneNumber:document.getElementById('phone-number').value;
-            commandForm.address.value =  this.isUseMyAddress?myAddress:this.getfullAddress();
             commandForm.note.value = ''
             commandForm.promotionCode.value = this.promotion?.code ||'';
             commandForm.email.value =  this.isUseMyAddress?myEmail:document.getElementById('email').value;
             console.log(this.getfullAddress()) ;
-            alert(commandForm.address.value+' ' + commandForm.customerName.value);
             commandForm.submit();
             }
         }"
@@ -198,10 +194,13 @@
                                         class="flex m-2 p-4 rounded-md bg-gray-200 gap-y-1 items-center"
                                         :class="{'hidden':!promotion}"
                                 >
-                                    <h3
-                                            class="text-xl grow font-bold leading-tight tracking-tight text-gray-900"
-                                            x-text="promotion?.name"
-                                    ></h3>
+                                    <div>
+                                        <h3
+                                                class="text-xl grow font-bold leading-tight tracking-tight text-gray-900"
+                                                x-text="promotion?.name"
+                                        ></h3>
+                                        <p class="text-sm text-gray-500 mt-2" x-text="promotion?.description"></p>
+                                    </div>
                                     <button
                                             type="button"
                                             @click="promotion = null"
@@ -290,6 +289,7 @@
 
                                 <div class="flex w-full mt-2 justify-center">
                                     <button
+
                                             type="submit"
 
                                             class="text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-md text-xl px-5 py-2.5 text-center mb-2"
@@ -307,7 +307,13 @@
                         $watch('isUseMyAddress', value => {
                             if(value){
                                 if(myAddress){
+                                        const commandForm = document.getElementById('commandForm');
 
+                                    commandForm.customerName.value = isUseMyAddress? myFullName:document.getElementById('name').value;
+                                    commandForm.phoneNumber.value =  isUseMyAddress? myPhoneNumber:document.getElementById('phone-number').value;
+                                    commandForm.address.value =  isUseMyAddress?myAddress:getfullAddress();
+                                    commandForm.note.value = ''
+                                    commandForm.email.value =  isUseMyAddress?myEmail:document.getElementById('email').value;
                                     getShipService(myAddress);
                                 }
                                 else{
@@ -347,11 +353,14 @@
                                     <input hidden="hidden" type="text" th:field="*{address}" name="address"/>
 
                                     <input hidden="hidden" type="text" th:field="*{note}"/>
-                                    <input hidden="hidden" type="text" th:field="*{promotionCode}" name="promotionCode"/>
-                                    <input hidden="hidden" type="text" th:field="*{paymentMethod}" name="paymentMethod"/>
-                                    <input hidden="hidden" type="text" th:field="*{shipServiceId}" name="shipServiceId"/>
+                                    <input hidden="hidden" type="text" th:field="*{promotionCode}"
+                                           name="promotionCode"/>
+                                    <input hidden="hidden" type="text" th:field="*{paymentMethod}"
+                                           name="paymentMethod"/>
+                                    <input hidden="hidden" type="text" th:field="*{shipServiceId}"
+                                           name="shipServiceId"/>
 
-                                    <div x-show="!isUseMyAddress" >
+                                    <div x-show="!isUseMyAddress">
                                         <div class="my-6">
                                             <label for="name"
                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -385,7 +394,7 @@
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                             />
                                             <p class="mt-2 text-sm text-red-600 "
-                                              >
+                                            >
                                                 <span th:errors="*{phoneNumber}"> </span>
                                             </p>
 
@@ -403,12 +412,12 @@
                                                     th:field="*{email}" name="email"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                             />
-                                            <p class="mt-2 text-sm text-red-600 " >
+                                            <p class="mt-2 text-sm text-red-600 ">
                                                 <span th:errors="*{email}"> </span>
                                             </p>
                                         </div>
                                         <div th:replace="~{components/AddressPicker::addressPicker()} "></div>
-                                        <p class="mt-2 text-sm text-red-600 " >
+                                        <p class="mt-2 text-sm text-red-600 ">
                                             <span th:errors="*{address}"> </span>
                                         </p>
                                         <div class="flex w-full mt-4 justify-end">

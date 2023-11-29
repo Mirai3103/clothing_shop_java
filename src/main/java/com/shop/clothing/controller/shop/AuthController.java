@@ -108,11 +108,7 @@ public class AuthController {
             // redirect to login page
             return "redirect:/auth/login";
         }
-        model.addAttribute("notification", NotificationDto.builder()
-                .title("Đăng ký thất bại")
-                .content(result.getError())
-                .type("error")
-                .build());
+        bindingResult.addError(new ObjectError("registerCommand", result.getError()));
         return "register";
     }
 }
