@@ -31,7 +31,7 @@ public class GetAllStockReceiptsQueryHandler implements IRequestHandler<GetAllSt
             predicates = criteriaBuilder.and(predicates, criteriaBuilder.lessThanOrEqualTo(root.get("createdDate"), getAllStockReceiptsQuery.getEndDateObject()));
         }
         if (getAllStockReceiptsQuery.getSupplierId() != null && getAllStockReceiptsQuery.getSupplierId() != 0) {
-            predicates = criteriaBuilder.and(predicates, criteriaBuilder.equal(root.get("supplierId"), getAllStockReceiptsQuery.getSupplierId()));
+            predicates = criteriaBuilder.and(predicates, criteriaBuilder.equal(root.get("supplier.supplierId"), getAllStockReceiptsQuery.getSupplierId()));
         }
         if (getAllStockReceiptsQuery.getTotalFrom() != 0) {
             predicates = criteriaBuilder.and(predicates, criteriaBuilder.greaterThanOrEqualTo(root.get("total"), getAllStockReceiptsQuery.getTotalFrom()));
