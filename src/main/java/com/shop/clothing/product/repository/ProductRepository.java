@@ -18,6 +18,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     // has id in array
     List<Product> findByProductIdIn(Collection<Integer> productId);
 
+    @Query(value = "SELECT * FROM product p WHERE p.deleted_date IS NULL", nativeQuery = true)
+    Optional<Product> findByIdIncludeDeleted(int id);
+
     Optional<Product> findBySlug(String slug);
 
     @Modifying
@@ -61,15 +64,16 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "AND (:forGender is null or p.for_gender = :forGender)" +
             "AND (:keyword is null or p.name LIKE  CONCAT('%', :keyword ,'%'))",
             countQuery =
-            "select count(*) from product p " +
-            " WHERE (:categoryId is null OR p.category_category_id = :categoryId)" +
-            "         AND (:minPrice IS NULL OR p.price >= :minPrice)" +
-            "         AND (:maxPrice IS NULL OR p.price <= :maxPrice)" +
-                    "AND (:forGender is null or p.for_gender = :forGender)" +
-                    "AND (:keyword is null or p.name LIKE  CONCAT('%', :keyword ,'%'))"
+                    "select count(*) from product p " +
+                            " WHERE (:categoryId is null OR p.category_category_id = :categoryId)" +
+                            "         AND (:minPrice IS NULL OR p.price >= :minPrice)" +
+                            "         AND (:maxPrice IS NULL OR p.price <= :maxPrice)" +
+                            "AND (:forGender is null or p.for_gender = :forGender)" +
+                            "AND (:keyword is null or p.name LIKE  CONCAT('%', :keyword ,'%'))"
 
     )
     Page<Product> simpleSearch(String keyword, Integer categoryId, Product.ProductGender forGender, Integer minPrice, Integer maxPrice, Pageable pageable);
+
     @Modifying
     @Query("UPDATE Product p SET p.totalSold =  (" +
             "SELECT SUM(oi.quantity) FROM OrderItem oi " +
@@ -77,6 +81,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "WHERE oi.productOption.product.productId = p.productId AND o.status IN :statuses" +
             ")")
     void updateTotalSold(OrderStatus[] statuses);
+
     @Modifying
     @Query("UPDATE Product p SET p.totalSold = 0 WHERE p.totalSold IS NULL")
     void updateTotalToZeroWhereSoldIsNull();

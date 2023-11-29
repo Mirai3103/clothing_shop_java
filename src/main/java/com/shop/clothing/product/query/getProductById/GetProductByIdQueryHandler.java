@@ -16,7 +16,7 @@ public class GetProductByIdQueryHandler implements IRequestHandler<GetProductByI
 
     @Override
     public HandleResponse<ProductDetailDto> handle(GetProductByIdQuery getProductBySlugQuery) {
-        var product = productRepository.findById(getProductBySlugQuery.id());
+        var product = productRepository.findByIdIncludeDeleted(getProductBySlugQuery.id());
         if (product.isEmpty()) {
             return HandleResponse.ok(null);
         }
