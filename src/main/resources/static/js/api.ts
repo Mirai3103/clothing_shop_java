@@ -5804,9 +5804,9 @@ class ProductBriefDto implements IProductBriefDto {
     totalSold?: number;
     averageRating?: number;
     finalPrice?: number;
-    vietnamesePrice?: string;
-    averageRatingDisplay?: number;
     forGenderDisplay?: string;
+    averageRatingDisplay?: number;
+    vietnamesePrice?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -5839,9 +5839,9 @@ class ProductBriefDto implements IProductBriefDto {
             this.totalSold = _data["totalSold"];
             this.averageRating = _data["averageRating"];
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
-            this.averageRatingDisplay = _data["averageRatingDisplay"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.averageRatingDisplay = _data["averageRatingDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -5872,9 +5872,9 @@ class ProductBriefDto implements IProductBriefDto {
         data["totalSold"] = this.totalSold;
         data["averageRating"] = this.averageRating;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
-        data["averageRatingDisplay"] = this.averageRatingDisplay;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["averageRatingDisplay"] = this.averageRatingDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -5894,9 +5894,9 @@ interface IProductBriefDto {
     totalSold?: number;
     averageRating?: number;
     finalPrice?: number;
-    vietnamesePrice?: string;
-    averageRatingDisplay?: number;
     forGenderDisplay?: string;
+    averageRatingDisplay?: number;
+    vietnamesePrice?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -6315,8 +6315,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
     weightInGram?: number;
     toDistrict?: string;
     toProvince?: string;
-    toDetailAddress?: string;
     toWard?: string;
+    toDetailAddress?: string;
 
     [key: string]: any;
 
@@ -6344,8 +6344,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
             this.toProvince = _data["toProvince"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
         }
     }
 
@@ -6371,8 +6371,8 @@ class GetDeliveryOptionQuery implements IGetDeliveryOptionQuery {
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
         data["toProvince"] = this.toProvince;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
         return data;
     }
 }
@@ -6387,8 +6387,8 @@ interface IGetDeliveryOptionQuery {
     weightInGram?: number;
     toDistrict?: string;
     toProvince?: string;
-    toDetailAddress?: string;
     toWard?: string;
+    toDetailAddress?: string;
 
     [key: string]: any;
 }
@@ -7157,8 +7157,8 @@ class UserDto implements IUserDto {
     permissions?: string[];
     roles?: RoleDto[];
     emailVerified?: boolean;
-    accountEnabled?: boolean;
     customer?: boolean;
+    accountEnabled?: boolean;
 
     [key: string]: any;
 
@@ -7196,8 +7196,8 @@ class UserDto implements IUserDto {
                     this.roles!.push(RoleDto.fromJS(item));
             }
             this.emailVerified = _data["emailVerified"];
-            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
+            this.accountEnabled = _data["accountEnabled"];
         }
     }
 
@@ -7233,8 +7233,8 @@ class UserDto implements IUserDto {
                 data["roles"].push(item.toJSON());
         }
         data["emailVerified"] = this.emailVerified;
-        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        data["accountEnabled"] = this.accountEnabled;
         return data;
     }
 }
@@ -7251,8 +7251,8 @@ interface IUserDto {
     permissions?: string[];
     roles?: RoleDto[];
     emailVerified?: boolean;
-    accountEnabled?: boolean;
     customer?: boolean;
+    accountEnabled?: boolean;
 
     [key: string]: any;
 }
@@ -8150,9 +8150,9 @@ class ProductDetailDto implements IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
-    vietnamesePrice?: string;
-    averageRatingDisplay?: number;
     forGenderDisplay?: string;
+    averageRatingDisplay?: number;
+    vietnamesePrice?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -8196,9 +8196,9 @@ class ProductDetailDto implements IProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
-            this.averageRatingDisplay = _data["averageRatingDisplay"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.averageRatingDisplay = _data["averageRatingDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -8240,9 +8240,9 @@ class ProductDetailDto implements IProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
-        data["averageRatingDisplay"] = this.averageRatingDisplay;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["averageRatingDisplay"] = this.averageRatingDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -8265,9 +8265,9 @@ interface IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
-    vietnamesePrice?: string;
-    averageRatingDisplay?: number;
     forGenderDisplay?: string;
+    averageRatingDisplay?: number;
+    vietnamesePrice?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;

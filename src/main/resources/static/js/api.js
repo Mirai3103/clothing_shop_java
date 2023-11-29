@@ -5005,9 +5005,9 @@ class ProductBriefDto {
             this.totalSold = _data["totalSold"];
             this.averageRating = _data["averageRating"];
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
-            this.averageRatingDisplay = _data["averageRatingDisplay"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.averageRatingDisplay = _data["averageRatingDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -5036,9 +5036,9 @@ class ProductBriefDto {
         data["totalSold"] = this.totalSold;
         data["averageRating"] = this.averageRating;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
-        data["averageRatingDisplay"] = this.averageRatingDisplay;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["averageRatingDisplay"] = this.averageRatingDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -5334,8 +5334,8 @@ class GetDeliveryOptionQuery {
             this.weightInGram = _data["weightInGram"];
             this.toDistrict = _data["toDistrict"];
             this.toProvince = _data["toProvince"];
-            this.toDetailAddress = _data["toDetailAddress"];
             this.toWard = _data["toWard"];
+            this.toDetailAddress = _data["toDetailAddress"];
         }
     }
     static fromJS(data) {
@@ -5359,8 +5359,8 @@ class GetDeliveryOptionQuery {
         data["weightInGram"] = this.weightInGram;
         data["toDistrict"] = this.toDistrict;
         data["toProvince"] = this.toProvince;
-        data["toDetailAddress"] = this.toDetailAddress;
         data["toWard"] = this.toWard;
+        data["toDetailAddress"] = this.toDetailAddress;
         return data;
     }
 }
@@ -5912,8 +5912,8 @@ class UserDto {
                     this.roles.push(RoleDto.fromJS(item));
             }
             this.emailVerified = _data["emailVerified"];
-            this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
+            this.accountEnabled = _data["accountEnabled"];
         }
     }
     static fromJS(data) {
@@ -5947,8 +5947,8 @@ class UserDto {
                 data["roles"].push(item.toJSON());
         }
         data["emailVerified"] = this.emailVerified;
-        data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        data["accountEnabled"] = this.accountEnabled;
         return data;
     }
 }
@@ -6565,9 +6565,9 @@ class ProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
-            this.averageRatingDisplay = _data["averageRatingDisplay"];
             this.forGenderDisplay = _data["forGenderDisplay"];
+            this.averageRatingDisplay = _data["averageRatingDisplay"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -6607,9 +6607,9 @@ class ProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
-        data["vietnamesePrice"] = this.vietnamesePrice;
-        data["averageRatingDisplay"] = this.averageRatingDisplay;
         data["forGenderDisplay"] = this.forGenderDisplay;
+        data["averageRatingDisplay"] = this.averageRatingDisplay;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }

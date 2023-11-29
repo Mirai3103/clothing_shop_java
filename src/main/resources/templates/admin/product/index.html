@@ -62,10 +62,10 @@
                     deep: true
                   });
                      "
-
       >
-        <div class="mx-auto max-w-screen-2xl px-4 lg:px-12"
-        x-data="{
+        <div
+          class="mx-auto max-w-screen-2xl px-4 lg:px-12"
+          x-data="{
            setDeleted: function (id, isDeleted) {
                const index = this.data.findIndex((item) => item.productId === id);
               if (index === -1) {
@@ -132,7 +132,6 @@
                       id="simple-search"
                       placeholder="Search for products"
                       @input.debounce.1000ms="queryData.keyword = $event.target.value"
-
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2"
                     />
                   </div>
@@ -195,9 +194,10 @@
                     />
                   </svg>
                 </button>
-                <div id="filterDropdown" class="z-10 hidden px-3 pt-1 bg-white rounded-lg shadow w-80 right-0"
-
-                     x-data="{
+                <div
+                  id="filterDropdown"
+                  class="z-10 hidden px-3 pt-1 bg-white rounded-lg shadow w-80 right-0"
+                  x-data="{
                                 onApplyFilter(){
                                     const categoryFilter = document.getElementById('category-filter').value
                                     const genderFilter = document.getElementById('gender-filter').value
@@ -223,59 +223,54 @@
 
                                 }
                                 }"
-                x-init="
+                  x-init="
                   setTimeout(()=> resetFilter(), 1000);
                 "
                 >
                   <div class="flex items-center justify-between pt-2">
                     <h6 class="text-sm font-medium text-black">Filters</h6>
                     <div class="flex items-center space-x-3">
-                      <button class="flex items-center text-sm font-medium text-primary-600 hover:underline"
-                                x-on:click="onApplyFilter()"
-                        >
-
+                      <button
+                        class="flex items-center text-sm font-medium text-primary-600 hover:underline"
+                        x-on:click="onApplyFilter()"
+                      >
                         Áp dụng lọc
-                      </button
+                      </button>
+                      <button
+                        x-on:click="clearFilter()"
+                        class="flex items-center text-sm font-medium text-primary-600 hover:underline"
                       >
-                      <button x-on:click="clearFilter()" class="flex items-center text-sm font-medium text-primary-600 hover:underline"
-                        >
-
-                      Xóa lọc
-                      </button
-                      >
+                        Xóa lọc
+                      </button>
                     </div>
-
                   </div>
                   <div
-                          id="accordion-flush"
-                          data-accordion="collapse"
-                          data-active-classes="text-black"
-                          data-inactive-classes="text-gray-500"
+                    id="accordion-flush"
+                    data-accordion="collapse"
+                    data-active-classes="text-black"
+                    data-inactive-classes="text-gray-500"
                   >
                     <h2 id="category-heading">
                       <button
-                              type="button"
-                              class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
-                              data-accordion-target="#category-body"
-                              aria-expanded="true"
-                              aria-controls="category-body"
+                        type="button"
+                        class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
+                        data-accordion-target="#category-body"
+                        aria-expanded="true"
+                        aria-controls="category-body"
                       >
-                        <span>
-
-                        Danh mục
-                        </span>
+                        <span> Danh mục </span>
                         <svg
-                                aria-hidden="true"
-                                data-accordion-icon=""
-                                class="w-5 h-5 rotate-180 shrink-0"
-                                fill="currentColor"
-                                viewbox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          data-accordion-icon=""
+                          class="w-5 h-5 rotate-180 shrink-0"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                           />
                         </svg>
                       </button>
@@ -283,8 +278,8 @@
                     <div id="category-body" class="hidden" aria-labelledby="category-heading">
                       <div class="py-2">
                         <select
-                                id="category-filter"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          id="category-filter"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         >
                           <option selected value="">Không chọn</option>
                           <th:block th:each="oCat : ${categories}">
@@ -296,25 +291,25 @@
                     <!-- Price -->
                     <h2 id="price-heading">
                       <button
-                              type="button"
-                              class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
-                              data-accordion-target="#price-body"
-                              aria-expanded="true"
-                              aria-controls="price-body"
+                        type="button"
+                        class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
+                        data-accordion-target="#price-body"
+                        aria-expanded="true"
+                        aria-controls="price-body"
                       >
                         <span>Khoảng giá</span>
                         <svg
-                                aria-hidden="true"
-                                data-accordion-icon=""
-                                class="w-5 h-5 rotate-180 shrink-0"
-                                fill="currentColor"
-                                viewbox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          data-accordion-icon=""
+                          class="w-5 h-5 rotate-180 shrink-0"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                           />
                         </svg>
                       </button>
@@ -323,59 +318,57 @@
                       <div class="flex items-center py-4 px-2 space-x-3 font-light border-b border-gray-200">
                         <div class="relative z-0 w-full mb-6 group">
                           <input
-                                  type="number"
-                                  name="amount-start"
-                                  id="amount-start"
-                                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                  placeholder=" "
-                                  required
+                            type="number"
+                            name="amount-start"
+                            id="amount-start"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                            required
                           />
                           <label
-                                  for="amount-start"
-                                  class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                          >Từ
+                            for="amount-start"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                            >Từ
                           </label>
                         </div>
                         <div class="relative z-0 w-full mb-6 group">
                           <input
-                                  type="number"
-                                  name="amount-end"
-                                  id="amount-end"
-                                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                  placeholder=" "
-                                  required
+                            type="number"
+                            name="amount-end"
+                            id="amount-end"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "
+                            required
                           />
                           <label
-                                  for="amount-end"
-                                  class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-                          >Đến</label
+                            for="amount-end"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                            >Đến</label
                           >
                         </div>
                       </div>
                     </div>
                     <h2 id="status-heading">
                       <button
-                              type="button"
-                              class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
-                              data-accordion-target="#status-body"
-                              aria-expanded="true"
-                              aria-controls="price-body"
+                        type="button"
+                        class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50"
+                        data-accordion-target="#status-body"
+                        aria-expanded="true"
+                        aria-controls="price-body"
                       >
-                        <span>
-                        Giới tính
-                        </span>
+                        <span> Giới tính </span>
                         <svg
-                                aria-hidden="true"
-                                data-accordion-icon=""
-                                class="w-5 h-5 rotate-180 shrink-0"
-                                fill="currentColor"
-                                viewbox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          data-accordion-icon=""
+                          class="w-5 h-5 rotate-180 shrink-0"
+                          fill="currentColor"
+                          viewbox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                           />
                         </svg>
                       </button>
@@ -383,23 +376,16 @@
                     <div id="status-body" class="hidden" aria-labelledby="status-heading">
                       <div class="py-2">
                         <select
-                                id="gender-filter"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          id="gender-filter"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 mb-2 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         >
                           <option selected value="">Không chọn</option>
-                          <option :value="ForGenders.FOR_BOTH">
-                            Cả nam và nữ
-                          </option>
-                          <option :value="ForGenders.FOR_MALE">
-                            Chỉ nam
-                          </option>
-                          <option :value="ForGenders.FOR_FEMALE">
-                            Chỉ nữ
-                          </option>
+                          <option :value="ForGenders.FOR_BOTH">Cả nam và nữ</option>
+                          <option :value="ForGenders.FOR_MALE">Chỉ nam</option>
+                          <option :value="ForGenders.FOR_FEMALE">Chỉ nữ</option>
                         </select>
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -409,40 +395,32 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="col" class="p-4">
-
                       <div class="flex items-center gap-x-1" @click="queryData.sortField = 'name';toggleSortDir()">
-                        <span>
-                        Sản phẩm
-                        </span>
+                        <span> Sản phẩm </span>
                         <span id="nameIcon"></span>
                       </div>
                     </th>
                     <th scope="col" class="p-4">Danh mục</th>
                     <th scope="col" class="p-4">
                       <div class="flex items-center gap-x-1" @click="queryData.sortField = 'price';toggleSortDir()">
-                        <span>
-                        Giá tiền
-                        </span>
+                        <span> Giá tiền </span>
                         <span id="priceIcon"></span>
                       </div>
                     </th>
                     <th scope="col" class="p-4">
                       <div class="flex items-center gap-x-1" @click="queryData.sortField = 'discount';toggleSortDir()">
-                        <span>
-                        Giá tiền
-                        </span>
+                        <span> Giá tiền </span>
                         <span id="discountIcon"></span>
                       </div>
                     </th>
                     <th scope="col" class="p-4">Giới tính</th>
+                    <th scope="col" class="p-4">Tạo lúc</th>
                     <th scope="col" class="p-4">
-                      Tạo lúc
-                    </th>
-                    <th scope="col" class="p-4">
-                      <div class="flex items-center gap-x-1" @click="queryData.sortField = 'deleted_date';toggleSortDir()">
-                        <span>
-                        Ẩn
-                        </span>
+                      <div
+                        class="flex items-center gap-x-1"
+                        @click="queryData.sortField = 'deleted_date';toggleSortDir()"
+                      >
+                        <span> Ẩn </span>
                         <span id="deletedDateIcon"></span>
                       </div>
                     </th>
@@ -452,7 +430,7 @@
                   <template x-for="p in data" :key="p.productId">
                     <tr class="border-b hover:bg-gray-100 cursor-pointer">
                       <th
-                        x-on:click="window.location.href = '/admin/product/' + p.productId+'/view' "
+                        x-on:click="p.deletedDate ==null &&window.location.href = '/admin/product/' + p.productId+'/view' "
                         scope="row"
                         class="cursor-pointer px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
                       >

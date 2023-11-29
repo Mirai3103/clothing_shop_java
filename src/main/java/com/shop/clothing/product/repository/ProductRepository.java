@@ -51,7 +51,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                                     Pageable pageable);
 
     @Modifying
-    @Query(value = "update Product p set p.deleted_date = null where p.product_id = ?1", nativeQuery = true)
+    @Query(value = "update product p set p.deleted_date = null where p.product_id = ?1", nativeQuery = true)
     void recoveryByProductId(int productId);
 
     @Query(nativeQuery = true, value = "select * from product p " +
