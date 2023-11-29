@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     // has id in array
     List<Product> findByProductIdIn(Collection<Integer> productId);
 
-    @Query(value = "SELECT * FROM product p WHERE p.deleted_date IS NULL and p.product_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM product p WHERE  p.product_id = ?1", nativeQuery = true)
     Optional<Product> findByIdIncludeDeleted(int id);
 
     Optional<Product> findBySlug(String slug);

@@ -6,6 +6,7 @@ import com.shop.clothing.product.dto.ProductDetailDto;
 import com.shop.clothing.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,7 @@ public class GetProductByIdQueryHandler implements IRequestHandler<GetProductByI
     public HandleResponse<ProductDetailDto> handle(GetProductByIdQuery getProductBySlugQuery) {
         var product = productRepository.findByIdIncludeDeleted(getProductBySlugQuery.id());
         if (product.isEmpty()) {
-            return HandleResponse.ok(null);
+            return HandleResponse.error("Product not found", HttpStatus.NOT_FOUND);
         }
         return HandleResponse.ok(modelMapper.map(product.get(), ProductDetailDto.class));
     }

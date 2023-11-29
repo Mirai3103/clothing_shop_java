@@ -51,7 +51,7 @@ public class ProductController {
     public String viewProduct(Model model, @PathVariable int id) {
 
         var query = new GetProductByIdQuery(id);
-        var product = sender.send(query).get();
+        var product = sender.send(query).orThrow();
         var deletedProductOptions = sender.send(new GetDeletedProductOptionsByProductId(id)).get();
         product.getProductOptions().addAll(deletedProductOptions);
         var colors = sender.send(new GetAllColorQuery()).get();
