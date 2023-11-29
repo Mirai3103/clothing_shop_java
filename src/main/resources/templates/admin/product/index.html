@@ -12,6 +12,13 @@
   <body>
     <div layout:fragment="content">
       <script src="/js/tableUtil.js"></script>
+      <script>
+        const GENDER_DISPLAY = {
+          FOR_MALE: "Cho nam",
+          FOR_FEMALE: "Cho nữ",
+          FOR_BOTH: "Cả nam và nữ",
+        };
+      </script>
       <section
         class="bg-gray-50 p-3 sm:p-5 antialiased"
         x-data="tableData({
@@ -430,7 +437,7 @@
                   <template x-for="p in data" :key="p.productId">
                     <tr class="border-b hover:bg-gray-100 cursor-pointer">
                       <th
-                        x-on:click="p.deletedDate ==null &&window.location.href = '/admin/product/' + p.productId+'/view' "
+                        x-on:click="if(p.deletedDate ==null)window.location.href = '/admin/product/' + p.productId+'/view' "
                         scope="row"
                         class="cursor-pointer px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
                       >
@@ -454,7 +461,7 @@
                       ></td>
                       <td
                         class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
-                        x-text="GENDER[p.forGender]"
+                        x-text="GENDER_DISPLAY[p.forGender]"
                       ></td>
 
                       <td
