@@ -434,7 +434,8 @@
                             </td>
                         </tr>
                         <template x-for="item in !loading?data:[]" :key="item.stockReceiptId">
-                            <tr class="border-b hover:bg-gray-100 cursor-pointer">
+                            <tr class="border-b hover:bg-gray-100 cursor-pointer"
+                                x-on:click="window.location.href = '/admin/stock-receipt/view/'+item.stockReceiptId">
                                 <td class="px-4 py-3 font-medium text-gray-900" x-text="item.stockReceiptId"></td>
                                 <td class="px-4 py-3 text-sm font-medium" x-text="item.supplier.name"></td>
                                 <td class="px-4 py-3 text-black font-semibold" x-text="VND.format(item.total)"></td>

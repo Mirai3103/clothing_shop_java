@@ -2490,6 +2490,168 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @return OK
+     */
+    getStockReceiptById(id, cancelToken) {
+        let url_ = this.baseUrl + "/api/stock-receipt/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetStockReceiptById(_response);
+        });
+    }
+    processGetStockReceiptById(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            result200 = StockReceiptDetailDto.fromJS(resultData200);
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @return No Content
+     */
+    deleteStockReceipt(id, cancelToken) {
+        let url_ = this.baseUrl + "/api/stock-receipt/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "DELETE",
+            url: url_,
+            headers: {},
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processDeleteStockReceipt(_response);
+        });
+    }
+    processDeleteStockReceipt(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve(null);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
+     * @param startDateTimestamp (optional)
+     * @param endDateTimeStamp (optional)
+     * @return OK
+     */
+    getTopSoldProductReport(startDateTimestamp, endDateTimeStamp, cancelToken) {
+        let url_ = this.baseUrl + "/api/report/top-sold?";
+        if (startDateTimestamp === null)
+            throw new Error("The parameter 'startDateTimestamp' cannot be null.");
+        else if (startDateTimestamp !== undefined)
+            url_ += "startDateTimestamp=" + encodeURIComponent("" + startDateTimestamp) + "&";
+        if (endDateTimeStamp === null)
+            throw new Error("The parameter 'endDateTimeStamp' cannot be null.");
+        else if (endDateTimeStamp !== undefined)
+            url_ += "endDateTimeStamp=" + encodeURIComponent("" + endDateTimeStamp) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetTopSoldProductReport(_response);
+        });
+    }
+    processGetTopSoldProductReport(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(ProductReportDto.fromJS(item));
+            }
+            else {
+                result200 = null;
+            }
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @param startDateTime (optional)
      * @param endDateTime (optional)
      * @return OK
@@ -3513,52 +3675,6 @@ class Client {
                 result200 = null;
             }
             return Promise.resolve(result200);
-        }
-        else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve(null);
-    }
-    /**
-     * @return No Content
-     */
-    deleteStockReceipt(id, cancelToken) {
-        let url_ = this.baseUrl + "/api/stock-receipt/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-        let options_ = {
-            method: "DELETE",
-            url: url_,
-            headers: {},
-            cancelToken
-        };
-        return this.instance.request(options_).catch((_error) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            }
-            else {
-                throw _error;
-            }
-        }).then((_response) => {
-            return this.processDeleteStockReceipt(_response);
-        });
-    }
-    processDeleteStockReceipt(response) {
-        const status = response.status;
-        let _headers = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 204) {
-            const _responseText = response.data;
-            return Promise.resolve(null);
         }
         else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
@@ -5005,9 +5121,9 @@ class ProductBriefDto {
             this.totalSold = _data["totalSold"];
             this.averageRating = _data["averageRating"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.averageRatingDisplay = _data["averageRatingDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -5036,9 +5152,9 @@ class ProductBriefDto {
         data["totalSold"] = this.totalSold;
         data["averageRating"] = this.averageRating;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["averageRatingDisplay"] = this.averageRatingDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -5912,8 +6028,8 @@ class UserDto {
                     this.roles.push(RoleDto.fromJS(item));
             }
             this.emailVerified = _data["emailVerified"];
-            this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
+            this.customer = _data["customer"];
         }
     }
     static fromJS(data) {
@@ -5947,8 +6063,8 @@ class UserDto {
                 data["roles"].push(item.toJSON());
         }
         data["emailVerified"] = this.emailVerified;
-        data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
+        data["customer"] = this.customer;
         return data;
     }
 }
@@ -6050,6 +6166,104 @@ class SupplierDto {
         return data;
     }
 }
+class StockReceiptDetailDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : undefined;
+            this.stockReceiptId = _data["stockReceiptId"];
+            this.total = _data["total"];
+            this.note = _data["note"];
+            this.supplierId = _data["supplierId"];
+            this.supplier = _data["supplier"] ? SupplierDto.fromJS(_data["supplier"]) : undefined;
+            if (Array.isArray(_data["stockReceiptItems"])) {
+                this.stockReceiptItems = [];
+                for (let item of _data["stockReceiptItems"])
+                    this.stockReceiptItems.push(StockReceiptItemDto.fromJS(item));
+            }
+            this.createdDateDisplay = _data["createdDateDisplay"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new StockReceiptDetailDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : undefined;
+        data["stockReceiptId"] = this.stockReceiptId;
+        data["total"] = this.total;
+        data["note"] = this.note;
+        data["supplierId"] = this.supplierId;
+        data["supplier"] = this.supplier ? this.supplier.toJSON() : undefined;
+        if (Array.isArray(this.stockReceiptItems)) {
+            data["stockReceiptItems"] = [];
+            for (let item of this.stockReceiptItems)
+                data["stockReceiptItems"].push(item.toJSON());
+        }
+        data["createdDateDisplay"] = this.createdDateDisplay;
+        return data;
+    }
+}
+class StockReceiptItemDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.stockReceiptId = _data["stockReceiptId"];
+            this.productOptionId = _data["productOptionId"];
+            this.quantity = _data["quantity"];
+            this.price = _data["price"];
+            this.productOption = _data["productOption"] ? ProductOptionDetailDto.fromJS(_data["productOption"]) : undefined;
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new StockReceiptItemDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["stockReceiptId"] = this.stockReceiptId;
+        data["productOptionId"] = this.productOptionId;
+        data["quantity"] = this.quantity;
+        data["price"] = this.price;
+        data["productOption"] = this.productOption ? this.productOption.toJSON() : undefined;
+        return data;
+    }
+}
 class PaginatedStockReceiptBriefDto {
     constructor(data) {
         if (data) {
@@ -6147,6 +6361,44 @@ class StockReceiptBriefDto {
         data["supplierId"] = this.supplierId;
         data["supplier"] = this.supplier ? this.supplier.toJSON() : undefined;
         data["createdDateDisplay"] = this.createdDateDisplay;
+        return data;
+    }
+}
+class ProductReportDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : undefined;
+            this.totalSold = _data["totalSold"];
+            this.totalRevenue = _data["totalRevenue"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductReportDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["product"] = this.product ? this.product.toJSON() : undefined;
+        data["totalSold"] = this.totalSold;
+        data["totalRevenue"] = this.totalRevenue;
         return data;
     }
 }
@@ -6565,9 +6817,9 @@ class ProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.averageRatingDisplay = _data["averageRatingDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -6607,9 +6859,9 @@ class ProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["averageRatingDisplay"] = this.averageRatingDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }

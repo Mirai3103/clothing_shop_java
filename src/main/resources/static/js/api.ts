@@ -2694,6 +2694,178 @@ class Client {
     }
 
     /**
+     * @return OK
+     */
+    getStockReceiptById(id: number, cancelToken?: CancelToken | undefined): Promise<StockReceiptDetailDto> {
+        let url_ = this.baseUrl + "/api/stock-receipt/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetStockReceiptById(_response);
+        });
+    }
+
+    protected processGetStockReceiptById(response: AxiosResponse): Promise<StockReceiptDetailDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = StockReceiptDetailDto.fromJS(resultData200);
+            return Promise.resolve<StockReceiptDetailDto>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<StockReceiptDetailDto>(null as any);
+    }
+
+    /**
+     * @return No Content
+     */
+    deleteStockReceipt(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/stock-receipt/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDeleteStockReceipt(_response);
+        });
+    }
+
+    protected processDeleteStockReceipt(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 204) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param startDateTimestamp (optional) 
+     * @param endDateTimeStamp (optional) 
+     * @return OK
+     */
+    getTopSoldProductReport(startDateTimestamp: number | undefined, endDateTimeStamp: number | undefined, cancelToken?: CancelToken | undefined): Promise<ProductReportDto[]> {
+        let url_ = this.baseUrl + "/api/report/top-sold?";
+        if (startDateTimestamp === null)
+            throw new Error("The parameter 'startDateTimestamp' cannot be null.");
+        else if (startDateTimestamp !== undefined)
+            url_ += "startDateTimestamp=" + encodeURIComponent("" + startDateTimestamp) + "&";
+        if (endDateTimeStamp === null)
+            throw new Error("The parameter 'endDateTimeStamp' cannot be null.");
+        else if (endDateTimeStamp !== undefined)
+            url_ += "endDateTimeStamp=" + encodeURIComponent("" + endDateTimeStamp) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetTopSoldProductReport(_response);
+        });
+    }
+
+    protected processGetTopSoldProductReport(response: AxiosResponse): Promise<ProductReportDto[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ProductReportDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<ProductReportDto[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ProductReportDto[]>(null as any);
+    }
+
+    /**
      * @param startDateTime (optional) 
      * @param endDateTime (optional) 
      * @return OK
@@ -3765,56 +3937,6 @@ class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<CartItemDto[]>(null as any);
-    }
-
-    /**
-     * @return No Content
-     */
-    deleteStockReceipt(id: number, cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/api/stock-receipt/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "DELETE",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processDeleteStockReceipt(_response);
-        });
-    }
-
-    protected processDeleteStockReceipt(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (let k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 204) {
-            const _responseText = response.data;
-            return Promise.resolve<void>(null as any);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<void>(null as any);
     }
 
     /**
@@ -5804,9 +5926,9 @@ class ProductBriefDto implements IProductBriefDto {
     totalSold?: number;
     averageRating?: number;
     finalPrice?: number;
+    vietnamesePrice?: string;
     forGenderDisplay?: string;
     averageRatingDisplay?: number;
-    vietnamesePrice?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -5839,9 +5961,9 @@ class ProductBriefDto implements IProductBriefDto {
             this.totalSold = _data["totalSold"];
             this.averageRating = _data["averageRating"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.averageRatingDisplay = _data["averageRatingDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -5872,9 +5994,9 @@ class ProductBriefDto implements IProductBriefDto {
         data["totalSold"] = this.totalSold;
         data["averageRating"] = this.averageRating;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["averageRatingDisplay"] = this.averageRatingDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -5894,9 +6016,9 @@ interface IProductBriefDto {
     totalSold?: number;
     averageRating?: number;
     finalPrice?: number;
+    vietnamesePrice?: string;
     forGenderDisplay?: string;
     averageRatingDisplay?: number;
-    vietnamesePrice?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -7157,8 +7279,8 @@ class UserDto implements IUserDto {
     permissions?: string[];
     roles?: RoleDto[];
     emailVerified?: boolean;
-    customer?: boolean;
     accountEnabled?: boolean;
+    customer?: boolean;
 
     [key: string]: any;
 
@@ -7196,8 +7318,8 @@ class UserDto implements IUserDto {
                     this.roles!.push(RoleDto.fromJS(item));
             }
             this.emailVerified = _data["emailVerified"];
-            this.customer = _data["customer"];
             this.accountEnabled = _data["accountEnabled"];
+            this.customer = _data["customer"];
         }
     }
 
@@ -7233,8 +7355,8 @@ class UserDto implements IUserDto {
                 data["roles"].push(item.toJSON());
         }
         data["emailVerified"] = this.emailVerified;
-        data["customer"] = this.customer;
         data["accountEnabled"] = this.accountEnabled;
+        data["customer"] = this.customer;
         return data;
     }
 }
@@ -7251,8 +7373,8 @@ interface IUserDto {
     permissions?: string[];
     roles?: RoleDto[];
     emailVerified?: boolean;
-    customer?: boolean;
     accountEnabled?: boolean;
+    customer?: boolean;
 
     [key: string]: any;
 }
@@ -7405,6 +7527,154 @@ interface ISupplierDto {
     [key: string]: any;
 }
 
+class StockReceiptDetailDto implements IStockReceiptDetailDto {
+    createdDate?: Date;
+    stockReceiptId?: number;
+    total?: number;
+    note?: string;
+    supplierId?: number;
+    supplier?: SupplierDto;
+    stockReceiptItems?: StockReceiptItemDto[];
+    createdDateDisplay?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IStockReceiptDetailDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.createdDate = _data["createdDate"] ? new Date(_data["createdDate"].toString()) : <any>undefined;
+            this.stockReceiptId = _data["stockReceiptId"];
+            this.total = _data["total"];
+            this.note = _data["note"];
+            this.supplierId = _data["supplierId"];
+            this.supplier = _data["supplier"] ? SupplierDto.fromJS(_data["supplier"]) : <any>undefined;
+            if (Array.isArray(_data["stockReceiptItems"])) {
+                this.stockReceiptItems = [] as any;
+                for (let item of _data["stockReceiptItems"])
+                    this.stockReceiptItems!.push(StockReceiptItemDto.fromJS(item));
+            }
+            this.createdDateDisplay = _data["createdDateDisplay"];
+        }
+    }
+
+    static fromJS(data: any): StockReceiptDetailDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StockReceiptDetailDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["createdDate"] = this.createdDate ? this.createdDate.toISOString() : <any>undefined;
+        data["stockReceiptId"] = this.stockReceiptId;
+        data["total"] = this.total;
+        data["note"] = this.note;
+        data["supplierId"] = this.supplierId;
+        data["supplier"] = this.supplier ? this.supplier.toJSON() : <any>undefined;
+        if (Array.isArray(this.stockReceiptItems)) {
+            data["stockReceiptItems"] = [];
+            for (let item of this.stockReceiptItems)
+                data["stockReceiptItems"].push(item.toJSON());
+        }
+        data["createdDateDisplay"] = this.createdDateDisplay;
+        return data;
+    }
+}
+
+interface IStockReceiptDetailDto {
+    createdDate?: Date;
+    stockReceiptId?: number;
+    total?: number;
+    note?: string;
+    supplierId?: number;
+    supplier?: SupplierDto;
+    stockReceiptItems?: StockReceiptItemDto[];
+    createdDateDisplay?: string;
+
+    [key: string]: any;
+}
+
+class StockReceiptItemDto implements IStockReceiptItemDto {
+    stockReceiptId?: number;
+    productOptionId?: number;
+    quantity?: number;
+    price?: number;
+    productOption?: ProductOptionDetailDto;
+
+    [key: string]: any;
+
+    constructor(data?: IStockReceiptItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.stockReceiptId = _data["stockReceiptId"];
+            this.productOptionId = _data["productOptionId"];
+            this.quantity = _data["quantity"];
+            this.price = _data["price"];
+            this.productOption = _data["productOption"] ? ProductOptionDetailDto.fromJS(_data["productOption"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): StockReceiptItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new StockReceiptItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["stockReceiptId"] = this.stockReceiptId;
+        data["productOptionId"] = this.productOptionId;
+        data["quantity"] = this.quantity;
+        data["price"] = this.price;
+        data["productOption"] = this.productOption ? this.productOption.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+interface IStockReceiptItemDto {
+    stockReceiptId?: number;
+    productOptionId?: number;
+    quantity?: number;
+    price?: number;
+    productOption?: ProductOptionDetailDto;
+
+    [key: string]: any;
+}
+
 class PaginatedStockReceiptBriefDto implements IPaginatedStockReceiptBriefDto {
     data?: StockReceiptBriefDto[];
     page?: number;
@@ -7553,6 +7823,62 @@ interface IStockReceiptBriefDto {
     supplierId?: number;
     supplier?: SupplierDto;
     createdDateDisplay?: string;
+
+    [key: string]: any;
+}
+
+class ProductReportDto implements IProductReportDto {
+    product?: ProductBriefDto;
+    totalSold?: number;
+    totalRevenue?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IProductReportDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.product = _data["product"] ? ProductBriefDto.fromJS(_data["product"]) : <any>undefined;
+            this.totalSold = _data["totalSold"];
+            this.totalRevenue = _data["totalRevenue"];
+        }
+    }
+
+    static fromJS(data: any): ProductReportDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductReportDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["totalSold"] = this.totalSold;
+        data["totalRevenue"] = this.totalRevenue;
+        return data;
+    }
+}
+
+interface IProductReportDto {
+    product?: ProductBriefDto;
+    totalSold?: number;
+    totalRevenue?: number;
 
     [key: string]: any;
 }
@@ -8150,9 +8476,9 @@ class ProductDetailDto implements IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
+    vietnamesePrice?: string;
     forGenderDisplay?: string;
     averageRatingDisplay?: number;
-    vietnamesePrice?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;
@@ -8196,9 +8522,9 @@ class ProductDetailDto implements IProductDetailDto {
             }
             this.description = _data["description"];
             this.finalPrice = _data["finalPrice"];
+            this.vietnamesePrice = _data["vietnamesePrice"];
             this.forGenderDisplay = _data["forGenderDisplay"];
             this.averageRatingDisplay = _data["averageRatingDisplay"];
-            this.vietnamesePrice = _data["vietnamesePrice"];
             this.createdDateDisplay = _data["createdDateDisplay"];
         }
     }
@@ -8240,9 +8566,9 @@ class ProductDetailDto implements IProductDetailDto {
         }
         data["description"] = this.description;
         data["finalPrice"] = this.finalPrice;
+        data["vietnamesePrice"] = this.vietnamesePrice;
         data["forGenderDisplay"] = this.forGenderDisplay;
         data["averageRatingDisplay"] = this.averageRatingDisplay;
-        data["vietnamesePrice"] = this.vietnamesePrice;
         data["createdDateDisplay"] = this.createdDateDisplay;
         return data;
     }
@@ -8265,9 +8591,9 @@ interface IProductDetailDto {
     images?: ProductImageDto[];
     description?: string;
     finalPrice?: number;
+    vietnamesePrice?: string;
     forGenderDisplay?: string;
     averageRatingDisplay?: number;
-    vietnamesePrice?: string;
     createdDateDisplay?: string;
 
     [key: string]: any;

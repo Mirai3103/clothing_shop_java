@@ -175,6 +175,17 @@
                             </tr>
 
                         </template>
+                        <!--                        calculate total-->
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td colspan="5"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Tổng tiền
+                            </td>
+                            <td colspan="2"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <span x-text="VND.format(items.reduce((a,b)=>a+b.price*b.quantity,0))"></span>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

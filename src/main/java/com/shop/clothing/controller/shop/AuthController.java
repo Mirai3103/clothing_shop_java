@@ -86,7 +86,12 @@ public class AuthController {
             return "reset-password";
         }
         var result = sender.send(resetPasswordCommand);
-        return "reset-password";
+        if(result.hasError()){
+            model.addAttribute("error", result.getError());
+            return "reset-password";
+        }
+
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/reset-password/success")

@@ -5,6 +5,9 @@ import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.config.ICurrentUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,7 @@ public class UpdateProfileCommandHandler implements IRequestHandler<UpdateProfil
     @Transactional
     public HandleResponse<Void> handle(UpdateProfileCommand updateProfileCommand) throws Exception {
         var userId = currentUserService.getCurrentUserId();
+
         if (userId.isEmpty()) {
             return HandleResponse.error("Bạn chưa đăng nhập");
         }
@@ -25,13 +29,22 @@ public class UpdateProfileCommandHandler implements IRequestHandler<UpdateProfil
         if (user.isEmpty()) {
             return HandleResponse.error("Không tìm thấy người dùng");
         }
+
         var userEntity = user.get();
+
         userEntity.setFirstName(updateProfileCommand.getFirstName());
         userEntity.setLastName(updateProfileCommand.getLastName());
         userEntity.setEmail(updateProfileCommand.getEmail());
         userEntity.setAddress(updateProfileCommand.getAddress());
         userEntity.setPhoneNumber(updateProfileCommand.getPhoneNumber());
         IUserRepository.save(userEntity);
+        final Authentication oldAuth = SecurityContextHolder.getContext().getAuthentication();
+        if (oldAuth != null && oldAuth.isAuthenticated()) {
+            var newAuth = new PreAuthenticatedAuthenticationToken(userEntity,
+                    oldAuth.getCredentials(),
+                    oldAuth.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+        }
         return HandleResponse.ok();
 
 

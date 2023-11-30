@@ -89,6 +89,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("UPDATE Product p SET p.totalSold = 0 WHERE p.totalSold IS NULL")
     void updateTotalToZeroWhereSoldIsNull();
 
-    @Query(value = "SELECT p.name AS name, p.product_id AS productId, p.display_image AS displayImage, CAST(SUM(oi.quantity) AS int) AS total_sold, CAST(SUM(oi.quantity * oi.price) AS int) AS total_revenue FROM product p JOIN product_option po ON po.product_product_id = p.product_id JOIN order_item oi ON oi.product_option_id = po.product_option_id JOIN `_order` o ON o.order_id = oi.order_id WHERE o.completed_date IS NOT NULL AND o.completed_date >= ?1 AND o.completed_date <= ?2 GROUP BY p.product_id", nativeQuery = true)
-    List<Tuple> getSoldReport(LocalDate startDate, LocalDate endDate);
+    @Query(value = "SELECT p.name AS name, p.product_id AS productId, p.display_image AS displayImage, CAST(COALESCE(SUM(oi.quantity), 0) AS int) AS total_sold, CAST(COALESCE(SUM(oi.quantity * oi.price), 0) AS int) AS total_revenue " +
+            "FROM product p " +
+            "LEFT  JOIN product_option po ON po.product_product_id = p.product_id " +
+            "LEFT JOIN order_item oi ON oi.product_option_id = po.product_option_id " +
+            "LEFT JOIN `_order` o ON o.order_id = oi.order_id " +
+            "WHERE (o.completed_date IS NOT NULL AND (?1 is null or o.completed_date >= ?1) " +
+            "AND (?2 is null or o.completed_date <= ?2) ) " +
+            "OR o.order_id IS NULL " +
+            "GROUP BY p.product_id ", nativeQuery = true)
+    List<Tuple> getSoldReport(Date startDate, Date endDate);
 }
