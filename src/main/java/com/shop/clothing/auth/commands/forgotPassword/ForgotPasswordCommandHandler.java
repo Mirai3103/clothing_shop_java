@@ -23,10 +23,13 @@ public class ForgotPasswordCommandHandler implements IRequestHandler<ForgotPassw
     private final AppProperties appProperties;
 
     @Override
-    public HandleResponse<Void> handle(ForgotPasswordCommand forgotPasswordCommand){
+    public HandleResponse<Void> handle(ForgotPasswordCommand forgotPasswordCommand) {
         var user = IUserRepository.findByEmail(forgotPasswordCommand.email());
         if (user.isEmpty()) {
             return HandleResponse.error("Email không tồn tại");
+        }
+        if (!user.get().isAccountEnabled()) {
+            return HandleResponse.error("Tài khoản đã bị khóa");
         }
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.get().getEmail());
