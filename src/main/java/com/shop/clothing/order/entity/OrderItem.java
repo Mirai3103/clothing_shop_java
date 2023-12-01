@@ -45,7 +45,7 @@ public class OrderItem {
     private int quantity;
     private int price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "product_option_id", insertable = false, updatable = false)
     private ProductOption productOption;
 

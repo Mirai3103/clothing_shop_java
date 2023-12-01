@@ -43,7 +43,7 @@ public class CartItem {
     @Column(updatable = false, nullable = false,name = "product_option_id")
     private int productOptionId;
     private int quantity;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "product_option_id", insertable = false, updatable = false)
     private ProductOption productOption;
 }

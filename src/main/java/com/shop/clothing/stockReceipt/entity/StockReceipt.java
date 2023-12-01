@@ -27,7 +27,7 @@ public class StockReceipt extends AuditableEntity {
     @Column(length = 255)
     private String note;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Supplier supplier;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

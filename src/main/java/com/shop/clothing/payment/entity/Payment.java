@@ -24,7 +24,7 @@ public class Payment extends AuditableEntity {
     @Builder.Default
     private PaymentStatus status = PaymentStatus.PENDING;
     private int amount;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Order order;
     private LocalDateTime completedDate;
 

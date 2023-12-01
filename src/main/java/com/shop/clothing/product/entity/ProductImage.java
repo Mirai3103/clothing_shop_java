@@ -18,10 +18,10 @@ public class ProductImage extends AuditableEntity{
     @Column(updatable = false, nullable = false,name = "url",length = 500)
     private String url;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Color forColor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Product product;
 
 }
