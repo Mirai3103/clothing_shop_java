@@ -208,8 +208,8 @@
                                 onApplyFilter(){
                                     const categoryFilter = document.getElementById('category-filter').value
                                     const genderFilter = document.getElementById('gender-filter').value
-                                    queryData.amountFrom = Number(document.getElementById('amount-start').value)||undefined;
-                                    queryData.amountTo = Number(document.getElementById('amount-end').value)||undefined;
+                                    queryData.minPrice = Number(document.getElementById('amount-start').value)||undefined;
+                                    queryData.maxPrice = Number(document.getElementById('amount-end').value)||undefined;
                                     queryData.categoryId = categoryFilter === '' ? undefined : categoryFilter;
                                     queryData.forGender = genderFilter === '' ? undefined : genderFilter;
 

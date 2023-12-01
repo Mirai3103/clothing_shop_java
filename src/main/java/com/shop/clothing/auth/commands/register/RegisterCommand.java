@@ -20,6 +20,6 @@ public class RegisterCommand  implements IRequest<User> {
     @Email
     private String email;
     @NotEmpty(message = "Mật khẩu không được để trống")
-    @Length(min = 6,message = "Mật khẩu phải có ít nhất 8 ký tự")
+    @Length(min = 8,message = "Mật khẩu phải có ít nhất 8 ký tự")
     private String rawPassword;
 }

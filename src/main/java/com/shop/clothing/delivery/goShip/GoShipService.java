@@ -158,6 +158,35 @@ public class GoShipService implements IDeliveryService {
 
     }
 
+    @Override
+    public void cancelOrder(String orderId) {
+        var restTemplate = new RestTemplate();
+        var accessToken = goShipProperties.getAccessToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.set("Content-Type", "application/json");
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                goShipProperties.getEndpoint() + "/shipments?order_id=" + orderId,
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+        JSONObject obj = new JSONObject(response.getBody());
+        var data = obj.getJSONArray("data");
+        if (data.isEmpty()) return;
+        var shipment = data.getJSONObject(0);
+        var id = shipment.getString("id");
+        restTemplate.exchange(
+                goShipProperties.getEndpoint() + "/shipments/" + id,
+                HttpMethod.DELETE,
+                entity,
+                String.class
+        );
+
+
+    }
+
     public OrderStatus toDomainOrderStatus(int status) {
         if (status <= 904) return OrderStatus.PENDING;
         if (status == 905) return OrderStatus.DELIVERED;

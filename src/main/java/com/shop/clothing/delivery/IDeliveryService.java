@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 public interface IDeliveryService {
-    public List<GetValidShipServiceResponse> getValidShipService(GetValidShipServiceRequest request);
-    public CreateShipOrderResponse createOrder(CreateShipOrderRequest request);
+     List<GetValidShipServiceResponse> getValidShipService(GetValidShipServiceRequest request);
+     CreateShipOrderResponse createOrder(CreateShipOrderRequest request);
+      void cancelOrder(String orderId);
 }

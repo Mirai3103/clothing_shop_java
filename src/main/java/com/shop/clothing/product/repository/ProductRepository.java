@@ -28,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Modifying
 
-    @Query(value = "delete from Product p where p.product_id = ?1", nativeQuery = true)
+    @Query(value = "delete from product where product_id = ?1", nativeQuery = true)
     void hardDeleteById(int id);
 
     @Query(value = "SELECT DISTINCT  p.product  FROM ProductOption p WHERE " +

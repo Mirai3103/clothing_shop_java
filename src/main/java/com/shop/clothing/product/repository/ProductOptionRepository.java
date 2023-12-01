@@ -25,7 +25,7 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, In
 
     @Modifying()
 
-    @Query(value = "DELETE FROM  product_option p WHERE p.product_option_id = ?1", nativeQuery = true)
+    @Query(value = "DELETE FROM  product_option  WHERE product_product_id = ?1", nativeQuery = true)
     void hardDeleteById(int id);
 
     List<ProductOption> findAllByProductOptionIdIn(List<Integer> ids);

@@ -3,6 +3,7 @@ package com.shop.clothing.order.command.cancelOrder;
 import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.config.CurrentUserService;
+import com.shop.clothing.delivery.IDeliveryService;
 import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.order.repository.OrderRepository;
 import com.shop.clothing.payment.entity.enums.PaymentStatus;
@@ -11,12 +12,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.CompletableFuture;
+
 @AllArgsConstructor
 @Service
 public class CancelOrderCommandHandler implements IRequestHandler<CancelOrderCommand, Boolean> {
     private final OrderRepository _orderRepository;
     private final CurrentUserService _currentUserService;
     private final PaymentRepository _paymentRepository;
+    private final IDeliveryService _deliveryService;
 
     @Override
     @Transactional
@@ -46,6 +50,13 @@ public class CancelOrderCommandHandler implements IRequestHandler<CancelOrderCom
 
         order.get().setStatus(OrderStatus.CANCELLED);
         order.get().setCancelReason(cancelOrderCommand.getReason());
+        CompletableFuture.runAsync(() -> {
+            try {
+                _deliveryService.cancelOrder(order.get().getOrderId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         _orderRepository.save(order.get());
         return HandleResponse.ok(true);
     }
