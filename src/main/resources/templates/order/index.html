@@ -28,8 +28,10 @@
         const myFullName = myFirstName + " " + myLastName;
 
         /*]]>*/
-
-        if (myAddress) {
+        // check isNotUseDefaultAddress in query
+        const urlParams = new URLSearchParams(window.location.search);
+        const isNotUseDefaultAddress = urlParams.get('isNotUseDefaultAddress');
+        if (myAddress && !isNotUseDefaultAddress) {
             setTimeout(() => {
                 document.getElementById("use-my-address-lb").click();
             }, 1000);
@@ -70,6 +72,7 @@
          isLoading: false,
          selectedShipServiceId: null,
             promotion: null,
+            fullSelectedAddress: '',
                      isUseMyAddress: false,
 
         getSelectedShipService: function (){
@@ -83,21 +86,24 @@
              }
          },
          getShipService: function (myAddressPr=null) {
-
                 if(!this.isUseMyAddress){
                    if(!this.selectedProvince || !this.selectedDistrict || !this.selectedWard || !this.detailAddress){
                     $store.toast.add('error','Lỗi','Vui lòng nhập đầy đủ thông tin địa chỉ');
                     return;
                 }
                 }
+                if(!this.isUseMyAddress){
+                         this.fullSelectedAddress = this.getfullAddress();
+                }
                 this.isLoading = true;
                 window.apiClient.getDeliveryOption({
-                toAddress: this.isUseMyAddress?myAddressPr:this.getfullAddress(),
+                toAddress: this.isUseMyAddress?myAddressPr:this.fullSelectedAddress,
                  orderValue: totalValue,
                 }).then(p=> {
                 this.listShipService = [...p];
                 console.log(p);
                 }).finally(()=> this.isLoading = false);
+                console.log(this.fullSelectedAddress);
         },
         handleSubmit: function () {
            const commandForm = document.getElementById('commandForm');
@@ -112,11 +118,16 @@
                 $store.toast.add('error', 'Lỗi', 'Vui lòng chọn phương thức thanh toán');
                 return false;
             }
+            commandForm.address.value = this.isUseMyAddress?myAddress:this.fullSelectedAddress;
             commandForm.paymentMethod.value = checkedPayment.value;
             commandForm.note.value = ''
             commandForm.promotionCode.value = this.promotion?.code ||'';
             commandForm.email.value =  this.isUseMyAddress?myEmail:document.getElementById('email').value;
-            console.log(this.getfullAddress()) ;
+            commandForm.customerName.value = isUseMyAddress? myFullName:document.getElementById('name').value;
+             commandForm.phoneNumber.value =  isUseMyAddress? myPhoneNumber:document.getElementById('phone-number').value;
+             commandForm.address.value =  isUseMyAddress?myAddress:fullSelectedAddress;
+             commandForm.note.value = ''
+             commandForm.email.value =  isUseMyAddress?myEmail:document.getElementById('email').value;
             return true;
             }
         }"
@@ -309,12 +320,6 @@
                         $watch('isUseMyAddress', value => {
                             if(value){
                                 if(myAddress){
-                                        const commandForm = document.getElementById('commandForm');
-                                    commandForm.customerName.value = isUseMyAddress? myFullName:document.getElementById('name').value;
-                                    commandForm.phoneNumber.value =  isUseMyAddress? myPhoneNumber:document.getElementById('phone-number').value;
-                                    commandForm.address.value =  isUseMyAddress?myAddress:getfullAddress();
-                                    commandForm.note.value = ''
-                                    commandForm.email.value =  isUseMyAddress?myEmail:document.getElementById('email').value;
                                     getShipService(myAddress);
                                 }
                                 else{
@@ -437,6 +442,10 @@
                                     <h2 class="text-2xl font-bold leading-tight tracking-tight text-gray-900">
                                         Phương thức vận chuyển
                                     </h2>
+                                    <p class="text-sm mf-2 text-gray-500">
+                                        Vận chuyển đến <span
+                                            x-text="isUseMyAddress?myAddress:fullSelectedAddress"> </span>
+                                    </p>
                                     <div class="flex justify-center p-10"
                                          x-show="listShipService && listShipService.length == 0">
                                         <span class="text-gray-500"> Không có dịch vụ vận chuyển phù hợp </span>
