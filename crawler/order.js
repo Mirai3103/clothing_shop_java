@@ -52,9 +52,9 @@ const prisma = new PrismaClient();
       const paymentMethod = faker.helpers.arrayElement([0, 1, 2]);
       const status = faker.helpers.arrayElement([0, 1, 2, 3, 4]);
       const deliveryFee = randomVietNameseMoney({ min: 10000, max: 40000 });
-     var created_date = faker.date.past({
+      var created_date = faker.date.past({
         refDate: new Date(),
-        years: 2,
+        years: 1,
       });
 
       const order = {
@@ -140,6 +140,10 @@ async function createFakePayment() {
     if (order.payment_method == 0 && order.status != 3) {
       // thanh toan khi nhan hang
       status = 4; //pending
+    }
+    // neu don hang da thanh toan thi payment da thanh cong
+    if (order.status == 2) {
+      status = 1;
     }
 
     const payment = {

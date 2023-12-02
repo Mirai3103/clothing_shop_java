@@ -4,6 +4,8 @@ import com.shop.clothing.common.AuditableEntity;
 import com.shop.clothing.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -37,6 +39,7 @@ public class Category extends AuditableEntity {
     private LocalDateTime deletedDate = null;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private java.util.List<Product> products;
 
 

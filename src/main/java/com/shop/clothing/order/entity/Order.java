@@ -9,6 +9,8 @@ import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.payment.entity.Payment;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "_order")
@@ -63,6 +65,8 @@ public class Order extends AuditableEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    
     private java.util.List<OrderItem> orderItems;
 
     @Column(name = "completed_date")

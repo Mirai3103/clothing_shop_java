@@ -16,7 +16,7 @@
         const orderId = /*[[${order.orderId}]]*/ "2";
         const orderStatus = /*[[${order.status}]]*/ "2";
         const paymentStatus = /*[[${order.latestPayment.status}]]*/ "2";
-        const paymentId = /*[[${order.latestPayment.paymentId}]]; */ "2";
+        const paymentId = /*[[${order.latestPayment.paymentId}]]*/ "2";
         /*]]>*/
     </script>
     <section
@@ -221,6 +221,7 @@
 
                             <select
                                     id="paymentStatus"
+                                    th:value="${order.latestPayment.status}"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5"
                             >
                                 <th:block th:each="status : ${@clientUtil.paymentStatuses()}">

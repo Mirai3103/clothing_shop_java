@@ -5,6 +5,8 @@ import com.shop.clothing.payment.entity.enums.PromotionType;
 import com.shop.clothing.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -60,6 +62,7 @@ public class Promotion extends AuditableEntity {
     private int stock;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "promotion")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private java.util.List<Order> orders;
 
 

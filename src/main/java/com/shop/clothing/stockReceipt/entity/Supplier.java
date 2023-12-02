@@ -2,6 +2,8 @@ package com.shop.clothing.stockReceipt.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -26,6 +28,7 @@ public class Supplier {
     private String email;
     private String description;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "supplier")
+
     private java.util.List<StockReceipt> stockReceipts;
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate = null;
