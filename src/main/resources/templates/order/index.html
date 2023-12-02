@@ -122,12 +122,8 @@
             commandForm.paymentMethod.value = checkedPayment.value;
             commandForm.note.value = ''
             commandForm.promotionCode.value = this.promotion?.code ||'';
-            commandForm.email.value =  this.isUseMyAddress?myEmail:document.getElementById('email').value;
-            commandForm.customerName.value = isUseMyAddress? myFullName:document.getElementById('name').value;
-             commandForm.phoneNumber.value =  isUseMyAddress? myPhoneNumber:document.getElementById('phone-number').value;
-             commandForm.address.value =  isUseMyAddress?myAddress:fullSelectedAddress;
-             commandForm.note.value = ''
-             commandForm.email.value =  isUseMyAddress?myEmail:document.getElementById('email').value;
+
+
             return true;
             }
         }"
@@ -320,6 +316,11 @@
                         $watch('isUseMyAddress', value => {
                             if(value){
                                 if(myAddress){
+                                commandForm.customerName.value = isUseMyAddress? myFullName:document.getElementById('name').value;
+             commandForm.phoneNumber.value =  isUseMyAddress? myPhoneNumber:document.getElementById('phone-number').value;
+             commandForm.address.value =  isUseMyAddress?myAddress:fullSelectedAddress;
+             commandForm.note.value = ''
+             commandForm.email.value =  isUseMyAddress?myEmail:document.getElementById('email').value;
                                     getShipService(myAddress);
                                 }
                                 else{

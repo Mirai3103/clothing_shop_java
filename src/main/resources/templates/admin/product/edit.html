@@ -159,6 +159,8 @@
                             const payload = {};
                             payload.name = $event.target.name.value.trim()
                             payload.forGender = $event.target.forGender.value;
+                            alert(payload.forGender);
+
                             payload.price = parseInt($event.target.price.value);
                             payload.categoryId = $event.target.category.value;
                             payload.discount = $event.target.discount.value;
@@ -224,10 +226,18 @@
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                             >
                                 <option value="FOR_MALE"
+                                        th:selected=${product.forGender.name()=='FOR_MALE'}
                                 >Cho nam
                                 </option>
-                                <option value="FOR_FEMALE">Cho nữ</option>
-                                <option value="FOR_BOTH">Cả nam và nữ</option>
+                                <option value="FOR_FEMALE"
+                                        th:selected=${product.forGender.name()=='FOR_FEMALE'}
+
+
+                                >
+                                    Cho nữ</option>
+                                <option
+                                        th:selected=${product.forGender.name()=='FOR_BOTH'}
+                                        value="FOR_BOTH">Cả nam và nữ</option>
                             </select>
                         </div>
                         <div class="w-full">
