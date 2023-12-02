@@ -17,4 +17,9 @@ public class CacheTask {
     public void clearSearchCache() {
 
     }
+
+    @CacheEvict(value = "homePage", allEntries = true)
+    @Scheduled(fixedRate = 1800000)// =30 minutes
+    public void clearHomePageCache() {
+    }
 }

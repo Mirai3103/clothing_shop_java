@@ -15,7 +15,7 @@ public class ProductTask {
     private final RatingRepository ratingRepository;
 
     // every day at 3:00 AM
-//    @Scheduled(cron = "0 0 3 * * ?")
+    @Scheduled(cron = "0 0 3 * * ?")
     public void updateProductTotalSold() {
         System.out.println("Cập nhật số lượng sản phẩm đã bán");
         productRepository.updateTotalSold(new OrderStatus[]{OrderStatus.DELIVERED, OrderStatus.SHIPPING});
@@ -23,8 +23,7 @@ public class ProductTask {
 
     }
 
-    // every 1 day
-//    @Scheduled(fixedRate = 1000 * 60 * 60 * 24)
+    @Scheduled(cron = "0 0 0 * * ?")
     public void updateProductAverageRating() {
         System.out.println("Cập nhật đánh giá trung bình của sản phẩm");
         var allProduct = productRepository.findAll();

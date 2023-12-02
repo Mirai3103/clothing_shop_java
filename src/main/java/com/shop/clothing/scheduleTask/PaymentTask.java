@@ -18,8 +18,7 @@ public class PaymentTask {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
 
-    // 15 minutes
-//    @Scheduled(fixedRate = 900000)
+    @Scheduled(fixedRate = 900000)
     public void removeExpiredPayment() {
         System.out.println("Huỷ các yêu cầu thanh toán hết hạn");
         var order = orderRepository.getOrderByPaymentMethodInAndCreatedDateBeforeAndCompletedDateIsNull(
