@@ -59,7 +59,7 @@ public class Promotion extends AuditableEntity {
     @Column(nullable = false)
     private int stock;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "promotion",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "promotion")
     private java.util.List<Order> orders;
 
 

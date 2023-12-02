@@ -44,7 +44,7 @@ public class StockReceiptItem {
 
     private int quantity;
     private int price = 0; //gia nhap
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_option_id", insertable = false, updatable = false)
     private ProductOption productOption;
 }

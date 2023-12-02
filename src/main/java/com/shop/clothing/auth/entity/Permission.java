@@ -23,7 +23,7 @@ public class Permission implements java.io.Serializable {
     @Column(name = "description", length = 100)
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "role_permissions",
             joinColumns = @JoinColumn(name = "permission_id"),

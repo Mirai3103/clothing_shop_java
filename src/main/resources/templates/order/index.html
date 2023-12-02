@@ -84,18 +84,15 @@
          },
          getShipService: function (myAddressPr=null) {
 
-                if(myAddress ==null){
-                if(!this.selectedProvince || !this.selectedDistrict || !this.selectedWard || !this.detailAddress){
+                if(!this.isUseMyAddress){
+                   if(!this.selectedProvince || !this.selectedDistrict || !this.selectedWard || !this.detailAddress){
                     $store.toast.add('error','Lỗi','Vui lòng nhập đầy đủ thông tin địa chỉ');
                     return;
-                }}
-                console.log({
-                toAddress: myAddressPr?myAddressPr:this.getfullAddress(),
-                 orderValue: totalValue,
-                });
+                }
+                }
                 this.isLoading = true;
                 window.apiClient.getDeliveryOption({
-                toAddress: myAddressPr?myAddressPr:this.getfullAddress(),
+                toAddress: this.isUseMyAddress?myAddressPr:this.getfullAddress(),
                  orderValue: totalValue,
                 }).then(p=> {
                 this.listShipService = [...p];
@@ -106,29 +103,33 @@
            const commandForm = document.getElementById('commandForm');
             if (!this.selectedShipServiceId) {
                 $store.toast.add('error', 'Lỗi', 'Vui lòng chọn dịch vụ vận chuyển');
-                return;
+                return false;
             }
             commandForm.shipServiceId.value = this.selectedShipServiceId;
 
             const checkedPayment = document.querySelector('input[name=payment-method]:checked');
             if (!checkedPayment) {
                 $store.toast.add('error', 'Lỗi', 'Vui lòng chọn phương thức thanh toán');
-                return;
+                return false;
             }
             commandForm.paymentMethod.value = checkedPayment.value;
             commandForm.note.value = ''
             commandForm.promotionCode.value = this.promotion?.code ||'';
             commandForm.email.value =  this.isUseMyAddress?myEmail:document.getElementById('email').value;
             console.log(this.getfullAddress()) ;
-            commandForm.submit();
+            return true;
             }
         }"
-                x-on:submit.prevent="handleSubmit()"
+                x-on:submit="
+          if(!handleSubmit()){
+          $event.preventDefault();
+          }
+    "
         >
             <th:block th:each="item, iterStat : *{orderItems}">
                 <input class="hidden" hidden="hidden" th:field="*{orderItems[__${iterStat.index}__].productOptionId}"/>
 
-                <input th:field="*{orderItems[__${iterStat.index}__].quantity}"/>
+                <input class="hidden" hidden="hidden" th:field="*{orderItems[__${iterStat.index}__].quantity}"/>
             </th:block>
             <div class="flex flex-col gap-y-1">
                 <div>
@@ -292,6 +293,7 @@
 
                                             type="submit"
 
+
                                             class="text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 font-medium rounded-md text-xl px-5 py-2.5 text-center mb-2"
                                     >
                                         Tiến hành đặt hàng
@@ -308,7 +310,6 @@
                             if(value){
                                 if(myAddress){
                                         const commandForm = document.getElementById('commandForm');
-
                                     commandForm.customerName.value = isUseMyAddress? myFullName:document.getElementById('name').value;
                                     commandForm.phoneNumber.value =  isUseMyAddress? myPhoneNumber:document.getElementById('phone-number').value;
                                     commandForm.address.value =  isUseMyAddress?myAddress:getfullAddress();
