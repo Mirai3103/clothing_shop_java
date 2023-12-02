@@ -40,7 +40,8 @@ public class UserApiController {
 
     @PostMapping("/my-profile")
     public ResponseEntity<Void> updateMyProfile(@Valid @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody UpdateProfileCommand command) throws Exception {
-        return ResponseEntity.ok(sender.send(command).orThrow());
+        sender.send(command).orThrow();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update-avatar")

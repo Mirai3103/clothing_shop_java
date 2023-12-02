@@ -6,6 +6,7 @@ import com.shop.clothing.common.Cqrs.HandleResponse;
 import com.shop.clothing.common.Cqrs.IRequestHandler;
 import com.shop.clothing.config.ICurrentUserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +27,11 @@ public class UpdatePasswordCommandHandler implements IRequestHandler<UpdatePassw
         }
         var user = IUserRepository.findById(userId.get());
         if (user.isEmpty()) {
-            return HandleResponse.error("Không tìm thấy người dùng");
+            return HandleResponse.error("Không tìm thấy người dùng",HttpStatus.NOT_FOUND);
         }
         var userEntity = user.get();
         if (!passwordEncoder.matches(updatePasswordCommand.getOldPassword(), userEntity.getPasswordHash())) {
-            return HandleResponse.error("Mật khẩu cũ không đúng");
+            return HandleResponse.error("Mật khẩu cũ không đúng", HttpStatus.BAD_REQUEST);
         }
         userEntity.setPasswordHash(passwordEncoder.encode(updatePasswordCommand.getNewPassword()));
         IUserRepository.save(userEntity);
