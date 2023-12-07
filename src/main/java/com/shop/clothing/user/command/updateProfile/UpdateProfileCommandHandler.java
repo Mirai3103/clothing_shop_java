@@ -31,7 +31,12 @@ public class UpdateProfileCommandHandler implements IRequestHandler<UpdateProfil
         }
 
         var userEntity = user.get();
-
+        if (!userEntity.getEmail().equals(updateProfileCommand.getEmail())) {
+            var userByEmail = IUserRepository.findByEmail(updateProfileCommand.getEmail());
+            if (userByEmail.isPresent()) {
+                return HandleResponse.error("Email đã tồn tại");
+            }
+        }
         userEntity.setFirstName(updateProfileCommand.getFirstName());
         userEntity.setLastName(updateProfileCommand.getLastName());
         userEntity.setEmail(updateProfileCommand.getEmail());

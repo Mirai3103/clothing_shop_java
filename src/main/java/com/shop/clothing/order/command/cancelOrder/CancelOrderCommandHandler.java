@@ -8,6 +8,7 @@ import com.shop.clothing.order.entity.enums.OrderStatus;
 import com.shop.clothing.order.repository.OrderRepository;
 import com.shop.clothing.payment.entity.enums.PaymentStatus;
 import com.shop.clothing.payment.repository.PaymentRepository;
+import com.shop.clothing.product.repository.ProductOptionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ public class CancelOrderCommandHandler implements IRequestHandler<CancelOrderCom
     private final CurrentUserService _currentUserService;
     private final PaymentRepository _paymentRepository;
     private final IDeliveryService _deliveryService;
+    private final ProductOptionRepository _productOptionRepository;
 
     @Override
     @Transactional
@@ -48,6 +50,7 @@ public class CancelOrderCommandHandler implements IRequestHandler<CancelOrderCom
 
         }
 
+
         order.get().setStatus(OrderStatus.CANCELLED);
         order.get().setCancelReason(cancelOrderCommand.getReason());
         CompletableFuture.runAsync(() -> {
@@ -58,6 +61,11 @@ public class CancelOrderCommandHandler implements IRequestHandler<CancelOrderCom
             }
         });
         _orderRepository.save(order.get());
+        for (var orderItem : order.get().getOrderItems()) {
+            var productOption = orderItem.getProductOption();
+            productOption.setStock(productOption.getStock() + orderItem.getQuantity());
+            _productOptionRepository.save(productOption);
+        }
         return HandleResponse.ok(true);
     }
 }
