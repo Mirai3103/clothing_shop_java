@@ -18,6 +18,31 @@ public class CacheTask {
 
     }
 
+    @CacheEvict(value = "categoryReport", allEntries = true)
+
+    @Scheduled(fixedRate = 1800000)// =30 minutes
+    public void clearReport() {
+
+    }
+
+    @CacheEvict(value = "topSoldProductReport", allEntries = true)
+    @Scheduled(fixedRate = 1800000)// =30 minutes
+    public void clearTopSoldProductReport() {
+
+    }
+
+    @CacheEvict(value = "importReport", allEntries = true)
+    @Scheduled(fixedRate = 1800000)// =30 minutes
+    public void clearImportReport() {
+
+    }
+
+    @CacheEvict(value = "soldReport", allEntries = true)
+    @Scheduled(fixedRate = 1800000)// =30 minutes
+    public void clearSoldReport() {
+
+    }
+
     @CacheEvict(value = "homePage", allEntries = true)
     @Scheduled(fixedRate = 1800000)// =30 minutes
     public void clearHomePageCache() {

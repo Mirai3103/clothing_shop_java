@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ public class PaymentTask {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
 
-    @Scheduled(fixedRate = 900000)
+//    @Scheduled(fixedRate = 900000)
+    @Transactional
     public void removeExpiredPayment() {
         System.out.println("Huỷ các yêu cầu thanh toán hết hạn");
         var order = orderRepository.getOrderByPaymentMethodInAndCreatedDateBeforeAndCompletedDateIsNull(
@@ -38,6 +40,7 @@ public class PaymentTask {
     }
 
     @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
     public void cancelUnpaidOrder() {
         System.out.println("Huỷ các đơn hàng chưa thanh toán sau 1 ngày");
         var order = orderRepository.getOrderByPaymentMethodInAndCreatedDateBeforeAndCompletedDateIsNull(

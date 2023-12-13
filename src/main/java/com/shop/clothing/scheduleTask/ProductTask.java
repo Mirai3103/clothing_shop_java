@@ -7,6 +7,7 @@ import com.shop.clothing.rating.RatingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
 @Component
@@ -16,14 +17,16 @@ public class ProductTask {
 
     // every day at 3:00 AM
     @Scheduled(cron = "0 0 3 * * ?")
+    @Transactional
     public void updateProductTotalSold() {
         System.out.println("Cập nhật số lượng sản phẩm đã bán");
-        productRepository.updateTotalSold(new OrderStatus[]{OrderStatus.DELIVERED, OrderStatus.SHIPPING});
+        productRepository.updateTotalSold(new OrderStatus[]{OrderStatus.DELIVERED});
         productRepository.updateTotalToZeroWhereSoldIsNull();
 
     }
 
     @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
     public void updateProductAverageRating() {
         System.out.println("Cập nhật đánh giá trung bình của sản phẩm");
         var allProduct = productRepository.findAll();

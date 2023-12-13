@@ -81,7 +81,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("UPDATE Product p SET p.totalSold =  (" +
             "SELECT SUM(oi.quantity) FROM OrderItem oi " +
             "JOIN Order o on oi.orderId = o.orderId " +
-            "WHERE oi.productOption.product.productId = p.productId AND o.status IN :statuses" +
+            "WHERE oi.productOption.product.productId = p.productId AND o.status IN :statuses " +
             ")")
     void updateTotalSold(OrderStatus[] statuses);
 
@@ -89,7 +89,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("UPDATE Product p SET p.totalSold = 0 WHERE p.totalSold IS NULL")
     void updateTotalToZeroWhereSoldIsNull();
 
-    @Query(value = "SELECT p.name AS name, p.product_id AS productId, p.display_image AS displayImage, CAST(COALESCE(SUM(oi.quantity), 0) AS int) AS total_sold, CAST(COALESCE(SUM(oi.quantity * oi.price), 0) AS int) AS total_revenue " +
+    @Query(value = "SELECT  p.product_id AS productId" +
+            ", CAST(COALESCE(SUM(oi.quantity), 0) AS int) AS total_sold, CAST(COALESCE(SUM(oi.quantity * oi.price), 0) AS int) AS total_revenue " +
             "FROM product p " +
             "LEFT  JOIN product_option po ON po.product_product_id = p.product_id " +
             "LEFT JOIN order_item oi ON oi.product_option_id = po.product_option_id " +

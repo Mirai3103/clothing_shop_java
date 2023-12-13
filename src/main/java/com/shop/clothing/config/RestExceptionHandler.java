@@ -33,7 +33,7 @@ public class RestExceptionHandler {
             WebRequest request) {
         var errorBuilder = ErrorResponse.builder().error("Lỗi đầu vào").httpStatus(HttpStatus.BAD_REQUEST);
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().stream().
+        ex.getBindingResult().getFieldErrors().
                 forEach(fieldError -> {
                     if (errors.containsKey(fieldError.getField())) {
                         errors.put(fieldError.getField(), errors.get(fieldError.getField()) + ", " + fieldError.getDefaultMessage());

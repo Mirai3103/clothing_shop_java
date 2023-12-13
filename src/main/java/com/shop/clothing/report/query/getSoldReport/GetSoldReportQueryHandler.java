@@ -8,6 +8,7 @@ import com.shop.clothing.report.dto.SoldReportDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class GetSoldReportQueryHandler implements IRequestHandler<GetSoldReportQ
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "soldReport", key = "#getSoldReportQuery.toString()")
     public HandleResponse<List<SoldReportDto>> handle(GetSoldReportQuery getSoldReportQuery) throws Exception {
         var startDate = getSoldReportQuery.getStartDate();
         var endDate = getSoldReportQuery.getEndDate();

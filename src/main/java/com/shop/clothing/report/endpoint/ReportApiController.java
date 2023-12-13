@@ -2,9 +2,11 @@ package com.shop.clothing.report.endpoint;
 
 import com.shop.clothing.common.Cqrs.ISender;
 import com.shop.clothing.product.entity.Product;
+import com.shop.clothing.report.dto.CategoryReportDto;
 import com.shop.clothing.report.dto.ImportProductReportDto;
 import com.shop.clothing.report.dto.ProductReportDto;
 import com.shop.clothing.report.dto.SoldReportDto;
+import com.shop.clothing.report.query.getCategoryReport.GetReportByCategoryQuery;
 import com.shop.clothing.report.query.getImportReport.GetImportReportQuery;
 import com.shop.clothing.report.query.getSoldReport.GetSoldReportQuery;
 import com.shop.clothing.report.query.getTopSoldProductReport.GetTopSoldProductReportQuery;
@@ -37,6 +39,12 @@ public class ReportApiController {
 
     @GetMapping("/top-sold")
     public ResponseEntity<List<ProductReportDto>> getTopSoldProductReport(@ParameterObject GetTopSoldProductReportQuery query) throws Exception {
+        var result = sender.send(query); //
+        return ResponseEntity.ok(result.orThrow());
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<CategoryReportDto>> getCategoryReport(@ParameterObject GetReportByCategoryQuery query) throws Exception {
         var result = sender.send(query); //
         return ResponseEntity.ok(result.orThrow());
     }

@@ -10,6 +10,7 @@ import com.shop.clothing.stockReceipt.entity.StockReceipt;
 import com.shop.clothing.stockReceipt.repository.StockReceiptRepository;
 import jakarta.persistence.Tuple;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class GetImportReportQueryHandler implements IRequestHandler<GetImportRep
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "importReport", key = "#query.toString()")
     public HandleResponse<List<ImportProductReportDto>> handle(GetImportReportQuery query) throws Exception {
         var startDate = query.getStartDate();
         var endDate = query.getEndDate();

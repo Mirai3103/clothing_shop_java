@@ -13,15 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Secured("REPORT_MANAGEMENT")
 
 public class ReportController {
-    private  final ISender sender;
+    private final ISender sender;
 
     @GetMapping("/revenue")
-    public String getRevenueReport(){
+    public String getRevenueReport() {
         return "admin/report/revenue";
     }
 
     @GetMapping("/product")
-    public String getProductReport(){
+    public String getProductReport() {
         return "admin/report/product";
+    }
+
+    @GetMapping("/category")
+    public String getCategoryReport() {
+        return "admin/report/category";
     }
 }

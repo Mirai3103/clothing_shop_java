@@ -14,6 +14,8 @@ import java.util.Arrays;
 public class CachingConfig {
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("searchProduct", "homePage");
+        return new ConcurrentMapCacheManager("searchProduct", "homePage",
+                "categoryReport", "topSoldProductReport"
+        ,"importReport","soldReport");
     }
 }
