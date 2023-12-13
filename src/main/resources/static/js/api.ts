@@ -3002,6 +3002,74 @@ class Client {
     }
 
     /**
+     * @param startDateTimestamp (optional) 
+     * @param endDateTimeStamp (optional) 
+     * @return OK
+     */
+    getCategoryReport(startDateTimestamp: number | undefined, endDateTimeStamp: number | undefined, cancelToken?: CancelToken | undefined): Promise<CategoryReportDto[]> {
+        let url_ = this.baseUrl + "/api/report/category?";
+        if (startDateTimestamp === null)
+            throw new Error("The parameter 'startDateTimestamp' cannot be null.");
+        else if (startDateTimestamp !== undefined)
+            url_ += "startDateTimestamp=" + encodeURIComponent("" + startDateTimestamp) + "&";
+        if (endDateTimeStamp === null)
+            throw new Error("The parameter 'endDateTimeStamp' cannot be null.");
+        else if (endDateTimeStamp !== undefined)
+            url_ += "endDateTimeStamp=" + encodeURIComponent("" + endDateTimeStamp) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetCategoryReport(_response);
+        });
+    }
+
+    protected processGetCategoryReport(response: AxiosResponse): Promise<CategoryReportDto[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CategoryReportDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<CategoryReportDto[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<CategoryReportDto[]>(null as any);
+    }
+
+    /**
      * @param productOptionId (optional) 
      * @param userId (optional) 
      * @return OK
@@ -7278,9 +7346,9 @@ class UserDto implements IUserDto {
     createdAt?: Date;
     permissions?: string[];
     roles?: RoleDto[];
-    emailVerified?: boolean;
     accountEnabled?: boolean;
     customer?: boolean;
+    emailVerified?: boolean;
 
     [key: string]: any;
 
@@ -7317,9 +7385,9 @@ class UserDto implements IUserDto {
                 for (let item of _data["roles"])
                     this.roles!.push(RoleDto.fromJS(item));
             }
-            this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
+            this.emailVerified = _data["emailVerified"];
         }
     }
 
@@ -7354,9 +7422,9 @@ class UserDto implements IUserDto {
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
-        data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        data["emailVerified"] = this.emailVerified;
         return data;
     }
 }
@@ -7372,9 +7440,9 @@ interface IUserDto {
     createdAt?: Date;
     permissions?: string[];
     roles?: RoleDto[];
-    emailVerified?: boolean;
     accountEnabled?: boolean;
     customer?: boolean;
+    emailVerified?: boolean;
 
     [key: string]: any;
 }
@@ -7999,6 +8067,66 @@ interface IImportProductReportDto {
     totalImport?: number;
     totalCost?: number;
     totalQuantityImport?: number;
+
+    [key: string]: any;
+}
+
+class CategoryReportDto implements ICategoryReportDto {
+    category?: CategoryBriefDto;
+    totalProducts?: number;
+    totalSoldProducts?: number;
+    totalRevenue?: number;
+
+    [key: string]: any;
+
+    constructor(data?: ICategoryReportDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : <any>undefined;
+            this.totalProducts = _data["totalProducts"];
+            this.totalSoldProducts = _data["totalSoldProducts"];
+            this.totalRevenue = _data["totalRevenue"];
+        }
+    }
+
+    static fromJS(data: any): CategoryReportDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CategoryReportDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["category"] = this.category ? this.category.toJSON() : <any>undefined;
+        data["totalProducts"] = this.totalProducts;
+        data["totalSoldProducts"] = this.totalSoldProducts;
+        data["totalRevenue"] = this.totalRevenue;
+        return data;
+    }
+}
+
+interface ICategoryReportDto {
+    category?: CategoryBriefDto;
+    totalProducts?: number;
+    totalSoldProducts?: number;
+    totalRevenue?: number;
 
     [key: string]: any;
 }

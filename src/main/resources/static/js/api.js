@@ -2782,6 +2782,71 @@ class Client {
         return Promise.resolve(null);
     }
     /**
+     * @param startDateTimestamp (optional)
+     * @param endDateTimeStamp (optional)
+     * @return OK
+     */
+    getCategoryReport(startDateTimestamp, endDateTimeStamp, cancelToken) {
+        let url_ = this.baseUrl + "/api/report/category?";
+        if (startDateTimestamp === null)
+            throw new Error("The parameter 'startDateTimestamp' cannot be null.");
+        else if (startDateTimestamp !== undefined)
+            url_ += "startDateTimestamp=" + encodeURIComponent("" + startDateTimestamp) + "&";
+        if (endDateTimeStamp === null)
+            throw new Error("The parameter 'endDateTimeStamp' cannot be null.");
+        else if (endDateTimeStamp !== undefined)
+            url_ += "endDateTimeStamp=" + encodeURIComponent("" + endDateTimeStamp) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+        let options_ = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "*/*"
+            },
+            cancelToken
+        };
+        return this.instance.request(options_).catch((_error) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            else {
+                throw _error;
+            }
+        }).then((_response) => {
+            return this.processGetCategoryReport(_response);
+        });
+    }
+    processGetCategoryReport(response) {
+        const status = response.status;
+        let _headers = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200 = null;
+            let resultData200 = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(CategoryReportDto.fromJS(item));
+            }
+            else {
+                result200 = null;
+            }
+            return Promise.resolve(result200);
+        }
+        else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve(null);
+    }
+    /**
      * @param productOptionId (optional)
      * @param userId (optional)
      * @return OK
@@ -6027,9 +6092,9 @@ class UserDto {
                 for (let item of _data["roles"])
                     this.roles.push(RoleDto.fromJS(item));
             }
-            this.emailVerified = _data["emailVerified"];
             this.accountEnabled = _data["accountEnabled"];
             this.customer = _data["customer"];
+            this.emailVerified = _data["emailVerified"];
         }
     }
     static fromJS(data) {
@@ -6062,9 +6127,9 @@ class UserDto {
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
-        data["emailVerified"] = this.emailVerified;
         data["accountEnabled"] = this.accountEnabled;
         data["customer"] = this.customer;
+        data["emailVerified"] = this.emailVerified;
         return data;
     }
 }
@@ -6479,6 +6544,46 @@ class ImportProductReportDto {
         data["totalImport"] = this.totalImport;
         data["totalCost"] = this.totalCost;
         data["totalQuantityImport"] = this.totalQuantityImport;
+        return data;
+    }
+}
+class CategoryReportDto {
+    constructor(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    init(_data) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.category = _data["category"] ? CategoryBriefDto.fromJS(_data["category"]) : undefined;
+            this.totalProducts = _data["totalProducts"];
+            this.totalSoldProducts = _data["totalSoldProducts"];
+            this.totalRevenue = _data["totalRevenue"];
+        }
+    }
+    static fromJS(data) {
+        data = typeof data === 'object' ? data : {};
+        let result = new CategoryReportDto();
+        result.init(data);
+        return result;
+    }
+    toJSON(data) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["category"] = this.category ? this.category.toJSON() : undefined;
+        data["totalProducts"] = this.totalProducts;
+        data["totalSoldProducts"] = this.totalSoldProducts;
+        data["totalRevenue"] = this.totalRevenue;
         return data;
     }
 }
