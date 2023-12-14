@@ -20,6 +20,7 @@ import com.shop.clothing.payment.entity.enums.PaymentMethod;
 import com.shop.clothing.product.entity.ProductOption;
 import com.shop.clothing.product.repository.ProductOptionRepository;
 import com.shop.clothing.promotion.Promotion;
+import com.shop.clothing.promotion.query.checkPromotion.CheckPromotionQuery;
 import com.shop.clothing.promotion.repository.PromotionRepository;
 import com.shop.clothing.user.entity.User;
 import jakarta.mail.MessagingException;
@@ -42,6 +43,7 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final PromotionRepository promotionRepository;
+    private final ISender sender;
     private final ProductOptionRepository productOptionRepository;
     private final ClientUtil clientUtil;
     private final IDeliveryService deliveryService;
@@ -67,8 +69,13 @@ public class CreateOrderCommandHandler implements IRequestHandler<CreateOrderCom
                 }
         ).sum();
         if (promotion != null) {
+            var checkPromotion = sender.send(new CheckPromotionQuery(promotion.getCode(), totalPrice));
+            if (!checkPromotion.hasError()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, checkPromotion.getError());
+            }
             totalPrice = totalPrice - promotion.getFinalDiscount(totalPrice);
-
+            promotion.setStock(promotion.getStock() - 1);
+            promotionRepository.save(promotion);
         }
 
         var address = clientUtil.from(createOrderCommand.getAddress());
