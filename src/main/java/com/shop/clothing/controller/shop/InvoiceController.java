@@ -35,8 +35,5 @@ public class InvoiceController {
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         org.springframework.util.FileCopyUtils.copy(new java.io.FileInputStream(file), response.getOutputStream());
-
-
-
     }
 }

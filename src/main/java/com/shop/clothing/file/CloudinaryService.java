@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-@Service
 public class CloudinaryService implements IFileService {
 
     private final Cloudinary cloudinary;
