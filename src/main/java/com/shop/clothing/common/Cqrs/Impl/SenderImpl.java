@@ -50,6 +50,7 @@ class SenderImpl implements ISender {
         try {
             return  (HandleResponse<TResponse>) handler.handle(request);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

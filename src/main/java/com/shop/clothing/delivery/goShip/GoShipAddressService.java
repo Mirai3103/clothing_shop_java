@@ -24,6 +24,8 @@ public class GoShipAddressService implements IAddressService {
         headers.set("Authorization", "Bearer " + accessToken);
         headers.set("Content-Type", "application/json");
         HttpEntity<String> entity = new HttpEntity<>(headers);
+        System.out.println("Hsadsandn");
+        System.out.println(goShipProperties.getEndpoint() + "/cities");
         ResponseEntity<String> response = restTemplate.exchange(
                 goShipProperties.getEndpoint() + "/cities",
                 HttpMethod.GET,
